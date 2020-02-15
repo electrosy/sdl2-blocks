@@ -66,6 +66,10 @@ ley::Video::~Video() {
 }
 
 /* functions */
+void ley::Video::renderFrame() {
+    
+}
+
 void ley::Video::render() {
     if(sdl_ready) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);        

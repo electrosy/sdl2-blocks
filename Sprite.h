@@ -3,11 +3,11 @@ Author: Steven Philley
 Purpose: Representation of a sprite texture
 Date: Feb/14/2020
 */
-
 #ifndef SPRITE_H
 #define SPRITE_H
 
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -18,19 +18,16 @@ class Sprite {
 
 private:
     SDL_Texture* texture;
-    // the new SDL_Texture variable 
-    SDL_Rect source_rect; 
-    // the first rectangle 
     SDL_Rect dest_rect; 
-    // another rectangle
-
     SDL_Renderer* renderer; //the renderer that we output the sprite to.
+    bool multiframe = 0;
+    std::vector<SDL_Rect> frames;
   
 public:
-    Sprite(SDL_Renderer*, const char*);
+    Sprite(SDL_Renderer*, const char*, bool = 0, std::vector<SDL_Rect>* = nullptr);
     ~Sprite();
 
-    void render(int, int);
+    void render(int, int, int = 0);
     void clear();
 };
 

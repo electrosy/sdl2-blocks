@@ -3,7 +3,6 @@ Author: Steven Philley
 Purpose: Video System for the game.
 Date: Feb/14/2020
 */
-
 #ifndef VIDEO_H
 #define VIDEO_H
 
@@ -30,6 +29,7 @@ public:
     SDL_Renderer* getRenderer() {return renderer;};
 
 /* Functions */
+    void renderFrame();
     void render();
     void clear();
 };

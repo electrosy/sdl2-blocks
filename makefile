@@ -1,5 +1,5 @@
 #OBJS defines files to compile as part of the project
-OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp
+OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp Block.cpp
 
 #OBJ_NAME name of executable
 OBJ_NAME = sdl2-blocks
