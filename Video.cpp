@@ -7,8 +7,8 @@ Date: Feb/14/2020
 #include "Video.h"
 
 //Screen dimensions
-const auto SCREEN_WIDTH = 640;
-const auto SCREEN_HEIGHT = 480;
+const auto SCREEN_WIDTH = 800;
+const auto SCREEN_HEIGHT = 600;
 
 /* RAII */
 void ley::Video::createWindow() {
@@ -18,7 +18,7 @@ void ley::Video::createWindow() {
         window = SDL_CreateWindow(
             "sdl2-blocks",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            800, 600,
+            SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN);
 
     } else {

@@ -19,13 +19,9 @@ ley::Sprite::Sprite(SDL_Renderer* r, const char* path, bool m, std::vector<SDL_R
     dest_rect.y = source_rect.y = 0;
 
     if(multiframe) {
-
-
         for(auto rect : *v) {
             source_rect.x = rect.x; source_rect.y = rect.y;
-            source_rect.w = dest_rect.w = rect.w;
-            source_rect.h = dest_rect.h = rect.h;
-
+            source_rect.w = dest_rect.w = rect.w; source_rect.h = dest_rect.h = rect.h;
             frames.push_back(source_rect);
         }
        // source_rect.x = (*v).at(0).x; source_rect.y = (*v).at(0).y;

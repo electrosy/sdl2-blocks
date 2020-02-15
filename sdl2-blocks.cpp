@@ -23,14 +23,34 @@ int main() {
     std::vector<SDL_Rect> catFrames;
     
     SDL_Rect catFrame1; 
-    catFrame1.x = 8; catFrame1.y = 75;
-    catFrame1.h = 100; catFrame1.w = 86;
+    catFrame1.x = 0; catFrame1.y = 75;
+    catFrame1.h = 100; catFrame1.w = 100;
     catFrames.push_back(catFrame1);
 
     SDL_Rect catFrame2; 
-    catFrame2.x = 138; catFrame2.y = 75;
-    catFrame2.h = 100; catFrame2.w = 86;
+    catFrame2.x = 132; catFrame2.y = 75;
+    catFrame2.h = 100; catFrame2.w = 100;
     catFrames.push_back(catFrame2);
+
+    SDL_Rect catFrame3; 
+    catFrame3.x = 261; catFrame3.y = 75;
+    catFrame3.h = 100; catFrame3.w = 100;
+    catFrames.push_back(catFrame3);
+
+    SDL_Rect catFrame4; 
+    catFrame4.x = 400; catFrame4.y = 75;
+    catFrame4.h = 100; catFrame4.w = 100;
+    catFrames.push_back(catFrame4);
+
+    SDL_Rect catFrame5; 
+    catFrame5.x = 8; catFrame5.y = 207;
+    catFrame5.h = 100; catFrame5.w = 100;
+    catFrames.push_back(catFrame5);
+
+    SDL_Rect catFrame6; 
+    catFrame6.x = 138; catFrame6.y = 207;
+    catFrame6.h = 100; catFrame6.w = 100;
+    catFrames.push_back(catFrame6);
     
     ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
 
@@ -47,10 +67,12 @@ int main() {
     /*** RENDER ***/
         /* Render Sprites to buffer */
         {
-            catSprite.render(0,0);
+            auto current_frame = int(((SDL_GetTicks() / 175) % 6));
+            catSprite.render(695,540,current_frame);
+
             mainSprite.render(10,10);
-            firstBlock.getFrame()->render(20,20);
-            catAnimated.getFrame()->render(30,30);
+           // firstBlock.getFrame()->render(20,20);
+           // catAnimated.getFrame()->render(30,30);
         }
         /* Render the Video system to the screen */
         mainVideo.render();
