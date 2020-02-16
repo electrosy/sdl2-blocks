@@ -20,7 +20,6 @@ void ley::Video::createWindow() {
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN);
-
     } else {
         printf("Can't Initialize SDL2");
         sdl_ready = 0;
@@ -59,6 +58,7 @@ ley::Video::~Video() {
     if(sdl_ready && SDL_InitSubSystem(SDL_INIT_VIDEO)) {
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
+   
 
     if(getReady()) {
         atexit(SDL_Quit);
