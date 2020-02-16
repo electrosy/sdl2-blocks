@@ -3,7 +3,6 @@ Author: Steven Philley
 Purpose: see header.
 Date: Feb/14/2020
 */
-
 #include "Input.h"
 #include "Video.h"
 
@@ -24,7 +23,9 @@ bool ley::Input::pollEvents() {
         switch (event.type)     {       
             case SDL_QUIT:         
              running = false;
-                break;        
+                break;
+            case SDL_KEYDOWN:
+               SDL_Log("Keydown Detected!");
             default:
                 break;
                 }
