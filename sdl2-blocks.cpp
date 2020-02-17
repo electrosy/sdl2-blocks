@@ -15,7 +15,7 @@ Date: Feb/15/2020
 #include "GameModel.h"
 #include "Clock.h"
 #include "Winlet.h"
-//#include "TextureManager.h"
+//#include "TextureManager.h" // TODO rename to Renderables
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f;
@@ -28,12 +28,10 @@ int main() {
     ley::Input mainInput;
     //ley::TextureManager mainResource;
     
-
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
 
-    // TODO create a vector of SDL_Rect to define where the frames are in the sheet.
+    
     std::vector<SDL_Rect> catFrames;
-
     SDL_Rect catFrame1;
     catFrame1.x = 0; catFrame1.y = 75;
     catFrame1.h = 100; catFrame1.w = 100;
@@ -63,6 +61,7 @@ int main() {
     catFrame6.x = 138; catFrame6.y = 207;
     catFrame6.h = 100; catFrame6.w = 100;
     catFrames.push_back(catFrame6);
+
     
     ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
     ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
@@ -70,7 +69,7 @@ int main() {
     ley::Block firstBlock(mainSprite); //test block, not animated
     ley::Block catAnimated(catSprite);
 
-    // test window
+    // test Winlet
     SDL_Rect debugBounds;
     debugBounds.x = 200; debugBounds.y = 200;
     debugBounds.h = 300; debugBounds.h = 300;
@@ -84,7 +83,7 @@ int main() {
     unsigned fpsAdjustMili = 0;
     bool fs = 0; //full screen
     while(game_running) {
-        SDL_Delay(1 + fpsAdjustMili);
+        SDL_Delay(DELAY_MILI + fpsAdjustMili);
 
     /*** RENDER ***/
         /* Render Sprites to buffer */
@@ -120,9 +119,12 @@ int main() {
         //adjust for target fps. 
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 1) { //then speed up
+            if(avg_target_ratio > 1) { /*then speed up*/  /* TODO The point at which to speed up may need to be adjusted
+                                                            as well and may be system specific, may be best to save the adjustment
+                                                            off to a file*/
                 --fpsAdjustMili;
-            } else if(avg_target_ratio < 0.7999f) { //then slow down
+            } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE: slowing down seems easier   
+                                                                            because you dont notice when its too fast. */
                 ++fpsAdjustMili;
             } else { fpsAdjustMili = 0; }
         }

@@ -6,8 +6,8 @@ Date: Feb/17/2020
 #include "Renderable.h";
 
 /* RAII */
-ley::Renderable::Renderable() {
-   
+ley::Renderable::Renderable(SDL_Renderer* r) {
+   renderer=r;
 }
 
 ley::Renderable::~Renderable() {

@@ -1,6 +1,8 @@
-/* 
+/*
 Author: Steven Philley
-Purpose: Representation of a sprite object on the screen
+Purpose: Representation of a sprite object on the screen. 
+         This is the most basic game object that is 
+         displayed on the screen
 Date: Feb/17/2020
 */
 #ifndef SPRITE_H
@@ -12,22 +14,18 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "Texture.h"
+
 namespace ley {
 
-class Sprite {
+class Sprite : public Texture {
 
 private:
-    SDL_Texture* texture;
-    SDL_Rect dest_rect; 
-    SDL_Renderer* renderer; //the renderer that we output the sprite to.
-    bool multiframe = 0;
-    std::vector<SDL_Rect> frames;
   
 public:
-    Sprite(SDL_Renderer*, const char*, bool = 0, std::vector<SDL_Rect>* = nullptr);
+    Sprite(SDL_Renderer* r, const char*, bool = 0, std::vector<SDL_Rect>* = nullptr);
     ~Sprite();
 
-    void render(int, int, int = 0);
     void clear();
 };
 

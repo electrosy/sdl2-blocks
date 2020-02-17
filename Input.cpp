@@ -41,6 +41,9 @@ void ley::Input::pollEvents(bool &running, bool& fullscreen) {
                     printf("LALT + Return key pressed.\n");
                     fullscreen = !fullscreen;
                 }
+                if (state[SDL_SCANCODE_Q]) {
+                    running = false;
+                }
                 break;
             
             default:
