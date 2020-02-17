@@ -14,7 +14,7 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "GameModel.h"
 #include "Clock.h"
-#include "Winlet.h" // TODO rename to Winlet
+#include "Winlet.h"
 //#include "TextureManager.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
@@ -26,7 +26,7 @@ int main() {
     ley::GameModel mainGameModel;
     ley::Video mainVideo;
     ley::Input mainInput;
-    ley::TextureManager mainResource;
+    //ley::TextureManager mainResource;
     
 
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
