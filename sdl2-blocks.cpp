@@ -63,8 +63,8 @@ int main() {
     catFrames.push_back(catFrame6);
 
     
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
-    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
+    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png" /*,1*/, &catFrames);
+    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png" /*,1*/, &catFrames);
 
     ley::Block firstBlock(mainSprite); //test block, not animated
     ley::Block catAnimated(catSprite);
@@ -102,15 +102,12 @@ int main() {
                 SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
                // SDL_Log(std::to_string(frame_count/atoi(mainClock.secondsFromStart()));
             }
-           // firstBlock.getFrame()->render(20,20);
-           // catAnimated.getFrame()->render(30,30);
         }
         /* Render the Video system to the screen */
         mainVideo.render();
 
     /*** GET INPUT ***/
-        //.pollEvents updates running and full screen flags
-        
+        //pollEvents updates running and full screen flags
         mainInput.pollEvents(game_running,fs);
         mainVideo.setFullScreen(fs);
 
@@ -119,9 +116,11 @@ int main() {
         //adjust for target fps. 
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 1) { /*then speed up*/  /* TODO The point at which to speed up may need to be adjusted
-                                                            as well and may be system specific, may be best to save the adjustment
-                                                            off to a file*/
+            if(avg_target_ratio > 1) { /*then speed up*/  /* TODO The point at which to speed up may need to 
+                                                            be veriable. To ensure we dont dip below, we 
+                                                            should probably adjust right before hitting 1
+                                                            This adjustment may be very system specific, 
+                                                            may be best to save the adjustment off to a file*/
                 --fpsAdjustMili;
             } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE: slowing down seems easier   
                                                                             because you dont notice when its too fast. */

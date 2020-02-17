@@ -25,10 +25,9 @@ protected:
     SDL_Texture* texture;
     std::vector<SDL_Rect> frames;
     SDL_Rect dest_rect;
-    bool multiframe = 0;
   
 public:
-    Texture(SDL_Renderer*, const char* /*, std::vector<SDL_Rect>* */);
+    Texture(SDL_Renderer*, const char*, std::vector<SDL_Rect>*);
     ~Texture();
 
    void render(int, int, int = 0);

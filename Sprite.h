@@ -23,7 +23,7 @@ class Sprite : public Texture {
 private:
   
 public:
-    Sprite(SDL_Renderer* r, const char*, bool = 0, std::vector<SDL_Rect>* = nullptr);
+    Sprite(SDL_Renderer* r, const char*, std::vector<SDL_Rect>* = nullptr);
     ~Sprite();
 
     void clear();
