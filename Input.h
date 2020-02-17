@@ -19,7 +19,7 @@ public:
     Input();
     ~Input();
 
-    bool pollEvents();
+    void pollEvents(bool&, bool&);
 };
 
 }

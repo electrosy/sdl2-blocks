@@ -16,19 +16,35 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-bool ley::Input::pollEvents() {
-    auto running = true;
-    SDL_Event event;   
-    if(SDL_PollEvent(&event))   {     
+void ley::Input::pollEvents(bool &running, bool& fullscreen) {
+    SDL_Event event;
+    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
-             running = false;
+                running = false;
                 break;
+            
             case SDL_KEYDOWN:
-               SDL_Log("Keydown Detected!");
+                
+                SDL_Log("Keydown Detected!");
+                
+                if (state[SDL_SCANCODE_RETURN]) {
+                  printf("<RETURN> is pressed.\n");
+                }
+                if (state[SDL_SCANCODE_RIGHT] && state[SDL_SCANCODE_UP]) {
+                    printf("Right and Up Keys Pressed.\n");
+                }
+                if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
+                    |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
+                    ) {
+                    printf("LALT + Return key pressed.\n");
+                    fullscreen = !fullscreen;
+                }
+                break;
+            
             default:
                 break;
-                }
+        }
      }
-     return running;
 }

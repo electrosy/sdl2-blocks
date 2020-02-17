@@ -1,7 +1,7 @@
 /* 
 Author: Steven Philley
-Purpose: Representation of a sprite texture
-Date: Feb/14/2020
+Purpose: Representation of a sprite object on the screen
+Date: Feb/17/2020
 */
 #ifndef SPRITE_H
 #define SPRITE_H

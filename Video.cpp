@@ -19,7 +19,7 @@ void ley::Video::createWindow() {
             "sdl2-blocks",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
-            SDL_WINDOW_SHOWN);
+            SDL_WINDOW_SHOWN /*SDL_WINDOW_FULLSCREEN*/);
     } else {
         printf("Can't Initialize SDL2");
         sdl_ready = 0;
@@ -59,10 +59,17 @@ ley::Video::~Video() {
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
    
-
     if(getReady()) {
         atexit(SDL_Quit);
     }
+}
+/* Accessors */
+void ley::Video::setFullScreen(bool fs) {
+    sdl_fullscreen = fs;
+
+    if(fs) {
+        SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);
+    } else { SDL_SetWindowFullscreen(window,SDL_WINDOW_SHOWN); }
 }
 
 /* functions */
@@ -81,4 +88,3 @@ void ley::Video::clear() {
     SDL_RenderClear(renderer);
 }
 
-/* Accessors */

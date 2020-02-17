@@ -14,7 +14,8 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "GameModel.h"
 #include "Clock.h"
-#include "Window.h"
+#include "Winlet.h" // TODO rename to Winlet
+//#include "TextureManager.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f;
@@ -22,10 +23,11 @@ auto const DELAY_MILI = 1.3f;
 int main() {
     bool game_running = 1;
 
+    ley::GameModel mainGameModel;
     ley::Video mainVideo;
     ley::Input mainInput;
-
-    ley::GameModel mainGameModel;
+    ley::TextureManager mainResource;
+    
 
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
 
@@ -73,13 +75,14 @@ int main() {
     debugBounds.x = 200; debugBounds.y = 200;
     debugBounds.h = 300; debugBounds.h = 300;
     SDL_Color debugBoundsColor = {100,100,100,100};
-    ley::Window debugWindow(debugBounds,debugBoundsColor);
+    ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
     ley::Clock mainClock;
     size_t frame_count = 0;
     unsigned fpsAdjustMili = 0;
+    bool fs = 0; //full screen
     while(game_running) {
         SDL_Delay(1 + fpsAdjustMili);
 
@@ -107,18 +110,13 @@ int main() {
         mainVideo.render();
 
     /*** GET INPUT ***/
-        game_running = mainInput.pollEvents();
+        //.pollEvents updates running and full screen flags
+        
+        mainInput.pollEvents(game_running,fs);
+        mainVideo.setFullScreen(fs);
 
     /*** UPDATE ***/
         /* Calculate Frame Rate and output to log */
-        // TODO create timer object
-        /*
-        auto avgFPS = current_frame / ( fpsTimer.getTicks() / 1000.f );
-        if( avgFPS > 2000000 )
-        {
-            avgFPS = 0;
-        }
-        */
         //adjust for target fps. 
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
@@ -135,12 +133,9 @@ int main() {
 
         ++frame_count;
 
-
     /*** CLEAR ****/
         mainVideo.clear();
     }
-
-    //printf("Exiting!");
 
     return 1;
 }
