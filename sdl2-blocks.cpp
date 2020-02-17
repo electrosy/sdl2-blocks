@@ -15,10 +15,11 @@ Date: Feb/15/2020
 #include "GameModel.h"
 #include "Clock.h"
 #include "Winlet.h"
+#include "Renderables.h"
 //#include "TextureManager.h" // TODO rename to Renderables
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
-auto const DELAY_MILI = 1.3f;
+auto const DELAY_MILI = 1.3f; //start delay for the game loop
 
 int main() {
     bool game_running = 1;
@@ -29,8 +30,7 @@ int main() {
     //ley::TextureManager mainResource;
     
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
-
-    
+ 
     std::vector<SDL_Rect> catFrames;
     SDL_Rect catFrame1;
     catFrame1.x = 0; catFrame1.y = 75;
@@ -62,10 +62,12 @@ int main() {
     catFrame6.h = 100; catFrame6.w = 100;
     catFrames.push_back(catFrame6);
 
+    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", &catFrames);
+    ley::Renderables renderables;
+    renderables.push_back(&catSprite);
+    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", &catFrames);
+    renderables.push_back(&catSprite2);
     
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png" /*,1*/, &catFrames);
-    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png" /*,1*/, &catFrames);
-
     ley::Block firstBlock(mainSprite); //test block, not animated
     ley::Block catAnimated(catSprite);
 
@@ -84,7 +86,6 @@ int main() {
     bool fs = 0; //full screen
     while(game_running) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
-
     /*** RENDER ***/
         /* Render Sprites to buffer */
         auto avgFPS = 0;
@@ -100,7 +101,6 @@ int main() {
                     ? seconds_from_start : frame_count/seconds_from_start;
                 SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
                 SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
-               // SDL_Log(std::to_string(frame_count/atoi(mainClock.secondsFromStart()));
             }
         }
         /* Render the Video system to the screen */
@@ -122,7 +122,7 @@ int main() {
                                                             This adjustment may be very system specific, 
                                                             may be best to save the adjustment off to a file*/
                 --fpsAdjustMili;
-            } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE: slowing down seems easier   
+            } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE slowing down seems easier   
                                                                             because you dont notice when its too fast. */
                 ++fpsAdjustMili;
             } else { fpsAdjustMili = 0; }

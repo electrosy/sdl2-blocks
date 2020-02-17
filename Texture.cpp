@@ -47,5 +47,4 @@ void ley::Texture::render(int x, int y, int frame_num) {
     SDL_RenderCopy(renderer, texture, &frames[frame_num], &dest_rect);
 }
 
-
 /* Functions */
