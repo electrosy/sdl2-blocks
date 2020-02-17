@@ -13,6 +13,11 @@ Date: Feb/15/2020
 #include "Sprite.h"
 #include "Block.h"
 #include "GameModel.h"
+#include "Clock.h"
+#include "Window.h"
+
+auto const TARGET_FPS = 60; //provide at least this many frames per second.
+auto const DELAY_MILI = 1.3f;
 
 int main() {
     bool game_running = 1;
@@ -60,25 +65,41 @@ int main() {
     ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
     ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png",1, &catFrames);
 
-    // TODO Create a single sprite block
     ley::Block firstBlock(mainSprite); //test block, not animated
-    // TODO Create an animated test block
     ley::Block catAnimated(catSprite);
 
-    // TODO Create a constructed test block
+    // test window
+    SDL_Rect debugBounds;
+    debugBounds.x = 200; debugBounds.y = 200;
+    debugBounds.h = 300; debugBounds.h = 300;
+    SDL_Color debugBoundsColor = {100,100,100,100};
+    ley::Window debugWindow(debugBounds,debugBoundsColor);
 
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
+    ley::Clock mainClock;
+    size_t frame_count = 0;
+    unsigned fpsAdjustMili = 0;
     while(game_running) {
-        SDL_Delay(1);
+        SDL_Delay(1 + fpsAdjustMili);
 
     /*** RENDER ***/
         /* Render Sprites to buffer */
+        auto avgFPS = 0;
         auto current_frame = int(((SDL_GetTicks() / 175) % 6));
         {
             catSprite.render(695,540,current_frame);
             catSprite2.render(100,100,current_frame);
             mainSprite.render(10,10);
+
+            if (SDL_GetTicks() % 1000 == 0 ) {
+                auto seconds_from_start = mainClock.secondsFromStart();
+                avgFPS = seconds_from_start == 0 
+                    ? seconds_from_start : frame_count/seconds_from_start;
+                SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
+                SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
+               // SDL_Log(std::to_string(frame_count/atoi(mainClock.secondsFromStart()));
+            }
            // firstBlock.getFrame()->render(20,20);
            // catAnimated.getFrame()->render(30,30);
         }
@@ -98,6 +119,22 @@ int main() {
             avgFPS = 0;
         }
         */
+        //adjust for target fps. 
+        if(avgFPS != 0) {
+            auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
+            if(avg_target_ratio > 1) { //then speed up
+                --fpsAdjustMili;
+            } else if(avg_target_ratio < 0.7999f) { //then slow down
+                ++fpsAdjustMili;
+            } else { fpsAdjustMili = 0; }
+        }
+
+        if (SDL_GetTicks() % 1000 == 0 ) { 
+            SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
+        }
+
+        ++frame_count;
+
 
     /*** CLEAR ****/
         mainVideo.clear();
