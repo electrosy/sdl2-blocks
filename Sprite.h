@@ -10,10 +10,8 @@ Date: Feb/17/2020
 
 #include <string>
 #include <vector>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
 #include "Texture.h"
 
 namespace ley {
@@ -21,11 +19,15 @@ namespace ley {
 class Sprite : public Texture {
 
 private:
-  
+    
 public:
-    Sprite(SDL_Renderer* r, const char*, std::vector<SDL_Rect>* = nullptr);
+    /* RAII */
+    Sprite(SDL_Renderer* r, const char*, unsigned int = 0, std::vector<SDL_Rect>* = nullptr);
     ~Sprite();
 
+    /* Accessors */
+
+    /* Functions */
     void clear();
 };
 

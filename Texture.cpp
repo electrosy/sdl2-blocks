@@ -6,7 +6,8 @@ Date: Feb/17/2020
 #include "Texture.h";
 
 /* RAII */
-ley::Texture::Texture(SDL_Renderer* r,  const char* p, std::vector<SDL_Rect>* v) : Renderable(r)  {
+ley::Texture::Texture(SDL_Renderer* r,  const char* p, unsigned int s, std::vector<SDL_Rect>* v) 
+: Renderable(r), animSpeed(s) {
     SDL_Surface* temp_surface = IMG_Load(p);
     texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
     SDL_FreeSurface(temp_surface);
@@ -36,15 +37,19 @@ ley::Texture::~Texture() {
 
 }
 
-/*
+/* Accessors */
+void ley::Texture::setPos(unsigned int x, unsigned int y) {
+    pos.first = x; pos.second = y;
+}
+
 void ley::Texture::render() {
 
-}
-*/
-void ley::Texture::render(int x, int y, int frame_num) {
-    dest_rect.x = x;
-    dest_rect.y = y;
-    SDL_RenderCopy(renderer, texture, &frames[frame_num], &dest_rect);
+    unsigned int frameIndex = frames.size() > 1 ? 
+        (SDL_GetTicks() / animSpeed) % frames.size() : 0;
+
+    dest_rect.x = pos.first; dest_rect.y = pos.second;  // TODO put position in texture
+
+    SDL_RenderCopy(renderer, texture, &frames[frameIndex], &dest_rect);
 }
 
 /* Functions */

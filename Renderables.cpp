@@ -13,6 +13,10 @@ ley::Renderables::Renderables() {
 ley::Renderables::~Renderables() {
 
 }
+/* Accessors */
+unsigned int ley::Renderables::size() {
+   return renderables.size() > 0 ? renderables.size() : 0;
+}
 
 /* Functions */
 void ley::Renderables::push_back(Renderable * r) {
@@ -20,7 +24,8 @@ void ley::Renderables::push_back(Renderable * r) {
 }
 
 void ley::Renderables::renderAll() {
-    for(Renderable* ren : renderables) {
-       // ren->render();
-    }
+    
+    for(int i = 0; i < renderables.size(); ++i) {
+            renderables[i]->render();
+        }
 }

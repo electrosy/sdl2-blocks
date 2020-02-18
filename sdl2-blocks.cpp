@@ -30,7 +30,10 @@ int main() {
     //ley::TextureManager mainResource;
     
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
- 
+    mainSprite.setPos(10,10);
+    ley::Renderables renderables;
+    renderables.push_back(&mainSprite);
+
     std::vector<SDL_Rect> catFrames;
     SDL_Rect catFrame1;
     catFrame1.x = 0; catFrame1.y = 75;
@@ -62,14 +65,14 @@ int main() {
     catFrame6.h = 100; catFrame6.w = 100;
     catFrames.push_back(catFrame6);
 
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", &catFrames);
-    ley::Renderables renderables;
+    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
+    catSprite.setPos(695,540);
     renderables.push_back(&catSprite);
-    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", &catFrames);
+    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
+    catSprite2.setPos(100,100);
     renderables.push_back(&catSprite2);
     
     ley::Block firstBlock(mainSprite); //test block, not animated
-    ley::Block catAnimated(catSprite);
 
     // test Winlet
     SDL_Rect debugBounds;
@@ -89,22 +92,18 @@ int main() {
     /*** RENDER ***/
         /* Render Sprites to buffer */
         auto avgFPS = 0;
-        auto current_frame = int(((SDL_GetTicks() / 175) % 6));
-        {
-            catSprite.render(695,540,current_frame);
-            catSprite2.render(100,100,current_frame);
-            mainSprite.render(10,10);
-
-            if (SDL_GetTicks() % 1000 == 0 ) {
-                auto seconds_from_start = mainClock.secondsFromStart();
-                avgFPS = seconds_from_start == 0 
-                    ? seconds_from_start : frame_count/seconds_from_start;
-                SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
-                SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
-            }
+        renderables.renderAll(); // render all sprites
+        /* Output report */
+        if (SDL_GetTicks() % 1000 == 0 ) {
+            auto seconds_from_start = mainClock.secondsFromStart();
+            avgFPS = seconds_from_start == 0 
+                ? seconds_from_start : frame_count/seconds_from_start;
+            SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
+            SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
         }
+        
         /* Render the Video system to the screen */
-        mainVideo.render();
+        mainVideo.render(); // output to the video system.
 
     /*** GET INPUT ***/
         //pollEvents updates running and full screen flags

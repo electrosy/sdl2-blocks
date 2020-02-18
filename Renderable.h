@@ -17,15 +17,20 @@ namespace ley {
 class Renderable {
 
 private:
-
+    
 protected:
    SDL_Renderer* renderer;
   
 public:
+    /* RAII */
     Renderable(SDL_Renderer*);
     ~Renderable();
 
-    void virtual render(int, int, int = 0) = 0;
+    /* Accessors */
+    
+
+    /* Functions */
+    void virtual render() = 0;
 };
 
 }

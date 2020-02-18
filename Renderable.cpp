@@ -13,5 +13,6 @@ ley::Renderable::Renderable(SDL_Renderer* r) {
 ley::Renderable::~Renderable() {
 
 }
+/* Accessors */
 
 /* Functions */

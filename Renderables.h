@@ -28,6 +28,8 @@ public:
 
     void push_back(Renderable * r);
     void renderAll();
+
+    unsigned int size();
 };
 
 }
