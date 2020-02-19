@@ -13,7 +13,7 @@ const auto SCREEN_HEIGHT = 600;
 /* RAII */
 void ley::Video::createWindow() {
     /* create a window to render to */
-    if(SDL_Init(SDL_INIT_VIDEO) >= 0) {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) >= 0) {
         // if all good
         window = SDL_CreateWindow(
             "sdl2-blocks",

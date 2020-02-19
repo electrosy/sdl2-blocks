@@ -16,7 +16,7 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-void ley::Input::pollEvents(bool &running, bool& fullscreen) {
+void ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel& gm) {
     SDL_Event event;
     if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -40,6 +40,9 @@ void ley::Input::pollEvents(bool &running, bool& fullscreen) {
                     ) {
                     printf("LALT + Return key pressed.\n");
                     fullscreen = !fullscreen;
+                }
+                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
+                    gm.debugBoard();
                 }
                 if (state[SDL_SCANCODE_Q]) {
                     running = false;

@@ -16,7 +16,7 @@ Date: Feb/15/2020
 #include "Clock.h"
 #include "Winlet.h"
 #include "Renderables.h"
-//#include "TextureManager.h" // TODO rename to Renderables
+#include "GameController.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
@@ -72,7 +72,6 @@ int main() {
     catSprite2.setPos(100,100);
     renderables.push_back(&catSprite2);
     
-    ley::Block firstBlock(mainSprite); //test block, not animated
 
     // test Winlet
     SDL_Rect debugBounds;
@@ -80,6 +79,10 @@ int main() {
     debugBounds.h = 300; debugBounds.h = 300;
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
+
+
+    ley::GameController mainGameController;
+    mainGameModel.debugBoard();
 
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
@@ -107,7 +110,7 @@ int main() {
 
     /*** GET INPUT ***/
         //pollEvents updates running and full screen flags
-        mainInput.pollEvents(game_running,fs);
+        mainInput.pollEvents(game_running,fs,mainGameModel);
         mainVideo.setFullScreen(fs);
 
     /*** UPDATE ***/
@@ -115,7 +118,7 @@ int main() {
         //adjust for target fps. 
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 1) { /*then speed up*/  /* TODO The point at which to speed up may need to 
+            if(avg_target_ratio > 0.98887) { /*then speed up*/  /* TODO The point at which to speed up may need to 
                                                             be veriable. To ensure we dont dip below, we 
                                                             should probably adjust right before hitting 1
                                                             This adjustment may be very system specific, 
@@ -131,6 +134,8 @@ int main() {
             SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
         }
 
+
+        mainGameController.runFrame();
         ++frame_count;
 
     /*** CLEAR ****/

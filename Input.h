@@ -9,6 +9,8 @@ Date: Feb/14/2020
 
 #include <SDL2/SDL.h>
 
+#include "GameModel.h"
+
 namespace ley {
 
 class Input {
@@ -19,7 +21,7 @@ public:
     Input();
     ~Input();
 
-    void pollEvents(bool&, bool&);
+    void pollEvents(bool&, bool&, GameModel&);
 };
 
 }
