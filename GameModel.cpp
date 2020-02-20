@@ -9,7 +9,7 @@ Date: Feb/15/2020
 
 /* RAII */
 ley::GameModel::GameModel()
-: activeBlock(4,0,BlockType::cube), oldBlock(4,0,BlockType::empty) {
+: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::empty) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);

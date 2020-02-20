@@ -16,6 +16,7 @@ namespace ley {
 const auto BOARDSIZE_WIDTH = 10;
 const auto BOARDSIZE_HEIGHT = 20;
 const auto BLOCKSIZE_MAX_HW = 4; //the largest possible height and width(square) we will need for a single block.
+const auto BLOCK_PUT_X = 4; const auto BLOCK_PUT_Y = 0;
 const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that will be on the board.
 enum class Direction {down,right,up,left};
 

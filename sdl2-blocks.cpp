@@ -1,4 +1,4 @@
-/* 
+/*
 Author: Steven Philley
 Purpose: A fun game.
 Date: Feb/15/2020
@@ -17,6 +17,8 @@ Date: Feb/15/2020
 #include "Winlet.h"
 #include "Renderables.h"
 #include "GameController.h"
+#include "SimpleShape.h"
+#include "Timer.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
@@ -82,6 +84,19 @@ int main() {
     ley::GameController mainGameController;
     mainGameModel.debugBoard();
 
+
+    //Test SimpleShape
+    std::vector<SDL_Rect> rects;
+    ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
+    renderables.push_back(&firstSimpleShape);
+    firstSimpleShape.addShape("window-title",{10,10,100,10});
+    firstSimpleShape.addShape("window",{10,20,100,100});
+ 
+    //Test Timer
+    ley::Timer firstTimer(mainVideo.getRenderer());
+    firstTimer.fill();
+    renderables.push_back(&firstTimer);
+
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
     ley::Clock mainClock;
@@ -113,10 +128,10 @@ int main() {
 
     /*** UPDATE ***/
         /* Calculate Frame Rate and output to log */
-        //adjust for target fps. 
+        //adjust for target fps.
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 0.98887f) { /*then speed up*/  /* TODO The point at which to speed up may need to 
+            if(avg_target_ratio > 0.954445f) { /*then speed up*/  /* TODO The point at which to speed up may need to 
                                                             be veriable. To ensure we dont dip below, we 
                                                             should probably adjust right before hitting 1
                                                             This adjustment may be very system specific, 

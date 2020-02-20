@@ -3,7 +3,7 @@ Author: Steven Philley
 Purpose: see header.
 Date: Feb/17/2020
 */
-#include "Texture.h";
+#include "Texture.h"
 
 /* RAII */
 ley::Texture::Texture(SDL_Renderer* r,  const char* p, unsigned int s, std::vector<SDL_Rect>* v) 

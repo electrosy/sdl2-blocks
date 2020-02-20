@@ -6,6 +6,8 @@ Date: Feb/17/2020
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
+
+
 #include <string>
 #include <vector>
 
@@ -13,6 +15,8 @@ Date: Feb/17/2020
 #include <SDL2/SDL_image.h>
 
 namespace ley {
+
+enum class Color {red,blue,green,orange,yellow,violet,indigo,white};
 
 class Renderable {
 
@@ -25,7 +29,6 @@ public:
     /* RAII */
     Renderable(SDL_Renderer*);
     ~Renderable();
-
     /* Accessors */
     
 

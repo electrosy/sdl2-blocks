@@ -3,7 +3,7 @@ Author: Steven Philley
 Purpose: see header.
 Date: Feb/17/2020
 */
-#include "Renderables.h";
+#include "Renderables.h"
 
 /* RAII */
 ley::Renderables::Renderables() {
@@ -25,7 +25,9 @@ void ley::Renderables::push_back(Renderable * r) {
 
 void ley::Renderables::renderAll() {
     
-    for(int i = 0; i < renderables.size(); ++i) {
-            renderables[i]->render();
-        }
+    if(renderables.size() > 0) {
+        for(int i = 0; i < renderables.size(); ++i) {
+                renderables[i]->render();
+            }
+    }
 }
