@@ -19,6 +19,7 @@ private:
 protected:
     SDL_Texture *tex;
     SDL_Rect rect_tex;
+    SDL_Rect destRect_tex;
 public:
     SimpleShape(SDL_Renderer*);
     ~SimpleShape();

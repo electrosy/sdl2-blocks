@@ -93,7 +93,7 @@ int main() {
     firstSimpleShape.addShape("window",{10,20,100,100});
  
     //Test Timer
-    ley::Timer firstTimer(mainVideo.getRenderer());
+    ley::Timer firstTimer(mainVideo.getRenderer(),3000); // a 3 second timer
     firstTimer.fill();
     renderables.push_back(&firstTimer);
 
@@ -147,6 +147,7 @@ int main() {
             SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
         }
 
+        firstTimer.runFrame();
         mainGameController.runFrame();
         ++frame_count;
 

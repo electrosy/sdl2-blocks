@@ -38,5 +38,5 @@ void ley::SimpleShape::render() {
     }
 
     //also render out our texture piece.
-    SDL_RenderCopy(renderer, tex, &rect_tex, &rect_tex);
+    SDL_RenderCopy(renderer, tex, &rect_tex, &destRect_tex);
 }

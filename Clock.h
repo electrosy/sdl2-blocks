@@ -24,6 +24,7 @@ public:
     ~Clock();
 
     size_t secondsFromStart();
+    size_t miliSecondsFromStart();
     void reset();
 };
 
