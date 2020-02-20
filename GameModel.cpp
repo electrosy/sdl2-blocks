@@ -74,7 +74,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
     }
 
     //if asked to go outside the bounds of the game board.
-    if(rect.x+offset_x>BOARDSIZE_WIDTH || rect.y+offset_y>BOARDSIZE_HEIGHT) {
+    if(rect.x+offset_x>BOARDSIZE_WIDTH || rect.y+offset_y>=BOARDSIZE_HEIGHT) {
         return 0; /*!*! EARLY EXIT !*!*/
     }
 
