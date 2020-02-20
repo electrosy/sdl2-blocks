@@ -65,21 +65,19 @@ int main() {
     catFrame6.h = 100; catFrame6.w = 100;
     catFrames.push_back(catFrame6);
 
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
+    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", 100, &catFrames);
     catSprite.setPos(695,540);
     renderables.push_back(&catSprite);
     ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
     catSprite2.setPos(100,100);
     renderables.push_back(&catSprite2);
     
-
     // test Winlet
     SDL_Rect debugBounds;
     debugBounds.x = 200; debugBounds.y = 200;
     debugBounds.h = 300; debugBounds.h = 300;
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
-
 
     ley::GameController mainGameController;
     mainGameModel.debugBoard();
@@ -118,7 +116,7 @@ int main() {
         //adjust for target fps. 
         if(avgFPS != 0) {
             auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 0.98887) { /*then speed up*/  /* TODO The point at which to speed up may need to 
+            if(avg_target_ratio > 0.98887f) { /*then speed up*/  /* TODO The point at which to speed up may need to 
                                                             be veriable. To ensure we dont dip below, we 
                                                             should probably adjust right before hitting 1
                                                             This adjustment may be very system specific, 
@@ -133,7 +131,6 @@ int main() {
         if (SDL_GetTicks() % 1000 == 0 ) { 
             SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
         }
-
 
         mainGameController.runFrame();
         ++frame_count;

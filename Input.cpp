@@ -44,6 +44,15 @@ void ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel& gm) {
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
                     gm.debugBoard();
                 }
+                if (state[SDL_SCANCODE_DOWN]) {
+                    gm.moveBlock(ley::Direction::down);
+                }
+                if (state[SDL_SCANCODE_LEFT]) {
+                    gm.moveBlock(ley::Direction::left);
+                }
+                if (state[SDL_SCANCODE_RIGHT]) {
+                    gm.moveBlock(ley::Direction::right);
+                }
                 if (state[SDL_SCANCODE_Q]) {
                     running = false;
                 }

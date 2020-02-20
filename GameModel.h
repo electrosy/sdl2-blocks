@@ -11,28 +11,33 @@ Date: Feb/15/2020
 
 #include "Block.h"
 
+namespace ley {
+
 const auto BOARDSIZE_WIDTH = 10;
 const auto BOARDSIZE_HEIGHT = 20;
 const auto BLOCKSIZE_MAX_HW = 4; //the largest possible height and width(square) we will need for a single block.
-const auto MAX_BLOCKS_ON_BOARD = 500;
-
-namespace ley {
+const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that will be on the board.
+enum class Direction {down,right,up,left};
 
 class GameModel {
 
 private:
-   std::array< std::array<std::string, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT > board;
+   std::array<std::array<BlockTexCode, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT > board;
    Block activeBlock;
+   Block oldBlock;
    void clearBoard();
-   void putActive();
+   void clearOldBlock();
+   void putBlock(Block&); 
+   bool canPut(Block&, Direction d);
+   bool canMoveDown();
+   bool canMoveLeft();
+   bool canMoveRight();
 public:
     GameModel();
     ~GameModel();
-
     void downExpired(); //block automaticly moves down based on a time interval
-    void moveBlock();
+    void moveBlock(Direction d);
     void isBottom(); //test if block is at bottom.
-
     void debugBoard(); //print the board to the console
 };
 
