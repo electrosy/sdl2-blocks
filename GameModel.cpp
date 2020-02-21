@@ -21,17 +21,11 @@ ley::GameModel::~GameModel() {
 }
 
 /* Functions */
-bool ley::GameModel::canMoveDown() {
-
+std::array<std::array<ley::BlockTexCode, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
+ley::GameModel::getBoard() {
+    
 }
 
-bool ley::GameModel::canMoveLeft() {
-
-}
-
-bool ley::GameModel::canMoveRight() {
-
-}
 
 void ley::GameModel::clearBoard() {
     for(auto i = 0; i < BOARDSIZE_HEIGHT; ++i) {

@@ -30,12 +30,13 @@ private:
    void clearOldBlock();
    void putBlock(Block&); 
    bool canPut(Block&, Direction d);
-   bool canMoveDown();
-   bool canMoveLeft();
-   bool canMoveRight();
 public:
     GameModel();
     ~GameModel();
+
+    std::array<std::array<BlockTexCode, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
+    getBoard();
+
     void downExpired(); //block automaticly moves down based on a time interval
     void moveBlock(Direction d);
     void debugBoard(); //print the board to the console

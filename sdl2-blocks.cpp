@@ -100,12 +100,20 @@ int main() {
     firstSimpleShape.addShape("window",{10,20,100,100});
  
     //Test Timer
-    ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,25}); // a 3 second timer
+    ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     renderables.push_back(&firstTimer);
 
     //Test Timer
-    ley::Timer secondTimer(mainVideo.getRenderer(),2000,{10,400,100,25}); // a 2 second timer
+    ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2 second timer
     renderables.push_back(&secondTimer);
+
+    //Test Timer
+    ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 2 second timer
+    renderables.push_back(&thirdTimer);
+
+    //Test Timer
+    ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
+    renderables.push_back(&fourthTimer);
 
     //Temp texture for test rendering the board.
     SDL_Surface* temp_surface = IMG_Load("assets/BlockPiece.bmp");
@@ -170,6 +178,8 @@ int main() {
 
         firstTimer.runFrame();
         secondTimer.runFrame();
+        thirdTimer.runFrame();
+        fourthTimer.runFrame();
         mainGameController.runFrame();
         ++frame_count;
 

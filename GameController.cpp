@@ -6,6 +6,7 @@ Date: Feb/18/2020
 #include <SDL2/SDL.h>
 #include "GameController.h"
 #include "Textures.h"
+#include "Block.h"
 
 typedef ley::Textures TextureManager;
 
@@ -18,27 +19,41 @@ ley::GameController::GameController(SDL_Renderer* r, ley::GameModel* g)
 ley::GameController::~GameController() {
 
 }
+/* Accessors */
+
+
 /* Functions */
 void ley::GameController::renderBoard(SDL_Texture* t) {
+    
+    int startX = 200;
+
+    //get width and height of the texture
+    int w, h;SDL_QueryTexture(t, NULL, NULL, &w, &h);
+
     SDL_Rect start_rect;
     start_rect.x = 0; start_rect.y = 0;
     start_rect.h = 20; start_rect.w = 20;
 
     SDL_Rect dest_rect;
-    dest_rect.x = 400; dest_rect.y = 400;
-    dest_rect.h = 20; dest_rect.w = 20;
-
-    SDL_Rect dest_rect2;
-    dest_rect2.x = 400; dest_rect2.y = 420;
-    dest_rect2.h = 20; dest_rect2.w = 20;
-
-    SDL_Texture* test = TextureManager::Instance()->getTexture("d");
+    dest_rect.x = startX; dest_rect.y = 0;
+    dest_rect.h = h; dest_rect.w = w;
 
     // TODO Loop through the game model and output a representation to 
     //      the video screen.
-
-    SDL_RenderCopy(ren, test, &start_rect, &dest_rect);
-    SDL_RenderCopy(ren, test, &start_rect, &dest_rect2);
+    SDL_Texture* test = nullptr;
+    for(auto row : *gm->getBoard()) {
+        for(auto column : row) {
+            if(column == BlockTexCode::d) {
+                test = TextureManager::Instance()->getTexture("d");
+                if(test != nullptr) {
+                SDL_RenderCopy(ren, test, &start_rect, &dest_rect);
+                }
+            }
+            dest_rect.x = dest_rect.x + w;
+        }
+        dest_rect.y = dest_rect.y + h;
+        dest_rect.x=startX;
+    }
 }
 
 
