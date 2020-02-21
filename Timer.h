@@ -26,7 +26,7 @@ private:
     //updateProgress() rect based on time
     void adjustProgress(float);
 public:
-    Timer(SDL_Renderer*, unsigned int);
+    Timer(SDL_Renderer*, unsigned int, SDL_Rect rect);
     ~Timer();
 
     void hasElapsed();

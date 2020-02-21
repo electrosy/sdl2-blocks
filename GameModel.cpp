@@ -132,11 +132,7 @@ void ley::GameModel::moveBlock(Direction d) {
 
     putBlock(activeBlock);
 }
-    
 
-void ley::GameModel::isBottom() {
-
-}
 void ley::GameModel::debugBoard() {
 
     std::string sRow = "";

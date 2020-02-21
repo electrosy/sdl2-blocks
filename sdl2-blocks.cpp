@@ -19,18 +19,27 @@ Date: Feb/15/2020
 #include "GameController.h"
 #include "SimpleShape.h"
 #include "Timer.h"
+#include "Textures.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
+auto const MILI_ADJ_MAX = 1000;
+
+ley::Textures* ley::Textures::instance = nullptr;
+typedef ley::Textures TextureManager;
 
 int main() {
+
+    ley::Video mainVideo;
+    TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
+    TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp");
     bool game_running = 1;
 
-    ley::GameModel mainGameModel;
-    ley::Video mainVideo;
-    ley::Input mainInput;
-    //ley::TextureManager mainResource;
     
+    ley::Input mainInput;
+    ley::GameModel mainGameModel;
+    ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
+
     ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
     mainSprite.setPos(10,10);
     ley::Renderables renderables;
@@ -81,9 +90,7 @@ int main() {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-    ley::GameController mainGameController;
     mainGameModel.debugBoard();
-
 
     //Test SimpleShape
     std::vector<SDL_Rect> rects;
@@ -93,9 +100,17 @@ int main() {
     firstSimpleShape.addShape("window",{10,20,100,100});
  
     //Test Timer
-    ley::Timer firstTimer(mainVideo.getRenderer(),3000); // a 3 second timer
-    firstTimer.fill();
+    ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,25}); // a 3 second timer
     renderables.push_back(&firstTimer);
+
+    //Test Timer
+    ley::Timer secondTimer(mainVideo.getRenderer(),2000,{10,400,100,25}); // a 2 second timer
+    renderables.push_back(&secondTimer);
+
+    //Temp texture for test rendering the board.
+    SDL_Surface* temp_surface = IMG_Load("assets/BlockPiece.bmp");
+    SDL_Texture* temp_tex = SDL_CreateTextureFromSurface(mainVideo.getRenderer(), temp_surface);
+    SDL_FreeSurface(temp_surface);
 
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
@@ -109,6 +124,7 @@ int main() {
         /* Render Sprites to buffer */
         auto avgFPS = 0;
         renderables.renderAll(); // render all sprites
+        mainGameController.renderBoard(temp_tex);
         /* Output report */
         if (SDL_GetTicks() % 1000 == 0 ) {
             auto seconds_from_start = mainClock.secondsFromStart();
@@ -136,10 +152,15 @@ int main() {
                                                             should probably adjust right before hitting 1
                                                             This adjustment may be very system specific, 
                                                             may be best to save the adjustment off to a file*/
-                --fpsAdjustMili;
+                
+                fpsAdjustMili -= 5;
+                if(fpsAdjustMili < 0) {fpsAdjustMili = 0;}
             } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE slowing down seems easier   
                                                                             because you dont notice when its too fast. */
-                ++fpsAdjustMili;
+                
+                if(fpsAdjustMili < MILI_ADJ_MAX) {
+                    ++fpsAdjustMili;
+                }
             } else { fpsAdjustMili = 0; }
         }
 
@@ -148,6 +169,7 @@ int main() {
         }
 
         firstTimer.runFrame();
+        secondTimer.runFrame();
         mainGameController.runFrame();
         ++frame_count;
 

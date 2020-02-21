@@ -7,21 +7,27 @@ Date: Feb/15/2020
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include "Video.h"
 #include "Clock.h"
 #include "Block.h"
+#include "GameModel.h"
 
 namespace ley {
 
 class GameController {
 
 private:
-   Clock blockDownClock;
+    SDL_Renderer* ren;
+    ley::GameModel* gm;
+    void goNext(); //setup the next round, a round is a new block after the last has been placed.
 public:
-    GameController();
+    GameController(SDL_Renderer* , ley::GameModel*);
     ~GameController();
 
-    void goNext(); //setup the next round, a round is a new block after the last has been placed.
     void runFrame(); // call this for each frame in the game to control the game model.
+    
+    void renderBoard(SDL_Texture*); //renders the board to the video.
+    
 };
 
 }

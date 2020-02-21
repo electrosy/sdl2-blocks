@@ -38,8 +38,8 @@ public:
     ~GameModel();
     void downExpired(); //block automaticly moves down based on a time interval
     void moveBlock(Direction d);
-    void isBottom(); //test if block is at bottom.
     void debugBoard(); //print the board to the console
+    //std::string getBoard
 };
 
 }

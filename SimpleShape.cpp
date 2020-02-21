@@ -19,7 +19,6 @@ void ley::SimpleShape::addShape(std::string id, SDL_Rect rect) {
   shapes.insert(std::make_pair(id,rect));
 }
 
-
 /* Functions */
 /* private */
 void ley::SimpleShape::drawRect(const SDL_Rect* r) {
@@ -29,9 +28,6 @@ void ley::SimpleShape::drawRect(const SDL_Rect* r) {
 void ley::SimpleShape::render() {
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawLine(renderer, 320, 200, 300, 240);
-    SDL_RenderDrawLine(renderer, 300, 240, 340, 240);
-    SDL_RenderDrawLine(renderer, 340, 240, 320, 200);
 
     for (auto& [key, value]: shapes) {
         SDL_RenderDrawRect(renderer, &value);
