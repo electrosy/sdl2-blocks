@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: see header.
 Date: Feb/15/2020
 */
@@ -23,7 +25,7 @@ ley::GameModel::~GameModel() {
 /* Functions */
 std::array<std::array<ley::BlockTexCode, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
-    
+
 }
 
 

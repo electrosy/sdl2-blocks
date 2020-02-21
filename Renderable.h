@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: An object that can be rendered using SDL_RenderCopy
 Date: Feb/17/2020
 */

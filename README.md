@@ -2,7 +2,7 @@
 
 ## Install
 
-### ALL
+### Linux
 
 mkdir ~/Code/sdl2-blocks;
 cd ~/Code/sdl2-blocks;
@@ -15,6 +15,10 @@ sudo dnf install SDL2-devel; sudo dnf install SDL2_image-devel;
 #### Ubuntu
 
 sudo apt-get install SDL2-devel; sudo apt-get install SDL2_image-devel;
+
+## Run
+
+make; ./sdl2-blocks;
 
 ## About
 

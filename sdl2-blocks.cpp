@@ -1,6 +1,8 @@
 /*
-Author: Steven Philley
-Purpose: A fun game.
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
+Purpose: A fun game and Mini Game Framework.
 Date: Feb/15/2020
 */
 #include <stdio.h>

@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A timer works a bit like a stop watch.
          hasElapsed() will return a percentage of the time elapsed.
          hasElapsed() will return 101 if the time has already expired, and will reset the time.

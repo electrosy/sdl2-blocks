@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A GameModel stores a representation of the game state.
 Date: Feb/15/2020
 */

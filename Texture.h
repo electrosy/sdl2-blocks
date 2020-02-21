@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: Wrap SDL Texture which is a Renderable. Renderables
          are renderable with SDL_RenderCopy
 Date: Feb/17/2020

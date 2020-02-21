@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A collection of all the renderable objects for the program.
 Date: Feb/17/2020
 */

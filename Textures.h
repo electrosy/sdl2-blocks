@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A container for loading textures (single graphics files) from file and retrieving their SDL_Texture type.
          See Texture for animated frames.
          A singleton

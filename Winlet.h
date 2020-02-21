@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A window within an SDL window concept for SDL2
 Date: Feb/16/2020
 */

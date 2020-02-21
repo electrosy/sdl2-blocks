@@ -1,5 +1,7 @@
 /*
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: Representation of a sprite object on the screen. 
          This is the most basic game object that is 
          displayed on the screen

@@ -1,5 +1,7 @@
 /* 
-Author: Steven Philley
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
 Purpose: A SimpleShape is a Renderable object that deals with rendering Pixels, Rects, Lines, etc...
 Date: Feb/20/2020
 */
