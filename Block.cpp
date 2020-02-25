@@ -18,8 +18,8 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockType ty)
             rect.w = 2;
         break;
         case BlockType::empty :
-            rect.h = 0;
-            rect.w = 0;
+            rect.h = 2;
+            rect.w = 2;
         break;
         default : ;
     }

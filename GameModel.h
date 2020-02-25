@@ -30,8 +30,8 @@ private:
    Block oldBlock;
    void clearBoard();
    void clearOldBlock();
-   void putBlock(Block&); 
-   bool canPut(Block&, Direction d);
+   void putBlock(Block&);
+   bool canPut(Block&, Direction d); //can physically put the block in the board.
 public:
     GameModel();
     ~GameModel();
@@ -42,7 +42,8 @@ public:
     void downExpired(); //block automaticly moves down based on a time interval
     void moveBlock(Direction d);
     void debugBoard(); //print the board to the console
-    //std::string getBoard
+    bool canMoveDown(); //Can move down based on Game rules.
+    void newBlock();
 };
 
 }
