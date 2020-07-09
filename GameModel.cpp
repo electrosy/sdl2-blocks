@@ -11,7 +11,7 @@ Date: Feb/15/2020
 
 /* RAII */
 ley::GameModel::GameModel()
-: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::empty) {
+: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
@@ -39,24 +39,23 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
         for(int j = 0; j < rect.h; ++j) {
-            // TODO check for collision with the other blocks that have been put in place. 
-
-            //
             // NOTE board works backwards, this is where we reverse x and y. 
             //      this is common, see:
-            // https://stackoverflow.com/questions/2203525/are-the-x-y-and-row-col-attributes-of-a-two-dimensional-array-backwards  
-            board[rect.y+j][rect.x+i] = b.renderPart(i,j);
+            // https://stackoverflow.com/questions/2203525/are-the-x-y-and-row-col-attributes-of-a-two-dimensional-array-backwards 
+            //
+            
+            board[rect.y+j][rect.x+i] = b.renderPart(i,j);         
         }
     }
 }
 
-bool ley::GameModel::canPut(Block& b, Direction d) {
-    SDL_Rect rect = b.getRect();
-
+// **check for collision with the other blocks that have been put in place, 
+//   also checks for collision with game board boundry
+bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should probably go into the game controller
 /* Check borders */
-    unsigned int offset_x = 0; 
+    unsigned int offset_x = 0;
     unsigned int offset_y = 0;
-    
+    SDL_Rect rect = b.getRect();
     switch (d) {
         case Direction::down :
             offset_x = 0;
@@ -77,12 +76,19 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
         return false; /*!*! EARLY EXIT !*!*/  //hit the border.
     } /* End Check Borders */
 
+    //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.
     switch (d) {
         case Direction::down : // check across x (x+n)
            for(int i = 0; i<rect.w; ++i) {
-               if(board[rect.y+offset_y-1][rect.x+offset_x+i] != BlockTexCode::O) {
-                   return false; /*!*! EARLY EXIT !*!*/
+               for(int j = 0; j<rect.h; ++j) {
+                    //if there is a block piece to put,then check to see if it can be put.
+                    BlockTexCode renderablePart = b.renderPart(i, j);
+                    if( (renderablePart != BlockTexCode::O)
+                        && (board[rect.y + offset_y - 1][rect.x + i] != BlockTexCode::O)
+                    ) {
+                            return false; /*!*! EARLY EXIT !*!*/
+                    }
                }
            }
         break;
@@ -101,7 +107,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
            }
         break;
         
-        break;
+        break; // TODO extra break??
         default : break;
     }
 
@@ -117,9 +123,8 @@ void ley::GameModel::clearOldBlock() {
 
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
-    activeBlock = Block(4,0,BlockType::cube);
-    oldBlock = Block(4,0,BlockType::empty);
-   // oldBlock.getRect().x = 2; oldBlock.getRect().y = 2;
+    activeBlock = Block(4,0,BlockType::tee);
+    oldBlock = Block(4,0,BlockType::tee,1);
 }
 
 void ley::GameModel::moveBlock(Direction d) {

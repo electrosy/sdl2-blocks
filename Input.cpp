@@ -39,10 +39,7 @@ void ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel& gm) {
                 }
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
                     |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
-                    ) {
-                    printf("LALT + Return key pressed.\n");
-                    fullscreen = !fullscreen;
-                }
+                    ) { fullscreen = !fullscreen; }
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
                     gm.debugBoard();
                 }
