@@ -45,7 +45,7 @@ private:
     SDL_Rect rect; //Position and dimension    
     std::array<std::array<BlockTexCode, 4>,4> block;
     void setBlock(BlockType);
-    bool cf; //clear flag.
+    bool cf; //clear flag, used for a clear block, to clean up the oldposition.
 public:
 
     /* RAII */
@@ -55,6 +55,7 @@ public:
     /* Accessors */
     SDL_Rect getRect() {return rect;}; // TODO this should probably return a const
     const BlockType getType() {return type;};
+    const bool getClear() {return cf;};
     void setH(unsigned int h) {rect.h = h;};
     void setW(unsigned int w) {rect.w = w;};
     
@@ -63,6 +64,7 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
+    int heightAtWidth(int);
 };
 
 }

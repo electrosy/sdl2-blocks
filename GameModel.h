@@ -44,6 +44,7 @@ public:
     void debugBoard(); //print the board to the console
     bool canMoveDown(); //Can move down based on Game rules.
     void newBlock();
+    void setBlock();
 };
 
 }
