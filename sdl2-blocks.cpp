@@ -92,7 +92,7 @@ int main() {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-    mainGameModel.debugBoard();
+    mainGameModel.debugBoard(false);
 
     //Test SimpleShape
     std::vector<SDL_Rect> rects;

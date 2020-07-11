@@ -8,7 +8,6 @@ Date: Feb/15/2020
 #ifndef GAMEMODEL_H
 #define GAMEMODEL_H
 
-#include <vector>
 #include <array>
 
 #include "Block.h"
@@ -25,7 +24,7 @@ enum class Direction {down,right,up,left};
 class GameModel {
 
 private:
-   std::array<std::array<BlockTexCode, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT > board;
+   std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
    Block activeBlock;
    Block oldBlock;
    void clearBoard();
@@ -36,12 +35,12 @@ public:
     GameModel();
     ~GameModel();
 
-    std::array<std::array<BlockTexCode, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
+    std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
 
     void downExpired(); //block automaticly moves down based on a time interval
     void moveBlock(Direction d);
-    void debugBoard(); //print the board to the console
+    void debugBoard(bool); //print the board to the console
     bool canMoveDown(); //Can move down based on Game rules.
     void newBlock();
     void setBlock();

@@ -11,6 +11,11 @@ Date: Feb/20/2020
 ley::SimpleShape::SimpleShape(SDL_Renderer* r)
 : Renderable(r) {
     
+    rect_tex.w = -1;
+    rect_tex.h = -1;
+
+    destRect_tex.w = -1;
+    destRect_tex.h = -1;
 }
 
 ley::SimpleShape::~SimpleShape() {
@@ -36,5 +41,7 @@ void ley::SimpleShape::render() {
     }
 
     //also render out our texture piece.
-    SDL_RenderCopy(renderer, tex, &rect_tex, &destRect_tex);
+    if(rect_tex.h != -1 && rect_tex.w != -1 && destRect_tex.h != -1 && destRect_tex.w != -1) {
+        SDL_RenderCopy(renderer, tex, &rect_tex, &destRect_tex);
+    }
 }

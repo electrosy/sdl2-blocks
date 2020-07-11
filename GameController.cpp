@@ -45,7 +45,7 @@ void ley::GameController::renderBoard(SDL_Texture* t) {
     SDL_Texture* test = nullptr;
     for(auto row : *gm->getBoard()) {
         for(auto column : row) {
-            if(column == BlockTexCode::d) {
+            if(column.first == BlockTexCode::d) {
                 test = TextureManager::Instance()->getTexture("d");
                 if(test != nullptr) {
                     SDL_RenderCopy(ren, test, &start_rect, &dest_rect);

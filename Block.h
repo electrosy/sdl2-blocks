@@ -65,6 +65,7 @@ public:
     void moveLeft();
     void moveRight();
     int heightAtWidth(int);
+    int widthAtHeight(int);
 };
 
 }

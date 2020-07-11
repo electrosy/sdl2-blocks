@@ -48,10 +48,20 @@ void ley::Block::moveRight() {
 ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned int y /* height */) {
     return block[y][x];
 }
+//return width for this height value.
+int ley::Block::widthAtHeight(int height) {
+    auto widthAtY = 0;
+    for(auto k=0; k<rect.w; ++k) {
+        ley::BlockTexCode partCheck = renderPart(k,height);
+        if(partCheck != ley::BlockTexCode::O) {
+            widthAtY = k + 1;
+        }
+    }
+    return widthAtY;
+}
+
 //return height for this width value.
 int ley::Block::heightAtWidth(int width) {
-
-
     auto heightAtX = 0;
     for(auto k=0; k<rect.h; ++k) {
         ley::BlockTexCode partCheck = renderPart(width,k);
