@@ -11,7 +11,8 @@ Date: Feb/15/2020
 
 /* RAII */
 ley::GameModel::GameModel()
-: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1) {
+: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1),
+    debug_phase(0) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
@@ -136,8 +137,42 @@ void ley::GameModel::clearOldBlock() {
 
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
-    activeBlock = Block(4,0,BlockType::tee,false);
-    oldBlock = Block(4,0,BlockType::tee,true);
+  //  activeBlock = Block(4,0,BlockType::tee,false);
+  //  oldBlock = Block(4,0,BlockType::tee,true);
+
+
+    switch(debug_phase) {
+        case 0 : 
+            activeBlock = Block(4,0,BlockType::tee,false);
+            oldBlock = Block(4,0,BlockType::tee,true);
+        break;
+        case 1 : 
+            activeBlock = Block(4,0,BlockType::rLee,false);
+            oldBlock = Block(4,0,BlockType::rLee,true);
+        break;
+        case 2 : 
+            activeBlock = Block(4,0,BlockType::zee,false);
+            oldBlock = Block(4,0,BlockType::zee,true);
+        break;
+        case 3 : 
+            activeBlock = Block(4,0,BlockType::mzee,false);
+            oldBlock = Block(4,0,BlockType::mzee,true);
+        break;
+        case 4 : 
+            activeBlock = Block(4,0,BlockType::lLee,false);
+            oldBlock = Block(4,0,BlockType::lLee,true);
+        break;
+        case 5 : 
+            activeBlock = Block(4,0,BlockType::line,false);
+            oldBlock = Block(4,0,BlockType::line,true);
+        break;
+        default :
+            activeBlock = Block(4,0,BlockType::tee,false);
+            oldBlock = Block(4,0,BlockType::tee,true);
+        break;
+    }
+
+    ++debug_phase;
 }
 
 //TODO this function should probably go in the controller

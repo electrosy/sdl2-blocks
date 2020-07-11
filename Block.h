@@ -42,7 +42,7 @@ class Block {
 private:
     BlockType type;
     unsigned int orientation; // 0-3 - rotating to the left piece points down,right,up,left
-    SDL_Rect rect; //Position and dimension    
+    SDL_Rect rect; //Position and dimension
     std::array<std::array<BlockTexCode, 4>,4> block;
     void setBlock(BlockType);
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.

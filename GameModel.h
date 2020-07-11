@@ -31,6 +31,7 @@ private:
    void clearOldBlock();
    void putBlock(Block&);
    bool canPut(Block&, Direction d); //can physically put the block in the board.
+   unsigned int debug_phase = 0; //used to keep track of different phases of play
 public:
     GameModel();
     ~GameModel();
