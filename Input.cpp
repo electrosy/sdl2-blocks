@@ -28,33 +28,43 @@ void ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel& gm) {
                 break;
             
             case SDL_KEYDOWN:
-                
                 SDL_Log("Keydown Detected!");
                 
-                if (state[SDL_SCANCODE_RETURN]) {
-                  printf("<RETURN> is pressed.\n");
-                }
-                if (state[SDL_SCANCODE_RIGHT] && state[SDL_SCANCODE_UP]) {
-                    printf("Right and Up Keys Pressed.\n");
-                }
+                //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
                     |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
                     ) { fullscreen = !fullscreen; }
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
                     gm.debugBoard(false);
                 }
+                //Output setstate layer on the board
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
                     gm.debugBoard(true);
                 }
+                //Rotate Block counter clockwise
+                if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_E]) {
+                    gm.rotateBlock(false);
+                    SDL_Log("Rotate counter clockwise");
+                }
+                //Rotate Block clockwise
+                if (state[SDL_SCANCODE_R]) {
+                    gm.rotateBlock(true);
+                    SDL_Log("Rotate clockwise");
+                }
+
+                //move block down
                 if (state[SDL_SCANCODE_DOWN]) {
                     gm.moveBlock(ley::Direction::down);
                 }
+                //move block left
                 if (state[SDL_SCANCODE_LEFT]) {
                     gm.moveBlock(ley::Direction::left);
                 }
+                //move block right
                 if (state[SDL_SCANCODE_RIGHT]) {
                     gm.moveBlock(ley::Direction::right);
                 }
+                //quite game
                 if (state[SDL_SCANCODE_Q]) {
                     running = false;
                 }

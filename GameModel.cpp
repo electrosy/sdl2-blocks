@@ -45,7 +45,6 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
             // https://stackoverflow.com/questions/2203525/are-the-x-y-and-row-col-attributes-of-a-two-dimensional-array-backwards 
             //
             BlockTexCode renderPart = b.renderPart(i,j);
-
             if(board[rect.y+j][rect.x+i].second == false) {
                 board[rect.y+j][rect.x+i].first = renderPart;
             }
@@ -63,7 +62,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
     switch (d) {
         case Direction::down :
           offset_x = 0;
-          offset_y = rect.h + 1;
+          offset_y = rect.h + 1; 
         break;
         case Direction::right :
             offset_x = rect.w + 1;
@@ -80,7 +79,6 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
         return false; /*!*! EARLY EXIT !*!*/  //hit the border.
     } /* End Check Borders */
 
-    bool canPut = true;
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.
     switch (d) {
@@ -93,7 +91,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
                     if( (renderablePart != BlockTexCode::O)//we have a part to render.
                         && (boardPart != BlockTexCode::O)//there is an empty space on the board.
                     ) {
-                            canPut = false;
+                            return false; /*** EARLY EXIT! ***/
                     }
                }
            }
@@ -106,7 +104,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
-                            canPut = false;
+                           return false; /*** EARLY EXIT! ***/
                     }
                }
            }
@@ -119,17 +117,28 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
-                            canPut = false;
+                            return false; /*** EARLY EXIT! ***/
                     }
                }
            }
         break;
-        
+        case Direction::up : //this is a rotation
+            for(int i = 0; i < rect.w; ++i) {
+               for(int j = 0; j < rect.h; ++j) {
+                    //if there is a block piece to put,then check to see if it can be put.
+                    bool boardPart = board[rect.y + j][rect.x + i].second;
+                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
+                        && (boardPart == true)//the space is already occupied
+                    ) {
+                            return false; /*** EARLY EXIT! ***/
+                    }
+               }
+           }
         break; // TODO extra break??
         default : break;
     }
 
-    return canPut;
+    return true;
 }
 
 void ley::GameModel::downExpired() {
@@ -141,10 +150,6 @@ void ley::GameModel::clearOldBlock() {
 
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
-  //  activeBlock = Block(4,0,BlockType::tee,false);
-  //  oldBlock = Block(4,0,BlockType::tee,true);
-
-
     switch(debug_phase) {
         case 0 : 
             activeBlock = Block(4,0,BlockType::tee,false);
@@ -191,6 +196,26 @@ void ley::GameModel::setBlock() {
             }
         }
     }
+}
+void ley::GameModel::rotateBlock(bool r) {
+    if(canRotate(r)) {
+        activeBlock.rotate(r);
+        clearOldBlock();
+        oldBlock.rotate(r);
+        putBlock(activeBlock);
+    }
+}
+
+//** TODO we need to synchronize the rotation so that if doesn't happen 
+//** TODO when the timer stops the block.
+bool ley::GameModel::canRotate(bool r) {
+    //rotate the block 
+    bool canput = false;
+    activeBlock.rotate(r);
+    canput = canPut(activeBlock, ley::Direction::up); //up is a rotation
+    activeBlock.rotate(!r); //rotate it back, because this 
+                            //function is simply a test only
+    return canput;
 }
 
 //TODO this function should probably go in the controller

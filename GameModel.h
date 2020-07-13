@@ -40,7 +40,9 @@ public:
     getBoard();
 
     void downExpired(); //block automaticly moves down based on a time interval
-    void moveBlock(Direction d);
+    void moveBlock(Direction);
+    void rotateBlock(bool);
+    bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console
     bool canMoveDown(); //Can move down based on Game rules.
     void newBlock();

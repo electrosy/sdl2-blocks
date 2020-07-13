@@ -21,30 +21,29 @@ enum class BlockType {cube,tee,rLee,zee,mzee,lLee,line,empty};
 enum class BlockTexCode {a,b,c,d,e,f,g,h,i,j,k,l,O,Z};
 
 const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
-    std::make_pair (BlockTexCode::a, "a"),
-    std::make_pair (BlockTexCode::b, "b"),
-    std::make_pair (BlockTexCode::c, "c"),
-    std::make_pair (BlockTexCode::d, "d"),//This is the block that is being activly moved on the board.
-    std::make_pair (BlockTexCode::e, "e"),
-    std::make_pair (BlockTexCode::f, "f"),
-    std::make_pair (BlockTexCode::g, "g"),
-    std::make_pair (BlockTexCode::h, "h"),
-    std::make_pair (BlockTexCode::i, "i"),
-    std::make_pair (BlockTexCode::j, "j"),
-    std::make_pair (BlockTexCode::k, "k"),
-    std::make_pair (BlockTexCode::l, "l"),
+    std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
+    std::make_pair (BlockTexCode::b, "b"), //
+    std::make_pair (BlockTexCode::c, "c"), //
+    std::make_pair (BlockTexCode::d, "d"), //
+    std::make_pair (BlockTexCode::e, "e"), //
+    std::make_pair (BlockTexCode::f, "f"), //
+    std::make_pair (BlockTexCode::g, "g"), //
+    std::make_pair (BlockTexCode::h, "h"), //
+    std::make_pair (BlockTexCode::i, "i"), //
+    std::make_pair (BlockTexCode::j, "j"), //
+    std::make_pair (BlockTexCode::k, "k"), //
+    std::make_pair (BlockTexCode::l, "l"), //
     std::make_pair (BlockTexCode::O, "O"), //This is the empty texture blockpart.
-    std::make_pair (BlockTexCode::Z, "Z") //This is a block that has been set into the board.
   };
 
 class Block {
 
 private:
     BlockType type;
-    unsigned int orientation; // 0-3 - rotating to the left piece points down,right,up,left
+    unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and dimension
     std::array<std::array<BlockTexCode, 4>,4> block;
-    void setBlock(BlockType);
+    void setBlock(BlockType,int = 0);
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
 public:
 
@@ -58,6 +57,7 @@ public:
     const bool getClear() {return cf;};
     void setH(unsigned int h) {rect.h = h;};
     void setW(unsigned int w) {rect.w = w;};
+    void rotate(bool); // false for counterclockwise and true for clockwise.
     
     /* Functions */
     BlockTexCode renderPart(unsigned int, unsigned int); /* Return true or false depending on if the block would take up the x,y space */
