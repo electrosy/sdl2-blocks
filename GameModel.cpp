@@ -84,7 +84,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.
     switch (d) {
-        case Direction::down : // check across x (x+n)
+        case Direction::down : 
            for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
@@ -98,14 +98,12 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
                }
            }
         break;
-        case Direction::right : // check across y (y+n)
+        case Direction::right : 
             for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
-                    BlockTexCode renderablePart = b.renderPart(i, j);
-                    auto widthAtHeight = b.widthAtHeight(j);
-                    bool boardPart = board[rect.y + j][rect.x + widthAtHeight].second;
-                    if( (renderablePart != BlockTexCode::O)//we have a part to render.
+                    bool boardPart = board[rect.y + j][rect.x + i + 1].second;
+                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
                             canPut = false;
@@ -113,10 +111,16 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
                }
            }
         break;
-        case Direction::left : // check across y (y-n)
-            for(int i = 0; i<rect.h; ++i) {
-               if(board[rect.y+offset_y+i][rect.x+offset_x].first != BlockTexCode::O) {
-                   canPut = false; 
+        case Direction::left :
+            for(int i = 0; i < rect.w; ++i) {
+               for(int j = 0; j < rect.h; ++j) {
+                    //if there is a block piece to put,then check to see if it can be put.
+                    bool boardPart = board[rect.y + j][ (rect.x - 1) + i ].second;
+                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
+                        && (boardPart == true)//the space is already occupied
+                    ) {
+                            canPut = false;
+                    }
                }
            }
         break;

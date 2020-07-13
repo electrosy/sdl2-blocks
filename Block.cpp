@@ -67,13 +67,20 @@ void ley::Block::moveRight() {
 ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned int y /* height */) {
     return block[y][x];
 }
+
+//return the max possible x value which the block occupies for this height.
+int ley::Block::max_x(int height) {
+
+    return rect.w > widthAtHeight(height) ? rect.w : widthAtHeight(height);
+}
+
 //return width for this height value.
 int ley::Block::widthAtHeight(int height) {
     auto widthAtY = 0;
     for(auto k=0; k<rect.w; ++k) {
         ley::BlockTexCode partCheck = renderPart(k,height);
         if(partCheck != ley::BlockTexCode::O) {
-            widthAtY = k + 1;
+            widthAtY++;
         }
     }
     return widthAtY;

@@ -64,6 +64,7 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
+    int max_x(int);
     int heightAtWidth(int);
     int widthAtHeight(int);
 };
