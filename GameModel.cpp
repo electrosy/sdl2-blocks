@@ -72,6 +72,9 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
             offset_x = -1;
             offset_y = 0;
         break;
+        case Direction::up : //rotation
+            offset_x = rect.w;
+            offset_y = rect.h;
         default : break;
     }
     //if asked to go outside the bounds of the game board.
