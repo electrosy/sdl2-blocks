@@ -122,10 +122,16 @@ void ley::Block::setBlock(BlockType t, int o) {
     orientation = o;
     switch (t) {
         case BlockType::cube :
-            block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+            switch(o)
+            case 0 :
+            case 1 :
+            case 2 :
+            case 3 :
+                block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+            break;
         break;
         case BlockType::tee :
             switch(o) {
@@ -164,34 +170,143 @@ void ley::Block::setBlock(BlockType t, int o) {
             }
         break;
         case BlockType::rLee :
-            block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[2] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+             switch(o) {
+                case 0 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 3;
+                    rect.w = 2;
+                break;
+                case 1 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 2;
+                    rect.w = 3;
+                break;
+                case 2 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 3;
+                    rect.w = 2;
+                break; 
+                case 3 :
+                    block[0] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::d, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 2;
+                    rect.w = 3;
+                break;
+             }
         break;
         case BlockType::zee :
-            block[0] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
-            block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+            switch(o) {
+                case 0 :
+                case 2 :
+                    block[0] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 2;
+                    rect.w = 3;
+                break;
+                case 1 :
+                case 3 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 3;
+                    rect.w = 2;
+                break;
+            }
         break;
         case BlockType::mzee :
-            block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[1] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
-            block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+             switch(o) {
+                case 0 :
+                case 2 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 2;
+                rect.w = 3;
+                break;
+                case 1 :
+                case 3 :
+                    block[0] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 3;
+                rect.w = 2;
+                break;
+             }
         break;
         case BlockType::lLee :
-            block[0] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[1] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[2] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+            switch (o) {
+            case 0 :
+                block[0] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[1] = { BlockTexCode::O, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[2] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 3;
+                rect.w = 2;
+            break;
+            case 1 :
+                block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                block[1] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::d, BlockTexCode::O };
+                block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 2;
+                rect.w = 3;
+            break;
+            case 2 :
+                block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::O, BlockTexCode::O };
+                block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 3;
+                rect.w = 2;
+            break;
+            case 3 :
+                block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[1] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::O };
+                block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                rect.h = 2;
+                rect.w = 3;
+            break;
+            }
         break;
         case BlockType::line :
-            block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-            block[3] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+            switch (o) {
+                case 0 :
+                case 2 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 4;
+                    rect.w = 1;
+                break;
+
+                case 1 :
+                case 3 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::d };
+                    block[1] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 1;
+                    rect.w = 4;
+                break;
+            }
         break;
         default : ;
     }
