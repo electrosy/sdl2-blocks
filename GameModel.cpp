@@ -12,7 +12,7 @@ Date: Feb/15/2020
 /* RAII */
 ley::GameModel::GameModel()
 : activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1),
-    debug_phase(0) {
+    debug_phase(0), numLines(0) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
@@ -209,8 +209,8 @@ void ley::GameModel::rotateBlock(bool r) {
     }
 }
 
-//** TODO we need to synchronize the rotation so that if doesn't happen 
-//** TODO when the timer stops the block.
+//** TODO we need to synchronize the rotation so that it doesn't happen 
+//** TODO when the timer moves the block down.
 bool ley::GameModel::canRotate(bool r) {
     //rotate the block 
     bool canput = false;
@@ -219,6 +219,87 @@ bool ley::GameModel::canRotate(bool r) {
     activeBlock.rotate(!r); //rotate it back, because this 
                             //function is simply a test only
     return canput;
+}
+void ley::GameModel::clearAndRecordLines(int first, int last) {
+    for(int i = last; i >= first; --i) {
+        ++numLines; //add to the score for each line
+        //simply fill the rows where there are lines with the empty space.
+        board[i].fill(std::make_pair(ley::BlockTexCode::O, false));
+    }
+    SDL_Log("Your Score is:%s" , std::to_string(numLines).c_str());
+}
+void ley::GameModel::shiftBoard(char start, char num) {
+    //shift the board down start from the bottom right (backwards).
+    char stopLine = start - num;
+    for(char i = start; i >= 0; --i) {
+        for(char j = board[i].size() -1; j >= 0; --j) {
+            board[i][j] = board[i-num][j];
+        }
+    }
+}
+void ley::GameModel::fillTop(char num) {
+    for(char i = 0; i < num; i++) {
+        board[i].fill(std::make_pair(BlockTexCode::O,false));
+    }
+}
+
+void ley::GameModel::processLines() {
+    //Check to see how many full lines we have starting from the bottom
+    std::pair<char,char> firstAndLast;
+    firstAndLast.first = -1;
+    firstAndLast.second = -1;
+    firstAndLast = checkForLines(board.size()-1);
+
+    //remove the lines if neither of them are -1;
+    if(firstAndLast.first != -1 && firstAndLast.second != -1) {
+        clearAndRecordLines(firstAndLast.first, firstAndLast.second);
+        //Shift the board down the appropriate number of spaces.
+        char linesToCut = firstAndLast.first - firstAndLast.second + 1;
+        shiftBoard(firstAndLast.first, linesToCut);
+        //Be sore to fill the top of the board again with clear values after shifting.
+        fillTop(linesToCut);
+    }
+
+    
+}
+
+//pass in start line and returns the number of lines that are full lines from the start line
+std::pair<char,char> ley::GameModel::checkForLines(char start) {
+    
+    char firstLine = firstLineAt(start);
+    char lastLine = -1;
+    char counterStart = firstLine != -1 ? firstLine : start;
+    //check for consecutive lines.
+    for(int i = counterStart; i >= 0; --i){
+        int currentLine = firstLineAt(i);
+        if(currentLine != -1) {
+            lastLine = currentLine;
+        }
+    }
+
+    SDL_Log("First line: %s -> Last line: %s",std::to_string(firstLine).c_str(), std::to_string(lastLine).c_str());
+    return std::make_pair(firstLine,lastLine);
+}
+
+
+//return the first full line starting from start
+int ley::GameModel::firstLineAt(int start) {
+    bool fullline = false;
+
+    for(int i = start; i >= 0; --i) {
+        fullline = false;
+        for(int j = board[i].size() - 1; j >= 0; --j) {
+            if(!board[i][j].second) {
+                fullline = false;
+                break;
+            } 
+            else { fullline = true;}
+        }
+        if(fullline == true) { 
+            SDL_Log("Full line made!!!"); return i;
+        }
+    }
+    return -1;
 }
 
 //TODO this function should probably go in the controller
@@ -229,7 +310,13 @@ void ley::GameModel::moveBlock(Direction d) {
                 activeBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
-            } else { setBlock(); newBlock(); return; /*!* EARLY EXIT *!*/ }
+            } 
+            else { 
+                setBlock();
+                processLines();
+                newBlock();
+                return; /*!* EARLY EXIT *!*/ 
+            }
         break;
 
         case Direction::left :

@@ -24,14 +24,22 @@ enum class Direction {down,right,up,left};
 class GameModel {
 
 private:
-   std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
-   Block activeBlock;
-   Block oldBlock;
-   void clearBoard();
-   void clearOldBlock();
-   void putBlock(Block&);
-   bool canPut(Block&, Direction d); //can physically put the block in the board.
-   unsigned int debug_phase = 0; //used to keep track of different phases of play
+    std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
+    Block activeBlock;
+    Block oldBlock;
+    int numLines; //number of lines the player has successfully completed.
+    void clearBoard();
+    void clearOldBlock();
+    void putBlock(Block&);
+    bool canPut(Block&, Direction d); //can physically put the block in the board.
+    unsigned int debug_phase = 0; //used to keep track of different phases of play
+    std::pair<char,char> checkForLines(char); //check to see if any solid lines across the board have been made, return -1 for none
+    int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
+    void processLines();
+    void clearAndRecordLines(int, int); //clear the completed lines and keep track of the score.
+    void shiftBoard(char, char); //start line, number of lines
+    void fillTop(char); //fill top of the board after the shift
+
 public:
     GameModel();
     ~GameModel();
