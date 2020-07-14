@@ -221,7 +221,7 @@ bool ley::GameModel::canRotate(bool r) {
     return canput;
 }
 void ley::GameModel::clearAndRecordLines(int first, int last) {
-    for(int i = last; i >= first; --i) {
+    for(int i = first; i >= last; --i) {
         ++numLines; //add to the score for each line
         //simply fill the rows where there are lines with the empty space.
         board[i].fill(std::make_pair(ley::BlockTexCode::O, false));
