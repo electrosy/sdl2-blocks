@@ -25,6 +25,12 @@ Date: Feb/15/2020
 #include "Textures.h"
 #include "Font.h"
 
+// ** TODO s Edge Cases
+//      1.) Test case where there are more than one full lines but not on consecutive rows. This case hasen't been coded for.
+
+// ** New features
+//      1.) 
+
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;
@@ -33,7 +39,6 @@ ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
 int main() {
-
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
     TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp");
@@ -106,6 +111,8 @@ int main() {
     renderables.push_back(&firstSimpleShape);
     firstSimpleShape.addShape("window-title",{10,10,100,10});
     firstSimpleShape.addShape("window",{10,20,100,100});
+
+    firstSimpleShape.addShape("boardboundry", {199,-1,202,442});
  
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer

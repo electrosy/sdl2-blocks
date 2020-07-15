@@ -4,7 +4,8 @@
 #OBJS defines files to compile as part of the project
 OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp Block.cpp GameModel.cpp \
 		Clock.cpp Winlet.cpp Texture.cpp Renderable.cpp Renderables.cpp \
-		GameController.cpp SimpleShape.cpp Timer.cpp Textures.cpp Font.cpp
+		GameController.cpp SimpleShape.cpp Timer.cpp Textures.cpp Font.cpp \
+		Rand_int.cpp
 		
 
 #OBJ_NAME name of executable

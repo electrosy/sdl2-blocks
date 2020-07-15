@@ -8,6 +8,7 @@ Date: Feb/15/2020
 #include <array>
 #include <SDL2/SDL.h>
 #include "GameModel.h"
+#include "Rand_int.h"
 
 /* RAII */
 ley::GameModel::GameModel()
@@ -157,7 +158,10 @@ void ley::GameModel::clearOldBlock() {
 
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
-    switch(debug_phase) {
+
+    ley::Rand_int rand0to5(0,5); //random number generator
+
+    switch(rand0to5()) {
         case 0 : 
             activeBlock = Block(4,0,BlockType::tee,false);
             oldBlock = Block(4,0,BlockType::tee,true);
