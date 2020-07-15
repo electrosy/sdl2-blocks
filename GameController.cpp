@@ -59,8 +59,8 @@ void ley::GameController::renderBoard(SDL_Texture* t) {
 }
 
 
-void ley::GameController::runFrame() {
-
+void ley::GameController::runFrame(ley::Font* f) {  
+    f->updateMessage("Score " + std::to_string(int(gm->getScore())));
 }
 
 void ley::GameController::goNext() {

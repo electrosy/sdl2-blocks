@@ -27,7 +27,7 @@ private:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
     Block activeBlock;
     Block oldBlock;
-    int numLines; //number of lines the player has successfully completed.
+    double numLines; //number of lines the player has successfully completed. (score)
     void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);
@@ -55,6 +55,7 @@ public:
     bool canMoveDown(); //Can move down based on Game rules.
     void newBlock();
     void setBlock();
+    double getScore();
 };
 
 }

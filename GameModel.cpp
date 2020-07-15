@@ -24,6 +24,10 @@ ley::GameModel::~GameModel() {
 }
 
 /* Functions */
+double ley::GameModel::getScore() {
+    return numLines;
+}
+
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
 

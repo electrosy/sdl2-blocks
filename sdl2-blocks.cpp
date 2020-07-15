@@ -9,6 +9,7 @@ Date: Feb/15/2020
 #include <iostream>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Video.h"
 #include "Input.h"
@@ -22,6 +23,7 @@ Date: Feb/15/2020
 #include "SimpleShape.h"
 #include "Timer.h"
 #include "Textures.h"
+#include "Font.h"
 
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
@@ -37,7 +39,6 @@ int main() {
     TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp");
     bool game_running = 1;
 
-    
     ley::Input mainInput;
     ley::GameModel mainGameModel;
     ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
@@ -46,6 +47,11 @@ int main() {
     mainSprite.setPos(10,10);
     ley::Renderables renderables;
     renderables.push_back(&mainSprite);
+
+    //Create the rendertable font object
+    ley::Font fontOne(mainVideo.getRenderer());
+    ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
+    renderables.push_back(&fontOne);
 
     std::vector<SDL_Rect> catFrames;
     SDL_Rect catFrame1;
@@ -182,7 +188,7 @@ int main() {
         secondTimer.runFrame();
         thirdTimer.runFrame();
         fourthTimer.runFrame();
-        mainGameController.runFrame();
+        mainGameController.runFrame(ptrFont);
         ++frame_count;
 
     /*** CLEAR ****/

@@ -13,6 +13,7 @@ Date: Feb/15/2020
 #include "Clock.h"
 #include "Block.h"
 #include "GameModel.h"
+#include "Font.h"
 
 namespace ley {
 
@@ -26,10 +27,9 @@ public:
     GameController(SDL_Renderer* , ley::GameModel*);
     ~GameController();
 
-    void runFrame(); // call this for each frame in the game to control the game model.
+    void runFrame(ley::Font*); // call this for each frame in the game to control the game model.
     
     void renderBoard(SDL_Texture*); //renders the board to the video.
-    
 };
 
 }

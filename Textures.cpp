@@ -13,7 +13,7 @@ ley::Textures::Textures() {
 }
 
 ley::Textures::~Textures() {
-
+    delete instance;
 }
 
 /* Accessors */

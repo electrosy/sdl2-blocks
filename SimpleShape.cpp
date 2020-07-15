@@ -12,7 +12,7 @@ ley::SimpleShape::SimpleShape(SDL_Renderer* r)
 : Renderable(r) {
     
     rect_tex.w = -1;
-    rect_tex.h = -1;
+    rect_tex.h = -1; 
 
     destRect_tex.w = -1;
     destRect_tex.h = -1;

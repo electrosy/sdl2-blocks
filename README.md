@@ -10,11 +10,11 @@ git clone <https://github.com/electrosy/sdl2-blocks.git>
 
 #### Fedora
 
-sudo dnf install SDL2-devel; sudo dnf install SDL2_image-devel;
+sudo dnf install SDL2-devel; sudo dnf install SDL2_image-devel; sudo dnf install SDL2_ttf-devel;
 
 #### Ubuntu
 
-sudo apt-get install SDL2-devel; sudo apt-get install SDL2_image-devel;
+sudo apt-get install SDL2-devel; sudo apt-get install SDL2_image-devel; sudo apt-get install SDL2_ttf-devel;
 
 ## Run
 
