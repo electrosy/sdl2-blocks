@@ -159,9 +159,9 @@ void ley::GameModel::clearOldBlock() {
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
 
-    ley::Rand_int rand0to5(0,5); //random number generator
+    ley::Rand_int rand0to6(0,6); //random number generator
 
-    switch(rand0to5()) {
+    switch(rand0to6()) {
         case 0 : 
             activeBlock = Block(4,0,BlockType::tee,false);
             oldBlock = Block(4,0,BlockType::tee,true);
@@ -185,6 +185,10 @@ void ley::GameModel::newBlock() {
         case 5 : 
             activeBlock = Block(4,0,BlockType::line,false);
             oldBlock = Block(4,0,BlockType::line,true);
+        break;
+        case 6 : 
+            activeBlock = Block(4,0,BlockType::cube,false);
+            oldBlock = Block(4,0,BlockType::cube,true);
         break;
         default :
             activeBlock = Block(4,0,BlockType::tee,false);

@@ -109,7 +109,6 @@ int main() {
     std::vector<SDL_Rect> rects;
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("window-title",{10,10,100,10});
     firstSimpleShape.addShape("window",{10,20,100,100});
 
     firstSimpleShape.addShape("boardboundry", {199,-1,202,442});
@@ -140,7 +139,8 @@ int main() {
     ley::Clock mainClock;
     size_t frame_count = 0;
     unsigned fpsAdjustMili = 0;
-    bool fs = 0; //full screen
+    bool fs = false; //full screen
+    bool fs_changed = false;
     while(game_running) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
     /*** RENDER ***/
@@ -163,7 +163,10 @@ int main() {
     /*** GET INPUT ***/
         //pollEvents updates running and full screen flags
         mainInput.pollEvents(game_running,fs,mainGameModel);
-        mainVideo.setFullScreen(fs);
+        if(fs != fs_changed) {
+            mainVideo.setFullScreen(fs);
+            fs_changed = !fs_changed;
+        }
 
     /*** UPDATE ***/
         /* Calculate Frame Rate and output to log */
@@ -196,7 +199,8 @@ int main() {
         thirdTimer.runFrame();
         fourthTimer.runFrame();
         mainGameController.runFrame(ptrFont);
-        ++frame_count;
+        ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
+                       // seconds_from_start, so there is no chance of a memory overrun
 
     /*** CLEAR ****/
         mainVideo.clear();
