@@ -27,7 +27,7 @@ private:
 protected:
 
 public:
-    Font(SDL_Renderer* r);
+    Font(SDL_Renderer* r, int = 0, int = 0);
     ~Font();
     void updateMessage(std::string);
     void render();

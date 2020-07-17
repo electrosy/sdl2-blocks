@@ -8,7 +8,7 @@ Date: Jul/14/2020
 
 #include "Font.h"
 
-ley::Font::Font(SDL_Renderer* r)
+ley::Font::Font(SDL_Renderer* r, int x, int y)
 : Renderable(r) {
 
     if (TTF_Init() < 0) {
@@ -20,8 +20,8 @@ ley::Font::Font(SDL_Renderer* r)
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
 
-    Message_rect.x = 400;  //controls the rect's x coordinate
-    Message_rect.y = 25; // controls the rect's y coordinte
+    Message_rect.x = x;  //controls the rect's x coordinate
+    Message_rect.y = y; // controls the rect's y coordinte
     Message_rect.w = 100; // controls the width of the rect
     Message_rect.h = 35; // controls the height of the rect
 

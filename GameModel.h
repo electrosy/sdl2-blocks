@@ -28,11 +28,11 @@ private:
     Block activeBlock;
     Block oldBlock;
     double numLines; //number of lines the player has successfully completed. (score)
+    bool gameOver;
     void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);
     bool canPut(Block&, Direction d); //can physically put the block in the board.
-    unsigned int debug_phase = 0; //used to keep track of different phases of play
     std::pair<char,char> checkForLines(char); //check to see if any solid lines across the board have been made, return -1 for none
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     void processLines();
@@ -48,14 +48,15 @@ public:
     getBoard();
 
     void downExpired(); //block automaticly moves down based on a time interval
-    void moveBlock(Direction);
+    bool moveBlock(Direction);
     void rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console
     bool canMoveDown(); //Can move down based on Game rules.
-    void newBlock();
+    bool newBlock();
     void setBlock();
     double getScore();
+    bool isGameOver();
 };
 
 }

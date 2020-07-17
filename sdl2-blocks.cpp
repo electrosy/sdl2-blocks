@@ -54,7 +54,7 @@ int main() {
     renderables.push_back(&mainSprite);
 
     //Create the rendertable font object
-    ley::Font fontOne(mainVideo.getRenderer());
+    ley::Font fontOne(mainVideo.getRenderer(), 400, 25);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
     renderables.push_back(&fontOne);
 
@@ -124,7 +124,7 @@ int main() {
     //Test Timer
     ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
     renderables.push_back(&fourthTimer);
-    //Fall down timer
+    //Fall down timer - TODO timers should go into the controller
     ley::Timer fallTimer(mainVideo.getRenderer(),1000,{10,500,100,5}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
 
@@ -140,7 +140,7 @@ int main() {
     unsigned fpsAdjustMili = 0;
     bool fs = false; //full screen
     bool fs_changed = false;
-    while(game_running) {
+    while(game_running && !mainGameModel.isGameOver()) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
     /*** RENDER ***/
         /* Render Sprites to buffer */
@@ -195,7 +195,7 @@ int main() {
             } else { fpsAdjustMili = 0; }
         }
 
-        if (SDL_GetTicks() % 1000 == 0 ) { 
+        if (SDL_GetTicks() % 1000 == 0 ) {
             SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
         }
 
@@ -218,6 +218,20 @@ int main() {
 
     /*** CLEAR ****/
         mainVideo.clear();
+    }
+
+    ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190);
+    fontGameOver.updateMessage("Game Over!");
+    ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
+    renderables.push_back(ptrFontGameOver);
+
+    while(game_running) {
+       mainGameController.renderBoard(temp_tex);
+       renderables.renderAll();
+       mainVideo.render();
+       ley::Direction eventDirection = mainInput.pollEndEvents(game_running,fs,mainGameModel);
+
+       mainVideo.clear();
     }
 
     return 1;

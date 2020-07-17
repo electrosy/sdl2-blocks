@@ -33,3 +33,7 @@ void ley::Renderables::renderAll() {
             }
     }
 }
+
+std::vector<ley::Renderable*>* ley::Renderables::get_ptr() {
+    return &renderables;
+}

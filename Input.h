@@ -24,6 +24,7 @@ public:
     ~Input();
 
     ley::Direction pollEvents(bool&, bool&, GameModel&);
+    ley::Direction pollEndEvents(bool&, bool&, GameModel&);
 };
 
 }

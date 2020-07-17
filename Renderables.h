@@ -32,6 +32,7 @@ public:
     void renderAll();
 
     unsigned int size();
+    std::vector<Renderable*>* get_ptr();
 };
 
 }

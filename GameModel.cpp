@@ -13,7 +13,7 @@ Date: Feb/15/2020
 /* RAII */
 ley::GameModel::GameModel()
 : activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1),
-    debug_phase(0), numLines(0) {
+    numLines(0), gameOver(false) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
@@ -24,6 +24,9 @@ ley::GameModel::~GameModel() {
 
 }
 
+bool ley::GameModel::isGameOver() {
+    return gameOver;
+}
 
 /* Functions */
 double ley::GameModel::getScore() {
@@ -157,10 +160,9 @@ void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
 
-void ley::GameModel::newBlock() {
+bool ley::GameModel::newBlock() {
     SDL_Log("New Block");
     ley::Rand_int rand0to6(0,6); //random number generator
-
     switch(rand0to6()) {
         case 0 : 
             activeBlock = Block(4,0,BlockType::tee,false);
@@ -195,8 +197,14 @@ void ley::GameModel::newBlock() {
             oldBlock = Block(4,0,BlockType::tee,true);
         break;
     }
-
-    ++debug_phase;
+    if(!canPut(activeBlock, ley::Direction::up)) {
+        return false;
+    }
+    else {
+        putBlock(activeBlock);
+        return true;
+    }
+    return false; 
 }
 
 //TODO this function should probably go in the controller
@@ -272,7 +280,7 @@ void ley::GameModel::processLines() {
         fillTop(linesToCut);
     }
 
-    
+    // TODO also continue to check the rest of the board for full lines.    
 }
 
 //pass in start line and returns the number of lines that are full lines from the start line
@@ -315,7 +323,7 @@ int ley::GameModel::firstLineAt(int start) {
 }
 
 //TODO this function should probably go in the controller
-void ley::GameModel::moveBlock(Direction d) {
+bool ley::GameModel::moveBlock(Direction d) {
     switch (d) {
         case Direction::down :
             if (canPut(activeBlock, Direction::down)) {
@@ -326,8 +334,11 @@ void ley::GameModel::moveBlock(Direction d) {
             else { 
                 setBlock();
                 processLines();
-                newBlock();
-                return; /*!* EARLY EXIT *!*/ 
+                if(!newBlock()) {
+                    gameOver = true;
+                    return false; /*!* EARLY EXIT *!*/
+                }
+                return true; /*!* EARLY EXIT *!*/ 
             }
         break;
 
@@ -351,6 +362,7 @@ void ley::GameModel::moveBlock(Direction d) {
     }
 
     putBlock(activeBlock);
+    return true;
 }
 
 void ley::GameModel::debugBoard(bool setLayer) {
