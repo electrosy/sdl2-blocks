@@ -23,7 +23,7 @@ public:
     Input();
     ~Input();
 
-    void pollEvents(bool&, bool&, GameModel&);
+    ley::Direction pollEvents(bool&, bool&, GameModel&);
 };
 
 }

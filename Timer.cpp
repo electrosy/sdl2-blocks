@@ -43,12 +43,12 @@ void ley::Timer::adjustProgress(float m) {
     fill();
 }
 
-void ley::Timer::runFrame() {
+void ley::Timer::runFrame(bool autoRestart) {
 
     unsigned int miliFromStart = clock.miliSecondsFromStart();
     if(miliFromStart > mili) {
         expired = 1;
-        reset();
+       if(autoRestart) { reset(); }
     }
     adjustProgress(miliFromStart);
 }

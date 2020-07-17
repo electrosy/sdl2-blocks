@@ -24,6 +24,7 @@ ley::GameModel::~GameModel() {
 
 }
 
+
 /* Functions */
 double ley::GameModel::getScore() {
     return numLines;
@@ -31,7 +32,7 @@ double ley::GameModel::getScore() {
 
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
-
+    
 }
 
 void ley::GameModel::clearBoard() {
@@ -158,7 +159,6 @@ void ley::GameModel::clearOldBlock() {
 
 void ley::GameModel::newBlock() {
     SDL_Log("New Block");
-
     ley::Rand_int rand0to6(0,6); //random number generator
 
     switch(rand0to6()) {

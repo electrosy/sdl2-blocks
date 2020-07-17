@@ -28,6 +28,7 @@ ley::GameController::~GameController() {
 void ley::GameController::renderBoard(SDL_Texture* t) {
     
     int startX = 200;
+    int startY = 40;
 
     //get width and height of the texture
     int w, h;SDL_QueryTexture(t, NULL, NULL, &w, &h);
@@ -37,7 +38,7 @@ void ley::GameController::renderBoard(SDL_Texture* t) {
     start_rect.h = 20; start_rect.w = 20;
 
     SDL_Rect dest_rect;
-    dest_rect.x = startX; dest_rect.y = 0;
+    dest_rect.x = startX; dest_rect.y = startY;
     dest_rect.h = h; dest_rect.w = w;
 
     // TODO Loop through the game model and output a representation to 

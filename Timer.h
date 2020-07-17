@@ -33,7 +33,7 @@ public:
 
     void hasElapsed();
     void fill();
-    void runFrame();
+    void runFrame(bool = true);
     void reset();
     bool hasExpired();
 };

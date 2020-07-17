@@ -110,24 +110,23 @@ int main() {
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
     firstSimpleShape.addShape("window",{10,20,100,100});
-
-    firstSimpleShape.addShape("boardboundry", {199,-1,202,442});
+    firstSimpleShape.addShape("boardboundry", {199,39,202,402});
  
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     renderables.push_back(&firstTimer);
-
     //Test Timer
     ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2 second timer
     renderables.push_back(&secondTimer);
-
     //Test Timer
     ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 2 second timer
     renderables.push_back(&thirdTimer);
-
     //Test Timer
     ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
     renderables.push_back(&fourthTimer);
+    //Fall down timer
+    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{10,500,100,5}); //Time to force the blockdown.
+    renderables.push_back(&fallTimer);
 
     //Temp texture for test rendering the board.
     SDL_Surface* temp_surface = IMG_Load("assets/BlockPiece.bmp");
@@ -162,11 +161,17 @@ int main() {
 
     /*** GET INPUT ***/
         //pollEvents updates running and full screen flags
-        mainInput.pollEvents(game_running,fs,mainGameModel);
+        ley::Direction eventDirection = mainInput.pollEvents(game_running,fs,mainGameModel);
         if(fs != fs_changed) {
             mainVideo.setFullScreen(fs);
             fs_changed = !fs_changed;
         }
+    /*** INPUT PROCESSING ***/
+    //TODO this stuff should probably go in the controller
+    if(eventDirection == ley::Direction::down) {
+        fallTimer.reset();
+        eventDirection = ley::Direction::none;
+    }
 
     /*** UPDATE ***/
         /* Calculate Frame Rate and output to log */
@@ -194,13 +199,22 @@ int main() {
             SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
         }
 
+        /* run frames */
         firstTimer.runFrame();
         secondTimer.runFrame();
         thirdTimer.runFrame();
         fourthTimer.runFrame();
+        fallTimer.runFrame(false);
         mainGameController.runFrame(ptrFont);
         ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                        // seconds_from_start, so there is no chance of a memory overrun
+
+        /* additional control */
+        //TODO more stuff that should probably go in the controller.
+        if(fallTimer.hasExpired() == true) {
+            mainGameModel.moveBlock(ley::Direction::down);
+            fallTimer.reset();
+        }
 
     /*** CLEAR ****/
         mainVideo.clear();
