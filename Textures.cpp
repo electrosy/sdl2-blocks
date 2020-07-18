@@ -25,14 +25,14 @@ SDL_Texture* ley::Textures::getTexture(std::string s) {
     return textures.find(s)->second;
 }
 
-void ley::Textures::loadTexture(const char* p) {
+void ley::Textures::loadTexture(const char* p, std::string texturename) {
     
     SDL_Surface* temp_surface = IMG_Load(p);
     SDL_Texture* t = SDL_CreateTextureFromSurface(renderer, temp_surface);
     SDL_Log("Possible Error_loadTexture():");
     SDL_Log(SDL_GetError());
     SDL_FreeSurface(temp_surface);
-    textures.insert(std::make_pair("d",t));
+    textures.insert(std::make_pair(texturename,t));
     ++count;
 }
 /* Functions */

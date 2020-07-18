@@ -30,7 +30,7 @@ public:
     static Textures* Instance();
     ~Textures();
     /* Accessors */
-    void loadTexture(const char*);
+    void loadTexture(const char*, std::string);
     SDL_Texture* getTexture(std::string);
     void setRenderer(SDL_Renderer*);
 };
