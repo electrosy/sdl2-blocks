@@ -289,22 +289,22 @@ void ley::Block::setBlock(BlockType t, int o) {
             switch (o) {
                 case 0 :
                 case 2 :
-                    block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[3] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    rect.h = 4;
-                    rect.w = 1;
-                break;
-
-                case 1 :
-                case 3 :
                     block[0] = { BlockTexCode::d, BlockTexCode::d, BlockTexCode::d, BlockTexCode::d };
                     block[1] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     rect.h = 1;
                     rect.w = 4;
+                break;
+
+                case 1 :
+                case 3 :
+                    block[0] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::d, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    rect.h = 4;
+                    rect.w = 1;
                 break;
             }
         break;
