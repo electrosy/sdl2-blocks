@@ -18,6 +18,67 @@ ley::Input::~Input() {
 }
 
 /* Functions */
+ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, GameModel& gm) {
+    SDL_Event event;
+    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+
+    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        switch (event.type)     {       
+            case SDL_QUIT:         
+                running = false;
+                break;
+            case SDL_KEYDOWN:
+                SDL_Log("Keydown Detected!");
+                //TODO these inputs should manipulate the game controller instead of the game model directly.
+                //Full screen mode
+                //continue game
+                if (state[SDL_SCANCODE_DOWN]) {
+                    frameDirection = ley::Direction::down;
+                }
+                //quite game
+                if (state[SDL_SCANCODE_Q]) {
+                    running = false;
+                }
+                break;
+            default:
+                break;
+        }
+     }
+
+     return frameDirection;
+}
+
+ley::Direction ley::Input::pollTitleEvents(bool &running, bool& fullscreen, GameModel& gm) {
+    SDL_Event event;
+    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+
+    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        switch (event.type)     {       
+            case SDL_QUIT:         
+                running = false;
+                break;
+            case SDL_KEYDOWN:
+                SDL_Log("Keydown Detected!");
+                //TODO these inputs should manipulate the game controller instead of the game model directly.
+                //Full screen mode
+                //continue game
+                if (state[SDL_SCANCODE_RETURN]) {
+                    frameDirection = ley::Direction::down;
+                }
+                //quite game
+                if (state[SDL_SCANCODE_Q]) {
+                    running = false;
+                }
+                break;
+            default:
+                break;
+        }
+     }
+
+     return frameDirection;
+}
 ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameModel& gm) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;

@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020 Steven Philley. All rights reserved.
 
 Purpose: see header.
 Date: Feb/17/2020
@@ -45,12 +45,10 @@ void ley::Texture::setPos(unsigned int x, unsigned int y) {
 }
 
 void ley::Texture::render() {
-
     unsigned int frameIndex = frames.size() > 1 ? 
         (SDL_GetTicks() / animSpeed) % frames.size() : 0;
 
-    dest_rect.x = pos.first; dest_rect.y = pos.second;  // TODO put position in texture
-
+    dest_rect.x = pos.first; dest_rect.y = pos.second;
     SDL_RenderCopy(renderer, texture, &frames[frameIndex], &dest_rect);
 }
 

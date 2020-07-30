@@ -36,6 +36,7 @@ public:
     void runFrame(bool = true);
     void reset();
     bool hasExpired();
+    int getElapsed();
 };
 
 }

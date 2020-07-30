@@ -17,7 +17,7 @@ ley::GameModel::GameModel()
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
-    putBlock(activeBlock);
+    newBlock(); // TODO initilize this object with a random block instead of a cube, why does the first block start one line down.
 }
 
 ley::GameModel::~GameModel() {
@@ -207,7 +207,6 @@ bool ley::GameModel::newBlock() {
     return false; 
 }
 
-//TODO this function should probably go in the controller
 //Iterate through the height and width of the block and set
 //the board action layer elements to isset.
 void ley::GameModel::setBlock() {

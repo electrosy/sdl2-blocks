@@ -63,3 +63,7 @@ bool ley::Timer::hasExpired() {
     }
 
 }
+
+int ley::Timer::getElapsed() {
+    clock.miliSecondsFromStart();
+}

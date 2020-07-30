@@ -38,10 +38,120 @@ auto const MILI_ADJ_MAX = 1000;
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
+void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r) {
+    /**** Intro Screen Loop ****/
+    bool intro = true;
+    SDL_Texture* test = nullptr;
+    test = TextureManager::Instance()->getTexture(t);
+    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(test, 255);
+
+    SDL_Rect src_rect;
+    SDL_Rect dest_rect;
+    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
+    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
+
+    unsigned int alphaFrameIndex = 0;
+    bool faddedin = false;
+    char fadespeed = 50;
+    while(intro == true) {
+        if(!faddedin) {
+            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
+                if(alphaFrameIndex < 255) {
+                    alphaFrameIndex++;
+                }
+                else {
+                    faddedin = true;
+                }
+            }
+        } else {
+             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
+                 if(alphaFrameIndex != 0) {  
+                    alphaFrameIndex--;
+                 }
+            }
+        }
+        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
+        SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
+        v->render();
+        if(i->pollTitleEvents(intro,fs,(*m)) == ley::Direction::down 
+            || (alphaFrameIndex < 10 && faddedin)) {
+            intro = false;
+        }
+        v->clear();
+    }
+}
+void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r) {
+    bool runmain = true;
+    SDL_Texture* test = TextureManager::Instance()->getTexture(t);
+    SDL_Texture* startButton = TextureManager::Instance()->getTexture("start-white");
+    SDL_Texture* startButtonHot = TextureManager::Instance()->getTexture("start-hot-red");
+    SDL_Texture* hsButton = TextureManager::Instance()->getTexture("highscores-white");
+    SDL_Texture* hsButtonHot = TextureManager::Instance()->getTexture("highscores-hot-red");
+    SDL_Texture* currentButton = startButton;
+    SDL_Texture* currentButtonHot = startButtonHot;
+    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(test, 255);
+
+    SDL_Rect src_rect;
+    SDL_Rect dest_rect;
+    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
+    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
+
+    SDL_Rect start_rect;
+    SDL_Rect start_dest_rect;
+    start_rect = {0,0,150,60};
+    start_dest_rect = {29,199,150,60};
+
+    unsigned int alphaFrameIndex = 0;
+    bool faddedin = false;
+    char fadespeed = 17;
+    while(runmain == true) {
+        if(!faddedin) {
+            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
+                if(alphaFrameIndex < 255) {
+                    alphaFrameIndex++;
+                }
+                else {
+                    faddedin = true;
+                }
+            }
+        }
+        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
+        SDL_SetTextureAlphaMod(currentButton, alphaFrameIndex);
+        SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
+        
+        if((SDL_GetTicks() % 50) % 10) {
+            if(faddedin) {
+                SDL_RenderCopy(v->getRenderer(), currentButtonHot, &start_rect, &start_dest_rect);
+            }
+        } else {
+            if(faddedin) {
+                SDL_RenderCopy(v->getRenderer(), currentButton, &start_rect, &start_dest_rect);
+            }
+        }
+        v->render();
+        if(i->pollMainMenuEvents(runmain,fs,(*m)) == ley::Direction::down) {
+            currentButton = hsButton;
+            currentButtonHot = hsButtonHot;
+        }
+        v->clear();
+    }
+}
+
 int main() {
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
-    TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp");
+    TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp", "d");
+    TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
+    TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
+    TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
+
+    TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
+    TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
+
+    TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
+    TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
     bool game_running = 1;
 
     ley::Input mainInput;
@@ -133,21 +243,28 @@ int main() {
     SDL_Texture* temp_tex = SDL_CreateTextureFromSurface(mainVideo.getRenderer(), temp_surface);
     SDL_FreeSurface(temp_surface);
 
+    bool fs = false; //full screen
+    auto avgFPS = 0;
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240});
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400});
+
+    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600});
+
+    fallTimer.reset();
+    
     /**** Main Game Loop ****/
     SDL_Log("Starting Game loop!");
     ley::Clock mainClock;
     size_t frame_count = 0;
-    unsigned fpsAdjustMili = 0;
-    bool fs = false; //full screen
+    long fpsAdjustMili = 0;
+    
     bool fs_changed = false;
     while(game_running && !mainGameModel.isGameOver()) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
     /*** RENDER ***/
-        /* Render Sprites to buffer */
-        auto avgFPS = 0;
+        avgFPS = 0;
         renderables.renderAll(); // render all sprites
         mainGameController.renderBoard(temp_tex);
-        /* Output report */
         if (SDL_GetTicks() % 1000 == 0 ) {
             auto seconds_from_start = mainClock.secondsFromStart();
             avgFPS = seconds_from_start == 0 
@@ -155,8 +272,6 @@ int main() {
             SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
             SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
         }
-        
-        /* Render the Video system to the screen */
         mainVideo.render(); // output to the video system.
 
     /*** GET INPUT ***/

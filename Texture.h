@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020 Steven Philley. All rights reserved.
 
 Purpose: Wrap SDL Texture which is a Renderable. Renderables
          are renderable with SDL_RenderCopy
