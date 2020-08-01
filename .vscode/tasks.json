@@ -1,0 +1,41 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g",
+                "${workspaceFolder}/sdl2-blocks.cpp",
+                "${workspaceFolder}/Video.cpp",
+                "${workspaceFolder}/Input.cpp",
+                "${workspaceFolder}/Sprite.cpp",
+                "${workspaceFolder}/Block.cpp",
+                "${workspaceFolder}/GameModel.cpp",
+                "${workspaceFolder}/Clock.cpp",
+                "${workspaceFolder}/Winlet.cpp",
+                "${workspaceFolder}/Texture.cpp",
+                "${workspaceFolder}/Renderable.cpp",
+                "${workspaceFolder}/Renderables.cpp",
+                "${workspaceFolder}/GameController.cpp",
+                "${workspaceFolder}/Timer.cpp",
+                "${workspaceFolder}/SimpleShape.cpp",
+                "${workspaceFolder}/Textures.cpp",
+                "${workspaceFolder}/Font.cpp",
+                "${workspaceFolder}/Rand_int.cpp",
+                "-l",
+                "SDL2",
+                "-l",
+                "SDL2_image",
+                "-l",
+                "SDL2_ttf",
+                "-o",
+                "${workspaceFolder}/sdl2-blocks"
+            ],
+            "options": {
+                "cwd": "/usr/bin"
+            }
+        }
+    ],
+    "version": "2.0.0"
+}
