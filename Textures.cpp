@@ -14,6 +14,7 @@ ley::Textures::Textures() {
 
 ley::Textures::~Textures() {
     delete instance;
+    instance = nullptr;
 }
 
 /* Accessors */

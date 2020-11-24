@@ -38,7 +38,7 @@ auto const MILI_ADJ_MAX = 1000;
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
-void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r) {
+void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
     /**** Intro Screen Loop ****/
     bool intro = true;
     SDL_Texture* test = nullptr;
@@ -53,8 +53,10 @@ void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, st
 
     unsigned int alphaFrameIndex = 0;
     bool faddedin = false;
-    char fadespeed = 50;
+    char fadespeed = 8;
     while(intro == true) {
+        SDL_Delay(fpsDelay);
+
         if(!faddedin) {
             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
                 if(alphaFrameIndex < 255) {
@@ -81,7 +83,7 @@ void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, st
         v->clear();
     }
 }
-void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r) {
+void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
     bool runmain = true;
     SDL_Texture* test = TextureManager::Instance()->getTexture(t);
     SDL_Texture* startButton = TextureManager::Instance()->getTexture("start-white");
@@ -105,8 +107,10 @@ void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::
 
     unsigned int alphaFrameIndex = 0;
     bool faddedin = false;
-    char fadespeed = 17;
+    char fadespeed = 5;
     while(runmain == true) {
+        SDL_Delay(fpsDelay);
+
         if(!faddedin) {
             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
                 if(alphaFrameIndex < 255) {
@@ -146,10 +150,8 @@ int main() {
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
-
     TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
     TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
-
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
     bool game_running = 1;
@@ -245,10 +247,11 @@ int main() {
 
     bool fs = false; //full screen
     auto avgFPS = 0;
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240});
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400});
 
-    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600});
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240}, DELAY_MILI);
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400}, DELAY_MILI);
+
+    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, DELAY_MILI);
 
     fallTimer.reset();
     
@@ -261,7 +264,7 @@ int main() {
     bool fs_changed = false;
     while(game_running && !mainGameModel.isGameOver()) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
-    /*** RENDER ***/
+    /**** RENDER ****/
         avgFPS = 0;
         renderables.renderAll(); // render all sprites
         mainGameController.renderBoard(temp_tex);
@@ -274,21 +277,21 @@ int main() {
         }
         mainVideo.render(); // output to the video system.
 
-    /*** GET INPUT ***/
+    /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
         ley::Direction eventDirection = mainInput.pollEvents(game_running,fs,mainGameModel);
         if(fs != fs_changed) {
             mainVideo.setFullScreen(fs);
             fs_changed = !fs_changed;
         }
-    /*** INPUT PROCESSING ***/
+    /**** INPUT PROCESSING ****/
     //TODO this stuff should probably go in the controller
     if(eventDirection == ley::Direction::down) {
         fallTimer.reset();
         eventDirection = ley::Direction::none;
     }
 
-    /*** UPDATE ***/
+    /**** UPDATE ****/
         /* Calculate Frame Rate and output to log */
         //adjust for target fps.
         if(avgFPS != 0) {
@@ -325,13 +328,13 @@ int main() {
                        // seconds_from_start, so there is no chance of a memory overrun
 
         /* additional control */
-        //TODO more stuff that should probably go in the controller.
+        //TODO this bit of code should probably go in the controller.
         if(fallTimer.hasExpired() == true) {
             mainGameModel.moveBlock(ley::Direction::down);
             fallTimer.reset();
         }
 
-    /*** CLEAR ****/
+    /**** CLEAR ****/
         mainVideo.clear();
     }
 
@@ -340,7 +343,13 @@ int main() {
     ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
     renderables.push_back(ptrFontGameOver);
 
+    //continue to render graphics and get keyboard input after game is over.
+    // TODO add FPS throttling to this part as well.
     while(game_running) {
+
+       //For now just run at the frame rate that was set at the end of the game.
+       SDL_Delay(DELAY_MILI + fpsAdjustMili);
+    
        mainGameController.renderBoard(temp_tex);
        renderables.renderAll();
        mainVideo.render();
@@ -348,6 +357,9 @@ int main() {
 
        mainVideo.clear();
     }
+
+    /**** CLEAN UP ****/
+    
 
     return 1;
 }

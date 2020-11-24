@@ -41,16 +41,13 @@ void ley::GameController::renderBoard(SDL_Texture* t) {
     dest_rect.x = startX; dest_rect.y = startY;
     dest_rect.h = h; dest_rect.w = w;
 
-    // TODO Loop through the game model and output a representation to 
-    //      the video screen.
+    // Loop through the game model and output a representation to the video screen.
     SDL_Texture* test = nullptr;
     for(auto row : *gm->getBoard()) {
         for(auto column : row) {
             if(column.first == BlockTexCode::d) {
                 test = TextureManager::Instance()->getTexture("d");
-                if(test != nullptr) {
-                    SDL_RenderCopy(ren, test, &start_rect, &dest_rect);
-                }
+                SDL_RenderCopy(ren, test, &start_rect, &dest_rect);
             }
             dest_rect.x = dest_rect.x + w;
         }

@@ -30,13 +30,15 @@ ley::Font::Font(SDL_Renderer* r, int x, int y)
 
 }
 ley::Font::~Font() {
-    SDL_FreeSurface(surfaceMessage);
+
     SDL_DestroyTexture(Message);
 }
 void ley::Font::updateTexture() {
     
     surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
     Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    
+    SDL_FreeSurface(surfaceMessage);
 }
 void ley::Font::updateMessage(std::string s) {
     textMessage = (s);

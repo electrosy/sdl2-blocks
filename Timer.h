@@ -27,6 +27,8 @@ private:
     bool expired; //expired flag that can get picked up.
     //updateProgress() rect based on time
     void adjustProgress(float);
+
+    SDL_Surface *s;
 public:
     Timer(SDL_Renderer*, unsigned int, SDL_Rect rect);
     ~Timer();

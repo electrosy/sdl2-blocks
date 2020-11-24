@@ -19,27 +19,34 @@ ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect)
     destRect_tex.x=rect_progress.x; destRect_tex.y=rect_progress.y;
     destRect_tex.w=rect_progress.w; destRect_tex.h=rect_progress.h;
 
+    s = SDL_CreateRGBSurface(0, rect_border.w, rect_border.h, 32, 0, 0, 0, 0);
+    SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
+    tex = SDL_CreateTextureFromSurface(renderer,s);
+
     fill();
 }
 
 ley::Timer::~Timer() {
-
+    SDL_FreeSurface(s);
 }
 /* Functions */
 void ley::Timer::fill() {
-    SDL_Surface *s;
-    s = SDL_CreateRGBSurface(0, rect_border.w, rect_border.h, 32, 0, 0, 0, 0);
-    SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
 
-    tex = SDL_CreateTextureFromSurface(renderer,s);
     SDL_RenderCopy(renderer, tex, &rect_tex, &rect_progress);
+    
 }
 void ley::Timer::reset() {
     clock.reset();
 }
 
 void ley::Timer::adjustProgress(float m) {
-    destRect_tex.w = ceil(((m/mili)*100));
+
+    if(mili != 0) {
+        destRect_tex.w = ceil(((m/mili)*100));
+    } else {
+        destRect_tex.w = 0;
+    }
+    
     fill();
 }
 
