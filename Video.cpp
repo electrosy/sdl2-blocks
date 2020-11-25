@@ -19,7 +19,7 @@ void ley::Video::createWindow() {
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) >= 0) {
         // if all good
         window = SDL_CreateWindow(
-            "sdl2-blocks",
+            "Ablockalypse ver 0.1.0Alpha",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN /*SDL_WINDOW_FULLSCREEN*/);

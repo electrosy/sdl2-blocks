@@ -2,7 +2,45 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "g++ build active file",
+            "label": "g++ Windows debug",
+            "command": "g++",
+            "args": [
+                "-std=gnu++17",
+                "-g",
+                "${workspaceFolder}/sdl2-blocks.cpp",
+                "${workspaceFolder}/Video.cpp",
+                "${workspaceFolder}/Input.cpp",
+                "${workspaceFolder}/Sprite.cpp",
+                "${workspaceFolder}/Block.cpp",
+                "${workspaceFolder}/GameModel.cpp",
+                "${workspaceFolder}/Clock.cpp",
+                "${workspaceFolder}/Winlet.cpp",
+                "${workspaceFolder}/Texture.cpp",
+                "${workspaceFolder}/Renderable.cpp",
+                "${workspaceFolder}/Renderables.cpp",
+                "${workspaceFolder}/GameController.cpp",
+                "${workspaceFolder}/Timer.cpp",
+                "${workspaceFolder}/SimpleShape.cpp",
+                "${workspaceFolder}/Textures.cpp",
+                "${workspaceFolder}/Font.cpp",
+                "${workspaceFolder}/Rand_int.cpp",
+                "-IC:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/include",
+                "-LC:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/lib",
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-lSDL2_image",
+                "-lSDL2_ttf",
+                "-o",
+                "${workspaceFolder}/sdl2-blocks"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "g++ Linux debug",
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
