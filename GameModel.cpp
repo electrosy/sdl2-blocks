@@ -35,7 +35,7 @@ double ley::GameModel::getScore() {
 
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
-    
+    return &board;
 }
 
 void ley::GameModel::clearBoard() {

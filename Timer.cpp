@@ -72,5 +72,5 @@ bool ley::Timer::hasExpired() {
 }
 
 int ley::Timer::getElapsed() {
-    clock.miliSecondsFromStart();
+    return clock.miliSecondsFromStart();
 }

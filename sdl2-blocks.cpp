@@ -143,7 +143,7 @@ void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::
     }
 }
 
-int main() {
+int main(int argv, char** args) {
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
     TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp", "d");

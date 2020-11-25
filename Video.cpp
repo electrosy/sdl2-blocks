@@ -5,6 +5,7 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/14/2020
 */
+#include <stdio.h>
 
 #include "Video.h"
 
