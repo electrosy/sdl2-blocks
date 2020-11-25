@@ -248,10 +248,10 @@ int main(int argv, char** args) {
     bool fs = false; //full screen
     auto avgFPS = 0;
 
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240}, DELAY_MILI);
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400}, DELAY_MILI);
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240}, 1);
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400}, 1);
 
-    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, DELAY_MILI);
+    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, 1);
 
     fallTimer.reset();
     

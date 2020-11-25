@@ -1,3 +1,10 @@
+/* 
+sdl2-blocks
+Copyright (C) 2020 Steven Philley
+
+Purpose: Generate random int number.
+Date: Nov/11/2020
+*/
 #ifndef RAND_INT_H
 #define RAND_INT_H
 
@@ -24,8 +31,5 @@ namespace ley{
 	};
 
 /* Operators */
-/*
-std::ostream& operator<<(std::ostream& os, const Rand_int& ri);
-*/
 }
 #endif
