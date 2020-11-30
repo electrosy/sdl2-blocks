@@ -10,8 +10,8 @@ Date: Feb/14/2020
 #include "Video.h"
 
 //Screen dimensions
-const auto SCREEN_WIDTH = 800;
-const auto SCREEN_HEIGHT = 600;
+const auto SCREEN_WIDTH = 1024;
+const auto SCREEN_HEIGHT = 720;
 
 /* RAII */
 void ley::Video::createWindow() {

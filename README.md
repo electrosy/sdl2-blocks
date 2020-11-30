@@ -1,14 +1,24 @@
-# sdl2-blocks
+# Ablockalypse
 
-## Build & Run From Source
+## Run Game
+
+### Linux
+
+* Install SDL2
+* run Ablockalypse
+
+### Windows
+
+* Unzip folder
+* Double click on sdl2-blocks.exe
+
+## Setup Development Environment (For programming game)
 
 ### Linux
 
 mkdir ~/Code/sdl2-blocks;
 cd ~/Code/sdl2-blocks;
 git clone <https://github.com/electrosy/sdl2-blocks.git>
-
-#### Install
 
 ##### Fedora
 
@@ -24,10 +34,9 @@ make; ./sdl2-blocks;
 
 ### Windows
 
+Install MingW
 Install SDL Libraries, SDLttf, SDLimage
-
-## Run Binaries Only
 
 ## About
 
-A 'Block Falling & Locking Game' and Mini Game Framework.
+A 'Block Falling & Locking Game'.

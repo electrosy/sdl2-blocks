@@ -43,6 +43,7 @@
             "label": "g++ Linux debug",
             "command": "/usr/bin/g++",
             "args": [
+                "-std=gnu++1z",
                 "-g",
                 "${workspaceFolder}/sdl2-blocks.cpp",
                 "${workspaceFolder}/Video.cpp",

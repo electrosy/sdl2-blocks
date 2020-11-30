@@ -11,11 +11,11 @@ Date: Feb/15/2020
 #include <array>
 
 #include "Block.h"
-
+ 
 namespace ley {
 
 const auto BOARDSIZE_WIDTH = 10;
-const auto BOARDSIZE_HEIGHT = 20;
+const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetriminos can entry play in the right place.
 const auto BLOCKSIZE_MAX_HW = 4; //the largest possible height and width(square) we will need for a single block.
 const auto BLOCK_PUT_X = 4; const auto BLOCK_PUT_Y = 0;
 const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that will be on the board.
@@ -27,6 +27,7 @@ private:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
     Block activeBlock;
     Block oldBlock;
+    Block nextBlock;
     double numLines; //number of lines the player has successfully completed. (score)
     bool gameOver;
     void clearBoard();
@@ -39,6 +40,7 @@ private:
     void clearAndRecordLines(int, int); //clear the completed lines and keep track of the score.
     void shiftBoard(char, char); //start line, number of lines
     void fillTop(char); //fill top of the board after the shift
+    ley::Block getRandomBlock();
 
 public:
     GameModel();
@@ -57,6 +59,7 @@ public:
     void setBlock();
     double getScore();
     bool isGameOver();
+    ley::Block getNextBlock();
 };
 
 }

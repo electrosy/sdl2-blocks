@@ -42,7 +42,7 @@ void ley::Timer::reset() {
 void ley::Timer::adjustProgress(float m) {
 
     if(mili != 0) {
-        destRect_tex.w = ceil(((m/mili)*100));
+        destRect_tex.w = ceil(((m/mili)*rect_progress.w));
     } else {
         destRect_tex.w = 0;
     }

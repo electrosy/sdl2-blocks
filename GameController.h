@@ -29,7 +29,7 @@ public:
 
     void runFrame(ley::Font*); // call this for each frame in the game to control the game model.
     
-    void renderBoard(SDL_Texture*); //renders the board to the video.
+    void renderBoard(); //renders the board to the video.
 };
 
 }

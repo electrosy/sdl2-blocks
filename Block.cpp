@@ -8,8 +8,12 @@ Date: Feb/15/2020
 #include "Block.h"
 
 /* RAII */
+ley::Block::Block() {
+
+}
 ley::Block::Block(unsigned int x, unsigned int y, BlockType ty, bool c)
 : type(ty), cf(c) {
+    
     rect.x = x, rect.y = y;
     
     switch (type) {
@@ -49,9 +53,35 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockType ty, bool c)
     setBlock(type);
 }
 
+ley::Block::Block(const Block& b) {
+    type = b.type;
+    orientation = b.orientation; // 0-3 - rotating to the left piece points right,down,left,up
+    rect = b.rect; //Position and dimension
+    cf = b.cf;
+    setBlock(b.type);
+}
+
+void ley::Block::operator=(const Block& b) {
+    type = b.type;
+    orientation = b.orientation; // 0-3 - rotating to the left piece points right,down,left,up
+    rect = b.rect; //Position and dimension
+    cf = b.cf;
+    setBlock(b.type);
+}
+
 ley::Block::~Block() {
     
 }
+
+void ley::Block::setClear(bool c) {
+    cf = c;
+    setBlock(type);
+}
+
+std::array<std::array<ley::BlockTexCode, 4>,4> ley::Block::getBlockParts() {
+    return block;
+}
+
 
 /* Functions */
 void ley::Block::moveDown() {

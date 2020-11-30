@@ -39,25 +39,32 @@ const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
 class Block {
 
 private:
-    BlockType type;
+    BlockType type; //type empty == null block
     unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and dimension
     std::array<std::array<BlockTexCode, 4>,4> block;
-    void setBlock(BlockType,int = 0);
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
+
+    void setBlock(BlockType,int = 0);
 public:
 
     /* RAII */
+    Block();
     Block(unsigned int, unsigned int, BlockType, bool = 0); //x,y,type,clear
+    Block(const Block& b); //copy constructor
     ~Block();
 
     /* Accessors */
     SDL_Rect getRect() {return rect;}; // TODO this should probably return a const
     const BlockType getType() {return type;};
     const bool getClear() {return cf;};
+    void setClear(bool c);
     void setH(unsigned int h) {rect.h = h;};
     void setW(unsigned int w) {rect.w = w;};
     void rotate(bool); // false for counterclockwise and true for clockwise.
+    std::array<std::array<ley::BlockTexCode, 4>,4> getBlockParts();
+
+    void operator= (const Block &b);
     
     /* Functions */
     BlockTexCode renderPart(unsigned int, unsigned int); /* Return true or false depending on if the block would take up the x,y space */
@@ -68,6 +75,8 @@ public:
     int heightAtWidth(int);
     int widthAtHeight(int);
 };
+
+
 
 }
 #endif

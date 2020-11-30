@@ -13,15 +13,20 @@ Date: Feb/15/2020
 /* RAII */
 ley::GameModel::GameModel()
 : activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1),
+nextBlock(getRandomBlock()),
     numLines(0), gameOver(false) {
     clearBoard();
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
-    newBlock(); // TODO initilize this object with a random block instead of a cube, why does the first block start one line down.
 }
 
 ley::GameModel::~GameModel() {
 
+}
+
+/* Accessors */
+ley::Block ley::GameModel::getNextBlock() {
+    return nextBlock;
 }
 
 bool ley::GameModel::isGameOver() {
@@ -68,10 +73,12 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
     unsigned int offset_x = 0;
     unsigned int offset_y = 0;
     SDL_Rect rect = b.getRect();
+
+
     switch (d) {
         case Direction::down :
           offset_x = 0;
-          offset_y = rect.h + 1; 
+          offset_y = rect.h + 1;
         break;
         case Direction::right :
             offset_x = rect.w + 1;
@@ -84,11 +91,14 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
         case Direction::up : //rotation
             offset_x = rect.w;
             offset_y = rect.h;
+ 
         default : break;
     }
+
+
     //if asked to go outside the bounds of the game board.
-    if( (rect.x+offset_x>BOARDSIZE_WIDTH) || (rect.y+offset_y>BOARDSIZE_HEIGHT) ) {
-        return false; /*!*! EARLY EXIT !*!*/  //hit the border.
+    if( (rect.x+offset_x > BOARDSIZE_WIDTH) || (rect.y+offset_y > BOARDSIZE_HEIGHT) ) {
+       return false; /*!*! EARLY EXIT !*!*/  //hit the border.
     } /* End Check Borders */
 
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
@@ -160,43 +170,49 @@ void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
 
-bool ley::GameModel::newBlock() {
-    SDL_Log("New Block");
+ley::Block ley::GameModel::getRandomBlock() {
+    Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
     switch(rand0to6()) {
         case 0 : 
-            activeBlock = Block(4,0,BlockType::tee,false);
-            oldBlock = Block(4,0,BlockType::tee,true);
+            a = Block(4,0,BlockType::tee,false);
         break;
-        case 1 : 
-            activeBlock = Block(4,0,BlockType::rLee,false);
-            oldBlock = Block(4,0,BlockType::rLee,true);
+        case 1 :
+            a = Block(4,0,BlockType::rLee,false);
         break;
         case 2 : 
-            activeBlock = Block(4,0,BlockType::zee,false);
-            oldBlock = Block(4,0,BlockType::zee,true);
+            a = Block(4,0,BlockType::zee,false);
         break;
         case 3 : 
-            activeBlock = Block(4,0,BlockType::mzee,false);
-            oldBlock = Block(4,0,BlockType::mzee,true);
+            a = Block(4,0,BlockType::mzee,false);
         break;
         case 4 : 
-            activeBlock = Block(4,0,BlockType::lLee,false);
-            oldBlock = Block(4,0,BlockType::lLee,true);
+            a = Block(4,0,BlockType::lLee,false);
         break;
-        case 5 : 
-            activeBlock = Block(4,0,BlockType::line,false);
-            oldBlock = Block(4,0,BlockType::line,true);
+        case 5 :
+            a = Block(4,0,BlockType::line,false);
         break;
-        case 6 : 
-            activeBlock = Block(4,0,BlockType::cube,false);
-            oldBlock = Block(4,0,BlockType::cube,true);
+        case 6 :
+            a = Block(4,0,BlockType::cube,false);
         break;
         default :
-            activeBlock = Block(4,0,BlockType::tee,false);
-            oldBlock = Block(4,0,BlockType::tee,true);
+            a = Block(4,0,BlockType::tee,false);
         break;
     }
+
+    return a;
+}
+
+bool ley::GameModel::newBlock() {
+    SDL_Log("New Block");
+
+    activeBlock = nextBlock;
+    oldBlock = activeBlock;
+    oldBlock.setClear(true);
+
+    nextBlock = getRandomBlock();
+
+    //check if we can put down the new active block.
     if(!canPut(activeBlock, ley::Direction::up)) {
         return false;
     }
@@ -204,7 +220,8 @@ bool ley::GameModel::newBlock() {
         putBlock(activeBlock);
         return true;
     }
-    return false; 
+   
+    return false;
 }
 
 //Iterate through the height and width of the block and set
@@ -375,6 +392,6 @@ void ley::GameModel::debugBoard(bool setLayer) {
                 sRow += TEXCODE_CHAR.find(column.first)->second + ".";
             }
         }
-        SDL_Log(sRow.c_str());
+        SDL_Log("%s",sRow.c_str());
     }
 }

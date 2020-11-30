@@ -146,7 +146,7 @@ void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::
 int main(int argv, char** args) {
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
-    TextureManager::Instance()->loadTexture("assets/BlockPiece.bmp", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_gr_30x30.bmp", "d");
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
@@ -160,11 +160,7 @@ int main(int argv, char** args) {
     ley::GameModel mainGameModel;
     ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
 
-    ley::Sprite mainSprite(mainVideo.getRenderer(), "assets/BlockPiece.bmp");
-    mainSprite.setPos(10,10);
     ley::Renderables renderables;
-    renderables.push_back(&mainSprite);
-
     //Create the rendertable font object
     ley::Font fontOne(mainVideo.getRenderer(), 400, 25);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
@@ -202,10 +198,10 @@ int main(int argv, char** args) {
     catFrames.push_back(catFrame6);
 
     ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", 100, &catFrames);
-    catSprite.setPos(695,540);
+    catSprite.setPos(25,650);
     renderables.push_back(&catSprite);
     ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
-    catSprite2.setPos(100,100);
+    catSprite2.setPos(900,650);
     renderables.push_back(&catSprite2);
     
     // test Winlet
@@ -221,9 +217,8 @@ int main(int argv, char** args) {
     std::vector<SDL_Rect> rects;
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("window",{10,20,100,100});
-    firstSimpleShape.addShape("boardboundry", {199,39,202,402});
- 
+    firstSimpleShape.addShape("nextboundry",{10,39,130,130});
+    firstSimpleShape.addShape("boardboundry", {361,39,302,602});
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     renderables.push_back(&firstTimer);
@@ -237,13 +232,8 @@ int main(int argv, char** args) {
     ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
     renderables.push_back(&fourthTimer);
     //Fall down timer - TODO timers should go into the controller
-    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{10,500,100,5}); //Time to force the blockdown.
+    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{361,641,302,2}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
-
-    //Temp texture for test rendering the board.
-    SDL_Surface* temp_surface = IMG_Load("assets/BlockPiece.bmp");
-    SDL_Texture* temp_tex = SDL_CreateTextureFromSurface(mainVideo.getRenderer(), temp_surface);
-    SDL_FreeSurface(temp_surface);
 
     bool fs = false; //full screen
     auto avgFPS = 0;
@@ -267,13 +257,13 @@ int main(int argv, char** args) {
     /**** RENDER ****/
         avgFPS = 0;
         renderables.renderAll(); // render all sprites
-        mainGameController.renderBoard(temp_tex);
+        mainGameController.renderBoard();
         if (SDL_GetTicks() % 1000 == 0 ) {
             auto seconds_from_start = mainClock.secondsFromStart();
             avgFPS = seconds_from_start == 0 
                 ? seconds_from_start : frame_count/seconds_from_start;
-            SDL_Log(("Seconds From Start:" + std::to_string(seconds_from_start)).c_str());
-            SDL_Log(("AVG FPS: " + std::to_string(avgFPS)).c_str());
+            SDL_Log("Seconds From Start:%s", std::to_string(seconds_from_start).c_str());
+            SDL_Log("AVG FPS: %s",std::to_string(avgFPS).c_str());
         }
         mainVideo.render(); // output to the video system.
 
@@ -314,7 +304,7 @@ int main(int argv, char** args) {
         }
 
         if (SDL_GetTicks() % 1000 == 0 ) {
-            SDL_Log(("FpsMiliAdjust:" + std::to_string(fpsAdjustMili)).c_str());
+            SDL_Log("FpsMiliAdjust:%s",std::to_string(fpsAdjustMili).c_str());
         }
 
         /* run frames */
@@ -350,7 +340,7 @@ int main(int argv, char** args) {
        //For now just run at the frame rate that was set at the end of the game.
        SDL_Delay(DELAY_MILI + fpsAdjustMili);
     
-       mainGameController.renderBoard(temp_tex);
+       mainGameController.renderBoard();
        renderables.renderAll();
        mainVideo.render();
        ley::Direction eventDirection = mainInput.pollEndEvents(game_running,fs,mainGameModel);
