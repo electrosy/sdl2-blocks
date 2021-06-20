@@ -12,12 +12,13 @@ Date: Feb/15/2020
 
 /* RAII */
 ley::GameModel::GameModel()
-: activeBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube), oldBlock(BLOCK_PUT_X,BLOCK_PUT_Y,BlockType::cube,1),
+: activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
     numLines(0), gameOver(false) {
-    clearBoard();
-    oldBlock.setH(activeBlock.getRect().h);
-    oldBlock.setW(activeBlock.getRect().w);
+   clearBoard();
+   oldBlock.setH(activeBlock.getRect().h);
+   oldBlock.setW(activeBlock.getRect().w);
+   putBlock(activeBlock);
 }
 
 ley::GameModel::~GameModel() {
@@ -173,6 +174,7 @@ void ley::GameModel::clearOldBlock() {
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
+    
     switch(rand0to6()) {
         case 0 : 
             a = Block(4,0,BlockType::tee,false);
@@ -181,22 +183,19 @@ ley::Block ley::GameModel::getRandomBlock() {
             a = Block(4,0,BlockType::rLee,false);
         break;
         case 2 : 
-            a = Block(4,0,BlockType::zee,false);
+            a = Block(4,1,BlockType::zee,false);
         break;
         case 3 : 
-            a = Block(4,0,BlockType::mzee,false);
+            a = Block(4,1,BlockType::mzee,false);
         break;
         case 4 : 
             a = Block(4,0,BlockType::lLee,false);
         break;
         case 5 :
-            a = Block(4,0,BlockType::line,false);
+            a = Block(4,2,BlockType::line,false);
         break;
         case 6 :
-            a = Block(4,0,BlockType::cube,false);
-        break;
-        default :
-            a = Block(4,0,BlockType::tee,false);
+            a = Block(4,1,BlockType::cube,false);
         break;
     }
 

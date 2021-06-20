@@ -35,6 +35,9 @@ auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;
 
+auto const SCORE_POS_X_PX = 680;
+auto const SCORE_POS_Y_PX = 20;
+
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
@@ -154,7 +157,7 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
-    bool game_running = 1;
+    bool game_running = true;
 
     ley::Input mainInput;
     ley::GameModel mainGameModel;
@@ -162,7 +165,7 @@ int main(int argv, char** args) {
 
     ley::Renderables renderables;
     //Create the rendertable font object
-    ley::Font fontOne(mainVideo.getRenderer(), 400, 25);
+    ley::Font fontOne(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
     renderables.push_back(&fontOne);
 
@@ -252,6 +255,7 @@ int main(int argv, char** args) {
     long fpsAdjustMili = 0;
     
     bool fs_changed = false;
+
     while(game_running && !mainGameModel.isGameOver()) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
     /**** RENDER ****/
@@ -275,11 +279,11 @@ int main(int argv, char** args) {
             fs_changed = !fs_changed;
         }
     /**** INPUT PROCESSING ****/
-    //TODO this stuff should probably go in the controller
-    if(eventDirection == ley::Direction::down) {
-        fallTimer.reset();
-        eventDirection = ley::Direction::none;
-    }
+        //TODO this stuff should probably go in the controller
+        if(eventDirection == ley::Direction::down) {
+            fallTimer.reset();
+            eventDirection = ley::Direction::none;
+        }
 
     /**** UPDATE ****/
         /* Calculate Frame Rate and output to log */

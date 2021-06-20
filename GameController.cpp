@@ -12,6 +12,8 @@ Date: Feb/18/2020
 
 typedef ley::Textures TextureManager;
 
+const auto NEXTBLOCK_OFFSET_Y_PX = 10;
+
 /* RAII */
 ley::GameController::GameController(SDL_Renderer* r, ley::GameModel* g)
 : ren(r), gm(g) {
@@ -26,27 +28,25 @@ ley::GameController::~GameController() {
 
 /* Functions */
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
-    
-    int startX = 362;
-    int startY = -50;
 
     //get width and height of the texture
-     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
+    int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
     SDL_Rect start_rect;
     start_rect.x = 0; start_rect.y = 0;
     start_rect.h = h; start_rect.w = w;
 
     SDL_Rect dest_rect;
-    dest_rect.x = startX; dest_rect.y = startY;
+    dest_rect.x = START_X_OFFSET_PX; dest_rect.y = BOARD_OFFSET_PX;
     dest_rect.h = h; dest_rect.w = w;
 
 
 //TODO - Loop 1 and Loop 2 can probably be rafactored together.
     // Output the nextBlock from the game model
     SDL_Texture* blockBits = nullptr;
-    SDL_Rect next_dest_rect; next_dest_rect.x = 20; next_dest_rect.y = 40;
-    next_dest_rect.h = h; next_dest_rect.w = w;
+    SDL_Rect next_dest_rect; 
+             next_dest_rect.x = 20; next_dest_rect.y = 40 + NEXTBLOCK_OFFSET_Y_PX;
+             next_dest_rect.h = h; next_dest_rect.w = w;
     ley::Block nextBlock = gm->getNextBlock();
     for(auto row : nextBlock.getBlockParts()) {
         for(auto column : row) {
@@ -72,7 +72,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
             dest_rect.x = dest_rect.x + w;
         }
         dest_rect.y = dest_rect.y + h;
-        dest_rect.x=startX;
+        dest_rect.x=START_X_OFFSET_PX;
     }
 }
 
