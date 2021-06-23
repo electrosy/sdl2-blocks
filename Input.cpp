@@ -37,9 +37,11 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, G
                     frameDirection = ley::Direction::down;
                 }
                 //quite game
-                if (state[SDL_SCANCODE_Q]) {
+                if ( state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE] || state[SDL_SCANCODE_RETURN]) {
                     running = false;
                 }
+                
+
                 break;
             default:
                 break;
