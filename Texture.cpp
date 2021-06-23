@@ -10,8 +10,10 @@ Date: Feb/17/2020
 /* RAII */
 ley::Texture::Texture(SDL_Renderer* r,  const char* p, unsigned int s, std::vector<SDL_Rect>* v)
 : Renderable(r), animSpeed(s) {
+
     SDL_Surface* temp_surface = IMG_Load(p);
     texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
+
     SDL_FreeSurface(temp_surface);
 
     bool multiframe = false;

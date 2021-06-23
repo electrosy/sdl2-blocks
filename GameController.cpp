@@ -27,6 +27,16 @@ ley::GameController::~GameController() {
 
 
 /* Functions */
+void ley::GameController::renderBackground() {
+
+    SDL_Texture* bg_west_1 = nullptr;
+    SDL_Rect start_rect; start_rect.x = 0; start_rect.y = 0; start_rect.w = 1280; start_rect.h = 768;
+    SDL_Rect dest_rect; dest_rect = start_rect;
+
+    bg_west_1 = TextureManager::Instance()->getTexture("BG_WEST_01");
+    SDL_RenderCopy(ren, bg_west_1, &start_rect, &dest_rect);
+}
+
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
 
     //get width and height of the texture

@@ -30,6 +30,7 @@ public:
     void runFrame(ley::Font*); // call this for each frame in the game to control the game model.
     
     void renderBoard(); //renders the board to the video.
+    void renderBackground(); //render the background to the screen.
 };
 
 }

@@ -157,6 +157,9 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
+
+    TextureManager::Instance()->loadTexture("assets/background/1024_768/Wested/WEST01_0440_v1.JPG", "BG_WEST_01");
+
     bool game_running = true;
 
     ley::Input mainInput;
@@ -200,10 +203,10 @@ int main(int argv, char** args) {
     catFrame6.h = 100; catFrame6.w = 100;
     catFrames.push_back(catFrame6);
 
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/char9.png", 100, &catFrames);
+    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/cat-trans.png", 100, &catFrames);
     catSprite.setPos(25,650);
     renderables.push_back(&catSprite);
-    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/char9.png", 175, &catFrames);
+    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/cat-trans.png", 175, &catFrames);
     catSprite2.setPos(900,650);
     renderables.push_back(&catSprite2);
     
@@ -260,6 +263,7 @@ int main(int argv, char** args) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
     /**** RENDER ****/
         avgFPS = 0;
+        mainGameController.renderBackground();
         renderables.renderAll(); // render all sprites
         mainGameController.renderBoard();
         if (SDL_GetTicks() % 1000 == 0 ) {
