@@ -171,6 +171,8 @@ void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
 
+
+
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator

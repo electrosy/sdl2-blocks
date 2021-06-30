@@ -60,6 +60,7 @@ public:
     double getScore();
     bool isGameOver();
     ley::Block getNextBlock();
+    std::string getRandomTexture();
 };
 
 }

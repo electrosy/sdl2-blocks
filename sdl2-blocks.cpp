@@ -150,6 +150,13 @@ int main(int argv, char** args) {
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_gr_30x30.bmp", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_bl_30x30.bmp", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_or_30x30.bmp", "f");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_pr_30x30.bmp", "g");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_rd_30x30.bmp", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_yl_30x30.bmp", "i");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_cy_30x30.bmp", "j");
+
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
@@ -158,7 +165,7 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
 
-    TextureManager::Instance()->loadTexture("assets/background/1024_768/Wested/WEST01_0440_v1.JPG", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_01");
 
     bool game_running = true;
 

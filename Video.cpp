@@ -10,7 +10,7 @@ Date: Feb/14/2020
 #include "Video.h"
 
 //Screen dimensions
-const auto SCREEN_WIDTH = 1024;
+const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 /* RAII */
