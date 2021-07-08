@@ -17,16 +17,16 @@ ley::Clock::~Clock() {
 }
 
 /* Functions */
-size_t ley::Clock::secondsFromStart() {
-    auto end = std::chrono::system_clock::now();
-    return std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+Uint32 ley::Clock::secondsFromStart() {
+    auto end = SDL_GetTicks();
+    return end - start;
 }
 // TODO generalzie these functions to pass in the time increment
-size_t ley::Clock::miliSecondsFromStart() {
-    auto end = std::chrono::system_clock::now();
-    return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+Uint32 ley::Clock::miliSecondsFromStart() {
+    auto end = SDL_GetTicks(); 
+    return end - start;
 }
 
 void ley::Clock::reset() {
-    start = std::chrono::system_clock::now();
+    start = SDL_GetTicks();
 }

@@ -35,10 +35,12 @@ public:
 
     void hasElapsed();
     void fill();
-    void runFrame(bool = true);
+    void runFrame(bool = true, double = 0);
     void reset();
     bool hasExpired();
     int getElapsed();
+    void changeSpeed(float);
+    float getSpeed();
 };
 
 }

@@ -50,7 +50,14 @@ void ley::Timer::adjustProgress(float m) {
     fill();
 }
 
-void ley::Timer::runFrame(bool autoRestart) {
+void ley::Timer::runFrame(bool autoRestart, double newTime) {
+
+    if(newTime == 1) {
+        SDL_Log("newTime == 1, should not happen"); // TODO this should never happen but for some reason it does 
+    }
+    else if(mili != newTime && newTime != 0) { //How does newTime ever become 1? Is it a float rounding issue?
+        mili = newTime;
+    }
 
     unsigned int miliFromStart = clock.miliSecondsFromStart();
     if(miliFromStart > mili) {
@@ -73,4 +80,13 @@ bool ley::Timer::hasExpired() {
 
 int ley::Timer::getElapsed() {
     return clock.miliSecondsFromStart();
+}
+
+void ley::Timer::changeSpeed(float newSpeed) {
+
+   // mili = newSpeed; //causes a set fault, maybe the timer needs to be recreated completly.
+}
+
+float ley::Timer::getSpeed() {
+    return mili;
 }

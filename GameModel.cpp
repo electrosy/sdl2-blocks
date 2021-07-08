@@ -11,10 +11,10 @@ Date: Feb/15/2020
 #include "Rand_int.h"
 
 /* RAII */
-ley::GameModel::GameModel()
+ley::GameModel::GameModel(ley::Timer* ptrTimer)
 : activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
-    numLines(0), gameOver(false) {
+    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f) {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
@@ -35,8 +35,12 @@ bool ley::GameModel::isGameOver() {
 }
 
 /* Functions */
-double ley::GameModel::getScore() {
+int ley::GameModel::getScore() {
     return numLines;
+}
+
+int ley::GameModel::getLevel() {
+    return numLevel;
 }
 
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
@@ -260,6 +264,14 @@ bool ley::GameModel::canRotate(bool r) {
 void ley::GameModel::clearAndRecordLines(int first, int last) {
     for(int i = first; i >= last; --i) {
         ++numLines; //add to the score for each line
+        //If numLines is a multiple of 10 then increase the level as well
+        if(numLines % NEW_LVL_AT_LINES == 0) { // new level every 10 lines.
+            ++numLevel;
+
+            //also increase the speed of the fall down timer
+            this->ptrTimer->changeSpeed(500); //for testing just double the speed.
+        }
+
         //simply fill the rows where there are lines with the empty space.
         board[i].fill(std::make_pair(ley::BlockTexCode::O, false));
     }
@@ -339,8 +351,33 @@ int ley::GameModel::firstLineAt(int start) {
     return -1;
 }
 
+void ley::GameModel::updateSpeed() {
+
+    switch(numLevel) {
+        case 0 : currentSpeed = 1000;
+            break;
+        case 1 : currentSpeed = 900;
+            break;
+        case 2 : currentSpeed = 800;
+            break;
+        case 3 : currentSpeed = 700;
+            break;
+        case 4 : currentSpeed = 600;
+            break;
+        case 5 : currentSpeed = 500;
+            break;
+        case 6 : currentSpeed = 400;
+            break;
+        case 7 : currentSpeed = 300;
+            break;
+        case 8 : currentSpeed = 200;
+            break;
+        case 9 : currentSpeed = 100;
+    }
+}
+
 //TODO this function should probably go in the controller
-bool ley::GameModel::moveBlock(Direction d) {
+double ley::GameModel::moveBlock(Direction d) {
     switch (d) {
         case Direction::down :
             if (canPut(activeBlock, Direction::down)) {
@@ -353,9 +390,7 @@ bool ley::GameModel::moveBlock(Direction d) {
                 processLines();
                 if(!newBlock()) {
                     gameOver = true;
-                    return false; /*!* EARLY EXIT *!*/
                 }
-                return true; /*!* EARLY EXIT *!*/ 
             }
         break;
 
@@ -379,7 +414,9 @@ bool ley::GameModel::moveBlock(Direction d) {
     }
 
     putBlock(activeBlock);
-    return true;
+    updateSpeed();
+
+    return currentSpeed;
 }
 
 void ley::GameModel::debugBoard(bool setLayer) {

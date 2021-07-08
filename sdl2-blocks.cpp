@@ -38,6 +38,9 @@ auto const MILI_ADJ_MAX = 1000;
 auto const SCORE_POS_X_PX = 680;
 auto const SCORE_POS_Y_PX = 20;
 
+auto const LVL_POS_X_PX = 680;
+auto const LVL_POS_Y_PX = 40;
+
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
@@ -170,14 +173,17 @@ int main(int argv, char** args) {
     bool game_running = true;
 
     ley::Input mainInput;
-    ley::GameModel mainGameModel;
-    ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
 
     ley::Renderables renderables;
     //Create the rendertable font object
     ley::Font fontOne(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
     renderables.push_back(&fontOne);
+
+    //Create the font for the level ouput
+    ley::Font fontLvl(mainVideo.getRenderer(), LVL_POS_X_PX, LVL_POS_Y_PX);
+    ley::Font* ptrFontLvl = &fontLvl;
+    renderables.push_back(&fontLvl);
 
     std::vector<SDL_Rect> catFrames;
     SDL_Rect catFrame1;
@@ -224,7 +230,7 @@ int main(int argv, char** args) {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-    mainGameModel.debugBoard(false);
+    
 
     //Test SimpleShape
     std::vector<SDL_Rect> rects;
@@ -244,9 +250,15 @@ int main(int argv, char** args) {
     //Test Timer
     ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
     renderables.push_back(&fourthTimer);
+    
     //Fall down timer - TODO timers should go into the controller
     ley::Timer fallTimer(mainVideo.getRenderer(),1000,{361,641,302,2}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
+
+    ley::GameModel mainGameModel(&fallTimer);
+    mainGameModel.debugBoard(false);
+    ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
+
 
     bool fs = false; //full screen
     auto avgFPS = 0;
@@ -265,6 +277,7 @@ int main(int argv, char** args) {
     long fpsAdjustMili = 0;
     
     bool fs_changed = false;
+    double newTime = 1000;
 
     while(game_running && !mainGameModel.isGameOver()) {
         SDL_Delay(DELAY_MILI + fpsAdjustMili);
@@ -283,7 +296,7 @@ int main(int argv, char** args) {
         mainVideo.render(); // output to the video system.
 
     /**** GET INPUT ****/
-        //pollEvents updates running and full screen flags
+        //pollEtimervents updates running and full screen flags
         ley::Direction eventDirection = mainInput.pollEvents(game_running,fs,mainGameModel);
         if(fs != fs_changed) {
             mainVideo.setFullScreen(fs);
@@ -313,7 +326,7 @@ int main(int argv, char** args) {
                                                                             because you dont notice when its too fast. */
                 
                 if(fpsAdjustMili < MILI_ADJ_MAX) {
-                    ++fpsAdjustMili;
+                    ++fpsAdjustMili;    
                 }
             } else { fpsAdjustMili = 0; }
         }
@@ -322,20 +335,21 @@ int main(int argv, char** args) {
             SDL_Log("FpsMiliAdjust:%s",std::to_string(fpsAdjustMili).c_str());
         }
 
-        /* run frames */
         firstTimer.runFrame();
         secondTimer.runFrame();
         thirdTimer.runFrame();
         fourthTimer.runFrame();
-        fallTimer.runFrame(false);
-        mainGameController.runFrame(ptrFont);
+
+        fallTimer.runFrame(false, newTime);
+
+        mainGameController.runFrame(ptrFont, ptrFontLvl);
         ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                        // seconds_from_start, so there is no chance of a memory overrun
 
         /* additional control */
         //TODO this bit of code should probably go in the controller.
         if(fallTimer.hasExpired() == true) {
-            mainGameModel.moveBlock(ley::Direction::down);
+            newTime = mainGameModel.moveBlock(ley::Direction::down);
             fallTimer.reset();
         }
 

@@ -6,11 +6,12 @@ Purpose: see header.
 Date: Nov/11/2020
 */
 
+#include <SDL2/SDL.h>
 #include <chrono>
 #include "Rand_int.h"
 /* RAII */
 ley::Rand_int::Rand_int (int low, int high) :
-gen(clock()),
+gen(SDL_GetTicks()),
 dis{low,high} {
 
 }

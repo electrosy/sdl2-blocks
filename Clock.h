@@ -8,7 +8,6 @@ Date: Feb/16/2020
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include <chrono>
 #include <string>
 
 #include <SDL2/SDL.h>
@@ -19,14 +18,14 @@ namespace ley {
 class Clock {
 
 private:
-    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+    Uint32 start = SDL_GetTicks();
 
 public:
     Clock();
     ~Clock();
 
-    size_t secondsFromStart();
-    size_t miliSecondsFromStart();
+    Uint32 secondsFromStart();
+    Uint32 miliSecondsFromStart();
     void reset();
 };
 

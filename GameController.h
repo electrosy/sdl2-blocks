@@ -15,6 +15,8 @@ Date: Feb/15/2020
 #include "GameModel.h"
 #include "Font.h"
 
+#include "Timer.h"
+
 namespace ley {
 
 class GameController {
@@ -22,12 +24,12 @@ class GameController {
 private:
     SDL_Renderer* ren;
     ley::GameModel* gm;
-    void goNext(); //setup the next round, a round is a new block after the last has been placed.
 public:
     GameController(SDL_Renderer* , ley::GameModel*);
     ~GameController();
 
-    void runFrame(ley::Font*); // call this for each frame in the game to control the game model.
+    void runFrame(ley::Font*, ley::Font*); // call this for each frame in the game to control the game model.
+                                            //Fonts for, lines / score
     
     void renderBoard(); //renders the board to the video.
     void renderBackground(); //render the background to the screen.
