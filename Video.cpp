@@ -6,6 +6,7 @@ Purpose: see header.
 Date: Feb/14/2020
 */
 #include <stdio.h>
+#include <string>
 
 #include "Video.h"
 
@@ -13,13 +14,22 @@ Date: Feb/14/2020
 const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
+const std::string APPLICATION_NAME = "Ablockalypse";
+const std::string APPLICATION_VER = "0.1.3";
+const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
+const std::string APPLICATION_REL_TYPE = "Alpha";
+const std::string APPLICATION_ENV = "Development";
+
+const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER + " " +  APPLICATION_PLATFORM + " " +  APPLICATION_REL_TYPE + " " + APPLICATION_ENV);
+
+
 /* RAII */
 void ley::Video::createWindow() {
     /* create a window to render to */
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) >= 0) {
         // if all good
         window = SDL_CreateWindow(
-            "Ablockalypse ver 0.1.2 Alpha",
+            APPLICATION_STRING.c_str(),
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN /*SDL_WINDOW_FULLSCREEN*/);
