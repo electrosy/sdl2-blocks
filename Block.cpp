@@ -78,6 +78,12 @@ void ley::Block::setClear(bool c) {
     setBlock(type);
 }
 
+void ley::Block::reset() {
+    
+    rect.x = BLOCK_START_X;
+    rect.y = BLOCK_START_Y;
+}
+
 std::array<std::array<ley::BlockTexCode, 4>,4> ley::Block::getBlockParts() {
     return block;
 }

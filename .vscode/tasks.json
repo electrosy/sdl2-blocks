@@ -62,6 +62,8 @@
                 "${workspaceFolder}/Textures.cpp",
                 "${workspaceFolder}/Font.cpp",
                 "${workspaceFolder}/Rand_int.cpp",
+                "${workspaceFolder}/UIElement.cpp",
+                "${workspaceFolder}/UIMenu.cpp",
                 "-l",
                 "SDL2",
                 "-l",

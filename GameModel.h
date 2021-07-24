@@ -21,7 +21,7 @@ const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that w
 const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 const auto START_X_OFFSET_PX = 362;
 const auto NEW_LVL_AT_LINES = 10;
-enum class Direction {down,right,up,left,none};
+enum class Direction {down,right,up,left,none,pause};
 
 class GameModel {
 
@@ -34,6 +34,7 @@ private:
     int numLines; //number of lines the player has successfully completed. (Lines)
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
     bool gameOver;
+    bool active; //not paused
     void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);
@@ -68,6 +69,9 @@ public:
     bool isGameOver();
     ley::Block getNextBlock();
     std::string getRandomTexture();
+    void resetGame();
+    void pauseGame(bool);
+    bool isPaused();
 };
 
 }

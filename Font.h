@@ -30,6 +30,7 @@ public:
     Font(SDL_Renderer* r, int = 0, int = 0);
     ~Font();
     void updateMessage(std::string);
+    std::string getMessage();
     void render();
 
 };

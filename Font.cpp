@@ -45,6 +45,10 @@ void ley::Font::updateMessage(std::string s) {
     updateTexture();
 }
 
+std::string ley::Font::getMessage() {
+    return textMessage;
+}
+
 void ley::Font::render() {
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 }

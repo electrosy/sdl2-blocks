@@ -33,9 +33,22 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, G
                 //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 //continue game
+                if (state[SDL_SCANCODE_UP]) {
+                    frameDirection = ley::Direction::up;
+                }
+
                 if (state[SDL_SCANCODE_DOWN]) {
                     frameDirection = ley::Direction::down;
                 }
+
+                if (state[SDL_SCANCODE_RIGHT]) {
+                    frameDirection = ley::Direction::right;
+                }
+
+                if (state[SDL_SCANCODE_LEFT]) {
+                    frameDirection = ley::Direction::left;
+                }
+
                 //quite game
                 if ( state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE] || state[SDL_SCANCODE_RETURN]) {
                     running = false;
@@ -172,6 +185,11 @@ ley::Direction ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
                     running = false;
+                }
+
+                //pause game
+                if(state[SDL_SCANCODE_P]) {
+                    frameDirection = ley::Direction::pause;
                 }
                 break;
             default:

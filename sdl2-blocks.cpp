@@ -24,6 +24,8 @@ Date: Feb/15/2020
 #include "Timer.h"
 #include "Textures.h"
 #include "Font.h"
+#include "UIMenu.h"
+#include "UIElement.h"
 
 // ** TODO s Edge Cases
 //      1.) Test case where there are more than one full lines but not on consecutive rows. This case hasen't been coded for.
@@ -40,6 +42,10 @@ auto const SCORE_POS_Y_PX = 20;
 
 auto const LVL_POS_X_PX = 680;
 auto const LVL_POS_Y_PX = 40;
+
+
+
+enum class menuitems {start,highscores,options,exit};
 
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
@@ -89,28 +95,58 @@ void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, st
         v->clear();
     }
 }
-void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
+void runOptionMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
+    bool running = true;
+    SDL_Texture* startButton = TextureManager::Instance()->getTexture("optionsmenu");
+
+    while(running) {
+        ley::Direction frameDirection = i->pollMainMenuEvents(running,fs,(*m));
+    }
+}
+
+int runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
     bool runmain = true;
-    SDL_Texture* test = TextureManager::Instance()->getTexture(t);
+    
+    SDL_Texture* background = TextureManager::Instance()->getTexture(t); 
+    
+    SDL_Texture* btnStart = TextureManager::Instance()->getTexture("btnStart");
     SDL_Texture* startButton = TextureManager::Instance()->getTexture("start-white");
     SDL_Texture* startButtonHot = TextureManager::Instance()->getTexture("start-hot-red");
+
+    SDL_Texture* btnHighScores = TextureManager::Instance()->getTexture("btnHighScores");
     SDL_Texture* hsButton = TextureManager::Instance()->getTexture("highscores-white");
     SDL_Texture* hsButtonHot = TextureManager::Instance()->getTexture("highscores-hot-red");
+
+    SDL_Texture* btnOptions = TextureManager::Instance()->getTexture("btnOptions");
+    SDL_Texture* options = TextureManager::Instance()->getTexture("options-white");
+    SDL_Texture* optionsHot = TextureManager::Instance()->getTexture("options-hot-red");
+
+    SDL_Texture* btnExit = TextureManager::Instance()->getTexture("btnExit");
+    SDL_Texture* exit = TextureManager::Instance()->getTexture("exit-white");
+    SDL_Texture* exitHot = TextureManager::Instance()->getTexture("exit-hot-red");
+
+    SDL_Texture* btnCurrent = btnStart;
     SDL_Texture* currentButton = startButton;
     SDL_Texture* currentButtonHot = startButtonHot;
-    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(test, 255);
+
+    SDL_SetTextureBlendMode(background,SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(background, 255);
 
     SDL_Rect src_rect;
     SDL_Rect dest_rect;
     src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
     dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
 
-    SDL_Rect start_rect;
-    SDL_Rect start_dest_rect;
-    start_rect = {0,0,150,60};
-    start_dest_rect = {29,199,150,60};
+    //default - start
+    SDL_Rect current_rect = {0,0,150,60};
+    SDL_Rect current_dest_rect = {29,199,150,60};
 
+    ley::UIMenu mainmenu;
+    mainmenu.push("start",{0,0,139,46},{25,199,139,46},btnStart,startButton,startButtonHot);
+    mainmenu.push("highscore",{0,0,323,64},{29,282,323,64},btnHighScores,hsButton,hsButtonHot);
+    mainmenu.push("options",{0,0,218,63},{29,365,218,63},btnOptions,options,optionsHot);
+    mainmenu.push("exit",{0,0,100,49},{30,451,100,49},btnExit,exit,exitHot);
+    
     unsigned int alphaFrameIndex = 0;
     bool faddedin = false;
     char fadespeed = 5;
@@ -127,26 +163,57 @@ void runMainMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::
                 }
             }
         }
-        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
+        SDL_SetTextureAlphaMod(background, alphaFrameIndex);
         SDL_SetTextureAlphaMod(currentButton, alphaFrameIndex);
-        SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
-        
+        SDL_RenderCopy(v->getRenderer(), background, &src_rect, &dest_rect);
+
+        //Display all the base menu elements
+        std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> baseElements;
+        mainmenu.getBaseElements(&baseElements); 
+        for(int i = 0; i < baseElements.size() && !baseElements.empty(); ++i) {
+            SDL_Rect source = std::get<0>(baseElements.at(i));
+            SDL_Rect destination = std::get<1>(baseElements.at(i));
+            SDL_Texture* baseTexture = std::get<2>(baseElements.at(i));
+
+
+            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
+        }
+
+        //Display either the hot or flicker depending on the current flag
         if((SDL_GetTicks() % 50) % 10) {
             if(faddedin) {
-                SDL_RenderCopy(v->getRenderer(), currentButtonHot, &start_rect, &start_dest_rect);
+                mainmenu.setHot(true);
+                SDL_RenderCopy(v->getRenderer(), mainmenu.currentTex(), &current_rect, &current_dest_rect);
             }
         } else {
             if(faddedin) {
-                SDL_RenderCopy(v->getRenderer(), currentButton, &start_rect, &start_dest_rect);
+                mainmenu.setHot(false);
+                SDL_RenderCopy(v->getRenderer(), mainmenu.currentTex(), &current_rect, &current_dest_rect);
             }
         }
         v->render();
-        if(i->pollMainMenuEvents(runmain,fs,(*m)) == ley::Direction::down) {
-            currentButton = hsButton;
-            currentButtonHot = hsButtonHot;
+
+        ley::Direction frameDirection = i->pollMainMenuEvents(runmain,fs,(*m));
+        
+        if(frameDirection == ley::Direction::down || frameDirection == ley::Direction::right) {
+            mainmenu.next();
         }
+        
+        if(frameDirection == ley::Direction::up || frameDirection == ley::Direction::left) {
+            mainmenu.previous();
+        }
+
+        current_rect = mainmenu.currentSrc();
+        current_dest_rect = mainmenu.currentDest();
+        mainmenu.setHot(false);
+        currentButton = mainmenu.currentTex();
+        mainmenu.setHot(true);
+        currentButtonHot = mainmenu.currentTex();
+
         v->clear();
     }
+
+    return mainmenu.getIndex();
 }
 
 int main(int argv, char** args) {
@@ -163,14 +230,29 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
+
+    TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    
+    TextureManager::Instance()->loadTexture("assets/btnStart.png", "btnStart");
     TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
     TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
+
+    TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
 
+    TextureManager::Instance()->loadTexture("assets/btnOptions.png", "btnOptions");
+    TextureManager::Instance()->loadTexture("assets/options.png", "options-white");
+    TextureManager::Instance()->loadTexture("assets/options-hot-red.png", "options-hot-red");
+
+    TextureManager::Instance()->loadTexture("assets/btnExit.png", "btnExit");
+    TextureManager::Instance()->loadTexture("assets/exit-white.png", "exit-white");
+    TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
+
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_01");
 
-    bool game_running = true;
+    bool masterloop = true;
+    bool programRunning = true;
 
     ley::Input mainInput;
 
@@ -232,8 +314,9 @@ int main(int argv, char** args) {
 
     
 
-    //Test SimpleShape
-    std::vector<SDL_Rect> rects;
+    //SimpleShape
+    ////std::vector<SDL_Rect> rects;
+
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
     firstSimpleShape.addShape("nextboundry",{10,39,130,130});
@@ -259,125 +342,169 @@ int main(int argv, char** args) {
     mainGameModel.debugBoard(false);
     ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
 
-
     bool fs = false; //full screen
     auto avgFPS = 0;
 
     runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240}, 1);
     runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400}, 1);
 
-    runMainMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, 1);
-
-    fallTimer.reset();
-    
-    /**** Main Game Loop ****/
-    SDL_Log("Starting Game loop!");
-    ley::Clock mainClock;
-    size_t frame_count = 0;
-    long fpsAdjustMili = 0;
-    
-    bool fs_changed = false;
-    double newTime = 1000;
-
-    while(game_running && !mainGameModel.isGameOver()) {
-        SDL_Delay(DELAY_MILI + fpsAdjustMili);
-    /**** RENDER ****/
-        avgFPS = 0;
-        mainGameController.renderBackground();
-        renderables.renderAll(); // render all sprites
-        mainGameController.renderBoard();
-        if (SDL_GetTicks() % 1000 == 0 ) {
-            auto seconds_from_start = mainClock.secondsFromStart();
-            avgFPS = seconds_from_start == 0 
-                ? seconds_from_start : frame_count/seconds_from_start;
-            SDL_Log("Seconds From Start:%s", std::to_string(seconds_from_start).c_str());
-            SDL_Log("AVG FPS: %s",std::to_string(avgFPS).c_str());
-        }
-        mainVideo.render(); // output to the video system.
-
-    /**** GET INPUT ****/
-        //pollEtimervents updates running and full screen flags
-        ley::Direction eventDirection = mainInput.pollEvents(game_running,fs,mainGameModel);
-        if(fs != fs_changed) {
-            mainVideo.setFullScreen(fs);
-            fs_changed = !fs_changed;
-        }
-    /**** INPUT PROCESSING ****/
-        //TODO this stuff should probably go in the controller
-        if(eventDirection == ley::Direction::down) {
-            fallTimer.reset();
-            eventDirection = ley::Direction::none;
-        }
-
-    /**** UPDATE ****/
-        /* Calculate Frame Rate and output to log */
-        //adjust for target fps.
-        if(avgFPS != 0) {
-            auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
-            if(avg_target_ratio > 0.954445f) { /*then speed up*/  /* TODO The point at which to speed up may need to 
-                                                            be veriable. To ensure we dont dip below, we 
-                                                            should probably adjust right before hitting 1
-                                                            This adjustment may be very system specific, 
-                                                            may be best to save the adjustment off to a file*/
-                
-                fpsAdjustMili -= 5;
-                if(fpsAdjustMili < 0) {fpsAdjustMili = 0;}
-            } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE slowing down seems easier   
-                                                                            because you dont notice when its too fast. */
-                
-                if(fpsAdjustMili < MILI_ADJ_MAX) {
-                    ++fpsAdjustMili;    
-                }
-            } else { fpsAdjustMili = 0; }
-        }
-
-        if (SDL_GetTicks() % 1000 == 0 ) {
-            SDL_Log("FpsMiliAdjust:%s",std::to_string(fpsAdjustMili).c_str());
-        }
-
-        firstTimer.runFrame();
-        secondTimer.runFrame();
-        thirdTimer.runFrame();
-        fourthTimer.runFrame();
-
-        fallTimer.runFrame(false, newTime);
-
-        mainGameController.runFrame(ptrFont, ptrFontLvl);
-        ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
-                       // seconds_from_start, so there is no chance of a memory overrun
-
-        /* additional control */
-        //TODO this bit of code should probably go in the controller.
-        if(fallTimer.hasExpired() == true) {
-            newTime = mainGameModel.moveBlock(ley::Direction::down);
-            fallTimer.reset();
-        }
-
-    /**** CLEAR ****/
-        mainVideo.clear();
-    }
+    /**** UI/UX ****/
+    bool runInitialUI = true;
+    int menuItem;
+    int optionItem;
 
     ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190);
-    fontGameOver.updateMessage("Game Over!");
+    fontGameOver.updateMessage("");
     ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
     renderables.push_back(ptrFontGameOver);
 
-    //continue to render graphics and get keyboard input after game is over.
-    // TODO add FPS throttling to this part as well.
-    while(game_running) {
+    while(masterloop && runInitialUI) {
 
-       //For now just run at the frame rate that was set at the end of the game.
-       SDL_Delay(DELAY_MILI + fpsAdjustMili);
-    
-       mainGameController.renderBoard();
-       renderables.renderAll();
-       mainVideo.render();
-       ley::Direction eventDirection = mainInput.pollEndEvents(game_running,fs,mainGameModel);
+        while(runInitialUI) {
+        
+            menuItem = runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, 1);
 
-       mainVideo.clear();
+            if(menuItem == 0) {
+                runInitialUI = false;
+            }
+            else if(menuItem == 2) {
+                optionItem = runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1);
+            } else if(menuItem == 3) {
+                runInitialUI = false;
+                programRunning = false;
+                masterloop = false;
+            }
+
+        }
+        runInitialUI = true;
+
+        fallTimer.reset();
+        
+        /**** Main Game Loop ****/
+        SDL_Log("Starting Game loop!");
+
+        //unpause game if it is already paused.
+        if(mainGameModel.isPaused()) {
+            mainGameModel.pauseGame(false);
+            fallTimer.pause(false);
+        }
+
+        ley::Clock mainClock;
+        size_t frame_count = 0;
+        long fpsAdjustMili = 0;
+        
+        bool fs_changed = false;
+        double newTime = 1000;
+
+
+        fontGameOver.updateMessage("");
+        while(programRunning && !mainGameModel.isGameOver()) {
+            SDL_Delay(DELAY_MILI + fpsAdjustMili);
+        /**** RENDER ****/
+            avgFPS = 0;
+            mainGameController.renderBackground();
+            renderables.renderAll(); // render all sprites
+            mainGameController.renderBoard();
+            if (SDL_GetTicks() % 1000 == 0 ) {
+                auto seconds_from_start = mainClock.secondsFromStart();
+                avgFPS = seconds_from_start == 0 
+                    ? seconds_from_start : frame_count/seconds_from_start;
+                SDL_Log("Seconds From Start:%s", std::to_string(seconds_from_start).c_str());
+                SDL_Log("AVG FPS: %s",std::to_string(avgFPS).c_str());
+            }
+            mainVideo.render(); // output to the video system.
+
+        /**** GET INPUT ****/
+            //pollEtimervents updates running and full screen flags
+            ley::Direction eventDirection = mainInput.pollEvents(programRunning,fs,mainGameModel);
+            if(fs != fs_changed) {
+                mainVideo.setFullScreen(fs);
+                fs_changed = !fs_changed;
+            }
+        /**** INPUT PROCESSING ****/
+            //TODO this stuff should probably go in the controller
+            if(eventDirection == ley::Direction::down) {
+                fallTimer.reset();
+                eventDirection = ley::Direction::none;
+            } else if(eventDirection == ley::Direction::pause) {
+                mainGameModel.pauseGame(!mainGameModel.isPaused());
+                fallTimer.pause(!fallTimer.isPaused());
+            }
+
+        /**** UPDATE ****/
+            /* Calculate Frame Rate and output to log */
+            //adjust for target fps.
+            if(avgFPS != 0) {
+                auto avg_target_ratio = TARGET_FPS / avgFPS; //greater than 1 too slow, less than one too fast.
+                if(avg_target_ratio > 0.954445f) { /*then speed up*/  /* TODO The point at which to speed up may need to 
+                                                                be veriable. To ensure we dont dip below, we 
+                                                                should probably adjust right before hitting 1
+                                                                This adjustment may be very system specific, 
+                                                                may be best to save the adjustment off to a file*/
+                    
+                    fpsAdjustMili -= 5;
+                    if(fpsAdjustMili < 0) {fpsAdjustMili = 0;}
+                } else if(avg_target_ratio < 0.7999f) { /* then slow down */ /* NOTE slowing down seems easier   
+                                                                                because you dont notice when its too fast. */
+                    
+                    if(fpsAdjustMili < MILI_ADJ_MAX) {
+                        ++fpsAdjustMili;    
+                    }
+                } else { fpsAdjustMili = 0; }
+            }
+
+            if (SDL_GetTicks() % 1000 == 0 ) {
+                SDL_Log("FpsMiliAdjust:%s",std::to_string(fpsAdjustMili).c_str());
+            }
+
+            firstTimer.runFrame();
+            secondTimer.runFrame();
+            thirdTimer.runFrame();
+            fourthTimer.runFrame();
+
+            fallTimer.runFrame(false, newTime);
+
+            mainGameController.runFrame(ptrFont, ptrFontLvl);
+            ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
+                        // seconds_from_start, so there is no chance of a memory overrun
+
+            /* additional control */
+            //TODO this bit of code should probably go in the controller.
+            if(fallTimer.hasExpired() == true) {
+                newTime = mainGameModel.moveBlock(ley::Direction::down);
+                fallTimer.reset();
+            }
+
+        /**** CLEAR ****/
+            mainVideo.clear();
+        }
+
+        //continue to render graphics and get keyboard input after game is over.
+        // TODO add FPS throttling to this part as well.
+
+        if(fontGameOver.getMessage().empty() && mainGameModel.isGameOver()) {
+            fontGameOver.updateMessage("Game Over!!!");
+        }
+
+        while(programRunning) {
+
+            //For now just run at the frame rate that was set at the end of the game.
+            SDL_Delay(DELAY_MILI + fpsAdjustMili);
+            
+            mainGameController.renderBoard();
+            renderables.renderAll();
+            mainVideo.render();
+            ley::Direction eventDirection = mainInput.pollEndEvents(programRunning,fs,mainGameModel);
+
+            mainVideo.clear();
+        }
+
+        /**** CLEAN UP ****/
+        mainGameModel.resetGame();
+        programRunning = true;
     }
 
-    /**** CLEAN UP ****/
+    
     
 
     return 1;

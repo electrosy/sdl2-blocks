@@ -16,6 +16,9 @@ Date: Feb/15/2020
 
 #include "Rand_int.h"
 
+const auto BLOCK_START_X = 4;
+const auto BLOCK_START_Y = 0;
+
 namespace ley {
 
 enum class BlockType {cube,tee,rLee,zee,mzee,lLee,line,empty};
@@ -77,6 +80,7 @@ public:
     int max_x(int);
     int heightAtWidth(int);
     int widthAtHeight(int);
+    void reset(); //return block to original position for restarting the game.
 
 
 };

@@ -19,6 +19,9 @@ class Clock {
 
 private:
     Uint32 start = SDL_GetTicks();
+    Uint32 pausestart;
+    Uint32 pauseend;
+    bool active;
 
 public:
     Clock();
@@ -27,6 +30,7 @@ public:
     Uint32 secondsFromStart();
     Uint32 miliSecondsFromStart();
     void reset();
+    void pause(bool);
 };
 
 }

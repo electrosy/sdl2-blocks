@@ -9,7 +9,7 @@ Date: Feb/20/2020
 
 /* RAII */
 ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect)
-: SimpleShape(r), mili(m), rect_border(rect), rect_progress(rect) {
+: SimpleShape(r), mili(m), rect_border(rect), rect_progress(rect), active(true) {
     
     rect_tex.x = 0; rect_tex.y = 0; //rectange for internal texture
     rect_tex.w = rect_border.w;
@@ -36,7 +36,10 @@ void ley::Timer::fill() {
     
 }
 void ley::Timer::reset() {
-    clock.reset();
+
+    if(!isPaused()) {
+        clock.reset();
+    }
 }
 
 void ley::Timer::adjustProgress(float m) {
@@ -51,6 +54,10 @@ void ley::Timer::adjustProgress(float m) {
 }
 
 void ley::Timer::runFrame(bool autoRestart, double newTime) {
+
+    if(!active) {
+        return; //timer is paused.
+    }
 
     if(newTime == 1) {
         SDL_Log("newTime == 1, should not happen"); // TODO this should never happen but for some reason it does 
@@ -89,4 +96,13 @@ void ley::Timer::changeSpeed(float newSpeed) {
 
 float ley::Timer::getSpeed() {
     return mili;
+}
+
+bool ley::Timer::isPaused() {
+    return !active;
+}
+
+void ley::Timer::pause(bool paused) {
+    clock.pause(paused);
+    active = !paused;
 }

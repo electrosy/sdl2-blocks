@@ -26,10 +26,11 @@ void ley::Renderables::push_back(Renderable * r) {
 }
 
 void ley::Renderables::renderAll() {
-    
     if(renderables.size() > 0) {
         for(int i = 0; i < renderables.size(); ++i) {
+                
                 renderables[i]->render();
+                
             }
     }
 }

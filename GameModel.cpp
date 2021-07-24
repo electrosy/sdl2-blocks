@@ -14,7 +14,7 @@ Date: Feb/15/2020
 ley::GameModel::GameModel(ley::Timer* ptrTimer)
 : activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
-    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f) {
+    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true) {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
@@ -253,12 +253,16 @@ void ley::GameModel::rotateBlock(bool r) {
 //** TODO we need to synchronize the rotation so that it doesn't happen 
 //** TODO when the timer moves the block down.
 bool ley::GameModel::canRotate(bool r) {
-    //rotate the block 
+    //rotate the block if the game is not paused
     bool canput = false;
-    activeBlock.rotate(r);
-    canput = canPut(activeBlock, ley::Direction::up); //up is a rotation
-    activeBlock.rotate(!r); //rotate it back, because this 
-                            //function is simply a test only
+
+    if(!isPaused()) {
+        activeBlock.rotate(r);
+        canput = canPut(activeBlock, ley::Direction::up); //up is a rotation
+        activeBlock.rotate(!r); //rotate it back, because this 
+                                //function is simply a test only
+    }
+    
     return canput;
 }
 void ley::GameModel::clearAndRecordLines(int first, int last) {
@@ -378,6 +382,11 @@ void ley::GameModel::updateSpeed() {
 
 //TODO this function should probably go in the controller
 double ley::GameModel::moveBlock(Direction d) {
+
+    if(!active) {
+        return currentSpeed; //don't do any movies while we are paused.
+    }
+
     switch (d) {
         case Direction::down :
             if (canPut(activeBlock, Direction::down)) {
@@ -432,4 +441,23 @@ void ley::GameModel::debugBoard(bool setLayer) {
         }
         SDL_Log("%s",sRow.c_str());
     }
+}
+
+void ley::GameModel::resetGame() {
+    clearBoard();
+    gameOver = false;
+    numLines = 0;
+    numLevel = 0;
+
+    activeBlock.reset();
+    oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
+    
+}
+bool ley::GameModel::isPaused() {
+    return !active;
+}
+
+void ley::GameModel::pauseGame(bool pause) {
+        
+        active = !pause;
 }

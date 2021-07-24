@@ -25,6 +25,7 @@ private:
     float mili; //how many miliseconds this timer runs
     ley::Clock clock;
     bool expired; //expired flag that can get picked up.
+    bool active; //activly running, not paused.
     //updateProgress() rect based on time
     void adjustProgress(float);
 
@@ -41,6 +42,8 @@ public:
     int getElapsed();
     void changeSpeed(float);
     float getSpeed();
+    bool isPaused();
+    void pause(bool);
 };
 
 }
