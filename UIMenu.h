@@ -14,8 +14,11 @@ Date: Jul/17/2021
 #include <SDL2/SDL.h>
 
 #include "UIElement.h"
+#include "Textures.h"
 
 //#typedef std::tuple<std::string, SDL_Rect, SDL_Rect, SDL_Texture*> menuelement;
+
+enum class menutypes {main,options,highscore};
 
 namespace ley {
 
@@ -48,9 +51,11 @@ public:
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
     void setHot(bool);
-    void push(std::string, const SDL_Rect, const SDL_Rect, SDL_Texture*, SDL_Texture*, SDL_Texture*);
+    void push(std::string, const SDL_Rect, const SDL_Rect, std::string, std::string, std::string); //WStrings (new way)
     int getIndex();
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
+    void clear(); //clear out all the elements.
+    int runMenu(ley::Video*, ley::Input*, ley::GameModel*, bool, std::string, SDL_Rect, double, menutypes);
 
 };
 

@@ -37,15 +37,14 @@ auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;
 
-auto const SCORE_POS_X_PX = 680;
-auto const SCORE_POS_Y_PX = 20;
+auto const SCORE_POS_X_PX = 800; //Score text
+auto const SCORE_POS_Y_PX = 40;
 
-auto const LVL_POS_X_PX = 680;
-auto const LVL_POS_Y_PX = 40;
+auto const LVL_POS_X_PX = 800; //Level text
+auto const LVL_POS_Y_PX = 60;
 
-
-
-enum class menuitems {start,highscores,options,exit};
+enum class mainmenu {start,highscores,options,exit};
+enum class optionsmenu {debug,sound_volume,back};
 
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
@@ -95,130 +94,11 @@ void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, st
         v->clear();
     }
 }
-void runOptionMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
-    bool running = true;
-    SDL_Texture* startButton = TextureManager::Instance()->getTexture("optionsmenu");
-
-    while(running) {
-        ley::Direction frameDirection = i->pollMainMenuEvents(running,fs,(*m));
-    }
-}
-
-int runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
-    bool runmain = true;
-    
-    SDL_Texture* background = TextureManager::Instance()->getTexture(t); 
-    
-    SDL_Texture* btnStart = TextureManager::Instance()->getTexture("btnStart");
-    SDL_Texture* startButton = TextureManager::Instance()->getTexture("start-white");
-    SDL_Texture* startButtonHot = TextureManager::Instance()->getTexture("start-hot-red");
-
-    SDL_Texture* btnHighScores = TextureManager::Instance()->getTexture("btnHighScores");
-    SDL_Texture* hsButton = TextureManager::Instance()->getTexture("highscores-white");
-    SDL_Texture* hsButtonHot = TextureManager::Instance()->getTexture("highscores-hot-red");
-
-    SDL_Texture* btnOptions = TextureManager::Instance()->getTexture("btnOptions");
-    SDL_Texture* options = TextureManager::Instance()->getTexture("options-white");
-    SDL_Texture* optionsHot = TextureManager::Instance()->getTexture("options-hot-red");
-
-    SDL_Texture* btnExit = TextureManager::Instance()->getTexture("btnExit");
-    SDL_Texture* exit = TextureManager::Instance()->getTexture("exit-white");
-    SDL_Texture* exitHot = TextureManager::Instance()->getTexture("exit-hot-red");
-
-    SDL_Texture* btnCurrent = btnStart;
-    SDL_Texture* currentButton = startButton;
-    SDL_Texture* currentButtonHot = startButtonHot;
-
-    SDL_SetTextureBlendMode(background,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background, 255);
-
-    SDL_Rect src_rect;
-    SDL_Rect dest_rect;
-    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
-    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
-
-    //default - start
-    SDL_Rect current_rect = {0,0,150,60};
-    SDL_Rect current_dest_rect = {29,199,150,60};
-
-    ley::UIMenu mainmenu;
-    mainmenu.push("start",{0,0,139,46},{25,199,139,46},btnStart,startButton,startButtonHot);
-    mainmenu.push("highscore",{0,0,323,64},{29,282,323,64},btnHighScores,hsButton,hsButtonHot);
-    mainmenu.push("options",{0,0,218,63},{29,365,218,63},btnOptions,options,optionsHot);
-    mainmenu.push("exit",{0,0,100,49},{30,451,100,49},btnExit,exit,exitHot);
-    
-    unsigned int alphaFrameIndex = 0;
-    bool faddedin = false;
-    char fadespeed = 5;
-    while(runmain == true) {
-        SDL_Delay(fpsDelay);
-
-        if(!faddedin) {
-            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                if(alphaFrameIndex < 255) {
-                    alphaFrameIndex++;
-                }
-                else {
-                    faddedin = true;
-                }
-            }
-        }
-        SDL_SetTextureAlphaMod(background, alphaFrameIndex);
-        SDL_SetTextureAlphaMod(currentButton, alphaFrameIndex);
-        SDL_RenderCopy(v->getRenderer(), background, &src_rect, &dest_rect);
-
-        //Display all the base menu elements
-        std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> baseElements;
-        mainmenu.getBaseElements(&baseElements); 
-        for(int i = 0; i < baseElements.size() && !baseElements.empty(); ++i) {
-            SDL_Rect source = std::get<0>(baseElements.at(i));
-            SDL_Rect destination = std::get<1>(baseElements.at(i));
-            SDL_Texture* baseTexture = std::get<2>(baseElements.at(i));
-
-
-            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
-        }
-
-        //Display either the hot or flicker depending on the current flag
-        if((SDL_GetTicks() % 50) % 10) {
-            if(faddedin) {
-                mainmenu.setHot(true);
-                SDL_RenderCopy(v->getRenderer(), mainmenu.currentTex(), &current_rect, &current_dest_rect);
-            }
-        } else {
-            if(faddedin) {
-                mainmenu.setHot(false);
-                SDL_RenderCopy(v->getRenderer(), mainmenu.currentTex(), &current_rect, &current_dest_rect);
-            }
-        }
-        v->render();
-
-        ley::Direction frameDirection = i->pollMainMenuEvents(runmain,fs,(*m));
-        
-        if(frameDirection == ley::Direction::down || frameDirection == ley::Direction::right) {
-            mainmenu.next();
-        }
-        
-        if(frameDirection == ley::Direction::up || frameDirection == ley::Direction::left) {
-            mainmenu.previous();
-        }
-
-        current_rect = mainmenu.currentSrc();
-        current_dest_rect = mainmenu.currentDest();
-        mainmenu.setHot(false);
-        currentButton = mainmenu.currentTex();
-        mainmenu.setHot(true);
-        currentButtonHot = mainmenu.currentTex();
-
-        v->clear();
-    }
-
-    return mainmenu.getIndex();
-}
 
 int main(int argv, char** args) {
     ley::Video mainVideo;
     TextureManager::Instance()->setRenderer(mainVideo.getRenderer());
+    //Block pieces
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_gr_30x30.bmp", "d");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_bl_30x30.bmp", "e");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_or_30x30.bmp", "f");
@@ -226,33 +106,47 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_rd_30x30.bmp", "h");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_yl_30x30.bmp", "i");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/block_cy_30x30.bmp", "j");
-
+    //Logos
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
-
-    TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
-    
+    //Buttons for main menu
+    //Start
     TextureManager::Instance()->loadTexture("assets/btnStart.png", "btnStart");
     TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
     TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
-
+    //High Scores
     TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
-
+    //Options
     TextureManager::Instance()->loadTexture("assets/btnOptions.png", "btnOptions");
     TextureManager::Instance()->loadTexture("assets/options.png", "options-white");
     TextureManager::Instance()->loadTexture("assets/options-hot-red.png", "options-hot-red");
-
+    //Exit
     TextureManager::Instance()->loadTexture("assets/btnExit.png", "btnExit");
     TextureManager::Instance()->loadTexture("assets/exit-white.png", "exit-white");
     TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
+    //Options Background
+    TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    //Buttons for options menu.
+    TextureManager::Instance()->loadTexture("assets/btn/back.png", "opt-back");
+    TextureManager::Instance()->loadTexture("assets/btn/back-hot.png", "opt-hot");
+    TextureManager::Instance()->loadTexture("assets/btn/back-white.png", "opt-white");
+    //Backgrounds.
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1.JPG", "BG_WEST_03");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1.JPG", "BG_WEST_04");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1.JPG", "BG_WEST_05");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1.JPG", "BG_WEST_06");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1.JPG", "BG_WEST_07");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.JPG", "BG_WEST_09");
 
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_01");
-
-    bool masterloop = true;
-    bool programRunning = true;
+    bool masterloop = true; //Starts the main menu.
+    bool programRunning = true; //If the program is running, this could also be in the game over state, to restart play.
 
     ley::Input mainInput;
 
@@ -302,7 +196,7 @@ int main(int argv, char** args) {
     catSprite.setPos(25,650);
     renderables.push_back(&catSprite);
     ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/cat-trans.png", 175, &catFrames);
-    catSprite2.setPos(900,650);
+    catSprite2.setPos(1150,650);
     renderables.push_back(&catSprite2);
     
     // test Winlet
@@ -312,15 +206,12 @@ int main(int argv, char** args) {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-    
 
     //SimpleShape
-    ////std::vector<SDL_Rect> rects;
-
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("nextboundry",{10,39,130,130});
-    firstSimpleShape.addShape("boardboundry", {361,39,302,602});
+    firstSimpleShape.addShape("nextboundry",{ley::START_X_OFFSET_PX - 145,39,130,130});
+    firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     renderables.push_back(&firstTimer);
@@ -335,7 +226,7 @@ int main(int argv, char** args) {
     renderables.push_back(&fourthTimer);
     
     //Fall down timer - TODO timers should go into the controller
-    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{361,641,302,2}); //Time to force the blockdown.
+    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
 
     ley::GameModel mainGameModel(&fallTimer);
@@ -350,25 +241,41 @@ int main(int argv, char** args) {
 
     /**** UI/UX ****/
     bool runInitialUI = true;
-    int menuItem;
-    int optionItem;
+    int menuItem; //Store the option selected from the main menu.
+    int optionItem; //Store the option selected from the options menu.
 
     ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190);
     fontGameOver.updateMessage("");
     ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
     renderables.push_back(ptrFontGameOver);
 
+    //Gather elements for the menus
+    ley::UIMenu mainmenu;
+    mainmenu.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
+    mainmenu.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
+    mainmenu.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
+    mainmenu.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
+
+    ley::UIMenu optionmenu;
+    optionmenu.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
+    optionmenu.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
+    optionmenu.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
+    optionmenu.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
+
+
     while(masterloop && runInitialUI) {
 
         while(runInitialUI) {
         
-            menuItem = runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,800,600}, 1);
+            //menuItem = runMenuMain(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+
+            menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
 
             if(menuItem == 0) {
                 runInitialUI = false;
             }
             else if(menuItem == 2) {
-                optionItem = runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1);
+                optionItem = optionmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
             } else if(menuItem == 3) {
                 runInitialUI = false;
                 programRunning = false;
@@ -395,7 +302,6 @@ int main(int argv, char** args) {
         
         bool fs_changed = false;
         double newTime = 1000;
-
 
         fontGameOver.updateMessage("");
         while(programRunning && !mainGameModel.isGameOver()) {

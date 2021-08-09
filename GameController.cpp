@@ -12,6 +12,7 @@ Date: Feb/18/2020
 
 typedef ley::Textures TextureManager;
 
+const auto NEXTBLOCK_OFFSET_X_PX = 360;
 const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 /* RAII */
@@ -38,7 +39,9 @@ void ley::GameController::renderBackground()
     SDL_Rect dest_rect;
     dest_rect = start_rect;
 
-    bg_west_1 = TextureManager::Instance()->getTexture("BG_WEST_01");
+    std::string background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+
+    bg_west_1 = TextureManager::Instance()->getTexture(background_level.c_str());
     SDL_RenderCopy(ren, bg_west_1, &start_rect, &dest_rect);
 }
 
@@ -63,7 +66,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
     // Output the nextBlock from the game model
     SDL_Texture *blockBits = nullptr;
     SDL_Rect next_dest_rect;
-    next_dest_rect.x = 20;
+    next_dest_rect.x = NEXTBLOCK_OFFSET_X_PX;
     next_dest_rect.y = 40 + NEXTBLOCK_OFFSET_Y_PX;
     next_dest_rect.h = h;
     next_dest_rect.w = w;
@@ -80,7 +83,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
             next_dest_rect.x = next_dest_rect.x + w;
         }
         next_dest_rect.y = next_dest_rect.y + h;
-        next_dest_rect.x = 20;
+        next_dest_rect.x = NEXTBLOCK_OFFSET_X_PX;
     }
 
     // TODO loop2 refactor with loop 1 above

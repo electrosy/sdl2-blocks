@@ -19,8 +19,8 @@ class UIElement {
 private:
 
     std::string label;
-    const SDL_Rect source;
-    const SDL_Rect destination;
+    SDL_Rect source;
+    SDL_Rect destination;
     SDL_Texture* textureBase;
     SDL_Texture* texture;
     SDL_Texture* textureHot;
