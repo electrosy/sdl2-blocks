@@ -8,12 +8,20 @@ Date: Jul/17/2021
 #include "UIElement.h"
 
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, SDL_Texture* b, SDL_Texture* t, SDL_Texture* th)
-: label(l), source(sr), destination(dr), textureBase(b), texture(t), textureHot(th) {
+: label(l), source(sr), destination(dr), textureBase(b), texture(t), textureHot(th), hot(false) {
 
 }
 
 ley::UIElement::~UIElement() {
 
+}
+
+void ley::UIElement::setActiveSelector(bool h) {
+    hot = h;
+}
+
+bool ley::UIElement::isActiveSelector() {
+    return hot;
 }
 
 std::string ley::UIElement::getLabel() {

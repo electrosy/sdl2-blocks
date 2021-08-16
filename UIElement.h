@@ -30,6 +30,8 @@ protected:
    
 public:
     UIElement(std::string, SDL_Rect, SDL_Rect, SDL_Texture*, SDL_Texture*, SDL_Texture*);
+    void setActiveSelector(bool);
+    bool isActiveSelector();
     std::string getLabel();
     SDL_Rect getSource();
     SDL_Rect getDestination();

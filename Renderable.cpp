@@ -9,12 +9,19 @@ Date: Feb/17/2020
 
 /* RAII */
 ley::Renderable::Renderable(SDL_Renderer* r) {
-   renderer=r;
+   renderer=r, visible=true;
 }
 
 ley::Renderable::~Renderable() {
 
 }
 /* Accessors */
+void ley::Renderable::setVisible(bool v) {
+   visible = v;
+}
+
+bool ley::Renderable::isVisible() {
+   return visible;
+}
 
 /* Functions */

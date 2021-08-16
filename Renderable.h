@@ -23,6 +23,7 @@ enum class Color {red,blue,green,orange,yellow,violet,indigo,white};
 class Renderable {
 
 private:
+    bool visible;
     
 protected:
    SDL_Renderer* renderer;
@@ -32,7 +33,8 @@ public:
     Renderable(SDL_Renderer*);
     ~Renderable();
     /* Accessors */
-    
+    void setVisible(bool);
+    bool isVisible();
 
     /* Functions */
     void virtual render() = 0;

@@ -10,6 +10,7 @@ Date: Jul/17/2021
 
 #include <vector>
 #include <tuple>
+#include <list>
 
 #include <SDL2/SDL.h>
 
@@ -26,16 +27,8 @@ class UIMenu {
 
 private:
     
-    //std::tuple<std::string, SDL_Rect, SDL_Rect, SDL_Texture*> menuelement;
-    //std::vector<menuelement> numbers;
     std::vector<ley::UIElement> elements;
-
-/*
-    SDL_Rect source;
-    SDL_Rect destination;
-    SDL_Texture* texture;
-    SDL_Texture* textureHot;
-    */
+    std::multimap<std::string,ley::UIElement> selectors; //element id, and selectors
     int currentIndex;
     bool hot; //indicates that this menu item is currently selected.
 
@@ -47,15 +40,19 @@ public:
 
     void next();
     void previous();
+    void toggle();
     SDL_Texture* currentTex();
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
     void setHot(bool);
-    void push(std::string, const SDL_Rect, const SDL_Rect, std::string, std::string, std::string); //WStrings (new way)
+    void push(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     int getIndex();
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
     int runMenu(ley::Video*, ley::Input*, ley::GameModel*, bool, std::string, SDL_Rect, double, menutypes);
+
+    void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
+    int getElementId(std::string);
 
 };
 

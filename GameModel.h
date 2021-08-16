@@ -23,7 +23,7 @@ const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 const auto START_X_OFFSET_PX = 490;
 
 const auto NEW_LVL_AT_LINES = 10;
-enum class Direction {down,right,up,left,none,pause};
+enum class Direction {down,right,up,left,none,pause,space}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 class GameModel {
 
@@ -32,6 +32,7 @@ private:
     Block activeBlock;
     Block oldBlock;
     Block nextBlock;
+    bool overlayOn;
     double currentSpeed; //how many miliseconds until the block falls down.
     int numLines; //number of lines the player has successfully completed. (Lines)
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
@@ -63,6 +64,8 @@ public:
     void rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console
+    void overlayToggle();
+    bool isOverlayOn();
     bool canMoveDown(); //Can move down based on Game rules.
     bool newBlock();
     void setBlock();

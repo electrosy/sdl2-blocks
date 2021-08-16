@@ -14,7 +14,7 @@ Date: Feb/15/2020
 ley::GameModel::GameModel(ley::Timer* ptrTimer)
 : activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
-    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true) {
+    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true), overlayOn(false) {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
@@ -426,6 +426,13 @@ double ley::GameModel::moveBlock(Direction d) {
     updateSpeed();
 
     return currentSpeed;
+}
+void ley::GameModel::overlayToggle() {
+    overlayOn = !overlayOn;
+}
+
+bool ley::GameModel::isOverlayOn() {
+    return overlayOn;
 }
 
 void ley::GameModel::debugBoard(bool setLayer) {

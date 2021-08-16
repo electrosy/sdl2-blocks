@@ -130,9 +130,17 @@ int main(int argv, char** args) {
     //Options Background
     TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
     //Buttons for options menu.
-    TextureManager::Instance()->loadTexture("assets/btn/back.png", "opt-back");
-    TextureManager::Instance()->loadTexture("assets/btn/back-hot.png", "opt-hot");
-    TextureManager::Instance()->loadTexture("assets/btn/back-white.png", "opt-white");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back.png", "opt-back");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back-hot.png", "opt-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back-white.png", "opt-white");
+    //Yes and No selectors
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes.png", "yes");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes-hot.png", "yes-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes-white.png", "yes-white");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no.png", "no");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no-hot.png", "no-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no-white.png", "no-white");
+
     //Backgrounds.
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_01");
@@ -151,6 +159,7 @@ int main(int argv, char** args) {
     ley::Input mainInput;
 
     ley::Renderables renderables;
+    ley::Renderables debugRenderables;
     //Create the rendertable font object
     ley::Font fontOne(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
@@ -214,16 +223,16 @@ int main(int argv, char** args) {
     firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
-    renderables.push_back(&firstTimer);
+    debugRenderables.push_back(&firstTimer);
     //Test Timer
     ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2 second timer
-    renderables.push_back(&secondTimer);
+    debugRenderables.push_back(&secondTimer);
     //Test Timer
     ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 2 second timer
-    renderables.push_back(&thirdTimer);
+    debugRenderables.push_back(&thirdTimer);
     //Test Timer
     ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
-    renderables.push_back(&fourthTimer);
+    debugRenderables.push_back(&fourthTimer);
     
     //Fall down timer - TODO timers should go into the controller
     ley::Timer fallTimer(mainVideo.getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}); //Time to force the blockdown.
@@ -236,8 +245,8 @@ int main(int argv, char** args) {
     bool fs = false; //full screen
     auto avgFPS = 0;
 
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {193,170,414,240}, 1);
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {200,155,400,400}, 1);
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {400,170,414,240}, 1);
+    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {400,155,400,400}, 1);
 
     /**** UI/UX ****/
     bool runInitialUI = true;
@@ -257,18 +266,21 @@ int main(int argv, char** args) {
     mainmenu.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
 
     ley::UIMenu optionmenu;
-    optionmenu.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
-    optionmenu.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
-    optionmenu.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
-    optionmenu.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
+    optionmenu.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
+    optionmenu.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
+    optionmenu.push("back",{0,0,100,49},{30,451,100,49},"opt-back","opt-white","opt-hot");
+    
+    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "yes", "yes-white", "yes-hot");
+    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-white", "no-hot");
+    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-hot", "no-white");
+    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "btnExit","exit-white","exit-hot-red");
 
+    optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
+    optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
 
     while(masterloop && runInitialUI) {
 
         while(runInitialUI) {
-        
-            //menuItem = runMenuMain(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
-
             menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
 
             if(menuItem == 0) {
@@ -310,6 +322,9 @@ int main(int argv, char** args) {
             avgFPS = 0;
             mainGameController.renderBackground();
             renderables.renderAll(); // render all sprites
+            if(mainGameModel.isOverlayOn()) { //render debug renderables
+                debugRenderables.renderAll();
+            }
             mainGameController.renderBoard();
             if (SDL_GetTicks() % 1000 == 0 ) {
                 auto seconds_from_start = mainClock.secondsFromStart();
@@ -399,6 +414,9 @@ int main(int argv, char** args) {
             
             mainGameController.renderBoard();
             renderables.renderAll();
+            if(mainGameModel.isOverlayOn()) {
+                debugRenderables.renderAll();
+            }
             mainVideo.render();
             ley::Direction eventDirection = mainInput.pollEndEvents(programRunning,fs,mainGameModel);
 

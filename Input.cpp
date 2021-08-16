@@ -49,6 +49,10 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, G
                     frameDirection = ley::Direction::left;
                 }
 
+                if (state[SDL_SCANCODE_SPACE]) {
+                    frameDirection = ley::Direction::space;
+                }
+
                 //quite game
                 if ( state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE] || state[SDL_SCANCODE_RETURN]) {
                     running = false;
@@ -119,6 +123,9 @@ ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameMo
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
                     gm.debugBoard(true);
                 }
+                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_A]) {
+                    gm.overlayToggle();
+                }
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
                     running = false;
@@ -155,6 +162,9 @@ ley::Direction ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel
                 //Output setstate layer on the board
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
                     gm.debugBoard(true);
+                }
+                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_A]) {
+                    gm.overlayToggle();
                 }
                 //Rotate Block counter clockwise
                 if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_E]) {
