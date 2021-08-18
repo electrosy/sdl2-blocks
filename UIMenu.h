@@ -16,10 +16,11 @@ Date: Jul/17/2021
 
 #include "UIElement.h"
 #include "Textures.h"
+#include "Renderables.h"
 
 //#typedef std::tuple<std::string, SDL_Rect, SDL_Rect, SDL_Texture*> menuelement;
 
-enum class menutypes {main,options,highscore};
+enum class menutypes {main,options,highscores};
 
 namespace ley {
 
@@ -31,6 +32,7 @@ private:
     std::multimap<std::string,ley::UIElement> selectors; //element id, and selectors
     int currentIndex;
     bool hot; //indicates that this menu item is currently selected.
+    ley::Renderables renderables;
 
 protected:
    
@@ -50,7 +52,8 @@ public:
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
     int runMenu(ley::Video*, ley::Input*, ley::GameModel*, bool, std::string, SDL_Rect, double, menutypes);
-
+    int count();
+    void addRenderables(ley::Renderables);
     void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     int getElementId(std::string);
 

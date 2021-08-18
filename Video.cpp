@@ -15,7 +15,7 @@ const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.1.5";
+const std::string APPLICATION_VER = "0.1.6";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";

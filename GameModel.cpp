@@ -14,7 +14,7 @@ Date: Feb/15/2020
 ley::GameModel::GameModel(ley::Timer* ptrTimer)
 : activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
-    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true), overlayOn(false) {
+    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true), overlayOn(false), score(0) {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
@@ -34,8 +34,12 @@ bool ley::GameModel::isGameOver() {
     return gameOver;
 }
 
-/* Functions */
+
 int ley::GameModel::getScore() {
+    return score;
+}
+
+int ley::GameModel::getLines() {
     return numLines;
 }
 
@@ -46,6 +50,11 @@ int ley::GameModel::getLevel() {
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
     return &board;
+}
+
+/* Functions */
+void ley::GameModel::addToScore(long p) {
+    score+=p;
 }
 
 void ley::GameModel::clearBoard() {
@@ -175,8 +184,6 @@ void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
 
-
-
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
@@ -269,13 +276,7 @@ void ley::GameModel::clearAndRecordLines(int first, int last) {
     for(int i = first; i >= last; --i) {
         ++numLines; //add to the score for each line
         //If numLines is a multiple of 10 then increase the level as well
-        if(numLines % NEW_LVL_AT_LINES == 0) { // new level every 10 lines.
-            ++numLevel;
-
-            //also increase the speed of the fall down timer
-            this->ptrTimer->changeSpeed(500); //for testing just double the speed.
-        }
-
+    
         //simply fill the rows where there are lines with the empty space.
         board[i].fill(std::make_pair(ley::BlockTexCode::O, false));
     }
@@ -305,15 +306,29 @@ void ley::GameModel::processLines() {
 
     //remove the lines if neither of them are -1;
     if(firstAndLast.first != -1 && firstAndLast.second != -1) {
-        clearAndRecordLines(firstAndLast.first, firstAndLast.second);
         //Shift the board down the appropriate number of spaces.
         char linesToCut = firstAndLast.first - firstAndLast.second + 1;
+        clearAndRecordLines(firstAndLast.first, firstAndLast.second);
+        addToScore( (linesToCut * (numLevel+1)) * 10 );
+        if(numLines % NEW_LVL_AT_LINES == 0) { // new level every X lines.
+            ++numLevel;
+        //also increase the speed of the fall down timer
+        this->ptrTimer->changeSpeed(500); //for testing just double the speed.
+    }
+        
         shiftBoard(firstAndLast.first, linesToCut);
         //Be sore to fill the top of the board again with clear values after shifting.
         fillTop(linesToCut);
+
+        //add to the score based on number of lines completed in a single move 1 to 4 (i dont think this could ever be more than four)
+        
     }
 
-    // TODO also continue to check the rest of the board for full lines.    
+    
+
+    
+
+    // TODO also continue to check the rest of the board for full lines. (but is this a valid case?)
 }
 
 //pass in start line and returns the number of lines that are full lines from the start line
@@ -455,6 +470,7 @@ void ley::GameModel::resetGame() {
     gameOver = false;
     numLines = 0;
     numLevel = 0;
+    score = 0;
 
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.

@@ -39,7 +39,12 @@ void ley::GameController::renderBackground()
     SDL_Rect dest_rect;
     dest_rect = start_rect;
 
-    std::string background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+    std::string background_level;
+    if(gm->getLevel() <= 9) {
+        background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+    } else {
+        background_level = "BG_WEST_09";
+    }
 
     bg_west_1 = TextureManager::Instance()->getTexture(background_level.c_str());
     SDL_RenderCopy(ren, bg_west_1, &start_rect, &dest_rect);
@@ -105,8 +110,9 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
     }
 }
 
-void ley::GameController::runFrame(ley::Font *f, ley::Font *l)
+void ley::GameController::runFrame(ley::Font *f, ley::Font *l, ley::Font *s)
 {
-    f->updateMessage("Lines  " + std::to_string(int(gm->getScore())));
+    f->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
     l->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
+    s->updateMessage("Score  " + std::to_string(int(gm->getScore())));
 }

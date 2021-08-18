@@ -36,6 +36,7 @@ private:
     double currentSpeed; //how many miliseconds until the block falls down.
     int numLines; //number of lines the player has successfully completed. (Lines)
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
+    long score; //the total score the this game (level*linesatonce)
     bool gameOver;
     bool active; //not paused
     void clearBoard();
@@ -71,6 +72,8 @@ public:
     void setBlock();
     int getScore();
     int getLevel();
+    int getLines();
+    void addToScore(long);
     bool isGameOver();
     ley::Block getNextBlock();
     std::string getRandomTexture();

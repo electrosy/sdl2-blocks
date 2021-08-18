@@ -7,6 +7,7 @@ Date: Feb/15/2020
 */
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -26,6 +27,7 @@ Date: Feb/15/2020
 #include "Font.h"
 #include "UIMenu.h"
 #include "UIElement.h"
+#include "HighScores.h"
 
 // ** TODO s Edge Cases
 //      1.) Test case where there are more than one full lines but not on consecutive rows. This case hasen't been coded for.
@@ -37,11 +39,14 @@ auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;
 
-auto const SCORE_POS_X_PX = 800; //Score text
-auto const SCORE_POS_Y_PX = 40;
+auto const LINES_POS_X_PX = 800; //Score text
+auto const LINES_POS_Y_PX = 40;
 
 auto const LVL_POS_X_PX = 800; //Level text
 auto const LVL_POS_Y_PX = 60;
+
+auto const SCORE_POS_X_PX = 800;
+auto const SCORE_POS_Y_PX = 80;
 
 enum class mainmenu {start,highscores,options,exit};
 enum class optionsmenu {debug,sound_volume,back};
@@ -129,6 +134,8 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
     //Options Background
     TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    //Highscores Background
+    TextureManager::Instance()->loadTexture("assets/highscores.png", "highscores");
     //Buttons for options menu.
     TextureManager::Instance()->loadTexture("assets/graphic/btn/back.png", "opt-back");
     TextureManager::Instance()->loadTexture("assets/graphic/btn/back-hot.png", "opt-hot");
@@ -143,15 +150,15 @@ int main(int argv, char** args) {
 
     //Backgrounds.
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_01");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.JPG", "BG_WEST_02");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1.JPG", "BG_WEST_03");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1.JPG", "BG_WEST_04");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1.JPG", "BG_WEST_05");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1.JPG", "BG_WEST_06");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1.JPG", "BG_WEST_07");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_08");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.JPG", "BG_WEST_09");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
 
     bool masterloop = true; //Starts the main menu.
     bool programRunning = true; //If the program is running, this could also be in the game over state, to restart play.
@@ -160,15 +167,20 @@ int main(int argv, char** args) {
 
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
-    //Create the rendertable font object
-    ley::Font fontOne(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX);
+    //Create the rendertable font object for lines
+    ley::Font fontOne(mainVideo.getRenderer(), LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35);
     ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
     renderables.push_back(&fontOne);
 
     //Create the font for the level ouput
-    ley::Font fontLvl(mainVideo.getRenderer(), LVL_POS_X_PX, LVL_POS_Y_PX);
+    ley::Font fontLvl(mainVideo.getRenderer(), LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35);
     ley::Font* ptrFontLvl = &fontLvl;
     renderables.push_back(&fontLvl);
+
+    //Create the font for the level output
+    ley::Font fontScore(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35);
+    ley::Font* ptrFontScore = &fontScore;
+    renderables.push_back(&fontScore);
 
     std::vector<SDL_Rect> catFrames;
     SDL_Rect catFrame1;
@@ -253,7 +265,7 @@ int main(int argv, char** args) {
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
-    ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190);
+    ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190, 100, 35);
     fontGameOver.updateMessage("");
     ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
     renderables.push_back(ptrFontGameOver);
@@ -278,13 +290,60 @@ int main(int argv, char** args) {
     optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
     optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
 
+    ley::UIMenu highscoresmenu;
+
+    std::vector<ley::Font*> fonts;
+    ley::Font fontHighScores0(mainVideo.getRenderer(), 450, 190, 400, 40);
+    ley::Font fontHighScores1(mainVideo.getRenderer(), 450, 225, 400, 40);
+    ley::Font fontHighScores2(mainVideo.getRenderer(), 450, 260, 400, 40);
+    ley::Font fontHighScores3(mainVideo.getRenderer(), 450, 295, 400, 40);
+    ley::Font fontHighScores4(mainVideo.getRenderer(), 450, 330, 400, 40);
+    ley::Font fontHighScores5(mainVideo.getRenderer(), 450, 365, 400, 40);
+    ley::Font fontHighScores6(mainVideo.getRenderer(), 450, 400, 400, 40);
+    ley::Font fontHighScores7(mainVideo.getRenderer(), 450, 435, 400, 40);
+    ley::Font fontHighScores8(mainVideo.getRenderer(), 450, 470, 400, 40);
+    ley::Font fontHighScores9(mainVideo.getRenderer(), 450, 505, 400, 40);
+    ley::Font fontHighScores10(mainVideo.getRenderer(), 450, 540, 400, 40);
+
+    fonts.push_back(&fontHighScores0);
+    fonts.push_back(&fontHighScores1);
+    fonts.push_back(&fontHighScores2);
+    fonts.push_back(&fontHighScores3);
+    fonts.push_back(&fontHighScores4);
+    fonts.push_back(&fontHighScores5);
+    fonts.push_back(&fontHighScores6);
+    fonts.push_back(&fontHighScores7);
+    fonts.push_back(&fontHighScores8);
+    fonts.push_back(&fontHighScores9);
+    fonts.push_back(&fontHighScores10);
+
+    ley::HighScores highscores;
+
+    ley::Renderables highScoreRenderables;
+    //Load highscore data initially.
+    highscores.read();
+    highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);
+    highscoresmenu.addRenderables(highScoreRenderables);
+    
     while(masterloop && runInitialUI) {
 
         while(runInitialUI) {
-            menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+            //read high scores at the main menu.
+            
+            if(!highscores.isClean()) { //check if we have new highscore data to read.
+                highscores.read();
+                highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);
+                highscoresmenu.addRenderables(highScoreRenderables);
+                highscores.setClean(true);
+            }
 
+            menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+            
             if(menuItem == 0) {
                 runInitialUI = false;
+            }
+            else if(menuItem == 1) {
+                highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "highscores", {0,0,1280,720}, 1, menutypes::highscores);
             }
             else if(menuItem == 2) {
                 optionItem = optionmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
@@ -293,7 +352,6 @@ int main(int argv, char** args) {
                 programRunning = false;
                 masterloop = false;
             }
-
         }
         runInitialUI = true;
 
@@ -385,7 +443,7 @@ int main(int argv, char** args) {
 
             fallTimer.runFrame(false, newTime);
 
-            mainGameController.runFrame(ptrFont, ptrFontLvl);
+            mainGameController.runFrame(ptrFont, ptrFontLvl, ptrFontScore);
             ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 
@@ -402,9 +460,15 @@ int main(int argv, char** args) {
 
         //continue to render graphics and get keyboard input after game is over.
         // TODO add FPS throttling to this part as well.
+        //push on the new high score
+        if(mainGameModel.isGameOver()) {
+            highscores.push(mainGameModel.getScore(), "Steve", mainGameModel.getLevel(), mainGameModel.getLines());
+            highscores.write();
+            highscores.setClean(false);
 
-        if(fontGameOver.getMessage().empty() && mainGameModel.isGameOver()) {
+            if(fontGameOver.getMessage().empty()) {
             fontGameOver.updateMessage("Game Over!!!");
+            }
         }
 
         while(programRunning) {
@@ -429,7 +493,7 @@ int main(int argv, char** args) {
     }
 
     
-    
+   
 
     return 1;
 }
