@@ -26,7 +26,7 @@
                 "${workspaceFolder}/Rand_int.cpp",
                 "${workspaceFolder}/UIElement.cpp",
                 "${workspaceFolder}/UIMenu.cpp",
-                "${wordspaceFolder}/HighScores.cpp",
+                "${workspaceFolder}/HighScores.cpp",
                 "-IC:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/include",
                 "-LC:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/lib",
                 "-lmingw32",
