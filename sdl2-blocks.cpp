@@ -12,6 +12,7 @@ Date: Feb/15/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "Audio.h"
 #include "Video.h"
 #include "Input.h"
 #include "Sprite.h"
@@ -69,7 +70,7 @@ void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, st
 
     unsigned int alphaFrameIndex = 0;
     bool faddedin = false;
-    char fadespeed = 8;
+    char fadespeed = 10;
     while(intro == true) {
         SDL_Delay(fpsDelay);
 
@@ -160,7 +161,7 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
 
-    bool masterloop = true; //Starts the main menu.
+    
     bool programRunning = true; //If the program is running, this could also be in the game over state, to restart play.
 
     ley::Input mainInput;
@@ -257,11 +258,17 @@ int main(int argv, char** args) {
     bool fs = false; //full screen
     auto avgFPS = 0;
 
+    //Start intro Music
+    ley::Audio audSystem;
+    audSystem.playIntro();
+
     runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {400,170,414,240}, 1);
     runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {400,155,400,400}, 1);
+    
+    audSystem.fadeOutMusic();
 
     /**** UI/UX ****/
-    bool runInitialUI = true;
+    
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
@@ -324,7 +331,10 @@ int main(int argv, char** args) {
     highscores.read();
     highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);
     highscoresmenu.addRenderables(highScoreRenderables);
-    
+
+    bool masterloop = true; //Starts the main menu.
+    bool runInitialUI = true;
+
     while(masterloop && runInitialUI) {
 
         while(runInitialUI) {
@@ -337,8 +347,9 @@ int main(int argv, char** args) {
                 highscores.setClean(true);
             }
 
+            audSystem.playMainMenu();
             menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
-            
+                  
             if(menuItem == 0) {
                 runInitialUI = false;
             }
@@ -359,6 +370,7 @@ int main(int argv, char** args) {
         
         /**** Main Game Loop ****/
         SDL_Log("Starting Game loop!");
+        audSystem.fadeOutMusic();
 
         //unpause game if it is already paused.
         if(mainGameModel.isPaused()) {
@@ -369,13 +381,18 @@ int main(int argv, char** args) {
         ley::Clock mainClock;
         size_t frame_count = 0;
         long fpsAdjustMili = 0;
-        
         bool fs_changed = false;
         double newTime = 1000;
-
+        
         fontGameOver.updateMessage("");
+        bool hitnext; //if player its next music button
         while(programRunning && !mainGameModel.isGameOver()) {
             SDL_Delay(DELAY_MILI + fpsAdjustMili);
+
+        /**** MUSIC ****/
+        audSystem.playPlaylist();
+
+        
         /**** RENDER ****/
             avgFPS = 0;
             mainGameController.renderBackground();
@@ -395,7 +412,7 @@ int main(int argv, char** args) {
 
         /**** GET INPUT ****/
             //pollEtimervents updates running and full screen flags
-            ley::Direction eventDirection = mainInput.pollEvents(programRunning,fs,mainGameModel);
+            ley::Direction eventDirection = mainInput.pollEvents(programRunning,fs,mainGameModel, hitnext);
             if(fs != fs_changed) {
                 mainVideo.setFullScreen(fs);
                 fs_changed = !fs_changed;
@@ -456,7 +473,15 @@ int main(int argv, char** args) {
 
         /**** CLEAR ****/
             mainVideo.clear();
+            
+            //check if player hits the next track
+            if(hitnext) {
+                audSystem.playNext();
+                hitnext = false;
+            }
         }
+
+        
 
         //continue to render graphics and get keyboard input after game is over.
         // TODO add FPS throttling to this part as well.
@@ -489,11 +514,10 @@ int main(int argv, char** args) {
 
         /**** CLEAN UP ****/
         mainGameModel.resetGame();
+        audSystem.fadeOutMusic();
         programRunning = true;
-    }
 
-    
-   
+    }//EXIT THE GAME
 
     return 1;
 }

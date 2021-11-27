@@ -17,7 +17,6 @@ class Font : public Renderable {
 
 private:
     std::string textMessage;
-    SDL_Surface* surfaceMessage;
     SDL_Texture* Message;
     SDL_Rect Message_rect;
     TTF_Font* Classic;
