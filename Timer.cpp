@@ -11,6 +11,14 @@ Date: Feb/20/2020
 ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect)
 : SimpleShape(r), mili(m), rect_border(rect), rect_progress(rect), active(true) {
     
+
+    if(SDL_Init(SDL_INIT_TIMER) >= 0) {
+        // if all good
+    } else {
+        printf("Can't Initialize SDL2 Timer");
+        sdlTimerReady = 0;
+    }
+
     rect_tex.x = 0; rect_tex.y = 0; //rectange for internal texture
     rect_tex.w = rect_border.w;
     rect_tex.h = rect_border.h;
@@ -28,6 +36,10 @@ ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect)
 
 ley::Timer::~Timer() {
     SDL_FreeSurface(s);
+
+     if(sdlTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
+        SDL_QuitSubSystem(SDL_INIT_TIMER);
+    }
 }
 /* Functions */
 void ley::Timer::fill() {

@@ -20,6 +20,7 @@ namespace ley {
 class Timer : public SimpleShape {
 
 private:
+    bool sdlTimerReady;
     SDL_Rect rect_border;
     SDL_Rect rect_progress;
     float mili; //how many miliseconds this timer runs

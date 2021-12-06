@@ -1,9 +1,11 @@
 /*
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020,2021 Steven Philley. All rights reserved.
 
 Purpose: A fun game and Mini Game Framework.
 Date: Feb/15/2020
+
+Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Video.cpp(View), GameController.cpp(Controller)
 */
 #include <stdio.h>
 #include <iostream>
@@ -30,12 +32,6 @@ Date: Feb/15/2020
 #include "UIElement.h"
 #include "HighScores.h"
 
-// ** TODO s Edge Cases
-//      1.) Test case where there are more than one full lines but not on consecutive rows. This case hasen't been coded for.
-
-// ** New features
-//      1.) 
-
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;
@@ -54,52 +50,6 @@ enum class optionsmenu {debug,sound_volume,back};
 
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
-
-void runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
-    /**** Intro Screen Loop ****/
-    bool intro = true;
-    SDL_Texture* test = nullptr;
-    test = TextureManager::Instance()->getTexture(t);
-    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(test, 255);
-
-    SDL_Rect src_rect;
-    SDL_Rect dest_rect;
-    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
-    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
-
-    unsigned int alphaFrameIndex = 0;
-    bool faddedin = false;
-    char fadespeed = 10;
-    while(intro == true) {
-        SDL_Delay(fpsDelay);
-
-        if(!faddedin) {
-            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                if(alphaFrameIndex < 255) {
-                    alphaFrameIndex++;
-                }
-                else {
-                    faddedin = true;
-                }
-            }
-        } else {
-             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                 if(alphaFrameIndex != 0) {  
-                    alphaFrameIndex--;
-                 }
-            }
-        }
-        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
-        SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
-        v->render();
-        if(i->pollTitleEvents(intro,fs,(*m)) == ley::Direction::down 
-            || (alphaFrameIndex < 10 && faddedin)) {
-            intro = false;
-        }
-        v->clear();
-    }
-}
 
 int main(int argv, char** args) {
     ley::Video mainVideo;
@@ -161,10 +111,9 @@ int main(int argv, char** args) {
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
 
-    
     bool programRunning = true; //If the program is running, this could also be in the game over state, to restart play.
 
-    ley::Input mainInput;
+    ley::Input mainInput; //create the input system object.
 
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
@@ -178,7 +127,7 @@ int main(int argv, char** args) {
     ley::Font* ptrFontLvl = &fontLvl;
     renderables.push_back(&fontLvl);
 
-    //Create the font for the level output
+    //Create the font for the score output
     ley::Font fontScore(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35);
     ley::Font* ptrFontScore = &fontScore;
     renderables.push_back(&fontScore);
@@ -228,11 +177,10 @@ int main(int argv, char** args) {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-
     //SimpleShape
     ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
     renderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("nextboundry",{ley::START_X_OFFSET_PX - 145,39,130,130});
+    firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
     firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
@@ -262,13 +210,13 @@ int main(int argv, char** args) {
     ley::Audio audSystem;
     audSystem.playIntro();
 
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {400,170,414,240}, 1);
-    runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {400,155,400,400}, 1);
+    ley::UIMenu mainUI;
+    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {400,170,414,240}, 1); //display the sdl logo
+    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {400,155,400,400}, 1); //display the color it company logo
     
     audSystem.fadeOutMusic();
 
     /**** UI/UX ****/
-    
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
@@ -278,24 +226,23 @@ int main(int argv, char** args) {
     renderables.push_back(ptrFontGameOver);
 
     //Gather elements for the menus
-    ley::UIMenu mainmenu;
-    mainmenu.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
-    mainmenu.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
-    mainmenu.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
-    mainmenu.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
+    mainUI.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
+    mainUI.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
+    mainUI.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
+    mainUI.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
 
-    ley::UIMenu optionmenu;
-    optionmenu.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
-    optionmenu.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
-    optionmenu.push("back",{0,0,100,49},{30,451,100,49},"opt-back","opt-white","opt-hot");
+    ley::UIMenu optionUI;
+    optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
+    optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
+    optionUI.push("back",{0,0,100,49},{30,451,100,49},"opt-back","opt-white","opt-hot");
     
-    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "yes", "yes-white", "yes-hot");
-    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-white", "no-hot");
-    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-hot", "no-white");
-    optionmenu.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "btnExit","exit-white","exit-hot-red");
+    optionUI.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "yes", "yes-white", "yes-hot");
+    optionUI.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-white", "no-hot");
+    optionUI.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "no", "no-hot", "no-white");
+    optionUI.addSelector("options1", {0,0,100,49}, {300,365,100,49}, "btnExit","exit-white","exit-hot-red");
 
-    optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
-    optionmenu.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
+    optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
+    optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
 
     ley::UIMenu highscoresmenu;
 
@@ -348,7 +295,7 @@ int main(int argv, char** args) {
             }
 
             audSystem.playMainMenu();
-            menuItem = mainmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+            menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
                   
             if(menuItem == 0) {
                 runInitialUI = false;
@@ -357,7 +304,7 @@ int main(int argv, char** args) {
                 highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "highscores", {0,0,1280,720}, 1, menutypes::highscores);
             }
             else if(menuItem == 2) {
-                optionItem = optionmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
+                optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
             } else if(menuItem == 3) {
                 runInitialUI = false;
                 programRunning = false;
@@ -509,7 +456,8 @@ int main(int argv, char** args) {
             mainVideo.render();
             ley::Direction eventDirection = mainInput.pollEndEvents(programRunning,fs,mainGameModel);
 
-            mainVideo.clear();
+            
+            mainVideo.clear(); //SDL_RenderClear()
         }
 
         /**** CLEAN UP ****/

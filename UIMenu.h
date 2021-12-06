@@ -56,6 +56,7 @@ public:
     void addRenderables(ley::Renderables);
     void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     int getElementId(std::string);
+    void runIntroScreen(ley::Video*, ley::Input*, ley::GameModel*, bool, std::string, SDL_Rect, double);
 
 };
 

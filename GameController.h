@@ -24,6 +24,10 @@ class GameController {
 private:
     SDL_Renderer* ren;
     ley::GameModel* gm;
+
+    //Textures
+    SDL_Texture *blockBits2 = nullptr;
+
 public:
     GameController(SDL_Renderer* , ley::GameModel*);
     ~GameController();

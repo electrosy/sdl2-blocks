@@ -38,7 +38,6 @@ void ley::Font::updateTexture() {
     SDL_Surface* surfaceMessage;
     surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
     Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-    
     SDL_FreeSurface(surfaceMessage);
 }
 void ley::Font::updateMessage(std::string s) {

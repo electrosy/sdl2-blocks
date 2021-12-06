@@ -13,8 +13,19 @@ ley::Textures::Textures() {
 }
 
 ley::Textures::~Textures() {
+    unloadTextures();
+    
     delete instance;
     instance = nullptr;
+}
+
+void ley::Textures::unloadTextures() {
+    //iterate through the map of textures and unload each one.
+    for (const auto& [key, value] : textures) {
+        SDL_DestroyTexture(value);
+    }
+
+
 }
 
 /* Accessors */
@@ -29,10 +40,6 @@ SDL_Texture* ley::Textures::getTexture(std::string s) {
 void ley::Textures::loadTexture(const char* p, std::string texturename) {
     
     SDL_Surface* temp_surface = IMG_Load(p);
-
-    //set the transparency color
-    //SDL_SetColorKey(temp_surface, true, 0);
-
     SDL_Texture* t = SDL_CreateTextureFromSurface(renderer, temp_surface);
     SDL_Log("Possible Error_loadTexture():");
     SDL_Log("%s",SDL_GetError());

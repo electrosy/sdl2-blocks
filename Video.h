@@ -21,14 +21,14 @@ private:
 
     SDL_Window* window;
     SDL_Renderer* renderer;
-    bool sdl_ready; //system is woken up and initialized.
+    bool video_ready; //video is woken up and initialized.
     bool sdl_fullscreen = 0;
 public:
     Video();
     ~Video();
 
 /* Accessors */
-    bool getReady() {return sdl_ready;};
+    bool getReady() {return video_ready;};
     SDL_Renderer* getRenderer() {return renderer;};
     SDL_Window* getWindow() {return window;};
     void setFullScreen(bool);

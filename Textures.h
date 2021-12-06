@@ -26,6 +26,7 @@ private:
     unsigned int count; //number of textures we have loaded in the system.
     Textures();
     static Textures* instance;
+    void unloadTextures();
 public:
     static Textures* Instance();
     ~Textures();

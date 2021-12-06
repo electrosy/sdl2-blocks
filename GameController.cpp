@@ -17,18 +17,15 @@ const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 /* RAII */
 ley::GameController::GameController(SDL_Renderer *r, ley::GameModel *g)
-    : ren(r), gm(g)
-{
+    : ren(r), gm(g) {
 }
 
-ley::GameController::~GameController()
-{
+ley::GameController::~GameController() {
 }
 /* Accessors */
 
 /* Functions */
-void ley::GameController::renderBackground()
-{
+void ley::GameController::renderBackground() {
 
     SDL_Texture *bg_west_1 = nullptr;
     SDL_Rect start_rect;
@@ -50,8 +47,7 @@ void ley::GameController::renderBackground()
     SDL_RenderCopy(ren, bg_west_1, &start_rect, &dest_rect);
 }
 
-void ley::GameController::renderBoard(/*SDL_Texture* t*/)
-{
+void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
@@ -69,7 +65,6 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
 
     //TODO - Loop 1 and Loop 2 can probably be rafactored together.
     // Output the nextBlock from the game model
-    SDL_Texture *blockBits = nullptr;
     SDL_Rect next_dest_rect;
     next_dest_rect.x = NEXTBLOCK_OFFSET_X_PX;
     next_dest_rect.y = 40 + NEXTBLOCK_OFFSET_Y_PX;
@@ -82,8 +77,8 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
         {
             if (column != BlockTexCode::O)
             {
-                blockBits = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column));
-                SDL_RenderCopy(ren, blockBits, &start_rect, &next_dest_rect);
+                SDL_RenderCopy(ren, TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)), 
+                    &start_rect, &next_dest_rect);
             }
             next_dest_rect.x = next_dest_rect.x + w;
         }
@@ -93,15 +88,15 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
 
     // TODO loop2 refactor with loop 1 above
     // Loop through the game model and output a representation to the video screen.
-    SDL_Texture *test = nullptr;
+    SDL_Texture *blockBits2 = nullptr;
     for (auto row : *gm->getBoard())
     {
         for (auto column : row)
         {
             if (column.first != BlockTexCode::O)
             { // TODO Change BlockTexCode::O to BlockTexCode::d to reverse textures(clear blocks)
-                test = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column.first));
-                SDL_RenderCopy(ren, test, &start_rect, &dest_rect);
+                blockBits2 = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column.first));
+                SDL_RenderCopy(ren, blockBits2, &start_rect, &dest_rect);
             }
             dest_rect.x = dest_rect.x + w;
         }
@@ -110,8 +105,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/)
     }
 }
 
-void ley::GameController::runFrame(ley::Font *f, ley::Font *l, ley::Font *s)
-{
+void ley::GameController::runFrame(ley::Font *f, ley::Font *l, ley::Font *s) {
     f->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
     l->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
     s->updateMessage("Score  " + std::to_string(int(gm->getScore())));
