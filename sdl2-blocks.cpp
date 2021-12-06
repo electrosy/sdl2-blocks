@@ -32,6 +32,7 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "UIElement.h"
 #include "HighScores.h"
 
+
 auto const TARGET_FPS = 60; //provide at least this many frames per second.
 auto const DELAY_MILI = 1.3f; //start delay for the game loop
 auto const MILI_ADJ_MAX = 1000;

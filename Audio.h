@@ -1,8 +1,18 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
+/* 
+sdl2-blocks
+Copyright (C) 2020,2021 Steven Philley. All rights reserved.
+
+Purpose: Contains audio subsystem
+Date: Dec/2/2021
+*/
 
 #ifndef AUDIO_H
 #define AUDIO_H
+
+#include <stdio.h>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 namespace ley {
 

@@ -1,3 +1,11 @@
+/* 
+sdl2-blocks
+Copyright (C) 2020,2021 Steven Philley. All rights reserved.
+
+Purpose: see header.
+Date: Dec/2/2021
+*/
+
 #include "Audio.h"
 
 ley::Audio::Audio() :
@@ -11,7 +19,6 @@ playlistNumber(0), playlistMax(3) {
     if(initted & flags != flags) {
         printf("Mix_Init: Failed to init required mp3 support!\n");
         printf("Mix_Init: %s\n", Mix_GetError());
-        // handle error
     }
 
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)==-1) {
