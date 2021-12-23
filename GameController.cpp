@@ -17,7 +17,10 @@ const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 /* RAII */
 ley::GameController::GameController(SDL_Renderer *r, ley::GameModel *g)
-    : ren(r), gm(g) {
+: 
+ren(r), 
+gm(g) {
+
 }
 
 ley::GameController::~GameController() {
@@ -25,28 +28,6 @@ ley::GameController::~GameController() {
 /* Accessors */
 
 /* Functions */
-void ley::GameController::renderBackground() {
-
-    SDL_Texture *bg_west_1 = nullptr;
-    SDL_Rect start_rect;
-    start_rect.x = 0;
-    start_rect.y = 0;
-    start_rect.w = 1280;
-    start_rect.h = 720;
-    SDL_Rect dest_rect;
-    dest_rect = start_rect;
-
-    std::string background_level;
-    if(gm->getLevel() <= 9) {
-        background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
-    } else {
-        background_level = "BG_WEST_09";
-    }
-
-    bg_west_1 = TextureManager::Instance()->getTexture(background_level.c_str());
-    SDL_RenderCopy(ren, bg_west_1, &start_rect, &dest_rect);
-}
-
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
@@ -77,6 +58,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         {
             if (column != BlockTexCode::O)
             {
+                //TODO - all rendering should be done in the View(Video.cpp)
                 SDL_RenderCopy(ren, TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)), 
                     &start_rect, &next_dest_rect);
             }
@@ -89,13 +71,13 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     // TODO loop2 refactor with loop 1 above
     // Loop through the game model and output a representation to the video screen.
     SDL_Texture *blockBits2 = nullptr;
-    for (auto row : *gm->getBoard())
-    {
-        for (auto column : row)
-        {
-            if (column.first != BlockTexCode::O)
-            { // TODO Change BlockTexCode::O to BlockTexCode::d to reverse textures(clear blocks)
+    for (auto row : *gm->getBoard()) {
+        for (auto column : row) {
+            if (column.first != BlockTexCode::O) { 
+            // TODO Change BlockTexCode::O to BlockTexCode::d to reverse textures(clear blocks)
                 blockBits2 = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column.first));
+
+                //TODO - all rendering should be done in the View(Video.cpp)
                 SDL_RenderCopy(ren, blockBits2, &start_rect, &dest_rect);
             }
             dest_rect.x = dest_rect.x + w;

@@ -3,7 +3,7 @@ sdl2-blocks
 Copyright (C) 2020 Steven Philley. All rights reserved.
 
 Purpose: Wrap SDL Texture which is a Renderable. Renderables
-         are renderable with SDL_RenderCopy
+         are renderable with SDL_RenderCopy. A Texture is a Renderable
 Date: Feb/17/2020
 */
 #ifndef TEXTURE_H

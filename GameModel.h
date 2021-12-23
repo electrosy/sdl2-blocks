@@ -10,6 +10,7 @@ Date: Feb/15/2020
 
 #include <array>
 
+#include "Audio.h"
 #include "Block.h"
 #include "Timer.h"
  
@@ -32,6 +33,7 @@ private:
     Block activeBlock;
     Block oldBlock;
     Block nextBlock;
+    size_t frame_count; //number of frames that the game has been running
     bool overlayOn;
     double currentSpeed; //how many miliseconds until the block falls down.
     int numLines; //number of lines the player has successfully completed. (Lines)
@@ -52,10 +54,16 @@ private:
     ley::Block getRandomBlock();
     ley::Timer* ptrTimer; //pointer to the timer so that the speed can be changed.
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
+    bool running; //if true then the program is still runing and has not been asked to exit yet.
+    
+    ley::Audio audSystem; //audio subsystem.
+    
 
 public:
-    GameModel(ley::Timer*);
+    GameModel();
     ~GameModel();
+
+    void setTimer(ley::Timer*); //send in the fall timer.
 
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
@@ -80,6 +88,16 @@ public:
     void resetGame();
     void pauseGame(bool);
     bool isPaused();
+    bool programRunning(); //is the program running?
+    void stopProgram(bool); //sets the program to exit.
+    void frameCountInc(); //increment frame count
+    size_t frameCount();
+
+    /* AUDIO */
+    void fadeMusic(); //fade out the music
+    void playMainMenu(); //play the main menu music
+    void startPlayList();
+    void playNext();
 };
 
 }

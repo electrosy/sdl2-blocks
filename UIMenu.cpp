@@ -10,13 +10,14 @@ Date: Jul/17/2021
 #include "Video.h"
 #include "Input.h"
 #include "UIMenu.h"
-#include "UIElement.h"
 #include "Textures.h"
 
 typedef ley::Textures TextureManager;
 
 ley::UIMenu::UIMenu() 
-: hot(false), currentIndex(0) {
+: 
+hot(false), 
+currentIndex(0) {
     
 }
 
@@ -169,7 +170,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool f
         }
 
         renderables.renderAll();
-        v->render();
+        v->present();
 
         ley::Direction frameDirection = i->pollMainMenuEvents(runmain,fs,(*m));
         
@@ -300,7 +301,7 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
         }
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
-        v->render();
+        v->present();
         if(i->pollTitleEvents(intro,fs,(*m)) == ley::Direction::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;

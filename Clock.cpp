@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020-2021 Steven Philley. All rights reserved.
 
 Purpose: see header.
 Date: Feb/16/2020
@@ -9,7 +9,10 @@ Date: Feb/16/2020
 
 /* RAII */
 ley::Clock::Clock() 
-: pausestart(0), active(true), pauseend(0) {
+: 
+pausestart(0), 
+active(true), 
+pauseend(0) {
     
 }
 
@@ -37,9 +40,7 @@ void ley::Clock::pause(bool p) {
 }
 
 Uint32 ley::Clock::secondsFromStart() {
-    auto end = SDL_GetTicks();
-
-    return end - start;
+    return miliSecondsFromStart()/1000;
 }
 // TODO generalzie these functions to pass in the time increment
 Uint32 ley::Clock::miliSecondsFromStart() {

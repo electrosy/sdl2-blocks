@@ -10,21 +10,29 @@ Date: Feb/14/2020
 
 #include <SDL2/SDL.h>
 
+#include "GameModel.h"
+
 namespace ley {
 
 class Video {
 
 private:
-    void createWindow();
-    void createRenderer();
-    void init();
-
+    
     SDL_Window* window;
     SDL_Renderer* renderer;
     bool video_ready; //video is woken up and initialized.
-    bool sdl_fullscreen = 0;
+    bool sdl_fullscreen;
+    ley::GameModel* gm;
+    
+    void createWindow();
+    void createRenderer();
+    void init();
+    void loadTextures();
+
+    void renderBackground(); //Render the background image.
+
 public:
-    Video();
+    Video(ley::GameModel*);
     ~Video();
 
 /* Accessors */
@@ -34,9 +42,9 @@ public:
     void setFullScreen(bool);
 
 /* Functions */
-    void renderFrame();
-    void render();
-    void clear();
+    void render(); //Render additional bits.
+    void present(); //Present the rendered items to the user.
+    void clear(); //Clear the backbuffer.
 };
 
 }

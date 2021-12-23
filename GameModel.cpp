@@ -11,14 +11,27 @@ Date: Feb/15/2020
 #include "Rand_int.h"
 
 /* RAII */
-ley::GameModel::GameModel(ley::Timer* ptrTimer)
-: activeBlock(getRandomBlock()), oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
+ley::GameModel::GameModel()
+: 
+activeBlock(getRandomBlock()), 
+oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
-    numLines(0), numLevel(0), gameOver(false), currentSpeed(1000.0f), active(true), overlayOn(false), score(0) {
+numLines(0),
+numLevel(0),
+gameOver(false), 
+currentSpeed(1000.0f), 
+active(true), 
+overlayOn(false),
+score(0),
+running(true),
+frame_count(0)
+{
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
    putBlock(activeBlock);
+
+   audSystem.playIntro();
 }
 
 ley::GameModel::~GameModel() {
@@ -26,8 +39,19 @@ ley::GameModel::~GameModel() {
 }
 
 /* Accessors */
+void ley::GameModel::setTimer(ley::Timer* pT) {
+    ptrTimer = pT;
+}
+
 ley::Block ley::GameModel::getNextBlock() {
     return nextBlock;
+}
+bool ley::GameModel::programRunning() {
+    return running;
+}
+
+void ley::GameModel::stopProgram(bool stop) {
+    running = !stop;
 }
 
 bool ley::GameModel::isGameOver() {
@@ -52,7 +76,15 @@ ley::GameModel::getBoard() {
     return &board;
 }
 
+size_t ley::GameModel::frameCount() {
+    return frame_count;
+}
+
 /* Functions */
+void ley::GameModel::frameCountInc() {
+    ++frame_count;
+}
+
 void ley::GameModel::addToScore(long p) {
     score+=p;
 }
@@ -61,6 +93,22 @@ void ley::GameModel::clearBoard() {
     for(auto i = 0; i < BOARDSIZE_HEIGHT; ++i) {
         board[i].fill(std::make_pair(BlockTexCode::O,false));
     }
+}
+
+void ley::GameModel::fadeMusic() {
+    audSystem.fadeOutMusic();
+}
+
+void ley::GameModel::playMainMenu() {
+    audSystem.playMainMenu();
+}
+
+void ley::GameModel::startPlayList() {
+    audSystem.playPlaylist();
+}
+
+void ley::GameModel::playNext() {
+    audSystem.playNext();
 }
 
 // TODO This function should probably go in the controller?
@@ -474,6 +522,9 @@ void ley::GameModel::resetGame() {
 
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
+
+    audSystem.fadeOutMusic();
+    stopProgram(false);
     
 }
 bool ley::GameModel::isPaused() {

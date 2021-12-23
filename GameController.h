@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020-2021 Steven Philley
 
 Purpose: Controlls the flow of the game and moves the active 
          block when its time to.
@@ -36,7 +36,6 @@ public:
                                             //Fonts for, lines / score
     
     void renderBoard(); //renders the board to the video.
-    void renderBackground(); //render the background to the screen.
 };
 
 }

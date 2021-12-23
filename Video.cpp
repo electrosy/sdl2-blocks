@@ -9,22 +9,31 @@ Date: Feb/14/2020
 #include <string>
 
 #include "Video.h"
+#include "Textures.h"
 
 //Screen dimensions
 const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.1.7";
+const std::string APPLICATION_VER = "0.1.7.3";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
 
 const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER + " " +  APPLICATION_PLATFORM + " " +  APPLICATION_REL_TYPE + " " + APPLICATION_ENV);
 
-ley::Video::Video() {
-    window = nullptr;
-    renderer = nullptr;
+ley::Textures* ley::Textures::instance = nullptr;
+typedef ley::Textures TextureManager;
+
+ley::Video::Video(ley::GameModel* g)
+:
+window(nullptr), 
+renderer(nullptr), 
+video_ready(true), 
+sdl_fullscreen(false),
+gm(g){
+
     init();
 }
 
@@ -62,18 +71,18 @@ void ley::Video::createWindow() {
 
 void ley::Video::createRenderer() {
     /* create a renderer */
-    if(window != 0) { 
+    if(window != nullptr) { 
         renderer = SDL_CreateRenderer(window, -1, 0);
     } else {
         printf("Can't Initialize Renderer");
-        video_ready = 0;
+        video_ready = false;
     }
  
 }
 void ley::Video::init() {
-    video_ready = 1; //default to 1, this will get set to 0 if there is a problem.
     createWindow();
     createRenderer();
+    loadTextures();
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool fs) {
@@ -85,18 +94,101 @@ void ley::Video::setFullScreen(bool fs) {
 }
 
 /* functions */
-void ley::Video::renderFrame() {
-    
+void ley::Video::renderBackground() {
+    SDL_Texture *bg_west_1 = nullptr;
+    SDL_Rect start_rect;
+    start_rect.x = 0;
+    start_rect.y = 0;
+    start_rect.w = 1280;
+    start_rect.h = 720;
+    SDL_Rect dest_rect;
+    dest_rect = start_rect;
+
+    std::string background_level;
+    if(gm->getLevel() <= 9) {
+        background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+    } else {
+        background_level = "BG_WEST_09";
+    }
+
+    bg_west_1 = TextureManager::Instance()->getTexture(background_level.c_str());
+
+    SDL_RenderCopy(renderer, bg_west_1, &start_rect, &dest_rect); //TODO - all rendering should be done in the View(Video.cpp)
 }
 
 void ley::Video::render() {
+    renderBackground();
+}
+
+void ley::Video::present() {
+
     if(video_ready) {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);        
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderPresent(renderer);
     }
 }
 
 void ley::Video::clear() {
     SDL_RenderClear(renderer);
+}
+
+void ley::Video::loadTextures() {
+    TextureManager::Instance()->setRenderer(renderer);
+    //Block pieces
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_gr_30x30.bmp", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_bl_30x30.bmp", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_or_30x30.bmp", "f");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_pr_30x30.bmp", "g");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_rd_30x30.bmp", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_yl_30x30.bmp", "i");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_cy_30x30.bmp", "j");
+    //Logos
+    TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
+    TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
+    TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
+    //Buttons for main menu
+    //Start
+    TextureManager::Instance()->loadTexture("assets/btnStart.png", "btnStart");
+    TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
+    TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
+    //High Scores
+    TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
+    TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
+    TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
+    //Options
+    TextureManager::Instance()->loadTexture("assets/btnOptions.png", "btnOptions");
+    TextureManager::Instance()->loadTexture("assets/options.png", "options-white");
+    TextureManager::Instance()->loadTexture("assets/options-hot-red.png", "options-hot-red");
+    //Exit
+    TextureManager::Instance()->loadTexture("assets/btnExit.png", "btnExit");
+    TextureManager::Instance()->loadTexture("assets/exit-white.png", "exit-white");
+    TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
+    //Options Background
+    TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    //Highscores Background
+    TextureManager::Instance()->loadTexture("assets/highscores.png", "highscores");
+    //Buttons for options menu.
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back.png", "opt-back");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back-hot.png", "opt-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/back-white.png", "opt-white");
+    //Yes and No selectors
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes.png", "yes");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes-hot.png", "yes-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/yes-white.png", "yes-white");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no.png", "no");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no-hot.png", "no-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/btn/no-white.png", "no-white");
+
+    //Backgrounds.
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.JPG", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1.JPG", "BG_WEST_03");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1.JPG", "BG_WEST_04");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1.JPG", "BG_WEST_05");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1.JPG", "BG_WEST_06");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1.JPG", "BG_WEST_07");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
 }
 

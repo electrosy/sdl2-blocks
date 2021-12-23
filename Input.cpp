@@ -29,7 +29,6 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, G
                 running = false;
                 break;
             case SDL_KEYDOWN:
-                SDL_Log("Keydown Detected!");
                 //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 //continue game
@@ -79,7 +78,6 @@ ley::Direction ley::Input::pollTitleEvents(bool &running, bool& fullscreen, Game
                 running = false;
                 break;
             case SDL_KEYDOWN:
-                SDL_Log("Keydown Detected!");
                 //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 //continue game
@@ -98,7 +96,7 @@ ley::Direction ley::Input::pollTitleEvents(bool &running, bool& fullscreen, Game
 
      return frameDirection;
 }
-ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameModel& gm) {
+ley::Direction ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
 
@@ -106,11 +104,10 @@ ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameMo
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {
             case SDL_QUIT:         
-                running = false;
+                gm.stopProgram(true);
                 break;
             
             case SDL_KEYDOWN:
-                SDL_Log("Keydown Detected!");
                 //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
@@ -128,7 +125,7 @@ ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameMo
                 }
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
-                    running = false;
+                    gm.stopProgram(true);
                 }
                 break;
             default:
@@ -138,7 +135,7 @@ ley::Direction ley::Input::pollEndEvents(bool &running, bool& fullscreen, GameMo
 
      return frameDirection;
 }
-ley::Direction ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel& gm, bool &hitnext) {
+ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &hitnext) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
 
@@ -146,11 +143,10 @@ ley::Direction ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
-                running = false;
+                gm.stopProgram(true);
                 break;
             
             case SDL_KEYDOWN:
-                SDL_Log("Keydown Detected!");
                 //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
@@ -199,7 +195,7 @@ ley::Direction ley::Input::pollEvents(bool &running, bool& fullscreen, GameModel
 
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
-                    running = false;
+                    gm.stopProgram(true);
                 }
 
                 //pause game

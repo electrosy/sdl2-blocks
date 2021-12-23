@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2021 Steven Philley
+Copyright (C) 2021 Steven Philley. All rights reserved.
 
 Purpose: A Collection of UIElements
 Date: Jul/17/2021
