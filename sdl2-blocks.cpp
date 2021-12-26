@@ -19,7 +19,6 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "Sprite.h"
 #include "Block.h"
 #include "GameModel.h"
-#include "Clock.h"
 #include "Winlet.h"
 #include "Renderables.h"
 #include "GameController.h"
@@ -30,9 +29,6 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "UIElement.h"
 #include "HighScores.h"
 
-
-const int TARGET_FPS = 144; //provide at least this many frames per second.
-const int DELAY_TIME = 1; //start delay for the game loop
 
 auto const LINES_POS_X_PX = 800; //Score text
 auto const LINES_POS_Y_PX = 40;
@@ -45,6 +41,8 @@ auto const SCORE_POS_Y_PX = 80;
 
 enum class mainmenu {start,highscores,options,exit};
 enum class optionsmenu {debug,sound_volume,back};
+
+double mili_adjust = 0;
 
 int main(int argv, char** args) {
     ley::GameModel mainGameModel; //instantiating the Game Model also starts the audio system.
@@ -141,7 +139,7 @@ int main(int argv, char** args) {
     ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
 
     bool fs = false; //full screen
-    double avgFPS = 0.0;
+    Uint32 avgFPS = 0;
 
     ley::UIMenu mainUI;
 
@@ -217,13 +215,13 @@ int main(int argv, char** args) {
     bool masterloop = true; //Starts the main menu.
     bool runInitialUI = true;
 
-    float fpsAdjustMili = 0;
+    
 
     /*** Start Main Menu ***/
     Uint32 frame_start, frame_time;
     while(masterloop && runInitialUI) {
 
-        frame_start = SDL_GetTicks();
+        
 
         while(runInitialUI) {
             //read high scores at the main menu.
@@ -255,9 +253,6 @@ int main(int argv, char** args) {
 
         fallTimer.reset();
         
-        /**** Main Game Loop ****/
-        SDL_Log("Starting Game loop!");
-
         mainGameModel.fadeMusic(); // finish up the intro music
 
         //unpause game if it is already paused.
@@ -266,7 +261,7 @@ int main(int argv, char** args) {
             fallTimer.pause(false);
         }
 
-        ley::Clock mainClock;
+        mainGameModel.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
         
         bool fs_changed = false;
         double newTime = 1000;
@@ -274,49 +269,38 @@ int main(int argv, char** args) {
         fontGameOver.updateMessage("");
         bool hitnext = false; //if player its next music button
         
-        while(mainGameModel.programRunning() && !mainGameModel.isGameOver()) {
-        
-        /**** MUSIC ****/
-        mainGameModel.startPlayList(); //start the main playlist for game play
+        float fps_mili_adjust;
 
-        /**** RENDER ****/
+        /**** Main Game Loop ****/ 
+        SDL_Log("Starting Game loop!");
+        while(mainGameModel.programRunning() && !mainGameModel.isGameOver()) {
+            frame_start = SDL_GetTicks();
+            /**** MUSIC ****/
+            mainGameModel.startPlayList(); //start the main playlist for game play
+
+            /**** RENDER ****/
             mainVideo.render(); // renders background
             renderables.renderAll(); // render all sprites
             if(mainGameModel.isOverlayOn()) { //render debug renderables
                 debugRenderables.renderAll();
             }
             mainGameController.renderBoard();
-            
-            if (SDL_GetTicks() % 1000 == 0 ) {
-                
 
-                if(mainClock.secondsFromStart() != 0) {
-                    avgFPS = mainGameModel.frameCount()/mainClock.secondsFromStart();
-                }
-                
-                SDL_Log("Milisecondsfromstart: %u", mainClock.secondsFromStart());
-                SDL_Log("AVG FPS: %f",avgFPS);
+            if (SDL_GetTicks() % 1000 == 0 ) { // log once per second
                 SDL_Log("frame_count: %u", mainGameModel.frameCount());
-
-
-                //adjust delay time
-                
+                SDL_Log("mainGameModel.Clock.secondsFromStart(): %u", mainGameModel.secondsFromStart());
             }
 
             mainVideo.present(); // output to the video system.
-
-            
-            SDL_Delay(DELAY_TIME);
            
-
-        /**** GET INPUT ****/
+            /**** GET INPUT ****/
             //pollEtimervents updates running and full screen flags
             ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel, hitnext);
             if(fs != fs_changed) {
                 mainVideo.setFullScreen(fs);
                 fs_changed = !fs_changed;
             }
-        /**** INPUT PROCESSING ****/
+            /**** INPUT PROCESSING ****/
             //TODO this stuff should probably go in the controller
             if(eventDirection == ley::Direction::down) {
                 fallTimer.reset();
@@ -326,11 +310,7 @@ int main(int argv, char** args) {
                 fallTimer.pause(!fallTimer.isPaused());
             }
 
-        /**** UPDATE ****/
-            if (SDL_GetTicks() % 1000 == 0 ) {
-                SDL_Log("FpsMiliAdjust:%s",std::to_string(fpsAdjustMili).c_str());
-            }
-
+            /**** UPDATE ****/
             firstTimer.runFrame();
             secondTimer.runFrame();
             thirdTimer.runFrame();
@@ -349,7 +329,7 @@ int main(int argv, char** args) {
                 fallTimer.reset();
             }
 
-        /**** CLEAR ****/
+            /**** CLEAR ****/
             mainVideo.clear();
             
             //check if player hits the next track
@@ -357,12 +337,20 @@ int main(int argv, char** args) {
                 mainGameModel.playNext();
                 hitnext = false;
             }
+
+
+            /**** LOCK FRAME RATE ****/
+            frame_time = SDL_GetTicks() - frame_start;
+            if(SDL_GetTicks() % 500 == 0) { // every half second
+                SDL_Log("frame_time: %u", frame_time);
+            }
+
+            mili_adjust = mainVideo.frameDelay(mainGameModel.avgFPS(),mili_adjust);
         }
 
         //continue to render graphics and get keyboard input after game is over.
-        //TODO add FPS throttling to this part as well.
-        //push on the new high score
         if(mainGameModel.isGameOver()) {
+            //push on the new high score
             highscores.push(mainGameModel.getScore(), "Steve", mainGameModel.getLevel(), mainGameModel.getLines());
             highscores.write();
             highscores.setClean(false);
@@ -372,9 +360,8 @@ int main(int argv, char** args) {
             }
 
             while(mainGameModel.programRunning()) {
-
+                //This loop runs the gameover animations and should not run until the game is actually over.
                 //For now just run at the frame rate that was set at the end of the game.
-                SDL_Delay(DELAY_TIME + fpsAdjustMili);
                 
                 mainGameController.renderBoard();
                 renderables.renderAll();
@@ -385,10 +372,12 @@ int main(int argv, char** args) {
                 ley::Direction eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
 
                 mainVideo.clear(); //SDL_RenderClear()
+
+                mili_adjust = mainVideo.frameDelay(mainGameModel.avgFPS(), mili_adjust);
             }
         }
 
-        //This loop runs the gameover animations and should not run until the game is actually over.
+        
         
 
         /**** CLEAN UP ****/

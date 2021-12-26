@@ -24,7 +24,8 @@ active(true),
 overlayOn(false),
 score(0),
 running(true),
-frame_count(0)
+frame_count(0),
+avg_fps(0)
 {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
@@ -39,6 +40,25 @@ ley::GameModel::~GameModel() {
 }
 
 /* Accessors */
+Uint32 ley::GameModel::avgFPS() {
+
+    if(SDL_GetTicks() % 1000 == 0) { //recalculate the AVG fps only once per second.
+        avg_fps = secondsFromStart() == 0 ? secondsFromStart() : frameCount() / secondsFromStart();
+        SDL_Log("GameModel::frameCount(): %u", frameCount());
+        SDL_Log("GameModel::secondsFromStart(): %u", secondsFromStart());
+        SDL_Log("GameModel::avgFPS(): %u", avg_fps);
+    }
+
+    return avg_fps;
+}
+
+void ley::GameModel::resetClock() {
+    mainClock.reset();
+}
+
+Uint32 ley::GameModel::secondsFromStart() {
+    return mainClock.secondsFromStart();
+}
 void ley::GameModel::setTimer(ley::Timer* pT) {
     ptrTimer = pT;
 }

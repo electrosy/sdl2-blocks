@@ -12,6 +12,7 @@ Date: Feb/15/2020
 
 #include "Audio.h"
 #include "Block.h"
+#include "Clock.h"
 #include "Timer.h"
  
 namespace ley {
@@ -56,6 +57,10 @@ private:
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     
+
+    ley::Clock mainClock;
+    Uint32 avg_fps;
+    
     ley::Audio audSystem; //audio subsystem.
     
 
@@ -63,6 +68,9 @@ public:
     GameModel();
     ~GameModel();
 
+    Uint32 avgFPS();
+    Uint32 secondsFromStart();
+    void resetClock();
     void setTimer(ley::Timer*); //send in the fall timer.
 
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*

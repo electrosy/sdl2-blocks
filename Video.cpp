@@ -11,12 +11,16 @@ Date: Feb/14/2020
 #include "Video.h"
 #include "Textures.h"
 
+const auto START_DELAY = 1; //start delay for the game loop
+const auto TARGET_FPS = 144; //provide at least this many frames per second.
+const auto FPS_ADJUST_RATE = 1000; // adjust fps every second
+
 //Screen dimensions
 const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.1.7.3";
+const std::string APPLICATION_VER = "0.1.7.4";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -51,6 +55,40 @@ ley::Video::~Video() {
     if(getReady()) {
         atexit(SDL_Quit);
     }
+}
+Uint32 ley::Video::frameDelay(Uint32 avg_fps, double mili_adjust) {
+
+    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && avg_fps > 0) { // once per second
+    
+        float fps_ratio = avg_fps / TARGET_FPS;
+        
+        if(fps_ratio > 2.5) {
+            mili_adjust += 5; //add 5 mili seconds
+        }
+        else if (fps_ratio > 1) {
+            mili_adjust += 1; //add 1 mili second
+        } 
+        else if (fps_ratio < 1 ) {
+            mili_adjust -= 1; //subtract 1 mili second
+        }
+        else if (fps_ratio < 0.7) {
+            mili_adjust -= 7;
+        }
+        else if (fps_ratio < 0.5) {
+            mili_adjust -= 10; //subtract 5 mili seconds
+        }
+
+        if(mili_adjust < 0) { //mili_adust should never be negative
+            mili_adjust = 0;
+        }
+                
+        SDL_Log("miliadjust: %d", mili_adjust);
+        SDL_Log("AVG FPS: %u", avg_fps);
+    }
+
+    SDL_Delay(START_DELAY + mili_adjust);
+
+    return mili_adjust;
 }
 
 /* RAII */

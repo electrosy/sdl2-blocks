@@ -35,6 +35,7 @@ public:
     Video(ley::GameModel*);
     ~Video();
 
+    Uint32 frameDelay(Uint32, double);
 /* Accessors */
     bool getReady() {return video_ready;};
     SDL_Renderer* getRenderer() {return renderer;};

@@ -281,8 +281,6 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
     bool faddedin = false;
     char fadespeed = 10;
     while(intro == true) {
-        SDL_Delay(fpsDelay);
-
         if(!faddedin) {
             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
                 if(alphaFrameIndex < 255) {
@@ -307,5 +305,7 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
             intro = false;
         }
         v->clear();
+
+        SDL_Delay(fpsDelay);
     }
 }
