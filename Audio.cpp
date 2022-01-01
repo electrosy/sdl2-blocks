@@ -88,34 +88,36 @@ void ley::Audio::playNext() {
 
 void ley::Audio::playPlaylist() {
 
+    if (!Mix_FadingMusic() == MIX_FADING_OUT) {
 
-    if(playlistNumber == 0) {
+        if(playlistNumber == 0) {
 
-        if(!Mix_PlayingMusic() || Mix_FadingMusic() == MIX_FADING_OUT) {
-            if(Mix_PlayMusic(musMelJazz1, 1) == -1) {
-                printf("Mix_PlayMusic(musMelJazz1): %s\n", Mix_GetError());
-            } else {
-                playlistNumber++;
+            if(!Mix_PlayingMusic()) {
+                if(Mix_PlayMusic(musMelJazz1, 1) == -1) {
+                    printf("Mix_PlayMusic(musMelJazz1): %s\n", Mix_GetError());
+                } else {
+                    playlistNumber++;
+                }
             }
         }
-    }
 
-    if(playlistNumber == 1) {
-         if(!Mix_PlayingMusic() || Mix_FadingMusic() == MIX_FADING_OUT) {
-            if(Mix_PlayMusic(musMelJazz2, 1) == -1) {
-                printf("Mix_PlayMusic(musMelJazz2): %s\n", Mix_GetError());
-            } else {
-                playlistNumber++;
+        if(playlistNumber == 1) {
+            if(!Mix_PlayingMusic()) {
+                if(Mix_PlayMusic(musMelJazz2, 1) == -1) {
+                    printf("Mix_PlayMusic(musMelJazz2): %s\n", Mix_GetError());
+                } else {
+                    playlistNumber++;
+                }
             }
         }
-    }
 
-    if(playlistNumber == 2) {
-         if(!Mix_PlayingMusic() || Mix_FadingMusic() == MIX_FADING_OUT) {
-            if(Mix_PlayMusic(musMelJazz3, 1) == -1) {
-                printf("Mix_PlayMusic(musMelJazz3): %s\n", Mix_GetError());
-            } else {
-                playlistNumber++;
+        if(playlistNumber == 2) {
+            if(!Mix_PlayingMusic()) {
+                if(Mix_PlayMusic(musMelJazz3, 1) == -1) {
+                    printf("Mix_PlayMusic(musMelJazz3): %s\n", Mix_GetError());
+                } else {
+                    playlistNumber++;
+                }
             }
         }
     }
@@ -128,5 +130,5 @@ void ley::Audio::playPlaylist() {
 
 void ley::Audio::fadeOutMusic() {
 
-    Mix_FadeOutMusic(0);
+    Mix_FadeOutMusic(500);
 }

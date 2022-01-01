@@ -20,7 +20,7 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "Block.h"
 #include "GameModel.h"
 #include "Winlet.h"
-#include "Renderables.h"
+#include "Renderables.h"  // TODO move all renderables into the View(video.cpp)
 #include "GameController.h"
 #include "SimpleShape.h"
 #include "Timer.h"
@@ -31,7 +31,7 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 
 
 auto const LINES_POS_X_PX = 800; //Score text
-auto const LINES_POS_Y_PX = 40;
+auto const LINES_POS_Y_PX = 40; 
 
 auto const LVL_POS_X_PX = 800; //Level text
 auto const LVL_POS_Y_PX = 60;
@@ -39,10 +39,8 @@ auto const LVL_POS_Y_PX = 60;
 auto const SCORE_POS_X_PX = 800;
 auto const SCORE_POS_Y_PX = 80;
 
-enum class mainmenu {start,highscores,options,exit};
-enum class optionsmenu {debug,sound_volume,back};
-
-double mili_adjust = 0;
+enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model
+enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model
 
 int main(int argv, char** args) {
     ley::GameModel mainGameModel; //instantiating the Game Model also starts the audio system.
@@ -68,44 +66,6 @@ int main(int argv, char** args) {
     ley::Font* ptrFontScore = &fontScore;
     renderables.push_back(&fontScore);
 
-    std::vector<SDL_Rect> catFrames;
-    SDL_Rect catFrame1;
-    catFrame1.x = 0; catFrame1.y = 75;
-    catFrame1.h = 100; catFrame1.w = 100;
-    catFrames.push_back(catFrame1);
-
-    SDL_Rect catFrame2;
-    catFrame2.x = 132; catFrame2.y = 75;
-    catFrame2.h = 100; catFrame2.w = 100;
-    catFrames.push_back(catFrame2);
-
-    SDL_Rect catFrame3;
-    catFrame3.x = 261; catFrame3.y = 75;
-    catFrame3.h = 100; catFrame3.w = 100;
-    catFrames.push_back(catFrame3);
-
-    SDL_Rect catFrame4; 
-    catFrame4.x = 400; catFrame4.y = 75;
-    catFrame4.h = 100; catFrame4.w = 100;
-    catFrames.push_back(catFrame4);
-
-    SDL_Rect catFrame5; 
-    catFrame5.x = 8; catFrame5.y = 207;
-    catFrame5.h = 100; catFrame5.w = 100;
-    catFrames.push_back(catFrame5);
-
-    SDL_Rect catFrame6; 
-    catFrame6.x = 138; catFrame6.y = 207;
-    catFrame6.h = 100; catFrame6.w = 100;
-    catFrames.push_back(catFrame6);
-
-    ley::Sprite catSprite(mainVideo.getRenderer(), "assets/cat-trans.png", 100, &catFrames);
-    catSprite.setPos(25,650);
-    renderables.push_back(&catSprite);
-    ley::Sprite catSprite2(mainVideo.getRenderer(), "assets/cat-trans.png", 175, &catFrames);
-    catSprite2.setPos(1150,650);
-    renderables.push_back(&catSprite2);
-    
     // test Winlet
     SDL_Rect debugBounds;
     debugBounds.x = 200; debugBounds.y = 200;
@@ -215,14 +175,9 @@ int main(int argv, char** args) {
     bool masterloop = true; //Starts the main menu.
     bool runInitialUI = true;
 
-    
-
     /*** Start Main Menu ***/
     Uint32 frame_start, frame_time;
     while(masterloop && runInitialUI) {
-
-        
-
         while(runInitialUI) {
             //read high scores at the main menu.
             if(!highscores.isClean()) {//check if we have new highscore data to read.
@@ -267,10 +222,7 @@ int main(int argv, char** args) {
         double newTime = 1000;
         
         fontGameOver.updateMessage("");
-        bool hitnext = false; //if player its next music button
-        
-        float fps_mili_adjust;
-
+    
         /**** Main Game Loop ****/ 
         SDL_Log("Starting Game loop!");
         while(mainGameModel.programRunning() && !mainGameModel.isGameOver()) {
@@ -295,7 +247,7 @@ int main(int argv, char** args) {
            
             /**** GET INPUT ****/
             //pollEtimervents updates running and full screen flags
-            ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel, hitnext);
+            ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel);
             if(fs != fs_changed) {
                 mainVideo.setFullScreen(fs);
                 fs_changed = !fs_changed;
@@ -330,14 +282,7 @@ int main(int argv, char** args) {
             }
 
             /**** CLEAR ****/
-            mainVideo.clear();
-            
-            //check if player hits the next track
-            if(hitnext) {
-                mainGameModel.playNext();
-                hitnext = false;
-            }
-
+            mainVideo.clear(); //clear the backbuffer
 
             /**** LOCK FRAME RATE ****/
             frame_time = SDL_GetTicks() - frame_start;
@@ -345,7 +290,7 @@ int main(int argv, char** args) {
                 SDL_Log("frame_time: %u", frame_time);
             }
 
-            mili_adjust = mainVideo.frameDelay(mainGameModel.avgFPS(),mili_adjust);
+            mainVideo.frameDelay();
         }
 
         //continue to render graphics and get keyboard input after game is over.
@@ -373,12 +318,9 @@ int main(int argv, char** args) {
 
                 mainVideo.clear(); //SDL_RenderClear()
 
-                mili_adjust = mainVideo.frameDelay(mainGameModel.avgFPS(), mili_adjust);
+                mainVideo.frameDelay();
             }
         }
-
-        
-        
 
         /**** CLEAN UP ****/
         mainGameModel.resetGame();

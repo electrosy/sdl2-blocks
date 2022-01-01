@@ -8,6 +8,11 @@ Date: Feb/14/2020
 #include "Sprite.h"
 
 /* RAII */
+ley::Sprite::Sprite()
+: Texture(nullptr, nullptr, 0, nullptr) {
+
+}
+
 ley::Sprite::Sprite(SDL_Renderer* r, const char* p, unsigned int s, std::vector<SDL_Rect>* v)
 : Texture(r,p,s,v) {
 

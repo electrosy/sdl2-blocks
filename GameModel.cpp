@@ -131,7 +131,6 @@ void ley::GameModel::playNext() {
     audSystem.playNext();
 }
 
-// TODO This function should probably go in the controller?
 void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
@@ -150,12 +149,11 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
 
 // **check for collision with the other blocks that have been put in place, 
 //   also checks for collision with game board boundry
-bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should probably go into the game controller
+bool ley::GameModel::canPut(Block& b, Direction d) {
 /* Check borders */
     unsigned int offset_x = 0;
     unsigned int offset_y = 0;
     SDL_Rect rect = b.getRect();
-
 
     switch (d) {
         case Direction::down :
@@ -176,7 +174,6 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
  
         default : break;
     }
-
 
     //if asked to go outside the bounds of the game board.
     if( (rect.x+offset_x > BOARDSIZE_WIDTH) || (rect.y+offset_y > BOARDSIZE_HEIGHT) ) {
@@ -245,9 +242,6 @@ bool ley::GameModel::canPut(Block& b, Direction d) { // TODO canput() should pro
     return true;
 }
 
-void ley::GameModel::downExpired() {
-
-}
 void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
@@ -545,6 +539,9 @@ void ley::GameModel::resetGame() {
 
     audSystem.fadeOutMusic();
     stopProgram(false);
+
+    avg_fps = 0;
+    frame_count = 0;
     
 }
 bool ley::GameModel::isPaused() {

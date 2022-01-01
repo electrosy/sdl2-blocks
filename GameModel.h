@@ -76,7 +76,6 @@ public:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
 
-    void downExpired(); //block automaticly moves down based on a time interval
     double moveBlock(Direction); //will return a new falldown speed.
     void rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise

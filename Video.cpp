@@ -9,7 +9,6 @@ Date: Feb/14/2020
 #include <string>
 
 #include "Video.h"
-#include "Textures.h"
 
 const auto START_DELAY = 1; //start delay for the game loop
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
@@ -20,7 +19,7 @@ const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.1.7.4";
+const std::string APPLICATION_VER = "0.1.7.6";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -36,8 +35,11 @@ window(nullptr),
 renderer(nullptr), 
 video_ready(true), 
 sdl_fullscreen(false),
-gm(g){
+gm(g),
+mili_adjust(0)
 
+//sprites
+{    
     init();
 }
 
@@ -56,11 +58,12 @@ ley::Video::~Video() {
         atexit(SDL_Quit);
     }
 }
-Uint32 ley::Video::frameDelay(Uint32 avg_fps, double mili_adjust) {
+void ley::Video::frameDelay() {
 
-    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && avg_fps > 0) { // once per second
+    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && gm->avgFPS() > 0) { // once per second
     
-        float fps_ratio = avg_fps / TARGET_FPS;
+        //float fps_ratio = avg_fps / TARGET_FPS;
+        float fps_ratio = gm->avgFPS() / TARGET_FPS;
         
         if(fps_ratio > 2.5) {
             mili_adjust += 5; //add 5 mili seconds
@@ -82,13 +85,11 @@ Uint32 ley::Video::frameDelay(Uint32 avg_fps, double mili_adjust) {
             mili_adjust = 0;
         }
                 
-        SDL_Log("miliadjust: %d", mili_adjust);
-        SDL_Log("AVG FPS: %u", avg_fps);
+        SDL_Log("Video::miliadjust: %d", mili_adjust);
+        SDL_Log("Video::AVG FPS: %u", gm->avgFPS());
     }
 
     SDL_Delay(START_DELAY + mili_adjust);
-
-    return mili_adjust;
 }
 
 /* RAII */
@@ -121,6 +122,7 @@ void ley::Video::init() {
     createWindow();
     createRenderer();
     loadTextures();
+    loadSprites();
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool fs) {
@@ -156,6 +158,7 @@ void ley::Video::renderBackground() {
 
 void ley::Video::render() {
     renderBackground();
+    renders.renderAll();
 }
 
 void ley::Video::present() {
@@ -229,4 +232,16 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
 }
+
+void ley::Video::loadSprites() {
+
+    catSprite = ley::Sprite(renderer, "assets/cat-trans.png", 100, &cat_frames);
+    catSprite.setPos(25,650);
+    catSprite2 = ley::Sprite(renderer, "assets/cat-trans.png", 175, &cat_frames);
+    catSprite2.setPos(1150,650);
+
+    renders.push_back(&catSprite);
+    renders.push_back(&catSprite2);
+}
+
 

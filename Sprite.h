@@ -24,6 +24,7 @@ private:
     
 public:
     /* RAII */
+    Sprite();
     Sprite(SDL_Renderer* r, const char*, unsigned int = 0, std::vector<SDL_Rect>* = nullptr);
     ~Sprite();
 
