@@ -232,6 +232,7 @@ int main(int argv, char** args) {
 
             /**** RENDER ****/
             mainVideo.render(); // renders background
+            mainVideo.renderSprites();
             renderables.renderAll(); // render all sprites
             if(mainGameModel.isOverlayOn()) { //render debug renderables
                 debugRenderables.renderAll();
@@ -310,6 +311,7 @@ int main(int argv, char** args) {
                 
                 mainGameController.renderBoard();
                 renderables.renderAll();
+                mainVideo.renderSprites();
                 if(mainGameModel.isOverlayOn()) {
                     debugRenderables.renderAll();
                 }

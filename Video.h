@@ -65,6 +65,7 @@ public:
 
 /* Functions */
     void render(); //Render additional bits.
+    void renderSprites();
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
 };

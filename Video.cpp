@@ -158,6 +158,8 @@ void ley::Video::renderBackground() {
 
 void ley::Video::render() {
     renderBackground();
+}
+void ley::Video::renderSprites() {
     renders.renderAll();
 }
 
