@@ -5,7 +5,7 @@
 OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp Block.cpp GameModel.cpp \
 		Clock.cpp Winlet.cpp Texture.cpp Renderable.cpp Renderables.cpp \
 		GameController.cpp SimpleShape.cpp Timer.cpp Textures.cpp Font.cpp \
-		Rand_int.cpp
+		Rand_int.cpp UIElement.cpp UIMenu.cpp HighScores.cpp Audio.cpp
 		
 
 #OBJ_NAME name of executable
@@ -13,4 +13,4 @@ OBJ_NAME = sdl2-blocks
 
 #
 all : $(OBJS)
-	g++ $(OBJS) -w -lSDL2 -lSDL2_image -lSDL2_ttf -o $(OBJ_NAME)
+	g++ $(OBJS) -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o $(OBJ_NAME)
