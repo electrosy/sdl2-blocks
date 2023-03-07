@@ -29,7 +29,7 @@
             "name": "g++ Linux Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${workspaceFolder}/sdl2-blocks",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
