@@ -31,9 +31,6 @@ private:
 public:
     GameController(SDL_Renderer* , ley::GameModel*);
     ~GameController();
-
-    void runFrame(ley::Font*, ley::Font*, ley::Font*); // call this for each frame in the game to control the game model.
-                                            //Fonts for, lines / score
     
     void renderBoard(); //renders the board to the video.
 };

@@ -34,33 +34,6 @@ bool ley::HighScores::isClean() {
 
 void ley::HighScores::renderScoreFonts(SDL_Renderer* r, ley::Renderables* re, std::vector<ley::Font*> fonts) {
 
-/*
-    ley::Font fontHighScores0(r, 450, 190, 400, 40);
-    ley::Font fontHighScores1(r, 450, 225, 400, 40);
-    ley::Font fontHighScores2(r, 450, 260, 400, 40);
-    ley::Font fontHighScores3(r, 450, 295, 400, 40);
-    ley::Font fontHighScores4(r, 450, 330, 400, 40);
-    ley::Font fontHighScores5(r, 450, 365, 400, 40);
-    ley::Font fontHighScores6(r, 450, 400, 400, 40);
-    ley::Font fontHighScores7(r, 450, 435, 400, 40);
-    ley::Font fontHighScores8(r, 450, 470, 400, 40);
-    ley::Font fontHighScores9(r, 450, 505, 400, 40);
-    ley::Font fontHighScores10(r, 450, 540, 400, 40);
-*/
-
-/*
-    fonts->push_back(fontHighScores0);
-    fonts.push_back(fontHighScores1);
-    fonts.push_back(fontHighScores2);
-    fonts.push_back(fontHighScores3);
-    fonts.push_back(fontHighScores4);
-    fonts.push_back(fontHighScores5);
-    fonts.push_back(fontHighScores6);
-    fonts.push_back(fontHighScores7);
-    fonts.push_back(fontHighScores8);
-    fonts.push_back(fontHighScores9);
-    fonts.push_back(fontHighScores10);
-*/
     (*fonts.begin())->updateMessage("     Name                    Level                 Lines                   Score");
     re->push_back(*fonts.begin());
 

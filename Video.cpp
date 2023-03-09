@@ -37,8 +37,6 @@ video_ready(true),
 sdl_fullscreen(false),
 gm(g),
 mili_adjust(0)
-
-//sprites
 {    
     init();
 }
@@ -123,6 +121,18 @@ void ley::Video::init() {
     createRenderer();
     loadTextures();
     loadSprites();
+    //load fonts
+    //initialize the fonts for line, level, score
+    fontOne = { renderer, LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
+    ptrFont = { &fontOne };
+    fontLvl = { renderer, LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
+    ptrFontLvl = { &fontLvl };
+    fontScore = { renderer, SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
+    ptrFontScore = { &fontScore };
+    mRenderables.push_back(&fontOne);
+    mRenderables.push_back(&fontLvl);
+    mRenderables.push_back(&fontScore);
+    updateScores(); //TODO the model should call this
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool fs) {
@@ -160,7 +170,8 @@ void ley::Video::render() {
     renderBackground();
 }
 void ley::Video::renderSprites() {
-    renders.renderAll();
+    updateScores(); // TODO the model should call this only when the scores are updated.
+    mRenderables.renderAll();
 }
 
 void ley::Video::present() {
@@ -242,8 +253,14 @@ void ley::Video::loadSprites() {
     catSprite2 = ley::Sprite(renderer, "assets/cat-trans.png", 175, &cat_frames);
     catSprite2.setPos(1150,650);
 
-    renders.push_back(&catSprite);
-    renders.push_back(&catSprite2);
+    mRenderables.push_back(&catSprite);
+    mRenderables.push_back(&catSprite2);
+}
+
+void ley::Video::updateScores() {
+    ptrFont->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
+    ptrFontLvl->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
+    ptrFontScore->updateMessage("Score  " + std::to_string(int(gm->getScore())));
 }
 
 

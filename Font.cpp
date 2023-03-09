@@ -8,6 +8,11 @@ Date: Jul/14/2020
 
 #include "Font.h"
 
+ley::Font::Font() 
+: Renderable(nullptr) {
+    
+}
+
 ley::Font::Font(SDL_Renderer* r, int x, int y, int w, int h)
 : Renderable(r) {
 

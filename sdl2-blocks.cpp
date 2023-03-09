@@ -29,16 +29,6 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "UIElement.h"
 #include "HighScores.h"
 
-
-auto const LINES_POS_X_PX = 800; //Score text
-auto const LINES_POS_Y_PX = 40; 
-
-auto const LVL_POS_X_PX = 800; //Level text
-auto const LVL_POS_Y_PX = 60;
-
-auto const SCORE_POS_X_PX = 800;
-auto const SCORE_POS_Y_PX = 80;
-
 enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model
 enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model
 
@@ -51,20 +41,6 @@ int main(int argv, char** args) {
 
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
-    //Create the renderable font object for lines
-    ley::Font fontOne(mainVideo.getRenderer(), LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35);
-    ley::Font* ptrFont = &fontOne; //grab a pointer so we can update the text.
-    renderables.push_back(&fontOne);
-
-    //Create the font for the level ouput
-    ley::Font fontLvl(mainVideo.getRenderer(), LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35);
-    ley::Font* ptrFontLvl = &fontLvl;
-    renderables.push_back(&fontLvl);
-
-    //Create the font for the score output
-    ley::Font fontScore(mainVideo.getRenderer(), SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35);
-    ley::Font* ptrFontScore = &fontScore;
-    renderables.push_back(&fontScore);
 
     // test Winlet
     SDL_Rect debugBounds;
@@ -271,7 +247,7 @@ int main(int argv, char** args) {
 
             fallTimer.runFrame(false, newTime);
 
-            mainGameController.runFrame(ptrFont, ptrFontLvl, ptrFontScore);
+//mainGameController.runFrame(ptrFont, ptrFontLvl, ptrFontScore);
             mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 

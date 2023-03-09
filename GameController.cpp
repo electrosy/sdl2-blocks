@@ -86,9 +86,3 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         dest_rect.x = START_X_OFFSET_PX;
     }
 }
-
-void ley::GameController::runFrame(ley::Font *f, ley::Font *l, ley::Font *s) {
-    f->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
-    l->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
-    s->updateMessage("Score  " + std::to_string(int(gm->getScore())));
-}

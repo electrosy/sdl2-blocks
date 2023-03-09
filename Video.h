@@ -14,6 +14,16 @@ Date: Feb/14/2020
 #include "Renderables.h"
 #include "Sprite.h"
 #include "Textures.h"
+#include "Font.h"
+
+auto const LINES_POS_X_PX = 800; //Score text
+auto const LINES_POS_Y_PX = 40; 
+
+auto const LVL_POS_X_PX = 800; //Level text
+auto const LVL_POS_Y_PX = 60;
+
+auto const SCORE_POS_X_PX = 800;
+auto const SCORE_POS_Y_PX = 80;
 
 namespace ley {
 
@@ -27,7 +37,7 @@ private:
     bool sdl_fullscreen;
     ley::GameModel* gm;
     double mili_adjust; //number of mili seconds to delay the frame
-    ley::Renderables renders;
+    ley::Renderables mRenderables;
 
     
     
@@ -51,6 +61,17 @@ private:
     void loadSprites();
 
     void renderBackground(); //Render the background image.
+    void updateScores(); //Update the fonts for scores with new model data.
+
+    //Create the renderable font object for lines
+    ley::Font fontOne;
+    ley::Font* ptrFont;
+    //Create the font for the level ouput
+    ley::Font fontLvl;
+    ley::Font* ptrFontLvl;
+    //Create the font for the score output
+    ley::Font fontScore;
+    ley::Font* ptrFontScore;
 
 public:
     Video(ley::GameModel*);
