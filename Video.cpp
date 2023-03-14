@@ -42,19 +42,12 @@ mili_adjust(0)
 }
 
 ley::Video::~Video() {
-    auto sdl_ready = 0;
-    sdl_ready = !SDL_Init(0);
-
-    SDL_DestroyWindow(window);
+    
     SDL_DestroyRenderer(renderer);
-
-    if(sdl_ready && SDL_InitSubSystem(SDL_INIT_VIDEO)) {
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    }
-   
-    if(getReady()) {
-        atexit(SDL_Quit);
-    }
+    SDL_DestroyWindow(window);
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    atexit(SDL_Quit);
+    
 }
 void ley::Video::frameDelay() {
 
@@ -93,7 +86,7 @@ void ley::Video::frameDelay() {
 /* RAII */
 void ley::Video::createWindow() {
     /* create a window to render to */
-    if(SDL_Init(SDL_INIT_VIDEO) >= 0) {
+    if(SDL_InitSubSystem(SDL_INIT_VIDEO) >= 0) {
         // if all good
         window = SDL_CreateWindow(
             APPLICATION_STRING.c_str(),
@@ -247,7 +240,6 @@ void ley::Video::loadTextures() {
 }
 
 void ley::Video::loadSprites() {
-
     catSprite = ley::Sprite(renderer, "assets/cat-trans.png", 100, &cat_frames);
     catSprite.setPos(25,650);
     catSprite2 = ley::Sprite(renderer, "assets/cat-trans.png", 175, &cat_frames);

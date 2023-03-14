@@ -9,12 +9,15 @@ Date: Jul/14/2020
 #include "Font.h"
 
 ley::Font::Font() 
-: Renderable(nullptr) {
-    
+: 
+Renderable(nullptr) {
+
 }
 
 ley::Font::Font(SDL_Renderer* r, int x, int y, int w, int h)
-: Renderable(r) {
+: 
+Renderable(r),
+Message(nullptr) {
 
     if (TTF_Init() < 0) {
         SDL_Log("TTF_Init failed");
@@ -39,15 +42,24 @@ ley::Font::~Font() {
     SDL_DestroyTexture(Message);
 }
 void ley::Font::updateTexture() {
-    
+
+
+    if(Message != nullptr) {
+        SDL_DestroyTexture(Message);
+        Message = nullptr;
+    }
+
     SDL_Surface* surfaceMessage;
     surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
     Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
     SDL_FreeSurface(surfaceMessage);
 }
 void ley::Font::updateMessage(std::string s) {
-    textMessage = (s);
-    updateTexture();
+    //Only update the texture if the message has changed.
+    if(s != textMessage) {
+        textMessage = (s);
+        updateTexture();
+    }
 }
 
 std::string ley::Font::getMessage() {

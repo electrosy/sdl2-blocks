@@ -22,10 +22,12 @@ private:
     TTF_Font* Classic;
     void updateTexture();
     SDL_Color White = {255, 255, 255};
+    
 
 protected:
 
 public:
+    
     Font();
     Font(SDL_Renderer* r, int = 0, int = 0, int = 0, int = 0);
     ~Font();
