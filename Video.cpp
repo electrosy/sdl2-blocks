@@ -182,13 +182,13 @@ void ley::Video::clear() {
 void ley::Video::loadTextures() {
     TextureManager::Instance()->setRenderer(renderer);
     //Block pieces
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_gr_30x30.bmp", "d");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_bl_30x30.bmp", "e");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_or_30x30.bmp", "f");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_pr_30x30.bmp", "g");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_rd_30x30.bmp", "h");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_yl_30x30.bmp", "i");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/block_cy_30x30.bmp", "j");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_gr_30x30.bmp", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_bl_30x30.bmp", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_or_30x30.bmp", "f");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_pr_30x30.bmp", "g");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_rd_30x30.bmp", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_yl_30x30.bmp", "i");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_cy_30x30.bmp", "j");
     //Logos
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/coloritlogo.png", "itlogo");
