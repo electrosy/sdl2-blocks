@@ -23,8 +23,10 @@ protected:
     SDL_Rect rect_tex;
     SDL_Rect destRect_tex;
 public:
+    SimpleShape();
     SimpleShape(SDL_Renderer*);
     ~SimpleShape();
+    void operator()(SDL_Renderer*);
 
     void addShape(std::string, SDL_Rect);
     void render();

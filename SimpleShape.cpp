@@ -1,9 +1,9 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020,2023 Steven Philley
 
 Purpose: see header.
-Date: Feb/20/2020
+Date: Mar/27/2023
 */
 #include "SimpleShape.h"
 
@@ -17,9 +17,18 @@ ley::SimpleShape::SimpleShape(SDL_Renderer* r)
     destRect_tex.h = -1;
 }
 
+ley::SimpleShape::SimpleShape() {
+    
+}
+
 ley::SimpleShape::~SimpleShape() {
 
 }
+
+void ley::SimpleShape::operator()(SDL_Renderer* r) {
+    Renderable::renderer = r;
+}
+
 /* Accessors */
 void ley::SimpleShape::addShape(std::string id, SDL_Rect rect) {
   shapes.insert(std::make_pair(id,rect));

@@ -30,6 +30,7 @@ protected:
   
 public:
     /* RAII */
+    Renderable();
     Renderable(SDL_Renderer*);
     ~Renderable();
     /* Accessors */

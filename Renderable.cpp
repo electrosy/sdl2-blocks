@@ -12,6 +12,10 @@ ley::Renderable::Renderable(SDL_Renderer* r) {
    renderer=r, visible=true;
 }
 
+ley::Renderable::Renderable() {
+   
+}
+
 ley::Renderable::~Renderable() {
 
 }

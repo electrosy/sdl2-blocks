@@ -9,6 +9,7 @@ Date: Feb/14/2020
 #include <string>
 
 #include "Video.h"
+#include "SimpleShape.h"
 
 const auto START_DELAY = 1; //start delay for the game loop
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
@@ -19,7 +20,7 @@ const auto SCREEN_WIDTH = 1280;
 const auto SCREEN_HEIGHT = 720;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.1.8.0";
+const std::string APPLICATION_VER = "0.1.8.1";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -126,6 +127,12 @@ void ley::Video::init() {
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
     updateScores(); //TODO the model should call this
+
+    //SimpleShape
+    firstSimpleShape(renderer);
+    mRenderables.push_back(&firstSimpleShape);
+    firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
+    firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool fs) {

@@ -22,7 +22,6 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "Winlet.h"
 #include "Renderables.h"  // TODO move all renderables into the View(video.cpp)
 #include "GameController.h"
-#include "SimpleShape.h"
 #include "Timer.h"
 #include "Font.h"
 #include "UIMenu.h"
@@ -49,11 +48,7 @@ int main(int argv, char** args) {
     SDL_Color debugBoundsColor = {100,100,100,100};
     ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
 
-    //SimpleShape
-    ley::SimpleShape firstSimpleShape(mainVideo.getRenderer());
-    renderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
-    firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
+    
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     debugRenderables.push_back(&firstTimer);
@@ -247,7 +242,6 @@ int main(int argv, char** args) {
 
             fallTimer.runFrame(false, newTime);
 
-//mainGameController.runFrame(ptrFont, ptrFontLvl, ptrFontScore);
             mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 

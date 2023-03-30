@@ -38,9 +38,8 @@ private:
     ley::GameModel* gm;
     double mili_adjust; //number of mili seconds to delay the frame
     ley::Renderables mRenderables;
+    ley::SimpleShape firstSimpleShape;
 
-    
-    
     SDL_Rect cat_frame1 = {0,75,100,100};
     SDL_Rect cat_frame2 = {132,75,100,100};
     SDL_Rect cat_frame3 = {261,75,100,100};
