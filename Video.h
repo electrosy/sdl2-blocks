@@ -38,6 +38,7 @@ private:
     ley::GameModel* gm;
     double mili_adjust; //number of mili seconds to delay the frame
     ley::Renderables mRenderables;
+    ley::Renderables mDebugRenderables;
     ley::SimpleShape firstSimpleShape;
 
     SDL_Rect cat_frame1 = {0,75,100,100};
@@ -71,7 +72,7 @@ private:
     //Create the font for the score output
     ley::Font fontScore;
     ley::Font* ptrFontScore;
-
+    
 public:
     Video(ley::GameModel*);
     ~Video();

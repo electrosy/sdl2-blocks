@@ -14,6 +14,7 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "Clock.h"
 #include "Timer.h"
+
  
 namespace ley {
 
@@ -62,7 +63,6 @@ private:
     Uint32 avg_fps;
     
     ley::Audio audSystem; //audio subsystem.
-    
 
 public:
     GameModel();
@@ -99,6 +99,7 @@ public:
     void stopProgram(bool); //sets the program to exit.
     void frameCountInc(); //increment frame count
     size_t frameCount();
+    void runFrame();
 
     /* AUDIO */
     void fadeMusic(); //fade out the music

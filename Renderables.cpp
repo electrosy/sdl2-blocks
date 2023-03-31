@@ -25,10 +25,10 @@ void ley::Renderables::push_back(Renderable * r) {
     renderables.push_back(r);
 }
 
-void ley::Renderables::renderAll() {
+void ley::Renderables::renderAll(SDL_Renderer * r) {
     if(renderables.size() > 0) {
         for(int i = 0; i < renderables.size(); ++i) {
-                renderables[i]->render();
+                renderables[i]->render(r);
             }
     }
 }

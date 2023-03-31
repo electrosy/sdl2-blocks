@@ -8,15 +8,8 @@ Date: Jul/14/2020
 
 #include "Font.h"
 
-ley::Font::Font() 
-: 
-Renderable(nullptr) {
-
-}
-
-ley::Font::Font(SDL_Renderer* r, int x, int y, int w, int h)
-: 
-Renderable(r),
+ley::Font::Font(int x, int y, int w, int h)
+:
 Message(nullptr) {
 
     if (TTF_Init() < 0) {
@@ -44,15 +37,7 @@ ley::Font::~Font() {
 void ley::Font::updateTexture() {
 
 
-    if(Message != nullptr) {
-        SDL_DestroyTexture(Message);
-        Message = nullptr;
-    }
-
-    SDL_Surface* surfaceMessage;
-    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
-    Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-    SDL_FreeSurface(surfaceMessage);
+    
 }
 void ley::Font::updateMessage(std::string s) {
     //Only update the texture if the message has changed.
@@ -66,6 +51,17 @@ std::string ley::Font::getMessage() {
     return textMessage;
 }
 
-void ley::Font::render() {
-    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+void ley::Font::render(SDL_Renderer * r) {
+
+    if(Message != nullptr) {
+        SDL_DestroyTexture(Message);
+        Message = nullptr;
+    }
+
+    SDL_Surface* surfaceMessage;
+    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
+    Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
+    SDL_FreeSurface(surfaceMessage);
+
+    SDL_RenderCopy(r, Message, NULL, &Message_rect);
 }

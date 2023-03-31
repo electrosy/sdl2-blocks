@@ -26,19 +26,17 @@ private:
     bool visible;
     
 protected:
-   SDL_Renderer* renderer;
   
 public:
     /* RAII */
     Renderable();
-    Renderable(SDL_Renderer*);
     ~Renderable();
     /* Accessors */
     void setVisible(bool);
     bool isVisible();
 
     /* Functions */
-    void virtual render() = 0;
+    void virtual render(SDL_Renderer * r) = 0;
 };
 
 }

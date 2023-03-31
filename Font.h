@@ -28,12 +28,11 @@ protected:
 
 public:
     
-    Font();
-    Font(SDL_Renderer* r, int = 0, int = 0, int = 0, int = 0);
+    Font(int = 0, int = 0, int = 0, int = 0);
     ~Font();
     void updateMessage(std::string);
     std::string getMessage();
-    void render();
+    void render(SDL_Renderer * r);
 
 };
 

@@ -169,7 +169,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool f
             }
         }
 
-        renderables.renderAll();
+        renderables.renderAll(v->getRenderer());
         v->present();
 
         ley::Direction frameDirection = i->pollMainMenuEvents(runmain,fs,(*m));

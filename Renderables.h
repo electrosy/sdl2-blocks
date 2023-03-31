@@ -29,7 +29,7 @@ public:
     ~Renderables();    
 
     void push_back(Renderable * r);
-    void renderAll();
+    void renderAll(SDL_Renderer * r);
 
     unsigned int size();
     std::vector<Renderable*>* get_ptr();

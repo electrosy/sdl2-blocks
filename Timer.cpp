@@ -8,7 +8,8 @@ Date: Feb/20/2020
 #include "Timer.h"
 
 /* RAII */
-ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect) : SimpleShape(r), 
+ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect) 
+: SimpleShape(), 
 mili(m),
 rect_border(rect), 
 rect_progress(rect), 
@@ -34,9 +35,9 @@ sdlTimerReady(true) {
 
     s = SDL_CreateRGBSurface(0, rect_border.w, rect_border.h, 32, 0, 0, 0, 0);
     SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
-    tex = SDL_CreateTextureFromSurface(renderer,s);
+    tex = SDL_CreateTextureFromSurface(r,s);
 
-    fill();
+    fill(r);
 }
 
 ley::Timer::~Timer() {
@@ -47,9 +48,9 @@ ley::Timer::~Timer() {
     }
 }
 /* Functions */
-void ley::Timer::fill() {
+void ley::Timer::fill(SDL_Renderer * r) {
 
-    SDL_RenderCopy(renderer, tex, &rect_tex, &rect_progress); //TODO SDL_RenderCopy should be in the view.
+    SDL_RenderCopy(r, tex, &rect_tex, &rect_progress); //TODO SDL_RenderCopy should be in the view.
     
 }
 void ley::Timer::reset() {
@@ -66,8 +67,6 @@ void ley::Timer::adjustProgress(float m) {
     } else {
         destRect_tex.w = 0;
     }
-    
-    fill();
 }
 
 void ley::Timer::runFrame(bool autoRestart, double newTime) {

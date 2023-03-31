@@ -27,9 +27,9 @@ protected:
     std::vector<SDL_Rect> frames;
     SDL_Rect dest_rect;
 public:
-    Texture(SDL_Renderer*, const char*, unsigned int, std::vector<SDL_Rect>*);
+    Texture(SDL_Renderer * r, const char*, unsigned int, std::vector<SDL_Rect>*);
     ~Texture();
-    void render();
+    void render(SDL_Renderer * r);
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
 };

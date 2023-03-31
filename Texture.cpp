@@ -9,14 +9,14 @@ Date: Feb/17/2020
 
 /* RAII */
 ley::Texture::Texture(SDL_Renderer* r,  const char* p, unsigned int s, std::vector<SDL_Rect>* v)
-: Renderable(r), animSpeed(s) {
+: Renderable(), animSpeed(s) {
 
     if (p == nullptr) {return;//EARLY EXIT
     }
 
     SDL_Surface* temp_surface = IMG_Load(p);
 
-    texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
+    texture = SDL_CreateTextureFromSurface(r, temp_surface);
 
     SDL_FreeSurface(temp_surface);
 
@@ -50,12 +50,12 @@ void ley::Texture::setPos(unsigned int x, unsigned int y) {
     pos.first = x; pos.second = y;
 }
 
-void ley::Texture::render() {
+void ley::Texture::render(SDL_Renderer * r) {
     unsigned int frameIndex = frames.size() > 1 ? 
         (SDL_GetTicks() / animSpeed) % frames.size() : 0;
 
     dest_rect.x = pos.first; dest_rect.y = pos.second;
-    SDL_RenderCopy(renderer, texture, &frames[frameIndex], &dest_rect);
+    SDL_RenderCopy(r, texture, &frames[frameIndex], &dest_rect);
 }
 
 /* Functions */

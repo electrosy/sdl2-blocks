@@ -13,8 +13,8 @@ ley::Sprite::Sprite()
 
 }
 
-ley::Sprite::Sprite(SDL_Renderer* r, const char* p, unsigned int s, std::vector<SDL_Rect>* v)
-: Texture(r,p,s,v) {
+ley::Sprite::Sprite(SDL_Renderer * r, const char* p, unsigned int s, std::vector<SDL_Rect>* v)
+: Texture(r, p, s, v) {
 
 }
 

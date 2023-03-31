@@ -19,7 +19,6 @@ Notes: Intended to be built around the MVC philosophy. GameModel.cpp(Model), Vid
 #include "Sprite.h"
 #include "Block.h"
 #include "GameModel.h"
-#include "Winlet.h"
 #include "Renderables.h"  // TODO move all renderables into the View(video.cpp)
 #include "GameController.h"
 #include "Timer.h"
@@ -40,26 +39,18 @@ int main(int argv, char** args) {
 
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
-
-    // test Winlet
-    SDL_Rect debugBounds;
-    debugBounds.x = 200; debugBounds.y = 200;
-    debugBounds.h = 300; debugBounds.h = 300;
-    SDL_Color debugBoundsColor = {100,100,100,100};
-    ley::Winlet debugWinlet(debugBounds,debugBoundsColor);
-
     
     //Test Timer
     ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
     debugRenderables.push_back(&firstTimer);
     //Test Timer
-    ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2 second timer
+    ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2.5 second timer
     debugRenderables.push_back(&secondTimer);
     //Test Timer
-    ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 2 second timer
+    ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 1 second timer
     debugRenderables.push_back(&thirdTimer);
     //Test Timer
-    ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 2 second timer
+    ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 1/3 second timer
     debugRenderables.push_back(&fourthTimer);
     
     //Fall down timer - TODO timers should go into the controller
@@ -84,7 +75,7 @@ int main(int argv, char** args) {
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
-    ley::Font fontGameOver(mainVideo.getRenderer(), 255, 190, 100, 35);
+    ley::Font fontGameOver(255, 190, 100, 35);
     fontGameOver.updateMessage("");
     ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
     renderables.push_back(ptrFontGameOver);
@@ -111,17 +102,17 @@ int main(int argv, char** args) {
     ley::UIMenu highscoresmenu;
 
     std::vector<ley::Font*> fonts;
-    ley::Font fontHighScores0(mainVideo.getRenderer(), 450, 190, 400, 40);
-    ley::Font fontHighScores1(mainVideo.getRenderer(), 450, 225, 400, 40);
-    ley::Font fontHighScores2(mainVideo.getRenderer(), 450, 260, 400, 40);
-    ley::Font fontHighScores3(mainVideo.getRenderer(), 450, 295, 400, 40);
-    ley::Font fontHighScores4(mainVideo.getRenderer(), 450, 330, 400, 40);
-    ley::Font fontHighScores5(mainVideo.getRenderer(), 450, 365, 400, 40);
-    ley::Font fontHighScores6(mainVideo.getRenderer(), 450, 400, 400, 40);
-    ley::Font fontHighScores7(mainVideo.getRenderer(), 450, 435, 400, 40);
-    ley::Font fontHighScores8(mainVideo.getRenderer(), 450, 470, 400, 40);
-    ley::Font fontHighScores9(mainVideo.getRenderer(), 450, 505, 400, 40);
-    ley::Font fontHighScores10(mainVideo.getRenderer(), 450, 540, 400, 40);
+    ley::Font fontHighScores0(450, 190, 400, 40);
+    ley::Font fontHighScores1(450, 225, 400, 40);
+    ley::Font fontHighScores2(450, 260, 400, 40);
+    ley::Font fontHighScores3(450, 295, 400, 40);
+    ley::Font fontHighScores4(450, 330, 400, 40);
+    ley::Font fontHighScores5(450, 365, 400, 40);
+    ley::Font fontHighScores6(450, 400, 400, 40);
+    ley::Font fontHighScores7(450, 435, 400, 40);
+    ley::Font fontHighScores8(450, 470, 400, 40);
+    ley::Font fontHighScores9(450, 505, 400, 40);
+    ley::Font fontHighScores10(450, 540, 400, 40);
 
     fonts.push_back(&fontHighScores0);
     fonts.push_back(&fontHighScores1);
@@ -204,9 +195,9 @@ int main(int argv, char** args) {
             /**** RENDER ****/
             mainVideo.render(); // renders background
             mainVideo.renderSprites();
-            renderables.renderAll(); // render all sprites
+            renderables.renderAll(mainVideo.getRenderer()); // render all sprites
             if(mainGameModel.isOverlayOn()) { //render debug renderables
-                debugRenderables.renderAll();
+                debugRenderables.renderAll(mainVideo.getRenderer());
             }
             mainGameController.renderBoard();
 
@@ -242,6 +233,7 @@ int main(int argv, char** args) {
 
             fallTimer.runFrame(false, newTime);
 
+            mainGameModel.runFrame();
             mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 
@@ -280,10 +272,10 @@ int main(int argv, char** args) {
                 //For now just run at the frame rate that was set at the end of the game.
                 
                 mainGameController.renderBoard();
-                renderables.renderAll();
-                mainVideo.renderSprites();
+                renderables.renderAll(mainVideo.getRenderer());
+                mainVideo.renderSprites(); 
                 if(mainGameModel.isOverlayOn()) {
-                    debugRenderables.renderAll();
+                    debugRenderables.renderAll(mainVideo.getRenderer());
                 }
                 mainVideo.present();
                 ley::Direction eventDirection = mainInput.pollEndEvents(fs,mainGameModel);

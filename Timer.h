@@ -33,11 +33,11 @@ private:
 
     SDL_Surface *s;
 public:
-    Timer(SDL_Renderer*, unsigned int, SDL_Rect rect);
+    Timer(SDL_Renderer * r, unsigned int, SDL_Rect rect);
     ~Timer();
 
     void hasElapsed();
-    void fill();
+    void fill(SDL_Renderer * r);
     void runFrame(bool = true, double = 0);
     void reset();
     bool hasExpired();

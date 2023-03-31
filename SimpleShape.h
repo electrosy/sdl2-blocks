@@ -17,19 +17,17 @@ class SimpleShape : public Renderable {
 
 private:
     std::map<std::string,SDL_Rect> shapes;
-    void drawRect(const SDL_Rect*);
 protected:
     SDL_Texture *tex;
     SDL_Rect rect_tex;
     SDL_Rect destRect_tex;
 public:
     SimpleShape();
-    SimpleShape(SDL_Renderer*);
     ~SimpleShape();
     void operator()(SDL_Renderer*);
 
     void addShape(std::string, SDL_Rect);
-    void render();
+    void render(SDL_Renderer * r);
 };
 
 }

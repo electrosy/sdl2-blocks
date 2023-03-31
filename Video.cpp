@@ -117,11 +117,11 @@ void ley::Video::init() {
     loadSprites();
     //load fonts
     //initialize the fonts for line, level, score
-    fontOne = { renderer, LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
+    fontOne = { LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
     ptrFont = { &fontOne };
-    fontLvl = { renderer, LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
+    fontLvl = { LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
     ptrFontLvl = { &fontLvl };
-    fontScore = { renderer, SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
+    fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
     ptrFontScore = { &fontScore };
     mRenderables.push_back(&fontOne);
     mRenderables.push_back(&fontLvl);
@@ -171,7 +171,7 @@ void ley::Video::render() {
 }
 void ley::Video::renderSprites() {
     updateScores(); // TODO the model should call this only when the scores are updated.
-    mRenderables.renderAll();
+    mRenderables.renderAll(renderer);
 }
 
 void ley::Video::present() {
