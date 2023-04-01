@@ -10,11 +10,10 @@ Date: Feb/15/2020
 #define GAMECONTROLLER_H
 
 #include "Video.h"
+#include "GameModel.h"
 #include "Clock.h"
 #include "Block.h"
-#include "GameModel.h"
 #include "Font.h"
-
 #include "Timer.h"
 
 namespace ley {
@@ -22,15 +21,24 @@ namespace ley {
 class GameController {
 
 private:
+    ley::Video* v;
     SDL_Renderer* ren;
     ley::GameModel* gm;
 
     //Textures
     SDL_Texture *blockBits2 = nullptr;
 
+    //Debug timers
+    ley::Timer firstTimer;
+    ley::Timer secondTimer;
+    ley::Timer thirdTimer;
+    ley::Timer fourthTimer;
+
 public:
-    GameController(SDL_Renderer* , ley::GameModel*);
+    GameController(ley::Video* , ley::GameModel*);
     ~GameController();
+
+    void runFrame();
     
     void renderBoard(); //renders the board to the video.
 };

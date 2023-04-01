@@ -552,7 +552,3 @@ void ley::GameModel::pauseGame(bool pause) {
         
         active = !pause;
 }
-
-void ley::GameModel::runFrame() {
-    
-}

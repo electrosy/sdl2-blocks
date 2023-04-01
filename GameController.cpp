@@ -16,11 +16,19 @@ const auto NEXTBLOCK_OFFSET_X_PX = 360;
 const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 /* RAII */
-ley::GameController::GameController(SDL_Renderer *r, ley::GameModel *g)
+ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
 : 
-ren(r), 
-gm(g) {
+ren(v->getRenderer()), 
+gm(g),
+firstTimer(ren,3000,{10,300,100,50}),
+secondTimer(ren,2500,{10,400,100,25}),
+thirdTimer(ren,1000,{10,425,100,30}),
+fourthTimer(ren,333,{10,455,100,5}) {
 
+    v->addRenderable(true, &firstTimer);
+    v->addRenderable(true, &secondTimer);
+    v->addRenderable(true, &thirdTimer);
+    v->addRenderable(true, &fourthTimer);
 }
 
 ley::GameController::~GameController() {
@@ -28,6 +36,12 @@ ley::GameController::~GameController() {
 /* Accessors */
 
 /* Functions */
+void ley::GameController::runFrame() {
+    firstTimer.runFrame();
+    secondTimer.runFrame();
+    thirdTimer.runFrame();
+    fourthTimer.runFrame();
+}
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);

@@ -50,6 +50,14 @@ ley::Video::~Video() {
     atexit(SDL_Quit);
     
 }
+void ley::Video::addRenderable(bool layer, ley::Renderable * r) {
+    if(layer) {
+        mDebugRenderables.push_back(r);
+    }
+    else {
+        mRenderables.push_back(r);
+    }
+}
 void ley::Video::frameDelay() {
 
     if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && gm->avgFPS() > 0) { // once per second
@@ -172,6 +180,9 @@ void ley::Video::render() {
 void ley::Video::renderSprites() {
     updateScores(); // TODO the model should call this only when the scores are updated.
     mRenderables.renderAll(renderer);
+    if(gm->isOverlayOn()) {
+        mDebugRenderables.renderAll(renderer);
+    }
 }
 
 void ley::Video::present() {

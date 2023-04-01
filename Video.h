@@ -89,6 +89,7 @@ public:
     void renderSprites();
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
+    void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
 };
 
 }

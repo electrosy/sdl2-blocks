@@ -40,25 +40,12 @@ int main(int argv, char** args) {
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
     
-    //Test Timer
-    ley::Timer firstTimer(mainVideo.getRenderer(),3000,{10,300,100,50}); // a 3 second timer
-    debugRenderables.push_back(&firstTimer);
-    //Test Timer
-    ley::Timer secondTimer(mainVideo.getRenderer(),2500,{10,400,100,25}); // a 2.5 second timer
-    debugRenderables.push_back(&secondTimer);
-    //Test Timer
-    ley::Timer thirdTimer(mainVideo.getRenderer(),1000,{10,425,100,30}); // a 1 second timer
-    debugRenderables.push_back(&thirdTimer);
-    //Test Timer
-    ley::Timer fourthTimer(mainVideo.getRenderer(),333,{10,455,100,5}); // a 1/3 second timer
-    debugRenderables.push_back(&fourthTimer);
-    
     //Fall down timer - TODO timers should go into the controller
     ley::Timer fallTimer(mainVideo.getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
 
     mainGameModel.setTimer(&fallTimer);
-    ley::GameController mainGameController(mainVideo.getRenderer(),&mainGameModel);
+    ley::GameController mainGameController(&mainVideo,&mainGameModel);
 
     bool fs = false; //full screen
     Uint32 avgFPS = 0;
@@ -226,14 +213,9 @@ int main(int argv, char** args) {
             }
 
             /**** UPDATE ****/
-            firstTimer.runFrame();
-            secondTimer.runFrame();
-            thirdTimer.runFrame();
-            fourthTimer.runFrame();
-
             fallTimer.runFrame(false, newTime);
 
-            mainGameModel.runFrame();
+            mainGameController.runFrame();
             mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 

@@ -19,7 +19,7 @@ Date: Feb/15/2020
 namespace ley {
 
 const auto BOARDSIZE_WIDTH = 10;
-const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetriminos can entry play in the right place.
+const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can entry play in the right place.
 const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that will be on the board.
 
 const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
@@ -98,8 +98,7 @@ public:
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit.
     void frameCountInc(); //increment frame count
-    size_t frameCount();
-    void runFrame();
+    size_t frameCount();    
 
     /* AUDIO */
     void fadeMusic(); //fade out the music
