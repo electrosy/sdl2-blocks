@@ -18,14 +18,13 @@ Date: Feb/15/2020
  
 namespace ley {
 
-const auto BOARDSIZE_WIDTH = 10;
-const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can entry play in the right place.
-const auto MAX_BLOCKS_ON_BOARD = 500; //the max number of possible blocks that will be on the board.
+const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option added, check width of 4 bug case.
+const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can enter play in the right place.
 
 const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 const auto START_X_OFFSET_PX = 490;
-
 const auto NEW_LVL_AT_LINES = 10;
+//TODO rename up to rotate
 enum class Direction {down,right,up,left,none,pause,space}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 class GameModel {
@@ -54,7 +53,6 @@ private:
     void shiftBoard(char, char); //start line, number of lines
     void fillTop(char); //fill top of the board after the shift
     ley::Block getRandomBlock();
-    ley::Timer* ptrTimer; //pointer to the timer so that the speed can be changed.
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     
@@ -71,7 +69,6 @@ public:
     Uint32 avgFPS();
     Uint32 secondsFromStart();
     void resetClock();
-    void setTimer(ley::Timer*); //send in the fall timer.
 
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();

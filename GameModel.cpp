@@ -59,9 +59,6 @@ void ley::GameModel::resetClock() {
 Uint32 ley::GameModel::secondsFromStart() {
     return mainClock.secondsFromStart();
 }
-void ley::GameModel::setTimer(ley::Timer* pT) {
-    ptrTimer = pT;
-}
 
 ley::Block ley::GameModel::getNextBlock() {
     return nextBlock;
@@ -310,7 +307,7 @@ void ley::GameModel::setBlock() {
         }
     }
 }
-void ley::GameModel::rotateBlock(bool r) {
+void ley::GameModel::rotateBlock(bool r) { //ADD FEATURE - add control to Flip horz or vert.
     if(canRotate(r)) {
         activeBlock.rotate(r);
         clearOldBlock();
@@ -374,8 +371,6 @@ void ley::GameModel::processLines() {
         addToScore( (linesToCut * (numLevel+1)) * 10 );
         if(numLines % NEW_LVL_AT_LINES == 0) { // new level every X lines.
             ++numLevel;
-        //also increase the speed of the fall down timer
-        this->ptrTimer->changeSpeed(500); //for testing just double the speed.
     }
         
         shiftBoard(firstAndLast.first, linesToCut);

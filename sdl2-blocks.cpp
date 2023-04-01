@@ -44,7 +44,6 @@ int main(int argv, char** args) {
     ley::Timer fallTimer(mainVideo.getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}); //Time to force the blockdown.
     renderables.push_back(&fallTimer);
 
-    mainGameModel.setTimer(&fallTimer);
     ley::GameController mainGameController(&mainVideo,&mainGameModel);
 
     bool fs = false; //full screen
