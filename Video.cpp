@@ -32,13 +32,12 @@ typedef ley::Textures TextureManager;
 
 ley::Video::Video(ley::GameModel* g)
 :
-window(nullptr), 
-renderer(nullptr), 
-video_ready(true), 
-sdl_fullscreen(false),
+window(nullptr),
+renderer(nullptr),
+video_ready(true),
 gm(g),
 mili_adjust(0)
-{    
+{
     init();
 }
 
@@ -143,8 +142,10 @@ void ley::Video::init() {
     firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
 }
 /* Accessors */
+void ley::Video::fullScreen(bool f) {
+    fs = f;
+}
 void ley::Video::setFullScreen(bool fs) {
-    sdl_fullscreen = fs;
 
     if(fs) {
         SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);

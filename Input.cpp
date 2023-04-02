@@ -18,7 +18,7 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, GameModel& gm) {
+ley::Direction ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
 
@@ -67,7 +67,7 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, bool& fullscreen, G
      return frameDirection;
 }
 
-ley::Direction ley::Input::pollTitleEvents(bool &running, bool& fullscreen, GameModel& gm) {
+ley::Direction ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
 

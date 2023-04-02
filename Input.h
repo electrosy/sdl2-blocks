@@ -26,8 +26,8 @@ public:
     // there is likely a way to generalize them.
     ley::Direction pollEvents(bool&, GameModel&);
     ley::Direction pollEndEvents(bool&, GameModel&);
-    ley::Direction pollTitleEvents(bool&, bool&, GameModel&);
-    ley::Direction pollMainMenuEvents(bool&, bool&, GameModel&);
+    ley::Direction pollTitleEvents(bool&, GameModel&);
+    ley::Direction pollMainMenuEvents(bool&, GameModel&);
 };
 
 }

@@ -39,21 +39,16 @@ int main(int argv, char** args) {
 
     ley::Renderables renderables;
     ley::Renderables debugRenderables;
-    
-    //Fall down timer - TODO timers should go into the controller
-    ley::Timer fallTimer(mainVideo.getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}); //Time to force the blockdown.
-    renderables.push_back(&fallTimer);
 
     ley::GameController mainGameController(&mainVideo,&mainGameModel);
 
-    bool fs = false; //full screen
     Uint32 avgFPS = 0;
 
     ley::UIMenu mainUI;
 
     //TODO runIntroScreens need better FPS throttling.
-    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "sdl", {400,170,414,240}, 1); //display the sdl logo
-    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, fs, "itlogo", {400,155,400,400}, 1); //display the color it company logo
+    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, "sdl", {400,170,414,240}, 1); //display the sdl logo
+    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, "itlogo", {400,155,400,400}, 1); //display the color it company logo
     
     mainGameModel.fadeMusic();
 
@@ -136,16 +131,16 @@ int main(int argv, char** args) {
             }
 
             mainGameModel.playMainMenu(); // starts playing the music for the main menu
-            menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+            menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
                   
             if(menuItem == 0) {
                 runInitialUI = false;
             }
             else if(menuItem == 1) {
-                highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "highscores", {0,0,1280,720}, 1, menutypes::highscores);
+                highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, "highscores", {0,0,1280,720}, 1, menutypes::highscores);
             }
             else if(menuItem == 2) {
-                optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, fs, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
+                optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
             } else if(menuItem == 3) {
                 runInitialUI = false;
                 mainGameModel.stopProgram(true);
@@ -154,23 +149,25 @@ int main(int argv, char** args) {
         }
         runInitialUI = true;
 
-        fallTimer.reset();
+        mainGameController.getFallTimer()->reset();
         
         mainGameModel.fadeMusic(); // finish up the intro music
 
         //unpause game if it is already paused.
         if(mainGameModel.isPaused()) {
             mainGameModel.pauseGame(false);
-            fallTimer.pause(false);
+            mainGameController.getFallTimer()->pause(false);
         }
 
         mainGameModel.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
         
-        bool fs_changed = false;
+        
         double newTime = 1000;
         
         fontGameOver.updateMessage("");
-    
+        bool fs_changed = false;
+        bool fs = false; //full screen
+
         /**** Main Game Loop ****/ 
         SDL_Log("Starting Game loop!");
         while(mainGameModel.programRunning() && !mainGameModel.isGameOver()) {
@@ -204,25 +201,23 @@ int main(int argv, char** args) {
             /**** INPUT PROCESSING ****/
             //TODO this stuff should probably go in the controller
             if(eventDirection == ley::Direction::down) {
-                fallTimer.reset();
+                mainGameController.getFallTimer()->reset();
                 eventDirection = ley::Direction::none;
             } else if(eventDirection == ley::Direction::pause) {
                 mainGameModel.pauseGame(!mainGameModel.isPaused());
-                fallTimer.pause(!fallTimer.isPaused());
+                mainGameController.getFallTimer()->pause(!mainGameController.getFallTimer()->isPaused());
             }
 
             /**** UPDATE ****/
-            fallTimer.runFrame(false, newTime);
-
-            mainGameController.runFrame();
+            mainGameController.runFrame(false, newTime);
             mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
                         // seconds_from_start, so there is no chance of a memory overrun
 
             /* additional control */
             //TODO this bit of code should probably go in the controller.
-            if(fallTimer.hasExpired() == true) {
+            if(mainGameController.getFallTimer()->hasExpired() == true) {
                 newTime = mainGameModel.moveBlock(ley::Direction::down);
-                fallTimer.reset();
+                mainGameController.getFallTimer()->reset();
             }
 
             /**** CLEAR ****/

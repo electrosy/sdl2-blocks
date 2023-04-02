@@ -23,24 +23,30 @@ gm(g),
 firstTimer(ren,3000,{10,300,100,50}),
 secondTimer(ren,2500,{10,400,100,25}),
 thirdTimer(ren,1000,{10,425,100,30}),
-fourthTimer(ren,333,{10,455,100,5}) {
+fourthTimer(ren,333,{10,455,100,5}),
+fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
     v->addRenderable(true, &firstTimer);
     v->addRenderable(true, &secondTimer);
     v->addRenderable(true, &thirdTimer);
     v->addRenderable(true, &fourthTimer);
+    v->addRenderable(false, &fallTimer);
 }
 
 ley::GameController::~GameController() {
 }
 /* Accessors */
-
+ley::Timer* ley::GameController::getFallTimer() {
+    return &fallTimer;
+}
 /* Functions */
-void ley::GameController::runFrame() {
+void ley::GameController::runFrame(bool autoRestart, double newTime) {
     firstTimer.runFrame();
     secondTimer.runFrame();
     thirdTimer.runFrame();
     fourthTimer.runFrame();
+
+    fallTimer.runFrame(autoRestart, newTime);
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture

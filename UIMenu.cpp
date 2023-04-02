@@ -92,7 +92,7 @@ void ley::UIMenu::addSelector(std::string label, const SDL_Rect src, const SDL_R
     selectors.emplace(label,temp);
 
 }
-int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay, menutypes ty) {
+int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay, menutypes ty) {
     
     bool runmain = true;
     
@@ -172,7 +172,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, bool f
         renderables.renderAll(v->getRenderer());
         v->present();
 
-        ley::Direction frameDirection = i->pollMainMenuEvents(runmain,fs,(*m));
+        ley::Direction frameDirection = i->pollMainMenuEvents(runmain,(*m));
         
         if(count() > 0) {
             
@@ -264,7 +264,7 @@ void ley::UIMenu::clear() {
     currentIndex = 0;
 }
 
-void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, bool fs, std::string t, SDL_Rect r, double fpsDelay) {
+void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
     /**** Intro Screen Loop ****/
     bool intro = true;
     SDL_Texture* test = nullptr;
@@ -300,7 +300,7 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
         v->present();
-        if(i->pollTitleEvents(intro,fs,(*m)) == ley::Direction::down 
+        if(i->pollTitleEvents(intro,(*m)) == ley::Direction::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;
         }

@@ -33,8 +33,8 @@ private:
     
     SDL_Window* window;
     SDL_Renderer* renderer;
+    bool fs = false; //full screen
     bool video_ready; //video is woken up and initialized.
-    bool sdl_fullscreen;
     ley::GameModel* gm;
     double mili_adjust; //number of mili seconds to delay the frame
     ley::Renderables mRenderables;
@@ -79,6 +79,8 @@ public:
 
     void frameDelay(); //Calls SDL_Delay to delay frame based on mili_adjust
 /* Accessors */
+    bool fullScreen() {return fs;};
+    void fullScreen(bool fs);
     bool getReady() {return video_ready;};
     SDL_Renderer* getRenderer() {return renderer;};
     SDL_Window* getWindow() {return window;};

@@ -34,13 +34,19 @@ private:
     ley::Timer thirdTimer;
     ley::Timer fourthTimer;
 
+    //Timers
+    ley::Timer fallTimer; //Time to force the blockdown    
+
 public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runFrame();
+    void runFrame(bool autoRestart, double newTime); // TODO temporary pass through params for the timers.
+    ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.
+
+
 };
 
 }
