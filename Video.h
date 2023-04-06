@@ -36,6 +36,7 @@ private:
     bool fs = false; //full screen
     bool video_ready; //video is woken up and initialized.
     ley::GameModel* gm;
+    bool renderbg; //render background or not.
     double mili_adjust; //number of mili seconds to delay the frame
     ley::Renderables mRenderables;
     ley::Renderables mDebugRenderables;
@@ -72,6 +73,9 @@ private:
     //Create the font for the score output
     ley::Font fontScore;
     ley::Font* ptrFontScore;
+
+    //Game over font
+    ley::Font fontGameOver;
     
 public:
     Video(ley::GameModel*);
@@ -85,6 +89,7 @@ public:
     SDL_Renderer* getRenderer() {return renderer;};
     SDL_Window* getWindow() {return window;};
     void setFullScreen(bool);
+    void setRenderBackground(bool inRenderBackGround);
 
 /* Functions */
     void render(); //Render additional bits.

@@ -40,7 +40,7 @@ private:
     int numLines; //number of lines the player has successfully completed. (Lines)
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
     long score; //the total score the this game (level*linesatonce)
-    bool gameOver;
+    bool gameRunning;
     bool active; //not paused
     void clearBoard();
     void clearOldBlock();
@@ -86,10 +86,12 @@ public:
     int getLevel();
     int getLines();
     void addToScore(long);
-    bool isGameOver();
+    bool isGameRunning();
+    void setGameRunning(bool running);
     ley::Block getNextBlock();
     std::string getRandomTexture();
     void resetGame();
+    
     void pauseGame(bool);
     bool isPaused();
     bool programRunning(); //is the program running?

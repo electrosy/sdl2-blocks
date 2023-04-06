@@ -20,7 +20,6 @@ private:
     SDL_Texture* Message;
     SDL_Rect Message_rect;
     TTF_Font* Classic;
-    void updateTexture();
     SDL_Color White = {255, 255, 255};
     
 

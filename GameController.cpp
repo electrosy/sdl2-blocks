@@ -46,7 +46,7 @@ void ley::GameController::runFrame(bool autoRestart, double newTime) {
     thirdTimer.runFrame();
     fourthTimer.runFrame();
 
-    fallTimer.runFrame(autoRestart, newTime);
+    fallTimer.runFrame(autoRestart, newTime);    
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture

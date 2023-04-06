@@ -30,13 +30,16 @@ const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
+// TODO the Video should not have a pointer to the game model. The Controller should update the model and then notify Video of changes.
 ley::Video::Video(ley::GameModel* g)
 :
 window(nullptr),
 renderer(nullptr),
 video_ready(true),
 gm(g),
-mili_adjust(0)
+renderbg(true),
+mili_adjust(0),
+fontGameOver{255, 190, 100, 35}
 {
     init();
 }
@@ -130,6 +133,8 @@ void ley::Video::init() {
     ptrFontLvl = { &fontLvl };
     fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
     ptrFontScore = { &fontScore };
+
+    mRenderables.push_back(&fontGameOver);
     mRenderables.push_back(&fontOne);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
@@ -140,6 +145,8 @@ void ley::Video::init() {
     mRenderables.push_back(&firstSimpleShape);
     firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
     firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
+
+    
 }
 /* Accessors */
 void ley::Video::fullScreen(bool f) {
@@ -150,6 +157,9 @@ void ley::Video::setFullScreen(bool fs) {
     if(fs) {
         SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);
     } else { SDL_SetWindowFullscreen(window,SDL_WINDOW_SHOWN); }
+}
+void ley::Video::setRenderBackground(bool inRenderbg) {
+    renderbg = inRenderbg;
 }
 
 /* functions */
@@ -176,10 +186,25 @@ void ley::Video::renderBackground() {
 }
 
 void ley::Video::render() {
-    renderBackground();
+
+    setRenderBackground(gm->isGameRunning()); // TODO this should go in the controller
+    
+    if(gm->isGameRunning()) { //TODO all this fontGameOver update should go in the controller
+        fontGameOver.updateMessage("");
+    } else if(!gm->isGameRunning()) {
+        fontGameOver.updateMessage("Game Over!!!");
+    }
+
+    //Render background
+    if(renderbg) {
+        renderBackground();
+    }
+    //Then render sprites
+    renderSprites();
+
 }
 void ley::Video::renderSprites() {
-    updateScores(); // TODO the model should call this only when the scores are updated.
+    updateScores(); // TODO the controller should call this only when the scores are updated.
     mRenderables.renderAll(renderer);
     if(gm->isOverlayOn()) {
         mDebugRenderables.renderAll(renderer);

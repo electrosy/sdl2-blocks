@@ -26,24 +26,18 @@ Message(nullptr) {
     Message_rect.w = w; // controls the width of the rect
     Message_rect.h = h; // controls the height of the rect
 
-    updateMessage("Score");
-    updateTexture();
-
+    updateMessage("");
 }
 ley::Font::~Font() {
 
     SDL_DestroyTexture(Message);
+    TTF_Quit();
 }
-void ley::Font::updateTexture() {
 
-
-    
-}
 void ley::Font::updateMessage(std::string s) {
     //Only update the texture if the message has changed.
     if(s != textMessage) {
         textMessage = (s);
-        updateTexture();
     }
 }
 

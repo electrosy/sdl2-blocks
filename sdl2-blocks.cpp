@@ -56,11 +56,6 @@ int main(int argv, char** args) {
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
-    ley::Font fontGameOver(255, 190, 100, 35);
-    fontGameOver.updateMessage("");
-    ley::Font* ptrFontGameOver = &fontGameOver; //grab a pointer so we can update the text.
-    renderables.push_back(ptrFontGameOver);
-
     //Gather elements for the menus
     mainUI.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
     mainUI.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
@@ -108,7 +103,6 @@ int main(int argv, char** args) {
     fonts.push_back(&fontHighScores10);
 
     ley::HighScores highscores;
-
     ley::Renderables highScoreRenderables;
     //Load highscore data initially.
     highscores.read();
@@ -118,6 +112,7 @@ int main(int argv, char** args) {
     bool masterloop = true; //Starts the main menu.
     bool runInitialUI = true;
 
+    // TODO the master loop should go into the controller
     /*** Start Main Menu ***/
     Uint32 frame_start, frame_time;
     while(masterloop && runInitialUI) {
@@ -160,24 +155,20 @@ int main(int argv, char** args) {
         }
 
         mainGameModel.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
-        
-        
+              
         double newTime = 1000;
-        
-        fontGameOver.updateMessage("");
         bool fs_changed = false;
         bool fs = false; //full screen
 
         /**** Main Game Loop ****/ 
         SDL_Log("Starting Game loop!");
-        while(mainGameModel.programRunning() && !mainGameModel.isGameOver()) {
+        while(mainGameModel.programRunning() && mainGameModel.isGameRunning()) {
             frame_start = SDL_GetTicks();
             /**** MUSIC ****/
             mainGameModel.startPlayList(); //start the main playlist for game play
 
             /**** RENDER ****/
-            mainVideo.render(); // renders background
-            mainVideo.renderSprites();
+            mainVideo.render();
             renderables.renderAll(mainVideo.getRenderer()); // render all sprites
             if(mainGameModel.isOverlayOn()) { //render debug renderables
                 debugRenderables.renderAll(mainVideo.getRenderer());
@@ -233,15 +224,11 @@ int main(int argv, char** args) {
         }
 
         //continue to render graphics and get keyboard input after game is over.
-        if(mainGameModel.isGameOver()) {
+        if(!mainGameModel.isGameRunning()) {
             //push on the new high score
             highscores.push(mainGameModel.getScore(), "Steve", mainGameModel.getLevel(), mainGameModel.getLines());
             highscores.write();
             highscores.setClean(false);
-
-            if(fontGameOver.getMessage().empty()) {
-            fontGameOver.updateMessage("Game Over!!!");
-            }
 
             while(mainGameModel.programRunning()) {
                 //This loop runs the gameover animations and should not run until the game is actually over.
@@ -249,7 +236,7 @@ int main(int argv, char** args) {
                 
                 mainGameController.renderBoard();
                 renderables.renderAll(mainVideo.getRenderer());
-                mainVideo.renderSprites(); 
+                mainVideo.render();
                 if(mainGameModel.isOverlayOn()) {
                     debugRenderables.renderAll(mainVideo.getRenderer());
                 }
@@ -257,7 +244,6 @@ int main(int argv, char** args) {
                 ley::Direction eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
 
                 mainVideo.clear(); //SDL_RenderClear()
-
                 mainVideo.frameDelay();
             }
         }

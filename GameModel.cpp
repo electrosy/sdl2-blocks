@@ -18,7 +18,7 @@ oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1
 nextBlock(getRandomBlock()),
 numLines(0),
 numLevel(0),
-gameOver(false), 
+gameRunning(true), 
 currentSpeed(1000.0f), 
 active(true), 
 overlayOn(false),
@@ -71,8 +71,8 @@ void ley::GameModel::stopProgram(bool stop) {
     running = !stop;
 }
 
-bool ley::GameModel::isGameOver() {
-    return gameOver;
+bool ley::GameModel::isGameRunning() {
+    return gameRunning;
 }
 
 
@@ -470,7 +470,7 @@ double ley::GameModel::moveBlock(Direction d) {
                 setBlock();
                 processLines();
                 if(!newBlock()) {
-                    gameOver = true;
+                    setGameRunning(false);
                 }
             }
         break;
@@ -521,10 +521,20 @@ void ley::GameModel::debugBoard(bool setLayer) {
         SDL_Log("%s",sRow.c_str());
     }
 }
+void ley::GameModel::setGameRunning(bool running) {
+    gameRunning = running;
+
+    if(running) {
+
+    } 
+    else {
+        
+    }
+}
 
 void ley::GameModel::resetGame() {
     clearBoard();
-    gameOver = false;
+    setGameRunning(true);
     numLines = 0;
     numLevel = 0;
     score = 0;
