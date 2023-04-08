@@ -45,11 +45,8 @@ int main(int argv, char** args) {
     Uint32 avgFPS = 0;
 
     ley::UIMenu mainUI;
-
-    //TODO runIntroScreens need better FPS throttling.
-    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, "sdl", {400,170,414,240}, 1); //display the sdl logo
-    mainUI.runIntroScreen(&mainVideo, &mainInput, &mainGameModel, "itlogo", {400,155,400,400}, 1); //display the color it company logo
     
+    mainGameController.runIntros();
     mainGameModel.fadeMusic();
 
     /**** UI/UX ****/

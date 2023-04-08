@@ -15,6 +15,7 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "Font.h"
 #include "Timer.h"
+#include "Input.h"
 #include "inc/State/GameStateMachine.h"
 #include "inc/State/MenuState.h"
 #include "inc/State/PlayState.h"
@@ -25,10 +26,11 @@ namespace ley {
 class GameController {
 
 private:
-    ley::Video* v;
+    ley::Video* mVideoSystem;
     SDL_Renderer* ren;
     ley::GameModel* gm;
     ley::GameStateMachine gameStateMachine;
+    ley::Input mInputSystem;
 
     //Textures
     SDL_Texture *blockBits2 = nullptr;
@@ -50,6 +52,8 @@ public:
     ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.
+    void runIntro(std::string t, SDL_Rect r, double fpsDelay); //run intro screens
+    void runIntros(); //run both intro screens
     void setState(int statenum);
 
 

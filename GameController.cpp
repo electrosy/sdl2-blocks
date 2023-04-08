@@ -18,7 +18,8 @@ const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 /* RAII */
 ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
 : 
-ren(v->getRenderer()), 
+mVideoSystem(v),
+ren(mVideoSystem->getRenderer()),
 gm(g),
 firstTimer(ren,3000,{10,300,100,50}),
 secondTimer(ren,2500,{10,400,100,25}),
@@ -26,11 +27,11 @@ thirdTimer(ren,1000,{10,425,100,30}),
 fourthTimer(ren,333,{10,455,100,5}),
 fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
-    v->addRenderable(true, &firstTimer);
-    v->addRenderable(true, &secondTimer);
-    v->addRenderable(true, &thirdTimer);
-    v->addRenderable(true, &fourthTimer);
-    v->addRenderable(false, &fallTimer);
+    mVideoSystem->addRenderable(true, &firstTimer);
+    mVideoSystem->addRenderable(true, &secondTimer);
+    mVideoSystem->addRenderable(true, &thirdTimer);
+    mVideoSystem->addRenderable(true, &fourthTimer);
+    mVideoSystem->addRenderable(false, &fallTimer);
 
     gameStateMachine.changeState(new ley::IntroState());
 }
@@ -109,9 +110,67 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         dest_rect.x = START_X_OFFSET_PX;
     }
 }
+void ley::GameController::runIntros() {
+    runIntro("sdl", {400,170,414,240}, 1);
+    runIntro("itlogo", {400,155,400,400}, 1);
+}
+
+//TODO runIntroScreens need better FPS throttling.
+void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
+    /**** Intro Screen Loop ****/
+    bool intro = true;
+    SDL_Texture* test = nullptr;
+    test = TextureManager::Instance()->getTexture(t);
+    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(test, 255);
+
+    SDL_Rect src_rect;
+    SDL_Rect dest_rect;
+    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
+    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
+
+    unsigned int alphaFrameIndex = 0;
+    bool faddedin = false;
+    char fadespeed = 10;
+    while(intro == true) {
+        if(!faddedin) {
+            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
+                if(alphaFrameIndex < 255) {
+                    alphaFrameIndex++;
+                }
+                else {
+                    faddedin = true;
+                }
+            }
+        } else {
+             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
+                 if(alphaFrameIndex != 0) {  
+                    alphaFrameIndex--;
+                 }
+            }
+        }
+        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
+        SDL_RenderCopy(mVideoSystem->getRenderer(), test, &src_rect, &dest_rect);
+        mVideoSystem->present();
+        if(mInputSystem.pollTitleEvents(intro,(*gm)) == ley::Direction::down 
+            || (alphaFrameIndex < 10 && faddedin)) {
+            intro = false;
+        }
+        mVideoSystem->clear();
+
+        SDL_Delay(fpsDelay);
+    }
+
+}
 
 void ley::GameController::setState(int statenum) {
     switch(statenum) {
-      //  case 0 : 
+        case 0 : gameStateMachine.changeState(new ley::IntroState);
+        break;
+
+        case 1 : gameStateMachine.changeState(new ley::MenuState);
+        break;
+
+        case 2 : gameStateMachine.changeState(new ley::PlayState);
     }
 }
