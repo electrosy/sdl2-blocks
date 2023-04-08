@@ -24,7 +24,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Direction pollEvents(bool&, GameModel&);
+    ley::Direction pollEvents(bool&, GameModel&, bool& playnext);
     ley::Direction pollEndEvents(bool&, GameModel&);
     ley::Direction pollTitleEvents(bool&, GameModel&);
     ley::Direction pollMainMenuEvents(bool&, GameModel&);

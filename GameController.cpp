@@ -33,6 +33,8 @@ fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
     mVideoSystem->addRenderable(true, &fourthTimer);
     mVideoSystem->addRenderable(false, &fallTimer);
 
+    audSystem.playIntro();
+
     gameStateMachine.changeState(new ley::IntroState());
 }
 
@@ -113,6 +115,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
 void ley::GameController::runIntros() {
     runIntro("sdl", {400,170,414,240}, 1);
     runIntro("itlogo", {400,155,400,400}, 1);
+    fadeMusic();
 }
 
 //TODO runIntroScreens need better FPS throttling.
@@ -173,4 +176,20 @@ void ley::GameController::setState(int statenum) {
 
         case 2 : gameStateMachine.changeState(new ley::PlayState);
     }
+}
+
+void ley::GameController::fadeMusic() {
+    audSystem.fadeOutMusic();
+}
+
+void ley::GameController::playMainMenu() {
+    audSystem.playMainMenu();
+}
+
+void ley::GameController::startPlayList() {
+    audSystem.playPlaylist();
+}
+
+void ley::GameController::playNext() {
+    audSystem.playNext();
 }

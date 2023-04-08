@@ -31,7 +31,7 @@ enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes 
 enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model
 
 int main(int argv, char** args) {
-    ley::GameModel mainGameModel; //instantiating the Game Model also starts the audio system.
+    ley::GameModel mainGameModel; //instantiating the Game Model
     mainGameModel.debugBoard(false);
 
     ley::Video mainVideo(&mainGameModel);
@@ -45,9 +45,7 @@ int main(int argv, char** args) {
     Uint32 avgFPS = 0;
 
     ley::UIMenu mainUI;
-    
     mainGameController.runIntros();
-    mainGameModel.fadeMusic();
 
     /**** UI/UX ****/
     int menuItem; //Store the option selected from the main menu.
@@ -122,7 +120,7 @@ int main(int argv, char** args) {
                 highscores.setClean(true);
             }
 
-            mainGameModel.playMainMenu(); // starts playing the music for the main menu
+            mainGameController.playMainMenu(); // starts playing the music for the main menu
             menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
                   
             if(menuItem == 0) {
@@ -143,7 +141,7 @@ int main(int argv, char** args) {
 
         mainGameController.getFallTimer()->reset();
         
-        mainGameModel.fadeMusic(); // finish up the intro music
+        mainGameController.fadeMusic(); // finish up the intro music
 
         //unpause game if it is already paused.
         if(mainGameModel.isPaused()) {
@@ -156,13 +154,14 @@ int main(int argv, char** args) {
         double newTime = 1000;
         bool fs_changed = false;
         bool fs = false; //full screen
+        bool playnext; //TODO this should be in the controller
 
         /**** Main Game Loop ****/ 
         SDL_Log("Starting Game loop!");
         while(mainGameModel.programRunning() && mainGameModel.isGameRunning()) {
             frame_start = SDL_GetTicks();
             /**** MUSIC ****/
-            mainGameModel.startPlayList(); //start the main playlist for game play
+            mainGameController.startPlayList(); //start the main playlist for game play
 
             /**** RENDER ****/
             mainVideo.render();
@@ -181,7 +180,11 @@ int main(int argv, char** args) {
            
             /**** GET INPUT ****/
             //pollEtimervents updates running and full screen flags
-            ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel);
+            ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel, playnext);
+            if(playnext) {
+                mainGameController.playNext();
+                playnext = false;
+            }
             if(fs != fs_changed) {
                 mainVideo.setFullScreen(fs);
                 fs_changed = !fs_changed;
@@ -247,6 +250,7 @@ int main(int argv, char** args) {
 
         /**** CLEAN UP ****/
         mainGameModel.resetGame();
+        mainGameController.fadeMusic();
 
     }//EXIT THE GAME
 

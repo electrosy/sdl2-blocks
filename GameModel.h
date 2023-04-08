@@ -10,7 +10,6 @@ Date: Feb/15/2020
 
 #include <array>
 
-#include "Audio.h"
 #include "Block.h"
 #include "Clock.h"
 #include "Timer.h"
@@ -59,8 +58,6 @@ private:
 
     ley::Clock mainClock;
     Uint32 avg_fps;
-    
-    ley::Audio audSystem; //audio subsystem.
 
 public:
     GameModel();
@@ -97,13 +94,7 @@ public:
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit.
     void frameCountInc(); //increment frame count
-    size_t frameCount();    
-
-    /* AUDIO */
-    void fadeMusic(); //fade out the music
-    void playMainMenu(); //play the main menu music
-    void startPlayList();
-    void playNext();
+    size_t frameCount();
 };
 
 }

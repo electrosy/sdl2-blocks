@@ -9,6 +9,7 @@ Date: Feb/15/2020
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include "Audio.h"
 #include "Video.h"
 #include "GameModel.h"
 #include "Clock.h"
@@ -44,6 +45,8 @@ private:
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown    
 
+    ley::Audio audSystem; //audio subsystem.
+
 public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
@@ -56,7 +59,11 @@ public:
     void runIntros(); //run both intro screens
     void setState(int statenum);
 
-
+    /* AUDIO */
+    void fadeMusic(); //fade out the music
+    void playMainMenu(); //play the main menu music
+    void startPlayList();
+    void playNext();
 };
 
 }

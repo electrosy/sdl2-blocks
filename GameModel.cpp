@@ -31,8 +31,6 @@ avg_fps(0)
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
    putBlock(activeBlock);
-
-   audSystem.playIntro();
 }
 
 ley::GameModel::~GameModel() {
@@ -110,22 +108,6 @@ void ley::GameModel::clearBoard() {
     for(auto i = 0; i < BOARDSIZE_HEIGHT; ++i) {
         board[i].fill(std::make_pair(BlockTexCode::O,false));
     }
-}
-
-void ley::GameModel::fadeMusic() {
-    audSystem.fadeOutMusic();
-}
-
-void ley::GameModel::playMainMenu() {
-    audSystem.playMainMenu();
-}
-
-void ley::GameModel::startPlayList() {
-    audSystem.playPlaylist();
-}
-
-void ley::GameModel::playNext() {
-    audSystem.playNext();
 }
 
 void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
@@ -542,7 +524,6 @@ void ley::GameModel::resetGame() {
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
 
-    audSystem.fadeOutMusic();
     stopProgram(false);
 
     avg_fps = 0;

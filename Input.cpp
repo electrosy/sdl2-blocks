@@ -135,7 +135,7 @@ ley::Direction ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
 
      return frameDirection;
 }
-ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm) {
+ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &playnext) {
     SDL_Event event;
     ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
 
@@ -190,7 +190,7 @@ ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm) {
                 }
                 //play next audio music track
                 if (state[SDL_SCANCODE_N]) {
-                    gm.playNext();
+                    playnext = true;
                 }
 
                 //quite game
