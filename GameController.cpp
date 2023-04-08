@@ -21,21 +21,14 @@ ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
 mVideoSystem(v),
 ren(mVideoSystem->getRenderer()),
 gm(g),
-firstTimer(ren,3000,{10,300,100,50}),
-secondTimer(ren,2500,{10,400,100,25}),
-thirdTimer(ren,1000,{10,425,100,30}),
-fourthTimer(ren,333,{10,455,100,5}),
 fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
-    mVideoSystem->addRenderable(true, &firstTimer);
-    mVideoSystem->addRenderable(true, &secondTimer);
-    mVideoSystem->addRenderable(true, &thirdTimer);
-    mVideoSystem->addRenderable(true, &fourthTimer);
     mVideoSystem->addRenderable(false, &fallTimer);
 
     audSystem.playIntro();
 
-    gameStateMachine.changeState(new ley::IntroState());
+    gameStateMachine.changeState(new ley::PlayState(v));
+    gameStateMachine.loadRenderables();
 }
 
 ley::GameController::~GameController() {
@@ -46,11 +39,7 @@ ley::Timer* ley::GameController::getFallTimer() {
 }
 /* Functions */
 void ley::GameController::runFrame(bool autoRestart, double newTime) {
-    firstTimer.runFrame();
-    secondTimer.runFrame();
-    thirdTimer.runFrame();
-    fourthTimer.runFrame();
-
+    
     fallTimer.runFrame(autoRestart, newTime);
     gameStateMachine.update();
 }
@@ -168,13 +157,13 @@ void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
 
 void ley::GameController::setState(int statenum) {
     switch(statenum) {
-        case 0 : gameStateMachine.changeState(new ley::IntroState);
+        case 0 : gameStateMachine.changeState(new ley::IntroState(mVideoSystem));
         break;
 
-        case 1 : gameStateMachine.changeState(new ley::MenuState);
+        case 1 : gameStateMachine.changeState(new ley::MenuState(mVideoSystem));
         break;
 
-        case 2 : gameStateMachine.changeState(new ley::PlayState);
+        case 2 : gameStateMachine.changeState(new ley::PlayState(mVideoSystem));
     }
 }
 

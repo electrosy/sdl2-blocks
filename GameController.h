@@ -36,12 +36,6 @@ private:
     //Textures
     SDL_Texture *blockBits2 = nullptr;
 
-    //Debug timers
-    ley::Timer firstTimer;
-    ley::Timer secondTimer;
-    ley::Timer thirdTimer;
-    ley::Timer fourthTimer;
-
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown    
 

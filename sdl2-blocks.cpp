@@ -42,12 +42,10 @@ int main(int argv, char** args) {
 
     ley::GameController mainGameController(&mainVideo,&mainGameModel);
 
-    Uint32 avgFPS = 0;
-
-    ley::UIMenu mainUI;
     mainGameController.runIntros();
 
     /**** UI/UX ****/
+    ley::UIMenu mainUI;
     int menuItem; //Store the option selected from the main menu.
     int optionItem; //Store the option selected from the options menu.
 
@@ -112,7 +110,7 @@ int main(int argv, char** args) {
     Uint32 frame_start, frame_time;
     while(masterloop && runInitialUI) {
         while(runInitialUI) {
-            //read high scores at the main menu.
+            //read high scores at the main menu. // TODO reading the high scores and high score values can probably go in the model.
             if(!highscores.isClean()) {//check if we have new highscore data to read.
                 highscores.read();
                 highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);

@@ -2,12 +2,12 @@
 
 namespace ley {
 
-void GameStateMachine::pushState(GameState *pState) {
+void ley::GameStateMachine::pushState(GameState *pState) {
     mGameStates.push_back(pState);
     mGameStates.back()->onEnter();
 }
 
-void GameStateMachine::popState() {
+void ley::GameStateMachine::popState() {
     if(!mGameStates.empty()) {
         if(mGameStates.back()->onExit()) {
             delete mGameStates.back();
@@ -16,7 +16,7 @@ void GameStateMachine::popState() {
     }
 }
 
-void GameStateMachine::changeState(GameState *pState) {
+void ley::GameStateMachine::changeState(GameState *pState) {
     if(!mGameStates.empty()) {
         if(mGameStates.back()->getStateID() == pState->getStateID()) {
             return; // Do nothing
@@ -32,15 +32,15 @@ void GameStateMachine::changeState(GameState *pState) {
     mGameStates.back()->onEnter();
 }
 
-void GameStateMachine::update() {
+void ley::GameStateMachine::update() {
     if(!mGameStates.empty()) {
         mGameStates.back()->update();
     }
 }
 
-void GameStateMachine::render() {
+void ley::GameStateMachine::loadRenderables() {
     if(!mGameStates.empty()) {
-        mGameStates.back()->render();
+        mGameStates.back()->loadRenderables();
     }
 }
 

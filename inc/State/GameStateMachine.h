@@ -15,7 +15,7 @@ public:
     void changeState(GameState* pState);
     void popState();
     void update();
-    void render();
+    void loadRenderables();
 
 private:
 

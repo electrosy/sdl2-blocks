@@ -4,11 +4,15 @@ namespace ley {
 
 const std::string MenuState::sMenuID = "MENU";
 
+MenuState::MenuState(ley::Video * v) {
+    videoSystem = v;
+}
+
 void MenuState::update() {
 
 }
 
-void MenuState::render() {
+void MenuState::loadRenderables() {
 
 }
 

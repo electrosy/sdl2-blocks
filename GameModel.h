@@ -21,7 +21,7 @@ const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option
 const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can enter play in the right place.
 
 const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
-const auto START_X_OFFSET_PX = 490;
+
 const auto NEW_LVL_AT_LINES = 10;
 //TODO rename up to rotate
 enum class Direction {down,right,up,left,none,pause,space}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?

@@ -4,11 +4,15 @@ namespace ley {
 
 const std::string IntroState::sIntroID = "INTRO";
 
+IntroState::IntroState(ley::Video * v) {
+    videoSystem = v;
+}
+
 void IntroState::update() {
 
 }
 
-void IntroState::render() {
+void IntroState::loadRenderables() {
 
 }
 
