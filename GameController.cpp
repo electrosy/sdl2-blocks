@@ -31,6 +31,8 @@ fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
     v->addRenderable(true, &thirdTimer);
     v->addRenderable(true, &fourthTimer);
     v->addRenderable(false, &fallTimer);
+
+    gameStateMachine.changeState(new ley::IntroState());
 }
 
 ley::GameController::~GameController() {
@@ -46,7 +48,8 @@ void ley::GameController::runFrame(bool autoRestart, double newTime) {
     thirdTimer.runFrame();
     fourthTimer.runFrame();
 
-    fallTimer.runFrame(autoRestart, newTime);    
+    fallTimer.runFrame(autoRestart, newTime);
+    gameStateMachine.update();
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture
@@ -104,5 +107,11 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         }
         dest_rect.y = dest_rect.y + h;
         dest_rect.x = START_X_OFFSET_PX;
+    }
+}
+
+void ley::GameController::setState(int statenum) {
+    switch(statenum) {
+      //  case 0 : 
     }
 }

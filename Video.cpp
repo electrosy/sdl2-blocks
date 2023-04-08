@@ -62,6 +62,7 @@ void ley::Video::addRenderable(bool layer, ley::Renderable * r) {
 }
 void ley::Video::frameDelay() {
 
+    //TODO avgFPS should be in the video instead of the model
     if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && gm->avgFPS() > 0) { // once per second
     
         //float fps_ratio = avg_fps / TARGET_FPS;

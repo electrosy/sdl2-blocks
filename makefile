@@ -5,7 +5,8 @@
 OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp Block.cpp GameModel.cpp \
 		Clock.cpp Texture.cpp Renderable.cpp Renderables.cpp \
 		GameController.cpp SimpleShape.cpp Timer.cpp Textures.cpp Font.cpp \
-		Rand_int.cpp UIElement.cpp UIMenu.cpp HighScores.cpp Audio.cpp
+		Rand_int.cpp UIElement.cpp UIMenu.cpp HighScores.cpp Audio.cpp ./src/State/MenuState.cpp \
+		./src/State/PlayState.cpp ./src/State/IntroState.cpp ./src/State/GameStateMachine.cpp
 		
 
 #OBJ_NAME name of executable
