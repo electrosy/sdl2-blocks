@@ -107,7 +107,6 @@ int main(int argv, char** args) {
 
     // TODO the master loop should go into the controller
     /*** Start Main Menu ***/
-    Uint32 frame_start, frame_time;
     while(masterloop && runInitialUI) {
         while(runInitialUI) {
             //read high scores at the main menu. // TODO reading the high scores and high score values can probably go in the model.
@@ -157,7 +156,6 @@ int main(int argv, char** args) {
         /**** Main Game Loop ****/ 
         SDL_Log("Starting Game loop!");
         while(mainGameModel.programRunning() && mainGameModel.isGameRunning()) {
-            frame_start = SDL_GetTicks();
             /**** MUSIC ****/
             mainGameController.startPlayList(); //start the main playlist for game play
 
@@ -213,10 +211,6 @@ int main(int argv, char** args) {
             mainVideo.clear(); //clear the backbuffer
 
             /**** LOCK FRAME RATE ****/
-            frame_time = SDL_GetTicks() - frame_start;
-            if(SDL_GetTicks() % 500 == 0) { // every half second
-                SDL_Log("frame_time: %u", frame_time);
-            }
 
             mainVideo.frameDelay();
         }
