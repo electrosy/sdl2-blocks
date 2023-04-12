@@ -146,7 +146,7 @@ int main(int argv, char** args) {
             mainGameController.getFallTimer()->pause(false);
         }
 
-        mainGameModel.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
+        mainVideo.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
               
         double newTime = 1000;
         bool fs_changed = false;
@@ -166,11 +166,6 @@ int main(int argv, char** args) {
                 debugRenderables.renderAll(mainVideo.getRenderer());
             }
             mainGameController.renderBoard();
-
-            if (SDL_GetTicks() % 1000 == 0 ) { // log once per second
-                SDL_Log("frame_count: %u", mainGameModel.frameCount());
-                SDL_Log("mainGameModel.Clock.secondsFromStart(): %u", mainGameModel.secondsFromStart());
-            }
 
             mainVideo.present(); // output to the video system.
            
@@ -197,9 +192,7 @@ int main(int argv, char** args) {
 
             /**** UPDATE ****/
             mainGameController.runFrame(false, newTime);
-            mainGameModel.frameCountInc(); //TODO - every 10 minutes or so we should 0 (zero) the frame_count and  
-                        // seconds_from_start, so there is no chance of a memory overrun
-
+            
             /* additional control */
             //TODO this bit of code should probably go in the controller.
             if(mainGameController.getFallTimer()->hasExpired() == true) {
@@ -211,7 +204,6 @@ int main(int argv, char** args) {
             mainVideo.clear(); //clear the backbuffer
 
             /**** LOCK FRAME RATE ****/
-
             mainVideo.frameDelay();
         }
 

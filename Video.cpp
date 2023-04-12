@@ -12,7 +12,7 @@ Date: Feb/14/2020
 #include "SimpleShape.h"
 
 const auto START_DELAY = 1; //start delay for the game loop
-const auto TARGET_FPS = 144; //provide at least this many frames per second.
+const auto TARGET_FPS = 144.0; //provide at least this many frames per second.
 const auto FPS_ADJUST_RATE = 1000; // adjust fps every second
 
 //Screen dimensions
@@ -62,12 +62,12 @@ void ley::Video::addRenderable(bool layer, ley::Renderable * r) {
 }
 void ley::Video::frameDelay() {
 
-    //TODO avgFPS should be in the video instead of the model
-    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && gm->avgFPS() > 0) { // once per second
+    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && avgFPS() > 0) { // once per second
     
-        //float fps_ratio = avg_fps / TARGET_FPS;
-        float fps_ratio = gm->avgFPS() / TARGET_FPS;
+        float fps_ratio = avgFPS() / TARGET_FPS;
         
+        SDL_Log("Video::fps_ratio: %f", fps_ratio);
+
         if(fps_ratio > 2.5) {
             mili_adjust += 5; //add 5 mili seconds
         }
@@ -88,8 +88,7 @@ void ley::Video::frameDelay() {
             mili_adjust = 0;
         }
                 
-        SDL_Log("Video::miliadjust: %d", mili_adjust);
-        SDL_Log("Video::AVG FPS: %u", gm->avgFPS());
+        SDL_Log("Video::miliadjust: %f", mili_adjust);
     }
 
     SDL_Delay(START_DELAY + mili_adjust);
@@ -203,6 +202,8 @@ void ley::Video::render() {
     //Then render sprites
     renderSprites();
 
+    ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and 
+                                   // seconds_from_start, so there is no chance of a memory overrun
 }
 void ley::Video::renderSprites() {
     updateScores(); // TODO the controller should call this only when the scores are updated.
@@ -298,6 +299,22 @@ void ley::Video::updateScores() {
     ptrFont->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
     ptrFontLvl->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
     ptrFontScore->updateMessage("Score  " + std::to_string(int(gm->getScore())));
+}
+
+Uint32 ley::Video::avgFPS() {
+
+    if(SDL_GetTicks() % 1000 == 0) { //recalculate the AVG fps only once per second.
+        avg_fps = mainClock.secondsFromStart() == 0 ? mainClock.secondsFromStart() : frame_count / mainClock.secondsFromStart();
+        SDL_Log("Video::frameCount(): %u", frame_count);
+        SDL_Log("Video::secondsFromStart(): %u", mainClock.secondsFromStart());
+        SDL_Log("Video::avgFPS(): %u", avg_fps);
+    }
+
+    return avg_fps;
+}
+
+void ley::Video::resetClock() {
+    mainClock.reset();
 }
 
 

@@ -33,7 +33,6 @@ private:
     Block activeBlock;
     Block oldBlock;
     Block nextBlock;
-    size_t frame_count; //number of frames that the game has been running
     bool overlayOn;
     double currentSpeed; //how many miliseconds until the block falls down.
     int numLines; //number of lines the player has successfully completed. (Lines)
@@ -54,18 +53,10 @@ private:
     ley::Block getRandomBlock();
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
-    
-
-    ley::Clock mainClock;
-    Uint32 avg_fps;
 
 public:
     GameModel();
     ~GameModel();
-
-    Uint32 avgFPS();
-    Uint32 secondsFromStart();
-    void resetClock();
 
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
@@ -93,8 +84,6 @@ public:
     bool isPaused();
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit.
-    void frameCountInc(); //increment frame count
-    size_t frameCount();
 };
 
 }

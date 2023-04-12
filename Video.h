@@ -33,8 +33,12 @@ class Video {
 
 private:
     
+
     SDL_Window* window;
     SDL_Renderer* renderer;
+    Uint32 avg_fps;
+    ley::Clock mainClock;
+    size_t frame_count; //number of frames that the game has been running
     bool fs = false; //full screen
     bool video_ready; //video is woken up and initialized.
     ley::GameModel* gm;
@@ -57,8 +61,10 @@ private:
     ley::Sprite catSprite;
     ley::Sprite catSprite2;
     
+    Uint32 avgFPS();
     void createWindow();
     void createRenderer();
+
     void init();
     void loadTextures();
     void loadSprites();
@@ -99,6 +105,8 @@ public:
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
+
+    void resetClock();
 };
 
 }

@@ -23,9 +23,7 @@ currentSpeed(1000.0f),
 active(true), 
 overlayOn(false),
 score(0),
-running(true),
-frame_count(0),
-avg_fps(0)
+running(true)
 {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
@@ -38,26 +36,6 @@ ley::GameModel::~GameModel() {
 }
 
 /* Accessors */
-Uint32 ley::GameModel::avgFPS() {
-
-    if(SDL_GetTicks() % 1000 == 0) { //recalculate the AVG fps only once per second.
-        avg_fps = secondsFromStart() == 0 ? secondsFromStart() : frameCount() / secondsFromStart();
-        SDL_Log("GameModel::frameCount(): %u", frameCount());
-        SDL_Log("GameModel::secondsFromStart(): %u", secondsFromStart());
-        SDL_Log("GameModel::avgFPS(): %u", avg_fps);
-    }
-
-    return avg_fps;
-}
-
-void ley::GameModel::resetClock() {
-    mainClock.reset();
-}
-
-Uint32 ley::GameModel::secondsFromStart() {
-    return mainClock.secondsFromStart();
-}
-
 ley::Block ley::GameModel::getNextBlock() {
     return nextBlock;
 }
@@ -91,14 +69,7 @@ ley::GameModel::getBoard() {
     return &board;
 }
 
-size_t ley::GameModel::frameCount() {
-    return frame_count;
-}
-
 /* Functions */
-void ley::GameModel::frameCountInc() {
-    ++frame_count;
-}
 
 void ley::GameModel::addToScore(long p) {
     score+=p;
@@ -524,11 +495,7 @@ void ley::GameModel::resetGame() {
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
 
-    stopProgram(false);
-
-    avg_fps = 0;
-    frame_count = 0;
-    
+    stopProgram(false);   
 }
 bool ley::GameModel::isPaused() {
     return !active;
