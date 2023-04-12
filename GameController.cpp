@@ -38,10 +38,31 @@ ley::Timer* ley::GameController::getFallTimer() {
     return &fallTimer;
 }
 /* Functions */
-void ley::GameController::runFrame(bool autoRestart, double newTime) {
+void ley::GameController::runFrame(bool autoRestart, ley::Direction command) {
     
-    fallTimer.runFrame(autoRestart, newTime);
+    /**** INPUT PROCESSING ****/
+    //TODO this stuff should probably go in the controller
+    if(command == ley::Direction::down) {
+        getFallTimer()->reset();
+        command = ley::Direction::none;
+    } else if(command == ley::Direction::pause) {
+        gm->pauseGame(!gm->isPaused());
+        getFallTimer()->pause(!getFallTimer()->isPaused());
+    }
+
+    fallTimer.runFrame(autoRestart, blockFallSpeed);
     gameStateMachine.update();
+    
+    //Check to see if we need to move the block down.
+    if(getFallTimer()->hasExpired()) {
+        blockFallSpeed = gm->moveBlock(ley::Direction::down);
+        getFallTimer()->reset();
+    }
+
+    /**** CLEAR ****/
+    mVideoSystem->clear(); //clear the backbuffer
+    /**** LOCK FRAME RATE ****/
+    mVideoSystem->frameDelay();
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture

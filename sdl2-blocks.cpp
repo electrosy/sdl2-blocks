@@ -148,7 +148,6 @@ int main(int argv, char** args) {
 
         mainVideo.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
               
-        double newTime = 1000;
         bool fs_changed = false;
         bool fs = false; //full screen
         bool playnext; //TODO this should be in the controller
@@ -180,31 +179,9 @@ int main(int argv, char** args) {
                 mainVideo.setFullScreen(fs);
                 fs_changed = !fs_changed;
             }
-            /**** INPUT PROCESSING ****/
-            //TODO this stuff should probably go in the controller
-            if(eventDirection == ley::Direction::down) {
-                mainGameController.getFallTimer()->reset();
-                eventDirection = ley::Direction::none;
-            } else if(eventDirection == ley::Direction::pause) {
-                mainGameModel.pauseGame(!mainGameModel.isPaused());
-                mainGameController.getFallTimer()->pause(!mainGameController.getFallTimer()->isPaused());
-            }
-
-            /**** UPDATE ****/
-            mainGameController.runFrame(false, newTime);
             
-            /* additional control */
-            //TODO this bit of code should probably go in the controller.
-            if(mainGameController.getFallTimer()->hasExpired() == true) {
-                newTime = mainGameModel.moveBlock(ley::Direction::down);
-                mainGameController.getFallTimer()->reset();
-            }
-
-            /**** CLEAR ****/
-            mainVideo.clear(); //clear the backbuffer
-
-            /**** LOCK FRAME RATE ****/
-            mainVideo.frameDelay();
+            /**** UPDATE ****/
+            mainGameController.runFrame(false, eventDirection);
         }
 
         //continue to render graphics and get keyboard input after game is over.
