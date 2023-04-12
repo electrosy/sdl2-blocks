@@ -24,10 +24,10 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Direction pollEvents(bool&, GameModel&, bool& playnext);
-    ley::Direction pollEndEvents(bool&, GameModel&);
-    ley::Direction pollTitleEvents(bool&, GameModel&);
-    ley::Direction pollMainMenuEvents(bool&, GameModel&);
+    ley::Command pollEvents(bool&, GameModel&, bool& playnext);
+    ley::Command pollEndEvents(bool&, GameModel&);
+    ley::Command pollTitleEvents(bool&, GameModel&);
+    ley::Command pollMainMenuEvents(bool&, GameModel&);
 };
 
 }

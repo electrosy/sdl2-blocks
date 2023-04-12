@@ -99,26 +99,26 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
 
 // **check for collision with the other blocks that have been put in place, 
 //   also checks for collision with game board boundry
-bool ley::GameModel::canPut(Block& b, Direction d) {
+bool ley::GameModel::canPut(Block& b, Command d) {
 /* Check borders */
     unsigned int offset_x = 0;
     unsigned int offset_y = 0;
     SDL_Rect rect = b.getRect();
 
     switch (d) {
-        case Direction::down :
+        case Command::down :
           offset_x = 0;
           offset_y = rect.h + 1;
         break;
-        case Direction::right :
+        case Command::right :
             offset_x = rect.w + 1;
             offset_y = 0;
         break;
-        case Direction::left :
+        case Command::left :
             offset_x = -1;
             offset_y = 0;
         break;
-        case Direction::up : //rotation
+        case Command::up : //rotation
             offset_x = rect.w;
             offset_y = rect.h;
  
@@ -133,7 +133,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.
     switch (d) {
-        case Direction::down : 
+        case Command::down : 
            for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
@@ -147,7 +147,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
                }
            }
         break;
-        case Direction::right : 
+        case Command::right : 
             for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
@@ -160,7 +160,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
                }
            }
         break;
-        case Direction::left :
+        case Command::left :
             for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
@@ -173,7 +173,7 @@ bool ley::GameModel::canPut(Block& b, Direction d) {
                }
            }
         break;
-        case Direction::up : //this is a rotation
+        case Command::up : //this is a rotation
             for(int i = 0; i < rect.w; ++i) {
                for(int j = 0; j < rect.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
@@ -237,7 +237,7 @@ bool ley::GameModel::newBlock() {
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    if(!canPut(activeBlock, ley::Direction::up)) {
+    if(!canPut(activeBlock, ley::Command::up)) {
         return false;
     }
     else {
@@ -277,7 +277,7 @@ bool ley::GameModel::canRotate(bool r) {
 
     if(!isPaused()) {
         activeBlock.rotate(r);
-        canput = canPut(activeBlock, ley::Direction::up); //up is a rotation
+        canput = canPut(activeBlock, ley::Command::up); //up is a rotation
         activeBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
     }
@@ -406,15 +406,15 @@ void ley::GameModel::updateSpeed() {
 }
 
 //TODO this function should probably go in the controller
-double ley::GameModel::moveBlock(Direction d) {
+double ley::GameModel::moveBlock(Command d) {
 
     if(!active) {
         return currentSpeed; //don't do any movies while we are paused.
     }
 
     switch (d) {
-        case Direction::down :
-            if (canPut(activeBlock, Direction::down)) {
+        case Command::down :
+            if (canPut(activeBlock, Command::down)) {
                 activeBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
@@ -428,16 +428,16 @@ double ley::GameModel::moveBlock(Direction d) {
             }
         break;
 
-        case Direction::left :
-            if (canPut(activeBlock, Direction::left)) {
+        case Command::left :
+            if (canPut(activeBlock, Command::left)) {
                 activeBlock.moveLeft();
                 clearOldBlock();
                 oldBlock.moveLeft();
             }
         break;
 
-        case Direction::right :
-            if (canPut(activeBlock, Direction::right)) {
+        case Command::right :
+            if (canPut(activeBlock, Command::right)) {
                 activeBlock.moveRight();
                 clearOldBlock();
                 oldBlock.moveRight();

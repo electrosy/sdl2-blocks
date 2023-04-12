@@ -172,19 +172,19 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
         renderables.renderAll(v->getRenderer());
         v->present();
 
-        ley::Direction frameDirection = i->pollMainMenuEvents(runmain,(*m));
+        ley::Command frameDirection = i->pollMainMenuEvents(runmain,(*m));
         
         if(count() > 0) {
             
-            if(frameDirection == ley::Direction::down || frameDirection == ley::Direction::right) {
+            if(frameDirection == ley::Command::down || frameDirection == ley::Command::right) {
                 next();
             }
             
-            if(frameDirection == ley::Direction::up || frameDirection == ley::Direction::left) {
+            if(frameDirection == ley::Command::up || frameDirection == ley::Command::left) {
                 previous();
             }
 
-            if(frameDirection == ley::Direction::space) {
+            if(frameDirection == ley::Command::space) {
                 toggle(); //this will toggle the selector
             }
 
@@ -300,7 +300,7 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
         v->present();
-        if(i->pollTitleEvents(intro,(*m)) == ley::Direction::down 
+        if(i->pollTitleEvents(intro,(*m)) == ley::Command::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;
         }

@@ -24,7 +24,7 @@ const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 
 const auto NEW_LVL_AT_LINES = 10;
 //TODO rename up to rotate
-enum class Direction {down,right,up,left,none,pause,space}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+enum class Command {down,right,up,left,none,pause,space}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 class GameModel {
 
@@ -43,7 +43,7 @@ private:
     void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);
-    bool canPut(Block&, Direction d); //can physically put the block in the board.
+    bool canPut(Block&, Command d); //can physically put the block in the board.
     std::pair<char,char> checkForLines(char); //check to see if any solid lines across the board have been made, return -1 for none
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     void processLines();
@@ -61,7 +61,7 @@ public:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
 
-    double moveBlock(Direction); //will return a new falldown speed.
+    double moveBlock(Command); //will return a new falldown speed.
     void rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console

@@ -170,7 +170,7 @@ int main(int argv, char** args) {
            
             /**** GET INPUT ****/
             //pollEtimervents updates running and full screen flags
-            ley::Direction eventDirection = mainInput.pollEvents(fs,mainGameModel, playnext);
+            ley::Command eventDirection = mainInput.pollEvents(fs,mainGameModel, playnext);
             if(playnext) {
                 mainGameController.playNext();
                 playnext = false;
@@ -202,7 +202,7 @@ int main(int argv, char** args) {
                     debugRenderables.renderAll(mainVideo.getRenderer());
                 }
                 mainVideo.present();
-                ley::Direction eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
+                ley::Command eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
 
                 mainVideo.clear(); //SDL_RenderClear()
                 mainVideo.frameDelay();

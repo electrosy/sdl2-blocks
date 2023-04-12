@@ -38,14 +38,14 @@ ley::Timer* ley::GameController::getFallTimer() {
     return &fallTimer;
 }
 /* Functions */
-void ley::GameController::runFrame(bool autoRestart, ley::Direction command) {
+void ley::GameController::runFrame(bool autoRestart, ley::Command command) {
     
     /**** INPUT PROCESSING ****/
     //TODO this stuff should probably go in the controller
-    if(command == ley::Direction::down) {
+    if(command == ley::Command::down) {
         getFallTimer()->reset();
-        command = ley::Direction::none;
-    } else if(command == ley::Direction::pause) {
+        command = ley::Command::none;
+    } else if(command == ley::Command::pause) {
         gm->pauseGame(!gm->isPaused());
         getFallTimer()->pause(!getFallTimer()->isPaused());
     }
@@ -55,7 +55,7 @@ void ley::GameController::runFrame(bool autoRestart, ley::Direction command) {
     
     //Check to see if we need to move the block down.
     if(getFallTimer()->hasExpired()) {
-        blockFallSpeed = gm->moveBlock(ley::Direction::down);
+        blockFallSpeed = gm->moveBlock(ley::Command::down);
         getFallTimer()->reset();
     }
 
@@ -165,7 +165,7 @@ void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(mVideoSystem->getRenderer(), test, &src_rect, &dest_rect);
         mVideoSystem->present();
-        if(mInputSystem.pollTitleEvents(intro,(*gm)) == ley::Direction::down 
+        if(mInputSystem.pollTitleEvents(intro,(*gm)) == ley::Command::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;
         }

@@ -47,7 +47,7 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runFrame(bool autoRestart, ley::Direction command); // TODO temporary pass through params for the timers.
+    void runFrame(bool autoRestart, ley::Command command); // TODO temporary pass through params for the timers.
     ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.

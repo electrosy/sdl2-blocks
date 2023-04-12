@@ -18,9 +18,9 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-ley::Direction ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
+ley::Command ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
     SDL_Event event;
-    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+    ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
     if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -33,23 +33,23 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
                 //Full screen mode
                 //continue game
                 if (state[SDL_SCANCODE_UP]) {
-                    frameDirection = ley::Direction::up;
+                    frameDirection = ley::Command::up;
                 }
 
                 if (state[SDL_SCANCODE_DOWN]) {
-                    frameDirection = ley::Direction::down;
+                    frameDirection = ley::Command::down;
                 }
 
                 if (state[SDL_SCANCODE_RIGHT]) {
-                    frameDirection = ley::Direction::right;
+                    frameDirection = ley::Command::right;
                 }
 
                 if (state[SDL_SCANCODE_LEFT]) {
-                    frameDirection = ley::Direction::left;
+                    frameDirection = ley::Command::left;
                 }
 
                 if (state[SDL_SCANCODE_SPACE]) {
-                    frameDirection = ley::Direction::space;
+                    frameDirection = ley::Command::space;
                 }
 
                 //quite game
@@ -67,9 +67,9 @@ ley::Direction ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
      return frameDirection;
 }
 
-ley::Direction ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
+ley::Command ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
     SDL_Event event;
-    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+    ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
     if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -82,7 +82,7 @@ ley::Direction ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
                 //Full screen mode
                 //continue game
                 if (state[SDL_SCANCODE_RETURN]) {
-                    frameDirection = ley::Direction::down;
+                    frameDirection = ley::Command::down;
                 }
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
@@ -96,9 +96,9 @@ ley::Direction ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
 
      return frameDirection;
 }
-ley::Direction ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
+ley::Command ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
     SDL_Event event;
-    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+    ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
     if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -135,9 +135,9 @@ ley::Direction ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
 
      return frameDirection;
 }
-ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &playnext) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &playnext) {
     SDL_Event event;
-    ley::Direction frameDirection = ley::Direction::none; //direction for this frame;
+    ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
     if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -175,18 +175,18 @@ ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &pla
 
                 //move block down
                 if (state[SDL_SCANCODE_DOWN]) {
-                    frameDirection = ley::Direction::down;
-                    gm.moveBlock(ley::Direction::down);
+                    frameDirection = ley::Command::down;
+                    gm.moveBlock(ley::Command::down);
                 }
                 //move block left
                 if (state[SDL_SCANCODE_LEFT]) {
-                    frameDirection = ley::Direction::left;
-                    gm.moveBlock(ley::Direction::left);
+                    frameDirection = ley::Command::left;
+                    gm.moveBlock(ley::Command::left);
                 }
                 //move block right
                 if (state[SDL_SCANCODE_RIGHT]) {
-                    frameDirection = ley::Direction::right;
-                    gm.moveBlock(ley::Direction::right);
+                    frameDirection = ley::Command::right;
+                    gm.moveBlock(ley::Command::right);
                 }
                 //play next audio music track
                 if (state[SDL_SCANCODE_N]) {
@@ -200,7 +200,7 @@ ley::Direction ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &pla
 
                 //pause game
                 if(state[SDL_SCANCODE_P]) {
-                    frameDirection = ley::Direction::pause;
+                    frameDirection = ley::Command::pause;
                 }
                 break;
             default:
