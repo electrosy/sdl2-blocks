@@ -41,7 +41,6 @@ ley::Timer* ley::GameController::getFallTimer() {
 void ley::GameController::runFrame(bool autoRestart, ley::Command command) {
     
     /**** INPUT PROCESSING ****/
-    //TODO this stuff should probably go in the controller
     if(command == ley::Command::down) {
         getFallTimer()->reset();
         command = ley::Command::none;
@@ -65,7 +64,7 @@ void ley::GameController::runFrame(bool autoRestart, ley::Command command) {
     mVideoSystem->frameDelay();
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
-    //get width and height of the texture
+    //get width and height of the texture // TODO this should be dynamic based on image passed in
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
     SDL_Rect start_rect;

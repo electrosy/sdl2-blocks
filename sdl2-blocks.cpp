@@ -35,13 +35,9 @@ int main(int argv, char** args) {
     mainGameModel.debugBoard(false);
 
     ley::Video mainVideo(&mainGameModel);
-    ley::Input mainInput; //create the input system object.
-
-    ley::Renderables renderables;
-    ley::Renderables debugRenderables;
+    ley::Input mainInput; //create the input system object.    
 
     ley::GameController mainGameController(&mainVideo,&mainGameModel);
-
     mainGameController.runIntros();
 
     /**** UI/UX ****/
@@ -136,8 +132,7 @@ int main(int argv, char** args) {
         }
         runInitialUI = true;
 
-        mainGameController.getFallTimer()->reset();
-        
+        mainGameController.getFallTimer()->reset();  
         mainGameController.fadeMusic(); // finish up the intro music
 
         //unpause game if it is already paused.
@@ -160,12 +155,7 @@ int main(int argv, char** args) {
 
             /**** RENDER ****/
             mainVideo.render();
-            renderables.renderAll(mainVideo.getRenderer()); // render all sprites
-            if(mainGameModel.isOverlayOn()) { //render debug renderables
-                debugRenderables.renderAll(mainVideo.getRenderer());
-            }
             mainGameController.renderBoard();
-
             mainVideo.present(); // output to the video system.
            
             /**** GET INPUT ****/
@@ -194,13 +184,8 @@ int main(int argv, char** args) {
             while(mainGameModel.programRunning()) {
                 //This loop runs the gameover animations and should not run until the game is actually over.
                 //For now just run at the frame rate that was set at the end of the game.
-                
                 mainGameController.renderBoard();
-                renderables.renderAll(mainVideo.getRenderer());
                 mainVideo.render();
-                if(mainGameModel.isOverlayOn()) {
-                    debugRenderables.renderAll(mainVideo.getRenderer());
-                }
                 mainVideo.present();
                 ley::Command eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
 
