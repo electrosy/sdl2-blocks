@@ -22,7 +22,7 @@ ley::Command ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
-    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
@@ -71,7 +71,7 @@ ley::Command ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
-    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
@@ -100,7 +100,7 @@ ley::Command ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
-    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {
             case SDL_QUIT:         
@@ -139,7 +139,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel& gm, bool &playn
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
-    if(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
