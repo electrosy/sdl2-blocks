@@ -47,6 +47,7 @@ private:
     ley::Renderables mRenderables;
     ley::Renderables mDebugRenderables;
     ley::SimpleShape firstSimpleShape;
+    ley::SimpleShape debugSimpleShape;
 
     SDL_Rect cat_frame1 = {0,75,100,100};
     SDL_Rect cat_frame2 = {132,75,100,100};
@@ -72,18 +73,12 @@ private:
     void renderBackground(); //Render the background image.
     void updateScores(); //Update the fonts for scores with new model data.
 
-    //Create the renderable font object for lines
-    ley::Font fontOne;
-    ley::Font* ptrFont;
-    //Create the font for the level ouput
-    ley::Font fontLvl;
-    ley::Font* ptrFontLvl;
-    //Create the font for the score output
-    ley::Font fontScore;
-    ley::Font* ptrFontScore;
-
-    //Game over font
-    ley::Font fontGameOver;
+    
+    ley::Font fontLines; //Create the renderable font object for lines
+    ley::Font fontLvl; //Create the font for the level ouput
+    ley::Font fontScore; //Create the font for the score output
+    ley::Font fontGameOver; //Game over font
+    ley::Font fontDebugMode; //Debug sign
     
 public:
     Video(ley::GameModel*);

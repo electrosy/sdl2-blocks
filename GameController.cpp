@@ -38,30 +38,60 @@ ley::Timer* ley::GameController::getFallTimer() {
     return &fallTimer;
 }
 /* Functions */
-void ley::GameController::runFrame(bool autoRestart, ley::Command command) {
+void ley::GameController::runGameLoop(bool autoRestart) {
     
-    /**** INPUT PROCESSING ****/
-    if(command == ley::Command::down) {
-        getFallTimer()->reset();
-        command = ley::Command::none;
-    } else if(command == ley::Command::pause) {
-        gm->pauseGame(!gm->isPaused());
-        getFallTimer()->pause(!getFallTimer()->isPaused());
-    }
+    SDL_Log("Starting Game loop!");
+    while(gm->programRunning() && gm->isGameRunning()) {
+        /**** MUSIC ****/
+        //TODO startPlayList should prbably not be called every frame.
+        startPlayList(); //start the main playlist for game play
 
-    fallTimer.runFrame(autoRestart, blockFallSpeed);
-    gameStateMachine.update();
-    
-    //Check to see if we need to move the block down.
-    if(getFallTimer()->hasExpired()) {
-        blockFallSpeed = gm->moveBlock(ley::Command::down);
-        getFallTimer()->reset();
-    }
+        /**** RENDER ****/
+        mVideoSystem->render();
+        renderBoard();
+        mVideoSystem->present(); // output to the video system.
+        
+        /**** UPDATE ****/
+        bool fs = false;
+        bool fs_changed = false;
+        bool playnext = false;
+        
+        /**** GET INPUT ****/
+        //pollEtimervents updates running and full screen flags
+        ley::Command command = mainInput.pollEvents(fs, gm, playnext);
+        if(playnext) {
+            playNext();
+            playnext = false;
+        }
+        if(fs != fs_changed) {
+            mVideoSystem->setFullScreen(fs);
+            fs_changed = !fs_changed;
+        }
 
-    /**** CLEAR ****/
-    mVideoSystem->clear(); //clear the backbuffer
-    /**** LOCK FRAME RATE ****/
-    mVideoSystem->frameDelay();
+        /**** INPUT PROCESSING ****/
+        if(command == ley::Command::down) {
+            getFallTimer()->reset();
+            command = ley::Command::none;
+        } else if(command == ley::Command::pause) {
+            gm->pauseGame(!gm->isPaused());
+            getFallTimer()->pause(!getFallTimer()->isPaused());
+        }
+
+        fallTimer.runFrame(autoRestart, blockFallSpeed);
+        gameStateMachine.update();
+        
+        //Check to see if we need to move the block down.
+        if(getFallTimer()->hasExpired()) {
+            blockFallSpeed = gm->moveBlock(ley::Command::down);
+            getFallTimer()->reset();
+        }
+
+        /**** CLEAR ****/
+        mVideoSystem->clear(); //clear the backbuffer
+        
+        /**** LOCK FRAME RATE ****/
+        mVideoSystem->frameDelay();
+    }
 }
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture // TODO this should be dynamic based on image passed in

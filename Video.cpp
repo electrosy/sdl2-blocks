@@ -127,15 +127,12 @@ void ley::Video::init() {
     loadSprites();
     //load fonts
     //initialize the fonts for line, level, score
-    fontOne = { LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
-    ptrFont = { &fontOne };
+    fontLines = { LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
     fontLvl = { LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
-    ptrFontLvl = { &fontLvl };
     fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
-    ptrFontScore = { &fontScore };
-
+    
     mRenderables.push_back(&fontGameOver);
-    mRenderables.push_back(&fontOne);
+    mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
     updateScores(); //TODO the model should call this
@@ -145,6 +142,11 @@ void ley::Video::init() {
     mRenderables.push_back(&firstSimpleShape);
     firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
     firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
+
+    //debugShape
+    debugSimpleShape(renderer);
+    mDebugRenderables.push_back(&debugSimpleShape);
+    debugSimpleShape.addShape("debugconsole", {0,0,1280,100});
 
     
 }
@@ -296,9 +298,9 @@ void ley::Video::loadSprites() {
 }
 
 void ley::Video::updateScores() {
-    ptrFont->updateMessage("Lines  " + std::to_string(int(gm->getLines())));
-    ptrFontLvl->updateMessage("Level  " + std::to_string(int(gm->getLevel())));
-    ptrFontScore->updateMessage("Score  " + std::to_string(int(gm->getScore())));
+    fontLines.updateMessage("Lines  " + std::to_string(int(gm->getLines())));
+    fontLvl.updateMessage("Level  " + std::to_string(int(gm->getLevel())));
+    fontScore.updateMessage("Score  " + std::to_string(int(gm->getScore())));
 }
 
 Uint32 ley::Video::avgFPS() {

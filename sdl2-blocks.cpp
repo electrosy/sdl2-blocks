@@ -103,6 +103,7 @@ int main(int argv, char** args) {
 
     // TODO the master loop should go into the controller
     /*** Start Main Menu ***/
+    bool fs = false;
     while(masterloop && runInitialUI) {
         while(runInitialUI) {
             //read high scores at the main menu. // TODO reading the high scores and high score values can probably go in the model.
@@ -141,38 +142,11 @@ int main(int argv, char** args) {
             mainGameController.getFallTimer()->pause(false);
         }
 
-        mainVideo.resetClock(); //restart the clock for the main game loop AVG FPS calculation.
-              
-        bool fs_changed = false;
-        bool fs = false; //full screen
-        bool playnext; //TODO this should be in the controller
+        mainVideo.resetClock(); //restart the clock for the main game loop AVG FPS calculation.        
 
         /**** Main Game Loop ****/ 
-        SDL_Log("Starting Game loop!");
-        while(mainGameModel.programRunning() && mainGameModel.isGameRunning()) {
-            /**** MUSIC ****/
-            mainGameController.startPlayList(); //start the main playlist for game play
-
-            /**** RENDER ****/
-            mainVideo.render();
-            mainGameController.renderBoard();
-            mainVideo.present(); // output to the video system.
-           
-            /**** GET INPUT ****/
-            //pollEtimervents updates running and full screen flags
-            ley::Command eventDirection = mainInput.pollEvents(fs,mainGameModel, playnext);
-            if(playnext) {
-                mainGameController.playNext();
-                playnext = false;
-            }
-            if(fs != fs_changed) {
-                mainVideo.setFullScreen(fs);
-                fs_changed = !fs_changed;
-            }
-            
-            /**** UPDATE ****/
-            mainGameController.runFrame(false, eventDirection);
-        }
+        mainGameController.runGameLoop(false);
+        
 
         //continue to render graphics and get keyboard input after game is over.
         if(!mainGameModel.isGameRunning()) {
@@ -181,6 +155,7 @@ int main(int argv, char** args) {
             highscores.write();
             highscores.setClean(false);
 
+            
             while(mainGameModel.programRunning()) {
                 //This loop runs the gameover animations and should not run until the game is actually over.
                 //For now just run at the frame rate that was set at the end of the game.

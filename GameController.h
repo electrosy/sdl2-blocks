@@ -35,6 +35,8 @@ private:
     
     int blockFallSpeed = 1000; //how many milisecond to make the block fall
 
+    ley::Input mainInput; //create the input system object.
+
     //Textures
     SDL_Texture *blockBits2 = nullptr;
 
@@ -47,7 +49,7 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runFrame(bool autoRestart, ley::Command command); // TODO temporary pass through params for the timers.
+    void runGameLoop(bool autoRestart); // TODO temporary pass through params for the timers.
     ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.

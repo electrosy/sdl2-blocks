@@ -24,7 +24,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool&, GameModel&, bool& playnext);
+    ley::Command pollEvents(bool&, GameModel* gm, bool& playnext);
     ley::Command pollEndEvents(bool&, GameModel&);
     ley::Command pollTitleEvents(bool&, GameModel&);
     ley::Command pollMainMenuEvents(bool&, GameModel&);
