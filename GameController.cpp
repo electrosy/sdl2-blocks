@@ -40,6 +40,17 @@ ley::Timer* ley::GameController::getFallTimer() {
 /* Functions */
 void ley::GameController::runGameLoop(bool autoRestart) {
     
+    getFallTimer()->reset();
+    fadeMusic(); // finish up the intro music
+
+    //unpause game if it is already paused.
+    if(gm->isPaused()) {
+        gm->pauseGame(false);
+        getFallTimer()->pause(false);
+    }
+
+    mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
+
     SDL_Log("Starting Game loop!");
     while(gm->programRunning() && gm->isGameRunning()) {
         /**** MUSIC ****/

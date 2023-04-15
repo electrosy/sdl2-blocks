@@ -10,6 +10,7 @@ Date: Feb/17/2020
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -21,18 +22,17 @@ namespace ley {
 class Renderables {
 
 private:
-    std::vector<Renderable*> renderables;
+    std::multimap<int, Renderable*> renderables;
 protected:
    
 public:
     Renderables();
-    ~Renderables();    
+    ~Renderables();
 
-    void push_back(Renderable * r);
+    void push_back(Renderable * r, int layer = 9999);
     void renderAll(SDL_Renderer * r);
 
     unsigned int size();
-    std::vector<Renderable*>* get_ptr();
 };
 
 }

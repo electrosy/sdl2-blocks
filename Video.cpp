@@ -274,6 +274,9 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/btn/no-hot.png", "no-hot");
     TextureManager::Instance()->loadTexture("assets/graphic/btn/no-white.png", "no-white");
 
+    //Cat
+    TextureManager::Instance()->loadTexture("assets/cat-trans.png", "cat");
+
     //Backgrounds.
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_01");

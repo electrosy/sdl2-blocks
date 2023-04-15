@@ -17,22 +17,21 @@ ley::Renderables::~Renderables() {
 }
 /* Accessors */
 unsigned int ley::Renderables::size() {
+   
    return renderables.size() > 0 ? renderables.size() : 0;
 }
 
 /* Functions */
-void ley::Renderables::push_back(Renderable * r) {
-    renderables.push_back(r);
+void ley::Renderables::push_back(Renderable * r, int layer) {
+    
+    renderables.insert(std::make_pair(layer, r));
 }
 
-void ley::Renderables::renderAll(SDL_Renderer * r) {
+void ley::Renderables::renderAll(SDL_Renderer * r) {           
+    
     if(renderables.size() > 0) {
-        for(int i = 0; i < renderables.size(); ++i) {
-                renderables[i]->render(r);
-            }
+        for(const auto& [key, value] : renderables) {
+            value->render(r);
+        }
     }
-}
-
-std::vector<ley::Renderable*>* ley::Renderables::get_ptr() {
-    return &renderables;
 }

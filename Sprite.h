@@ -31,7 +31,6 @@ public:
     /* Accessors */
 
     /* Functions */
-    void clear();
 };
 
 }

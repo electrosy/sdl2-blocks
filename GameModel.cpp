@@ -333,11 +333,7 @@ void ley::GameModel::processLines() {
         //add to the score based on number of lines completed in a single move 1 to 4 (i dont think this could ever be more than four)
         
     }
-
     
-
-    
-
     // TODO also continue to check the rest of the board for full lines. (but is this a valid case?)
 }
 

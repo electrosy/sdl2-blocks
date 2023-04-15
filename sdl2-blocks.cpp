@@ -133,20 +133,8 @@ int main(int argv, char** args) {
         }
         runInitialUI = true;
 
-        mainGameController.getFallTimer()->reset();  
-        mainGameController.fadeMusic(); // finish up the intro music
-
-        //unpause game if it is already paused.
-        if(mainGameModel.isPaused()) {
-            mainGameModel.pauseGame(false);
-            mainGameController.getFallTimer()->pause(false);
-        }
-
-        mainVideo.resetClock(); //restart the clock for the main game loop AVG FPS calculation.        
-
         /**** Main Game Loop ****/ 
         mainGameController.runGameLoop(false);
-        
 
         //continue to render graphics and get keyboard input after game is over.
         if(!mainGameModel.isGameRunning()) {
