@@ -15,22 +15,26 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Texture.h"
+#include "Renderable.h"
 
 namespace ley {
 
-class Sprite : public Texture {
+class Sprite : public Renderable {
 
 private:
-    
+    std::pair<unsigned int,unsigned int> pos;
+    unsigned int animSpeed;
+protected:
+    SDL_Texture* texture;
+    std::vector<SDL_Rect> frames;
+    SDL_Rect dest_rect;
 public:
-    /* RAII */
     Sprite();
-    Sprite(SDL_Texture * t, unsigned int = 0, std::vector<SDL_Rect>* = nullptr);
+    Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>*);
     ~Sprite();
-
-    /* Accessors */
-
-    /* Functions */
+    void render(SDL_Renderer * r);
+    void setPos(unsigned int, unsigned int);
+    unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
 };
 
 }
