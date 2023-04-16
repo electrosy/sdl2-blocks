@@ -8,17 +8,15 @@ Date: Feb/17/2020
 #include "Texture.h"
 
 /* RAII */
-ley::Texture::Texture(SDL_Renderer* r,  const char* p, unsigned int s, std::vector<SDL_Rect>* v)
-: Renderable(), animSpeed(s) {
+ley::Texture::Texture(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect>* v)
+: 
+Renderable(), 
+animSpeed(s),
+texture(t) {
 
-    if (p == nullptr) {return;//EARLY EXIT
+    if (!texture) {
+        return;//EARLY EXIT
     }
-
-    SDL_Surface* temp_surface = IMG_Load(p);
-
-    texture = SDL_CreateTextureFromSurface(r, temp_surface);
-
-    SDL_FreeSurface(temp_surface);
 
     bool multiframe = false;
     if(v != nullptr) {

@@ -9,12 +9,12 @@ Date: Feb/14/2020
 
 /* RAII */
 ley::Sprite::Sprite()
-: Texture(nullptr, nullptr, 0, nullptr) {
+: Texture(nullptr, 0, nullptr) {
 
 }
 
-ley::Sprite::Sprite(SDL_Renderer * r, const char* p, unsigned int s, std::vector<SDL_Rect>* v)
-: Texture(r, p, s, v) {
+ley::Sprite::Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect>* v)
+: Texture(t, s, v) {
 
 }
 

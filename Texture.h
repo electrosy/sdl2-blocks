@@ -27,7 +27,7 @@ protected:
     std::vector<SDL_Rect> frames;
     SDL_Rect dest_rect;
 public:
-    Texture(SDL_Renderer * r, const char*, unsigned int, std::vector<SDL_Rect>*);
+    Texture(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>*);
     ~Texture();
     void render(SDL_Renderer * r);
     void setPos(unsigned int, unsigned int);

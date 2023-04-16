@@ -291,9 +291,9 @@ void ley::Video::loadTextures() {
 }
 
 void ley::Video::loadSprites() {
-    catSprite = ley::Sprite(renderer, "assets/cat-trans.png", 100, &cat_frames);
+    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, &cat_frames);
     catSprite.setPos(25,650);
-    catSprite2 = ley::Sprite(renderer, "assets/cat-trans.png", 175, &cat_frames);
+    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, &cat_frames);
     catSprite2.setPos(1150,650);
 
     mRenderables.push_back(&catSprite);
