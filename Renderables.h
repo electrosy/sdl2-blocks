@@ -19,10 +19,12 @@ Date: Feb/17/2020
 
 namespace ley {
 
+typedef std::multimap<int, Renderable*> RenderableType;
+
 class Renderables {
 
 private:
-    std::multimap<int, Renderable*> renderables;
+    RenderableType renderables;
 protected:
    
 public:

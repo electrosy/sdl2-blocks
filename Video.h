@@ -61,6 +61,7 @@ private:
     //sprites
     ley::Sprite catSprite;
     ley::Sprite catSprite2;
+    ley::Sprite spriteBackground;
     
     Uint32 avgFPS();
     void createWindow();
@@ -70,7 +71,7 @@ private:
     void loadTextures();
     void loadSprites();
 
-    void renderBackground(); //Render the background image.
+    void setBackgroundTexture(); //Create and set sprite object for the background.
     void updateScores(); //Update the fonts for scores with new model data.
 
     

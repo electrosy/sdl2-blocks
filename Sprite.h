@@ -14,7 +14,6 @@ Date: Feb/17/2020
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Texture.h"
 #include "Renderable.h"
 
 namespace ley {
@@ -30,7 +29,7 @@ protected:
     SDL_Rect dest_rect;
 public:
     Sprite();
-    Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>*);
+    Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>);
     ~Sprite();
     void render(SDL_Renderer * r);
     void setPos(unsigned int, unsigned int);

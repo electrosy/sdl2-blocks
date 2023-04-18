@@ -165,26 +165,22 @@ void ley::Video::setRenderBackground(bool inRenderbg) {
 }
 
 /* functions */
-void ley::Video::renderBackground() {
+void ley::Video::setBackgroundTexture() {
     SDL_Texture *bg_west_1 = nullptr;
     SDL_Rect start_rect;
     start_rect.x = 0;
     start_rect.y = 0;
     start_rect.w = 1280;
     start_rect.h = 720;
-    SDL_Rect dest_rect;
-    dest_rect = start_rect;
-
+ 
     std::string background_level;
     if(gm->getLevel() <= 9) {
         background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
     } else {
         background_level = "BG_WEST_09";
     }
-
-    bg_west_1 = TextureManager::Instance()->getTexture(background_level.c_str());
-
-    SDL_RenderCopy(renderer, bg_west_1, &start_rect, &dest_rect); //TODO - all rendering should be done in the View(Video.cpp)
+    
+    spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect});
 }
 
 void ley::Video::render() {
@@ -199,8 +195,10 @@ void ley::Video::render() {
 
     //Render background
     if(renderbg) {
-        renderBackground();
+        setBackgroundTexture();
+        spriteBackground.render(renderer);
     }
+    
     //Then render sprites
     renderSprites();
 
@@ -291,9 +289,9 @@ void ley::Video::loadTextures() {
 }
 
 void ley::Video::loadSprites() {
-    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, &cat_frames);
+    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, cat_frames);
     catSprite.setPos(25,650);
-    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, &cat_frames);
+    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, cat_frames);
     catSprite2.setPos(1150,650);
 
     mRenderables.push_back(&catSprite);
