@@ -31,6 +31,7 @@ void ley::SimpleShape::addShape(std::string id, SDL_Rect rect) {
 }
 
 /* Functions */
+
 /* private */
 
 /* public */

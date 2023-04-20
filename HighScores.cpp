@@ -32,7 +32,7 @@ bool ley::HighScores::isClean() {
   return clean;
 }
 
-void ley::HighScores::renderScoreFonts(SDL_Renderer* r, ley::Renderables* re, std::vector<ley::Font*> fonts) {
+void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts) {
 
     (*fonts.begin())->updateMessage("     Name                    Level                 Lines                   Score");
     re->push_back(*fonts.begin());
@@ -44,7 +44,7 @@ void ley::HighScores::renderScoreFonts(SDL_Renderer* r, ley::Renderables* re, st
       std::string score = std::to_string(it->first);
 
       (*fonts.at(counter)).updateMessage(std::get<0>(it->second) + "     " + std::to_string((std::get<2>(it->second))) + "         " + std::to_string(std::get<1>(it->second))  + "     " + score);
-      //(*fonts.at(counter)).updateMessage("Steve           45345             345345            345");
+      
       re->push_back( (fonts.at(counter)) );
     }
 }

@@ -95,7 +95,7 @@ int main(int argv, char** args) {
     ley::Renderables highScoreRenderables;
     //Load highscore data initially.
     highscores.read();
-    highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);
+    highscores.renderScoreFonts(&highScoreRenderables, fonts);
     highscoresmenu.addRenderables(highScoreRenderables);
 
     bool masterloop = true; //Starts the main menu.
@@ -109,7 +109,7 @@ int main(int argv, char** args) {
             //read high scores at the main menu. // TODO reading the high scores and high score values can probably go in the model.
             if(!highscores.isClean()) {//check if we have new highscore data to read.
                 highscores.read();
-                highscores.renderScoreFonts(mainVideo.getRenderer(), &highScoreRenderables, fonts);
+                highscores.renderScoreFonts(&highScoreRenderables, fonts);
                 highscoresmenu.addRenderables(highScoreRenderables);
                 highscores.setClean(true);
             }
@@ -125,7 +125,8 @@ int main(int argv, char** args) {
             }
             else if(menuItem == 2) {
                 optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
-            } else if(menuItem == 3) {
+            } 
+            else if(menuItem == 3) {
                 runInitialUI = false;
                 mainGameModel.stopProgram(true);
                 masterloop = false;
@@ -143,7 +144,6 @@ int main(int argv, char** args) {
             highscores.write();
             highscores.setClean(false);
 
-            
             while(mainGameModel.programRunning()) {
                 //This loop runs the gameover animations and should not run until the game is actually over.
                 //For now just run at the frame rate that was set at the end of the game.

@@ -405,7 +405,7 @@ void ley::GameModel::updateSpeed() {
 double ley::GameModel::moveBlock(Command d) {
 
     if(!active) {
-        return currentSpeed; //don't do any movies while we are paused.
+        return currentSpeed; //don't do any moves while we are paused.
     }
 
     switch (d) {
@@ -472,13 +472,6 @@ void ley::GameModel::debugBoard(bool setLayer) {
 }
 void ley::GameModel::setGameRunning(bool running) {
     gameRunning = running;
-
-    if(running) {
-
-    } 
-    else {
-        
-    }
 }
 
 void ley::GameModel::resetGame() {

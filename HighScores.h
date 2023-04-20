@@ -35,7 +35,7 @@ public:
     void write();
     int read();
     void push(unsigned long, std::string, int, int);
-    void renderScoreFonts(SDL_Renderer*, ley::Renderables*, std::vector<ley::Font*>);
+    void renderScoreFonts(ley::Renderables*, std::vector<ley::Font*>);
     void setClean(bool c);
     bool isClean();
 };
