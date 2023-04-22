@@ -32,9 +32,9 @@ void ley::GameStateMachine::changeState(GameState *pState) {
     mGameStates.back()->onEnter();
 }
 
-void ley::GameStateMachine::update() {
+void ley::GameStateMachine::update(ley::Command command, ley::GameModel * gm) {
     if(!mGameStates.empty()) {
-        mGameStates.back()->update();
+        mGameStates.back()->update(command, gm);
     }
 }
 

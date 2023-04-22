@@ -105,11 +105,6 @@ int ley::Timer::getElapsed() {
     return clock.miliSecondsFromStart();
 }
 
-void ley::Timer::changeSpeed(float newSpeed) {
-
-   // mili = newSpeed; //causes a set fault, maybe the timer needs to be recreated completly.
-}
-
 float ley::Timer::getSpeed() {
     return mili;
 }

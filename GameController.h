@@ -50,15 +50,13 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runGameLoop(bool autoRestart, ley::HighScores &hs); // TODO temporary pass through params for the timers.
+    void runGameLoop(ley::HighScores &hs); // TODO temporary pass through params for the timers.
     void runGameOver(ley::HighScores &hs, bool fs);
     void runCleanUp(); //run clean up after the game is completly over
-    ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.
     void runIntro(std::string t, SDL_Rect r, double fpsDelay); //run intro screens
     void runIntros(); //run both intro screens
-    void setState(int statenum);
 
     /* AUDIO */
     void fadeMusic(); //fade out the music

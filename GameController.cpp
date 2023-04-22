@@ -34,19 +34,17 @@ fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 ley::GameController::~GameController() {
 }
 /* Accessors */
-ley::Timer* ley::GameController::getFallTimer() {
-    return &fallTimer;
-}
+
 /* Functions */
-void ley::GameController::runGameLoop(bool autoRestart, ley::HighScores &hs) {
+void ley::GameController::runGameLoop(ley::HighScores &hs) {
     
-    getFallTimer()->reset();
+    fallTimer.reset();
     fadeMusic(); // finish up the intro music
 
     //unpause game if it is already paused.
     if(gm->isPaused()) {
         gm->pauseGame(false);
-        getFallTimer()->pause(false);
+        fallTimer.pause(false);
     }
 
     mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
@@ -77,22 +75,21 @@ void ley::GameController::runGameLoop(bool autoRestart, ley::HighScores &hs) {
         }
 
         if(command == ley::Command::down) {
-            getFallTimer()->reset();
+            fallTimer.reset();
             command = ley::Command::none;
         } else if(command == ley::Command::pause) {
             gm->pauseGame(!gm->isPaused());
-            getFallTimer()->pause(!getFallTimer()->isPaused());
+            fallTimer.pause(!fallTimer.isPaused());
         }
 
-
         /**** UPDATE ****/
-        fallTimer.runFrame(autoRestart, blockFallSpeed);
-        gameStateMachine.update();
+        fallTimer.runFrame(false, blockFallSpeed);
+        gameStateMachine.update(command, gm);
         
         //Check to see if we need to move the block down.
-        if(getFallTimer()->hasExpired()) {
+        if(fallTimer.hasExpired()) {
             blockFallSpeed = gm->moveBlock(ley::Command::down);
-            getFallTimer()->reset();
+            fallTimer.reset();
         }
 
         /**** CLEAR ****/
@@ -244,18 +241,6 @@ void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
         SDL_Delay(fpsDelay);
     }
 
-}
-
-void ley::GameController::setState(int statenum) {
-    switch(statenum) {
-        case 0 : gameStateMachine.changeState(new ley::IntroState(mVideoSystem));
-        break;
-
-        case 1 : gameStateMachine.changeState(new ley::MenuState(mVideoSystem));
-        break;
-
-        case 2 : gameStateMachine.changeState(new ley::PlayState(mVideoSystem));
-    }
 }
 
 void ley::GameController::fadeMusic() {

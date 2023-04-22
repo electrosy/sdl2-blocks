@@ -8,7 +8,7 @@ IntroState::IntroState(ley::Video * v) {
     videoSystem = v;
 }
 
-void IntroState::update() {
+void IntroState::update(ley::Command command, ley::GameModel * gm) {
 
 }
 

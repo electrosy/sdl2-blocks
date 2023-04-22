@@ -14,7 +14,7 @@ fourthTimer(v->getRenderer(),333,{10,455,100,5}) {
 
 }
 
-void PlayState::update() {
+void PlayState::update(ley::Command command, ley::GameModel * gm) {
     firstTimer.runFrame();
     secondTimer.runFrame();
     thirdTimer.runFrame();

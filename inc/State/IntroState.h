@@ -1,7 +1,5 @@
 #include "GameState.h"
 
-#include "../../Video.h"
-
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
 
@@ -11,7 +9,7 @@ class IntroState : public ley::GameState {
 public:
 
     IntroState(ley::Video * v);
-    virtual void update();
+    virtual void update(ley::Command command, ley::GameModel * gm);
     virtual void loadRenderables();
 
     virtual bool onEnter();
