@@ -92,7 +92,7 @@ void ley::UIMenu::addSelector(std::string label, const SDL_Rect src, const SDL_R
     selectors.emplace(label,temp);
 
 }
-int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay, menutypes ty) {
+int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
     
     bool runmain = true;
     

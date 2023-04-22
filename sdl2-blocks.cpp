@@ -114,16 +114,16 @@ int main(int argv, char** args) {
             }
 
             mainGameController.playMainMenu(); // starts playing the music for the main menu
-            menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "mainmenu", {0,0,1280,720}, 1, menutypes::main);
+            menuItem = mainUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "mainmenu", {0,0,1280,720}, 1);
                   
             if(menuItem == 0) {
                 runInitialUI = false;
             }
             else if(menuItem == 1) {
-                highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, "highscores", {0,0,1280,720}, 1, menutypes::highscores);
+                highscoresmenu.runMenu(&mainVideo, &mainInput, &mainGameModel, "highscores", {0,0,1280,720}, 1);
             }
             else if(menuItem == 2) {
-                optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "optionsmenu", {0,0,800,600}, 1, menutypes::options);
+                optionItem = optionUI.runMenu(&mainVideo, &mainInput, &mainGameModel, "optionsmenu", {0,0,1280,720}, 1);
             } 
             else if(menuItem == 3) {
                 runInitialUI = false;
@@ -132,8 +132,8 @@ int main(int argv, char** args) {
             }
         }
         runInitialUI = true;
-        
-        /**** Main Game Loop ****/ 
+
+        /**** Main Game Loop ****/
         mainGameController.runGameLoop(false, highscores);
 
     }//EXIT THE GAME
