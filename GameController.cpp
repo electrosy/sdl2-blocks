@@ -38,7 +38,7 @@ ley::Timer* ley::GameController::getFallTimer() {
     return &fallTimer;
 }
 /* Functions */
-void ley::GameController::runGameLoop(bool autoRestart) {
+void ley::GameController::runGameLoop(bool autoRestart, ley::HighScores &hs) {
     
     getFallTimer()->reset();
     fadeMusic(); // finish up the intro music
@@ -51,6 +51,7 @@ void ley::GameController::runGameLoop(bool autoRestart) {
 
     mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
 
+    bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
     while(gm->programRunning() && gm->isGameRunning()) {
         /**** MUSIC ****/
@@ -62,24 +63,19 @@ void ley::GameController::runGameLoop(bool autoRestart) {
         renderBoard();
         mVideoSystem->present(); // output to the video system.
         
-        /**** UPDATE ****/
-        bool fs = false;
-        bool fs_changed = false;
         bool playnext = false;
-        
         /**** GET INPUT ****/
-        //pollEtimervents updates running and full screen flags
+        //pollEvents updates running and full screen flags
         ley::Command command = mainInput.pollEvents(fs, gm, playnext);
+        /**** INPUT PROCESSING ****/
         if(playnext) {
             playNext();
             playnext = false;
         }
-        if(fs != fs_changed) {
+        if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
-            fs_changed = !fs_changed;
         }
 
-        /**** INPUT PROCESSING ****/
         if(command == ley::Command::down) {
             getFallTimer()->reset();
             command = ley::Command::none;
@@ -88,6 +84,8 @@ void ley::GameController::runGameLoop(bool autoRestart) {
             getFallTimer()->pause(!getFallTimer()->isPaused());
         }
 
+
+        /**** UPDATE ****/
         fallTimer.runFrame(autoRestart, blockFallSpeed);
         gameStateMachine.update();
         
@@ -103,7 +101,39 @@ void ley::GameController::runGameLoop(bool autoRestart) {
         /**** LOCK FRAME RATE ****/
         mVideoSystem->frameDelay();
     }
+
+    //continue to render graphics and get keyboard input after game is over.
+    if(!gm->isGameRunning()) {
+        runGameOver(hs, fs);
+    }
+        
+    /**** CLEAN UP ****/
+    runCleanUp();
 }
+void ley::GameController::runGameOver(ley::HighScores &hs, bool fs) {
+    //push on the new high score
+    hs.push(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
+    hs.write();
+    hs.setClean(false);
+
+    while(gm->programRunning()) {
+        //This loop runs the gameover animations and should not run until the game is actually over.
+        //For now just run at the frame rate that was set at the end of the game.
+        renderBoard();
+        mVideoSystem->render();
+        mVideoSystem->present();
+        mainInput.pollEndEvents(fs,(*gm));
+
+        mVideoSystem->clear(); //SDL_RenderClear()
+        mVideoSystem->frameDelay();
+    }
+}
+
+void ley::GameController::runCleanUp() {
+    gm->resetGame();
+    fadeMusic();
+}
+
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture // TODO this should be dynamic based on image passed in
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);

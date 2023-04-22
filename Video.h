@@ -88,7 +88,6 @@ public:
     void frameDelay(); //Calls SDL_Delay to delay frame based on mili_adjust
 /* Accessors */
     bool fullScreen() {return fs;};
-    void fullScreen(bool fs);
     bool getReady() {return video_ready;};
     SDL_Renderer* getRenderer() {return renderer;};
     SDL_Window* getWindow() {return window;};

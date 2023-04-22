@@ -103,7 +103,6 @@ int main(int argv, char** args) {
 
     // TODO the master loop should go into the controller
     /*** Start Main Menu ***/
-    bool fs = false;
     while(masterloop && runInitialUI) {
         while(runInitialUI) {
             //read high scores at the main menu. // TODO reading the high scores and high score values can probably go in the model.
@@ -133,33 +132,9 @@ int main(int argv, char** args) {
             }
         }
         runInitialUI = true;
-
+        
         /**** Main Game Loop ****/ 
-        mainGameController.runGameLoop(false);
-
-        //continue to render graphics and get keyboard input after game is over.
-        if(!mainGameModel.isGameRunning()) {
-            //push on the new high score
-            highscores.push(mainGameModel.getScore(), "Steve", mainGameModel.getLevel(), mainGameModel.getLines());
-            highscores.write();
-            highscores.setClean(false);
-
-            while(mainGameModel.programRunning()) {
-                //This loop runs the gameover animations and should not run until the game is actually over.
-                //For now just run at the frame rate that was set at the end of the game.
-                mainGameController.renderBoard();
-                mainVideo.render();
-                mainVideo.present();
-                ley::Command eventDirection = mainInput.pollEndEvents(fs,mainGameModel);
-
-                mainVideo.clear(); //SDL_RenderClear()
-                mainVideo.frameDelay();
-            }
-        }
-
-        /**** CLEAN UP ****/
-        mainGameModel.resetGame();
-        mainGameController.fadeMusic();
+        mainGameController.runGameLoop(false, highscores);
 
     }//EXIT THE GAME
 

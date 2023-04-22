@@ -17,6 +17,7 @@ Date: Feb/15/2020
 #include "Font.h"
 #include "Timer.h"
 #include "Input.h"
+#include "HighScores.h"
 #include "inc/State/GameStateMachine.h"
 #include "inc/State/MenuState.h"
 #include "inc/State/PlayState.h"
@@ -49,7 +50,9 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runGameLoop(bool autoRestart); // TODO temporary pass through params for the timers.
+    void runGameLoop(bool autoRestart, ley::HighScores &hs); // TODO temporary pass through params for the timers.
+    void runGameOver(ley::HighScores &hs, bool fs);
+    void runCleanUp(); //run clean up after the game is completly over
     ley::Timer* getFallTimer(); //TODO temporary accessor for the timer
     
     void renderBoard(); //renders the board to the video.

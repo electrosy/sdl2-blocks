@@ -151,14 +151,12 @@ void ley::Video::init() {
     
 }
 /* Accessors */
-void ley::Video::fullScreen(bool f) {
-    fs = f;
-}
-void ley::Video::setFullScreen(bool fs) {
+void ley::Video::setFullScreen(bool f) {
 
-    if(fs) {
+    if(f) {
         SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);
     } else { SDL_SetWindowFullscreen(window,SDL_WINDOW_SHOWN); }
+    fs = f;
 }
 void ley::Video::setRenderBackground(bool inRenderbg) {
     renderbg = inRenderbg;
