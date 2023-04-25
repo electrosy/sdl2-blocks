@@ -322,10 +322,8 @@ void ley::GameModel::processLines() {
         char linesToCut = firstAndLast.first - firstAndLast.second + 1;
         clearAndRecordLines(firstAndLast.first, firstAndLast.second);
         addToScore( (linesToCut * (numLevel+1)) * 10 );
-        if(numLines % NEW_LVL_AT_LINES == 0) { // new level every X lines.
-            ++numLevel;
-    }
-        
+        numLevel = numLines / NEW_LVL_AT_LINES;
+    
         shiftBoard(firstAndLast.first, linesToCut);
         //Be sore to fill the top of the board again with clear values after shifting.
         fillTop(linesToCut);

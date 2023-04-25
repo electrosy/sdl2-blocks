@@ -27,8 +27,7 @@ fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
     audSystem.playIntro();
 
-    gameStateMachine.changeState(new ley::PlayState(v));
-    gameStateMachine.loadRenderables();
+    gameStateMachine.changeState(new ley::PlayState(v));    
 }
 
 ley::GameController::~GameController() {

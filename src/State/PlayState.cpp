@@ -29,7 +29,8 @@ void PlayState::loadRenderables() {
 }
 
 bool PlayState::onEnter() {
-    SDL_Log("Entering PlayState");
+    SDL_Log("Entering PlayState and loading renderables");
+    loadRenderables();
     return true;
 }
 

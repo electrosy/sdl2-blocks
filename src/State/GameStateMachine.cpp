@@ -38,10 +38,4 @@ void ley::GameStateMachine::update(ley::Command command, ley::GameModel * gm) {
     }
 }
 
-void ley::GameStateMachine::loadRenderables() {
-    if(!mGameStates.empty()) {
-        mGameStates.back()->loadRenderables();
-    }
-}
-
 }
