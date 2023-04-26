@@ -9,7 +9,7 @@ class IntroState : public ley::GameState {
 public:
 
     IntroState(ley::Video * v);
-    virtual void update(ley::Command command, ley::GameModel * gm);
+    virtual void update(ley::Command command);
     virtual void loadRenderables();
 
     virtual bool onEnter();

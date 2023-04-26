@@ -8,7 +8,7 @@ MenuState::MenuState(ley::Video * v) {
     videoSystem = v;
 }
 
-void MenuState::update(ley::Command command, ley::GameModel * gm) {
+void MenuState::update(ley::Command command) {
 
 }
 

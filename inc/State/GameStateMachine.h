@@ -14,7 +14,7 @@ public:
     void pushState(GameState* pState);
     void changeState(GameState* pState);
     void popState();
-    void update(ley::Command command, ley::GameModel * gm);
+    void update(ley::Command command);
 
 private:
 

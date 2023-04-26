@@ -11,7 +11,7 @@ class MenuState : public ley::GameState {
 public:
 
     MenuState(ley::Video * v);
-    virtual void update(ley::Command command, ley::GameModel * gm);
+    virtual void update(ley::Command command);
     virtual void loadRenderables();
 
     virtual bool onEnter();

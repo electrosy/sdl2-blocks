@@ -24,10 +24,7 @@ gm(g),
 fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
     mVideoSystem->addRenderable(false, &fallTimer);
-
     audSystem.playIntro();
-
-    gameStateMachine.changeState(new ley::PlayState(v));    
 }
 
 ley::GameController::~GameController() {
@@ -46,7 +43,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         fallTimer.pause(false);
     }
 
-    mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
+    gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
@@ -83,7 +80,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
         /**** UPDATE ****/
         fallTimer.runFrame(false, blockFallSpeed);
-        gameStateMachine.update(command, gm);
+        gameStateMachine.update(command);
         
         //Check to see if we need to move the block down.
         if(fallTimer.hasExpired()) {
@@ -102,6 +99,8 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
     if(!gm->isGameRunning()) {
         runGameOver(hs, fs);
     }
+
+    gameStateMachine.popState();
         
     /**** CLEAN UP ****/
     runCleanUp();

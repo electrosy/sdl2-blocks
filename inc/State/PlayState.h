@@ -10,8 +10,8 @@ namespace ley {
 class PlayState : public ley::GameState {
 public:
 
-    PlayState(ley::Video * v);
-    virtual void update(ley::Command command, ley::GameModel * gm);
+    PlayState(ley::Video * v, ley::GameModel * gm);
+    virtual void update(ley::Command command);
     virtual void loadRenderables();
 
     virtual bool onEnter();
@@ -25,7 +25,8 @@ private:
     ley::Timer secondTimer; 
     ley::Timer thirdTimer; 
     ley::Timer fourthTimer;
-    ley::Video * videoSystem;
+    ley::Video * mVideoSystem;
+    ley::GameModel * mGameModel;
     static const std::string sPlayID;
 };
 

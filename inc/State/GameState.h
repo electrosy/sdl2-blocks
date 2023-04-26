@@ -13,7 +13,7 @@ namespace ley {
 class GameState {
 
 public:
-    virtual void update(ley::Command command, ley::GameModel * gm) = 0;
+    virtual void update(ley::Command command) = 0;
     virtual void loadRenderables() = 0;
     
     virtual bool onEnter() = 0;
