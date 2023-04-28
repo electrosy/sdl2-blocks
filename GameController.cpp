@@ -20,10 +20,8 @@ ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
 : 
 mVideoSystem(v),
 ren(mVideoSystem->getRenderer()),
-gm(g),
-fallTimer(ren,1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
+gm(g) {
 
-    mVideoSystem->addRenderable(false, &fallTimer);
     audSystem.playIntro();
 }
 
@@ -33,15 +31,8 @@ ley::GameController::~GameController() {
 
 /* Functions */
 void ley::GameController::runGameLoop(ley::HighScores &hs) {
-    
-    fallTimer.reset();
-    fadeMusic(); // finish up the intro music
 
-    //unpause game if it is already paused.
-    if(gm->isPaused()) {
-        gm->pauseGame(false);
-        fallTimer.pause(false);
-    }
+    fadeMusic(); // finish up the intro music
 
     gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
@@ -66,28 +57,13 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
             playNext();
             playnext = false;
         }
+
         if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
         }
 
-        if(command == ley::Command::down) {
-            fallTimer.reset();
-            command = ley::Command::none;
-        } else if(command == ley::Command::pause) {
-            gm->pauseGame(!gm->isPaused());
-            fallTimer.pause(!fallTimer.isPaused());
-        }
-
-        /**** UPDATE ****/
-        fallTimer.runFrame(false, blockFallSpeed);
         gameStateMachine.update(command);
-        
-        //Check to see if we need to move the block down.
-        if(fallTimer.hasExpired()) {
-            blockFallSpeed = gm->moveBlock(ley::Command::down);
-            fallTimer.reset();
-        }
-
+                
         /**** CLEAR ****/
         mVideoSystem->clear(); //clear the backbuffer
         
@@ -95,13 +71,13 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         mVideoSystem->frameDelay();
     }
 
+    gameStateMachine.popState();
+
     //continue to render graphics and get keyboard input after game is over.
     if(!gm->isGameRunning()) {
         runGameOver(hs, fs);
     }
 
-    gameStateMachine.popState();
-        
     /**** CLEAN UP ****/
     runCleanUp();
 }

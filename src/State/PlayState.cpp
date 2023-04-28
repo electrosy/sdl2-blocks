@@ -11,18 +11,38 @@ mGameModel(gm),
 firstTimer(v->getRenderer(),3000,{10,300,100,50}),
 secondTimer(v->getRenderer(),2500,{10,400,100,25}),
 thirdTimer(v->getRenderer(),1000,{10,425,100,30}),
-fourthTimer(v->getRenderer(),333,{10,455,100,5}) {
+fourthTimer(v->getRenderer(),333,{10,455,100,5}),
+fallTimer(v->getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 
 }
 
 void PlayState::update(ley::Command command) {
+
+    if(command == ley::Command::down) {
+            fallTimer.reset();
+            command = ley::Command::none;
+        } else if(command == ley::Command::pause) {
+            mGameModel->pauseGame(!mGameModel->isPaused());
+            fallTimer.pause(!fallTimer.isPaused());
+        }
+
+    /**** UPDATE ****/
+    fallTimer.runFrame(false, blockFallSpeed);
+
     firstTimer.runFrame();
     secondTimer.runFrame();
     thirdTimer.runFrame();
     fourthTimer.runFrame();
+
+    //Check to see if we need to move the block down.
+    if(fallTimer.hasExpired()) {
+        blockFallSpeed = mGameModel->moveBlock(ley::Command::down);
+        fallTimer.reset();
+    }
 }
 
 void PlayState::loadRenderables() {
+    mVideoSystem->addRenderable(false, &fallTimer);
     mVideoSystem->addRenderable(true, &firstTimer);
     mVideoSystem->addRenderable(true, &secondTimer);
     mVideoSystem->addRenderable(true, &thirdTimer);
@@ -31,6 +51,14 @@ void PlayState::loadRenderables() {
 
 bool PlayState::onEnter() {
     
+    fallTimer.reset();
+
+    //unpause game if it is already paused.
+    if(mGameModel->isPaused()) {
+        mGameModel->pauseGame(false);
+        fallTimer.pause(false);
+    }
+
     mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
     SDL_Log("Entering PlayState and loading renderables");
     loadRenderables();

@@ -20,6 +20,10 @@ public:
     virtual std::string getStateID() const { return sPlayID; }
 
 private:
+    int blockFallSpeed = 1000; //how many milisecond to make the block fall
+
+    //Timers
+    ley::Timer fallTimer; //Time to force the blockdown
 
     ley::Timer firstTimer;
     ley::Timer secondTimer; 

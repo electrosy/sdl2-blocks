@@ -33,16 +33,11 @@ private:
     ley::GameModel* gm;
     ley::GameStateMachine gameStateMachine;
     ley::Input mInputSystem;
-    
-    int blockFallSpeed = 1000; //how many milisecond to make the block fall
 
     ley::Input mainInput; //create the input system object.
 
     //Textures
     SDL_Texture *blockBits2 = nullptr;
-
-    //Timers
-    ley::Timer fallTimer; //Time to force the blockdown    
 
     ley::Audio audSystem; //audio subsystem.
 
