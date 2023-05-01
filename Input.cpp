@@ -196,6 +196,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
                     gm->stopProgram(true);
+                    gm->setGameRunning(false);
                 }
 
                 //pause game

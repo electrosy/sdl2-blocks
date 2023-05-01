@@ -19,12 +19,12 @@ fallTimer(v->getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 void PlayState::update(ley::Command command) {
 
     if(command == ley::Command::down) {
-            fallTimer.reset();
-            command = ley::Command::none;
-        } else if(command == ley::Command::pause) {
-            mGameModel->pauseGame(!mGameModel->isPaused());
-            fallTimer.pause(!fallTimer.isPaused());
-        }
+        fallTimer.reset();
+        command = ley::Command::none;
+    } else if(command == ley::Command::pause) {
+        mGameModel->pauseGame(!mGameModel->isPaused());
+        fallTimer.pause(!fallTimer.isPaused());
+    }
 
     /**** UPDATE ****/
     fallTimer.runFrame(false, blockFallSpeed);
