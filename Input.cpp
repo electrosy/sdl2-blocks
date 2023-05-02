@@ -137,7 +137,7 @@ ley::Command ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
 }
 ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playnext) {
     SDL_Event event;
-    ley::Command frameDirection = ley::Command::none; //direction for this frame;
+    ley::Command command = ley::Command::none; //direction for this frame;
 
     while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -175,17 +175,17 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
 
                 //move block down
                 if (state[SDL_SCANCODE_DOWN]) {
-                    frameDirection = ley::Command::down;
+                    command = ley::Command::down;
                     gm->moveBlock(ley::Command::down);
                 }
                 //move block left
                 if (state[SDL_SCANCODE_LEFT]) {
-                    frameDirection = ley::Command::left;
+                    command = ley::Command::left;
                     gm->moveBlock(ley::Command::left);
                 }
                 //move block right
                 if (state[SDL_SCANCODE_RIGHT]) {
-                    frameDirection = ley::Command::right;
+                    command = ley::Command::right;
                     gm->moveBlock(ley::Command::right);
                 }
                 //play next audio music track
@@ -201,7 +201,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
 
                 //pause game
                 if(state[SDL_SCANCODE_P]) {
-                    frameDirection = ley::Command::pause;
+                    command = ley::Command::pause;
                 }
                 break;
             default:
@@ -209,5 +209,5 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
         }
      }
 
-     return frameDirection;
+     return command;
 }
