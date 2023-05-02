@@ -134,7 +134,9 @@ int main(int argv, char** args) {
         runInitialUI = true;
 
         /**** Main Game Loop ****/
-        mainGameController.runGameLoop(highscores);
+        if(mainGameModel.programRunning()) {
+            mainGameController.runGameLoop(highscores);
+        }
 
     }//EXIT THE GAME
 

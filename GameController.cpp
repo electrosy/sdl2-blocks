@@ -38,45 +38,43 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
-    while(gm->programRunning()) {
-        while(gm->isGameRunning()) {
-            /**** MUSIC ****/
-            //TODO startPlayList should prbably not be called every frame.
-            startPlayList(); //start the main playlist for game play
+    
+    while(gm->isGameRunning()) {
+        /**** MUSIC ****/
+        //TODO startPlayList should prbably not be called every frame.
+        startPlayList(); //start the main playlist for game play
 
-            /**** RENDER ****/
-            mVideoSystem->render();
-            renderBoard();
-            mVideoSystem->present(); // output to the video system.
-            
-            bool playnext = false;
-            /**** GET INPUT ****/
-            //pollEvents updates running and full screen flags
-            ley::Command command = mainInput.pollEvents(fs, gm, playnext);
-            /**** INPUT PROCESSING ****/
-            if(playnext) {
-                playNext();
-                playnext = false;
-            }
-
-            if(fs != mVideoSystem->fullScreen()) {
-                mVideoSystem->setFullScreen(fs);
-            }
-
-            gameStateMachine.update(command);
-                    
-            /**** CLEAR ****/
-            mVideoSystem->clear(); //clear the backbuffer
-            
-            /**** LOCK FRAME RATE ****/
-            mVideoSystem->frameDelay();
-        }
+        /**** RENDER ****/
+        mVideoSystem->render();
+        renderBoard();
+        mVideoSystem->present(); // output to the video system.
         
-        runGameOver(hs, fs);
+        bool playnext = false;
+        /**** GET INPUT ****/
+        //pollEvents updates running and full screen flags
+        ley::Command command = mainInput.pollEvents(fs, gm, playnext);
+        /**** INPUT PROCESSING ****/
+        if(playnext) {
+            playNext();
+            playnext = false;
+        }
+
+        if(fs != mVideoSystem->fullScreen()) {
+            mVideoSystem->setFullScreen(fs);
+        }
+
+        gameStateMachine.update(command);
+                
+        /**** CLEAR ****/
+        mVideoSystem->clear(); //clear the backbuffer
+        
+        /**** LOCK FRAME RATE ****/
+        mVideoSystem->frameDelay();
     }
 
+    runGameOver(hs, fs);
+
     gameStateMachine.popState();
-    //gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
 
     /**** CLEAN UP ****/
     runCleanUp();
