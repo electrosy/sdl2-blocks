@@ -79,7 +79,7 @@ public:
     void moveRight();
     int max_x(int);
     int heightAtWidth(int);
-    int widthAtHeight(int);
+    int widthAtHeight(int); // TODO this method isn't used, clean it up.
     void reset(); //return block to original position for restarting the game.
 
 

@@ -27,6 +27,16 @@ void PlayState::update(ley::Command command) {
             mGameModel->pauseGame(!mGameModel->isPaused());
             fallTimer.pause(!fallTimer.isPaused());
         break;
+        case ley::Command::console :
+            mGameModel->overlayToggle();
+        break;
+        case ley::Command::cclockwise :
+            mGameModel->rotateBlock(false);
+            SDL_Log("Rotate counter clockwise");
+        break;
+        case ley::Command::clockwise :
+            mGameModel->rotateBlock(true);
+            SDL_Log("Rotate clockwise");
     }
 
     /**** UPDATE ****/

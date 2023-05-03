@@ -160,17 +160,15 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
                     gm->debugBoard(true);
                 }
                 if (state[SDL_SCANCODE_GRAVE]) {
-                    gm->overlayToggle();
+                    command = ley::Command::console;
                 }
                 //Rotate Block counter clockwise
                 if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_E]) {
-                    gm->rotateBlock(false);
-                    SDL_Log("Rotate counter clockwise");
+                    command = ley::Command::cclockwise;
                 }
                 //Rotate Block clockwise
                 if (state[SDL_SCANCODE_R]) {
-                    gm->rotateBlock(true);
-                    SDL_Log("Rotate clockwise");
+                    command = ley::Command::clockwise;
                 }
 
                 //move block down
