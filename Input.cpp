@@ -174,17 +174,14 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
                 //move block down
                 if (state[SDL_SCANCODE_DOWN]) {
                     command = ley::Command::down;
-                    gm->moveBlock(ley::Command::down);
                 }
                 //move block left
                 if (state[SDL_SCANCODE_LEFT]) {
                     command = ley::Command::left;
-                    gm->moveBlock(ley::Command::left);
                 }
                 //move block right
                 if (state[SDL_SCANCODE_RIGHT]) {
                     command = ley::Command::right;
-                    gm->moveBlock(ley::Command::right);
                 }
                 //play next audio music track
                 if (state[SDL_SCANCODE_N]) {

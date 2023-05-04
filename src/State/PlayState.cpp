@@ -19,10 +19,6 @@ fallTimer(v->getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
 void PlayState::update(ley::Command command) {
 
     switch (command) {
-        case ley::Command::down :
-            fallTimer.reset();
-            command = ley::Command::none;
-        break;
         case ley::Command::pause :
             mGameModel->pauseGame(!mGameModel->isPaused());
             fallTimer.pause(!fallTimer.isPaused());
@@ -37,6 +33,17 @@ void PlayState::update(ley::Command command) {
         case ley::Command::clockwise :
             mGameModel->rotateBlock(true);
             SDL_Log("Rotate clockwise");
+        break;
+        case ley::Command::down :
+            mGameModel->moveBlock(ley::Command::down);
+            fallTimer.reset();
+        break;
+        case ley::Command::left :
+            mGameModel->moveBlock(ley::Command::left);
+        break;
+        case ley::Command::right :
+            mGameModel->moveBlock(ley::Command::right);
+        break;
     }
 
     /**** UPDATE ****/
