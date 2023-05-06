@@ -39,13 +39,18 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
     
-    while(gm->isGameRunning()) {
+    bool gameOverState = false; // TODO we need to make this work without this extra 
+                                    // gameOverState flag/token which indicates if the
+                                    // state has been updated once the game resumes.
+                                    // It would be better to just push/pop the states directly.
+    while(gm->isGameRunning() || gm->programRunning()) {
         /**** MUSIC ****/
         //TODO startPlayList should prbably not be called every frame.
         startPlayList(); //start the main playlist for game play
 
         /**** RENDER ****/
         mVideoSystem->render();
+        gameStateMachine.render();
         renderBoard();
         mVideoSystem->present(); // output to the video system.
         
@@ -64,6 +69,17 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         gameStateMachine.update(command);
+
+        if(!gm->isGameRunning() && gameOverState == false) {
+            gameOverState = true;
+            setHighScores(hs);
+            gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
+        }
+
+        if(gm->isGameRunning() && gameOverState == true) {
+            gameOverState = false;
+            gameStateMachine.popState(); // remove the game over state.
+        }
                 
         /**** CLEAR ****/
         mVideoSystem->clear(); //clear the backbuffer
@@ -72,30 +88,16 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         mVideoSystem->frameDelay();
     }
 
-    runGameOver(hs, fs);
-
     gameStateMachine.popState();
 
     /**** CLEAN UP ****/
     runCleanUp();
 }
-void ley::GameController::runGameOver(ley::HighScores &hs, bool fs) {
+void ley::GameController::setHighScores(ley::HighScores &hs) {
     //push on the new high score
     hs.push(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
     hs.write();
     hs.setClean(false);
-
-    while(gm->programRunning()) {
-        //This loop runs the gameover animations and should not run until the game is actually over.
-        //For now just run at the frame rate that was set at the end of the game.
-        renderBoard();
-        mVideoSystem->render();
-        mVideoSystem->present();
-        mainInput.pollEndEvents(fs,(*gm));
-
-        mVideoSystem->clear(); //SDL_RenderClear()
-        mVideoSystem->frameDelay();
-    }
 }
 
 void ley::GameController::runCleanUp() {

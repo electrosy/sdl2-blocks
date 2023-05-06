@@ -14,10 +14,12 @@ class GameState {
 
 public:
     virtual void update(ley::Command command) = 0;
+    virtual void render() = 0;
     virtual void loadRenderables() = 0;
     
-    virtual bool onEnter() = 0;
-    virtual bool onExit() = 0;
+    virtual bool onEnter() = 0; //when the state is pushed on
+    virtual bool onExit() = 0; //when the state is poped off
+    virtual bool onReEnter() = 0; //rentering the state after the previous was popped off.
 
     virtual std::string getStateID() const = 0;
 };

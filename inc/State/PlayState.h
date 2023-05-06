@@ -13,16 +13,21 @@ public:
 
     PlayState(ley::Video * v, ley::GameModel * gm);
     virtual void update(ley::Command command);
+    virtual void render();
     virtual void loadRenderables();
 
     virtual bool onEnter();
     virtual bool onExit();
+    virtual bool onReEnter();
 
     virtual std::string getStateID() const { return sPlayID; }
 
 private:
 
     int blockFallSpeed = 1000; //how many milisecond to make the block fall
+
+    Renderables mRenderables;
+    Renderables mDebugRenderables;
 
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown
@@ -34,6 +39,8 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sPlayID;
+
+    void resetGame();
 };
 
 }

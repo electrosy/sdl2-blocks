@@ -15,6 +15,7 @@ public:
     void changeState(GameState* pState);
     void popState();
     void update(ley::Command command);
+    void render();
 
 private:
 

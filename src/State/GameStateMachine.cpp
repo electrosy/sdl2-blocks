@@ -14,6 +14,10 @@ void ley::GameStateMachine::popState() {
             mGameStates.pop_back();
         }
     }
+
+    if(!mGameStates.empty()) {
+        mGameStates.back()->onReEnter();
+    }
 }
 
 void ley::GameStateMachine::changeState(GameState *pState) {
@@ -35,6 +39,12 @@ void ley::GameStateMachine::changeState(GameState *pState) {
 void ley::GameStateMachine::update(ley::Command command) {
     if(!mGameStates.empty()) {
         mGameStates.back()->update(command);
+    }
+}
+
+void ley::GameStateMachine::render() {
+    if(!mGameStates.empty()) {
+        mGameStates.back()->render();
     }
 }
 

@@ -44,6 +44,12 @@ void PlayState::update(ley::Command command) {
         case ley::Command::right :
             mGameModel->moveBlock(ley::Command::right);
         break;
+        case ley::Command::debugcolide :
+            mGameModel->debugBoard(true);
+        break;
+        case ley::Command::debugtexture :
+            mGameModel->debugBoard(false);
+        break;
     }
 
     /**** UPDATE ****/
@@ -60,16 +66,44 @@ void PlayState::update(ley::Command command) {
     }
 }
 
+void PlayState::render() {
+    mRenderables.renderAll(mVideoSystem->getRenderer());
+
+    if(mGameModel->isOverlayOn()) {
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+    }
+}
+
 void PlayState::loadRenderables() {
-    mVideoSystem->addRenderable(false, &fallTimer);
-    mVideoSystem->addRenderable(true, &firstTimer);
-    mVideoSystem->addRenderable(true, &secondTimer);
-    mVideoSystem->addRenderable(true, &thirdTimer);
-    mVideoSystem->addRenderable(true, &fourthTimer);
+    
+    mRenderables.push_back(&fallTimer);
+
+    mDebugRenderables.push_back(&firstTimer);
+    mDebugRenderables.push_back(&secondTimer);
+    mDebugRenderables.push_back(&thirdTimer);
+    mDebugRenderables.push_back(&fourthTimer);
 }
 
 bool PlayState::onEnter() {
-    
+    resetGame();
+    SDL_Log("Entering PlayState and loading renderables");
+    loadRenderables();
+    return true;
+}
+
+bool PlayState::onReEnter() {
+    mGameModel->resetGame();
+    resetGame();
+    SDL_Log("ReEntering PlayState");
+    return true;
+}
+
+bool PlayState::onExit() {    
+    SDL_Log("Exiting Playstate");
+    return true;
+}
+
+void PlayState::resetGame() {
     fallTimer.reset();
 
     //unpause game if it is already paused.
@@ -77,16 +111,6 @@ bool PlayState::onEnter() {
         mGameModel->pauseGame(false);
         fallTimer.pause(false);
     }
-
-    mVideoSystem->resetClock(); //restart the clock for the main game loop AVG FPS calculation. 
-    SDL_Log("Entering PlayState and loading renderables");
-    loadRenderables();
-    return true;
-}
-
-bool PlayState::onExit() {
-    SDL_Log("Exiting Playstate");
-    return true;
 }
 
 }

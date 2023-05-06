@@ -153,11 +153,11 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
                     |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
                     ) { fullscreen = !fullscreen; }
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
-                    gm->debugBoard(false);
+                    command = ley::Command::debugtexture;
                 }
                 //Output setstate layer on the board
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
-                    gm->debugBoard(true);
+                    command = ley::Command::debugcolide;                    
                 }
                 if (state[SDL_SCANCODE_GRAVE]) {
                     command = ley::Command::console;
@@ -198,6 +198,11 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
                 if(state[SDL_SCANCODE_P]) {
                     command = ley::Command::pause;
                 }
+
+                if(state[SDL_SCANCODE_RETURN]) {
+                    command = ley::Command::enter;
+                }
+                
                 break;
             default:
                 break;

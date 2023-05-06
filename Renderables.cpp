@@ -22,15 +22,15 @@ unsigned int ley::Renderables::size() {
 }
 
 /* Functions */
-void ley::Renderables::push_back(Renderable * r, int layer) {
+void ley::Renderables::push_back(Renderable * r) {
     
-    renderables.insert(std::make_pair(layer, r));
+    renderables.push_back(r);
 }
 
 void ley::Renderables::renderAll(SDL_Renderer * r) {           
     
     if(renderables.size() > 0) {
-        for(const auto& [key, value] : renderables) {
+        for(const auto value : renderables) {
             value->render(r);
         }
     }

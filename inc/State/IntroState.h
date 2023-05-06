@@ -8,19 +8,25 @@ namespace ley {
 class IntroState : public ley::GameState {
 public:
 
-    IntroState(ley::Video * v);
+    IntroState(ley::Video * v, ley::GameModel * gm);
     virtual void update(ley::Command command);
+    virtual void render();
     virtual void loadRenderables();
 
     virtual bool onEnter();
     virtual bool onExit();
+    virtual bool onReEnter();
 
     virtual std::string getStateID() const { return sIntroID; }
 
 private:
 
-    ley::Video * videoSystem;
+    ley::Video * mVideoSystem;
+    ley::GameModel * mGameModel;
     static const std::string sIntroID;
+
+    Renderables mRenderables;
+    Renderables mDebugRenderables;
 };
 
 }

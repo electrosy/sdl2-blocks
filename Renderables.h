@@ -19,7 +19,7 @@ Date: Feb/17/2020
 
 namespace ley {
 
-typedef std::multimap<int, Renderable*> RenderableType;
+typedef std::vector<Renderable*> RenderableType;
 
 class Renderables {
 
@@ -31,7 +31,7 @@ public:
     Renderables();
     ~Renderables();
 
-    void push_back(Renderable * r, int layer = 9999);
+    void push_back(Renderable * r);
     void renderAll(SDL_Renderer * r);
 
     unsigned int size();
