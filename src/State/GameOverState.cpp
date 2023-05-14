@@ -16,6 +16,9 @@ void GameOverState::update(ley::Command command) {
         case ley::Command::enter :
             mGameModel->resetGame();
         break;
+        case ley::Command::quit :
+            mGameModel->setGameRunning(false);
+            mGameModel->stopProgram(true);
     }
 }
 

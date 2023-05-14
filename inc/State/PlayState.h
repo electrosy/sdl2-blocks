@@ -1,6 +1,7 @@
 #include "GameState.h"
 
 #include "../../Video.h"
+#include "../../GameModel.h"
 
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H

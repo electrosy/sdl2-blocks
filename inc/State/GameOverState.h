@@ -1,5 +1,8 @@
 #include "GameState.h"
 
+#include "../../Video.h"
+#include "../../GameModel.h"
+
 #ifndef GAMEOVERSTATE_H
 #define GAMEOVERSTATE_H
 

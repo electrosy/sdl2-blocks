@@ -18,7 +18,7 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-ley::Command ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
+ley::Command ley::Input::pollMainMenuEvents(bool &running) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
@@ -67,7 +67,7 @@ ley::Command ley::Input::pollMainMenuEvents(bool &running, GameModel& gm) {
      return frameDirection;
 }
 
-ley::Command ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
+ley::Command ley::Input::pollTitleEvents(bool &running) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
@@ -96,46 +96,8 @@ ley::Command ley::Input::pollTitleEvents(bool &running, GameModel& gm) {
 
      return frameDirection;
 }
-ley::Command ley::Input::pollEndEvents(bool& fullscreen, GameModel& gm) {
-    SDL_Event event;
-    ley::Command frameDirection = ley::Command::none; //direction for this frame;
 
-    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        switch (event.type)     {
-            case SDL_QUIT:         
-                gm.stopProgram(true);
-                break;
-            
-            case SDL_KEYDOWN:
-                //TODO these inputs should manipulate the game controller instead of the game model directly.
-                //Full screen mode
-                if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
-                    |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
-                    ) { fullscreen = !fullscreen; }
-                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
-                    gm.debugBoard(false);
-                }
-                //Output setstate layer on the board
-                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
-                    gm.debugBoard(true);
-                }
-                if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_A]) {
-                    gm.overlayToggle();
-                }
-                //quite game
-                if (state[SDL_SCANCODE_Q]) {
-                    gm.stopProgram(true);
-                }
-                break;
-            default:
-                break;
-        }
-     }
-
-     return frameDirection;
-}
-ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playnext) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, bool &playnext) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
 
@@ -143,7 +105,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
-                gm->stopProgram(true);
+                command = ley::Command::quit;
                 break;
             
             case SDL_KEYDOWN:
@@ -190,8 +152,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, GameModel* gm, bool &playn
 
                 //quite game
                 if (state[SDL_SCANCODE_Q]) {
-                    gm->stopProgram(true);
-                    gm->setGameRunning(false);
+                    command = ley::Command::quit;
                 }
 
                 //pause game

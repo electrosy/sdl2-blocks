@@ -57,7 +57,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         bool playnext = false;
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
-        ley::Command command = mainInput.pollEvents(fs, gm, playnext);
+        ley::Command command = mainInput.pollEvents(fs, playnext);
         /**** INPUT PROCESSING ****/
         if(playnext) {
             playNext();
@@ -206,7 +206,7 @@ void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(mVideoSystem->getRenderer(), test, &src_rect, &dest_rect);
         mVideoSystem->present();
-        if(mInputSystem.pollTitleEvents(intro,(*gm)) == ley::Command::down 
+        if(mInputSystem.pollTitleEvents(intro) == ley::Command::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;
         }

@@ -1,5 +1,8 @@
 #include "GameState.h"
 
+#include "../../Video.h"
+#include "../../GameModel.h"
+
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
 

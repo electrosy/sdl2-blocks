@@ -1,6 +1,7 @@
 #include "GameState.h"
 
 #include "../../Video.h"
+#include "../../GameModel.h"
 
 #ifndef MENUSTATE_H
 #define MENUSTATE_H

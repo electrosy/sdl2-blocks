@@ -16,7 +16,6 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "Font.h"
 #include "Timer.h"
-#include "Input.h"
 #include "HighScores.h"
 #include "inc/State/GameStateMachine.h"
 #include "inc/State/MenuState.h"

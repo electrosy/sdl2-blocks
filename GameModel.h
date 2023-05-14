@@ -14,6 +14,7 @@ Date: Feb/15/2020
 #include "Clock.h"
 #include "Timer.h"
 
+#include "Input.h"
  
 namespace ley {
 
@@ -24,7 +25,6 @@ const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 
 const auto NEW_LVL_AT_LINES = 10;
 //TODO rename up to rotate
-enum class Command {down,right,up,left,none,pause,space,console,cclockwise,clockwise,debugcolide,debugtexture,enter}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 class GameModel {
 

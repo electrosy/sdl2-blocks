@@ -172,7 +172,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
         renderables.renderAll(v->getRenderer());
         v->present();
 
-        ley::Command frameDirection = i->pollMainMenuEvents(runmain,(*m));
+        ley::Command frameDirection = i->pollMainMenuEvents(runmain);
         
         if(count() > 0) {
             
@@ -300,7 +300,7 @@ void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m
         SDL_SetTextureAlphaMod(test, alphaFrameIndex);
         SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
         v->present();
-        if(i->pollTitleEvents(intro,(*m)) == ley::Command::down 
+        if(i->pollTitleEvents(intro) == ley::Command::down 
             || (alphaFrameIndex < 10 && faddedin)) {
             intro = false;
         }

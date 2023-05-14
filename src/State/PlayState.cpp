@@ -50,6 +50,9 @@ void PlayState::update(ley::Command command) {
         case ley::Command::debugtexture :
             mGameModel->debugBoard(false);
         break;
+        case ley::Command::quit :
+            mGameModel->setGameRunning(false);
+            mGameModel->stopProgram(true);
     }
 
     /**** UPDATE ****/

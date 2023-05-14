@@ -1,9 +1,9 @@
+#include "../../Input.h"
+
 #include <string>
 #include <SDL2/SDL.h>
 
-#include "../../Input.h"
-#include "../../Video.h"
-#include "../../GameModel.h"
+
 
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
