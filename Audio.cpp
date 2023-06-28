@@ -50,6 +50,8 @@ playlistNumber(0), playlistMax(3) {
     if(!musMelJazz3) {
         printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
     }
+
+    Mix_VolumeMusic(20);
 }
 
 ley::Audio::~Audio() {
@@ -131,4 +133,19 @@ void ley::Audio::playPlaylist() {
 void ley::Audio::fadeOutMusic() {
 
     Mix_FadeOutMusic(500);
+}
+
+void ley::Audio::increaseVolume() {
+    Mix_VolumeMusic(Mix_VolumeMusic(-1) + 10);
+}
+
+void ley::Audio::decreaseVolume() {
+
+    //If current volume - decrease ammount is less than 0 then set to 0 and exit.
+    if(Mix_VolumeMusic(-1) - 10 < 0) {
+        Mix_VolumeMusic(0);
+        return;
+    }
+
+    Mix_VolumeMusic(Mix_VolumeMusic(-1) - 10);
 }

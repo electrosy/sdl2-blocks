@@ -54,22 +54,28 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         renderBoard();
         mVideoSystem->present(); // output to the video system.
         
-        bool playnext = false;
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
-        ley::Command command = mainInput.pollEvents(fs, playnext);
+        ley::Command command = mainInput.pollEvents(fs);
         /**** INPUT PROCESSING ****/
-        if(playnext) {
+        if(command == ley::Command::nextSong) {
             playNext();
-            playnext = false;
         }
 
         if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
         }
 
-        gameStateMachine.update(command);
+        if(command == ley::Command::decreaseVolume) {
+            audSystem.decreaseVolume();
+        }
 
+        if(command == ley::Command::increaseVolume) {
+            audSystem.increaseVolume();
+        }
+
+        gameStateMachine.update(command);
+                
         if(!gm->isGameRunning() && gameOverState == false) {
             gameOverState = true;
             setHighScores(hs);

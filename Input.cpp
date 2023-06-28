@@ -97,7 +97,7 @@ ley::Command ley::Input::pollTitleEvents(bool &running) {
      return frameDirection;
 }
 
-ley::Command ley::Input::pollEvents(bool& fullscreen, bool &playnext) {
+ley::Command ley::Input::pollEvents(bool& fullscreen) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
 
@@ -147,7 +147,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, bool &playnext) {
                 }
                 //play next audio music track
                 if (state[SDL_SCANCODE_N]) {
-                    playnext = true;
+                    command = ley::Command::nextSong;
                 }
 
                 //quite game
@@ -162,6 +162,14 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, bool &playnext) {
 
                 if(state[SDL_SCANCODE_RETURN]) {
                     command = ley::Command::enter;
+                }
+
+                if(state[SDL_SCANCODE_MINUS]) {
+                    command = ley::Command::decreaseVolume;
+                }
+
+                if(state[SDL_SCANCODE_EQUALS]) {
+                    command = ley::Command::increaseVolume;
                 }
                 
                 break;

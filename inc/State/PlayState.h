@@ -6,6 +6,9 @@
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
 
+auto constexpr VOLUME_POS_X_PX = 800;
+auto constexpr VOLUME_POS_Y_PX = 20;
+
 namespace ley {
 
 class PlayState : public ley::GameState {
@@ -30,13 +33,16 @@ private:
     Renderables mRenderables;
     Renderables mDebugRenderables;
 
+    //Font
+    ley::Font statusFont;
+
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown
-
     ley::Timer firstTimer;
     ley::Timer secondTimer; 
     ley::Timer thirdTimer; 
     ley::Timer fourthTimer;
+    ley::Timer statusTimer;
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sPlayID;

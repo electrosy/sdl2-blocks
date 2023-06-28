@@ -13,7 +13,25 @@ Date: Feb/14/2020
 
 namespace ley {
 
-enum class Command {down,right,up,left,none,pause,space,console,cclockwise,clockwise,debugcolide,debugtexture,enter,quit}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+enum class Command {
+    down,
+    right,
+    up,
+    left,
+    none,
+    pause,
+    space,
+    console,
+    cclockwise,
+    clockwise,
+    debugcolide,
+    debugtexture,
+    enter,
+    quit,
+    increaseVolume,
+    decreaseVolume,
+    nextSong,
+    previousSong}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 class Input {
 
@@ -24,7 +42,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool&, bool& playnext);
+    ley::Command pollEvents(bool&);
     ley::Command pollTitleEvents(bool&);
     ley::Command pollMainMenuEvents(bool&);
 };

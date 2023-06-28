@@ -12,7 +12,11 @@ firstTimer(v->getRenderer(),3000,{10,300,100,50}),
 secondTimer(v->getRenderer(),2500,{10,400,100,25}),
 thirdTimer(v->getRenderer(),1000,{10,425,100,30}),
 fourthTimer(v->getRenderer(),333,{10,455,100,5}),
-fallTimer(v->getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}) {
+fallTimer(v->getRenderer(),1000,{ley::START_X_OFFSET_PX-1,641,302,2}),
+statusTimer(v->getRenderer(),1000,{10,500,100,5}),
+statusFont(VOLUME_POS_X_PX, VOLUME_POS_Y_PX, 100, 20) {
+
+    statusFont.updateMessage("Start Game");
 
 }
 
@@ -53,6 +57,18 @@ void PlayState::update(ley::Command command) {
         case ley::Command::quit :
             mGameModel->setGameRunning(false);
             mGameModel->stopProgram(true);
+        break;
+        case ley::Command::decreaseVolume :
+            statusFont.updateMessage("Volume down");
+            statusTimer.reset();
+        break;
+        case ley::Command::increaseVolume :
+            statusFont.updateMessage("Volume up");
+            statusTimer.reset();
+        break;
+        case ley::Command::nextSong :
+            statusFont.updateMessage("Next song");
+            statusTimer.reset();
     }
 
     /**** UPDATE ****/
@@ -61,6 +77,10 @@ void PlayState::update(ley::Command command) {
     secondTimer.runFrame();
     thirdTimer.runFrame();
     fourthTimer.runFrame();
+    statusTimer.runFrame(false, 0.0);
+    if(statusTimer.hasExpired()) {
+        statusFont.updateMessage("");
+    }
 
     //Check to see if we need to move the block down.
     if(fallTimer.hasExpired()) {
@@ -79,12 +99,14 @@ void PlayState::render() {
 
 void PlayState::loadRenderables() {
     
+    mRenderables.push_back(&statusFont);
     mRenderables.push_back(&fallTimer);
 
     mDebugRenderables.push_back(&firstTimer);
     mDebugRenderables.push_back(&secondTimer);
     mDebugRenderables.push_back(&thirdTimer);
     mDebugRenderables.push_back(&fourthTimer);
+    mDebugRenderables.push_back(&statusTimer);
 }
 
 bool PlayState::onEnter() {

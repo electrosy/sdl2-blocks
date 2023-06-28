@@ -40,6 +40,8 @@ class Audio {
         void playPlaylist();
 
         void fadeOutMusic();
+        void increaseVolume();
+        void decreaseVolume();
 };
 
 }
