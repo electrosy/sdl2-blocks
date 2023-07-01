@@ -156,7 +156,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 }
 
                 //pause game
-                if(state[SDL_SCANCODE_P]) {
+                if(state[SDL_SCANCODE_P] || state[SDL_SCANCODE_SLASH]) {
                     command = ley::Command::pause;
                 }
 

@@ -50,10 +50,10 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
         /**** RENDER ****/
         mVideoSystem->render();
-        gameStateMachine.render();
         renderBoard();
+        gameStateMachine.render();
+        /**** PRESENT ****/
         mVideoSystem->present(); // output to the video system.
-        
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
         ley::Command command = mainInput.pollEvents(fs);
@@ -75,7 +75,21 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         gameStateMachine.update(command);
-                
+
+        //Only allow paused if the game is not over.
+        if(!gameOverState) {
+            if(command == ley::Command::pause && gm->isPaused()) {
+                SDL_Log("Game Paused!");
+                gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
+            }
+
+            if(command == ley::Command::pause && !gm->isPaused()) {
+                SDL_Log("Game Resumed");
+                gameStateMachine.popState();
+            }
+        }
+
+        //TODO should not use an extra flag for game over, should use the state machine directly.    
         if(!gm->isGameRunning() && gameOverState == false) {
             gameOverState = true;
             setHighScores(hs);

@@ -117,8 +117,9 @@ bool PlayState::onEnter() {
 }
 
 bool PlayState::onReEnter() {
-    mGameModel->resetGame();
-    resetGame();
+    if(fallTimer.isPaused()) {
+        fallTimer.pause(false);
+    }
     SDL_Log("ReEntering PlayState");
     return true;
 }

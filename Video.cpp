@@ -15,10 +15,6 @@ const auto START_DELAY = 1; //start delay for the game loop
 const auto TARGET_FPS = 144.0; //provide at least this many frames per second.
 const auto FPS_ADJUST_RATE = 1000; // adjust fps every second
 
-//Screen dimensions
-const auto SCREEN_WIDTH = 1280;
-const auto SCREEN_HEIGHT = 720;
-
 const std::string APPLICATION_NAME = "Ablockalypse";
 const std::string APPLICATION_VER = "0.1.8.2";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
@@ -272,6 +268,9 @@ void ley::Video::loadTextures() {
 
     //Cat
     TextureManager::Instance()->loadTexture("assets/cat-trans.png", "cat");
+
+    //Game controls
+    TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
     //Backgrounds.
     TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");

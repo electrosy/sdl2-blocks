@@ -25,6 +25,13 @@ auto const LVL_POS_Y_PX = 60;
 auto const SCORE_POS_X_PX = 800;
 auto const SCORE_POS_Y_PX = 80;
 
+//Screen dimensions
+const auto SCREEN_WIDTH = 1280;
+const auto SCREEN_HEIGHT = 720;
+
+constexpr auto SCREEN_WCENTER = SCREEN_WIDTH / 2;
+constexpr auto SCREEN_HCENTER = SCREEN_HEIGHT / 2;
+
 namespace ley {
 
 const auto START_X_OFFSET_PX = 490;
