@@ -21,11 +21,13 @@ playlistNumber(0), playlistMax(3) {
         printf("Mix_Init: %s\n", Mix_GetError());
     }
 
+    //Configure Audio system
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)==-1) {
         printf("Mix_OpenAudio: %s\n", Mix_GetError());
         exit(2);
     }
     
+    //Load music files
     musIntro = Mix_LoadMUS("./assets/audio/MovieTheaterIntro.mp3");
     if(!musIntro) {
         printf("Mix_LoadMUS(musIntro): %s\n", Mix_GetError());
@@ -51,7 +53,12 @@ playlistNumber(0), playlistMax(3) {
         printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
     }
 
+    //Set Music Volume
     Mix_VolumeMusic(20);
+
+    //Load Audio SFX
+    sfxSwoosh = Mix_LoadWAV("./assets/audio/sfx/swoosh.wav");
+    sfxSwooshReverse = Mix_LoadWAV("./assets/audio/sfx/swoosh_reverse");
 }
 
 ley::Audio::~Audio() {
@@ -128,6 +135,10 @@ void ley::Audio::playPlaylist() {
     if(playlistNumber > (playlistMax-1)) {
         playlistNumber = 0;
     }
+}
+
+void ley::Audio::playSfx() {
+    Mix_PlayChannel(-1, sfxSwoosh, 0);
 }
 
 void ley::Audio::fadeOutMusic() {

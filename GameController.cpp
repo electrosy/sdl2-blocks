@@ -79,11 +79,13 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         //Only allow paused if the game is not over.
         if(!gameOverState) {
             if(command == ley::Command::pause && gm->isPaused()) {
+                audSystem.playSfx();
                 SDL_Log("Game Paused!");
                 gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
             }
 
             if(command == ley::Command::pause && !gm->isPaused()) {
+                audSystem.playSfx();
                 SDL_Log("Game Resumed");
                 gameStateMachine.popState();
             }

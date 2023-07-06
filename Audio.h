@@ -26,6 +26,9 @@ class Audio {
         Mix_Music *musMelJazz2;
         Mix_Music *musMelJazz3;
 
+        Mix_Chunk* sfxSwoosh;
+        Mix_Chunk* sfxSwooshReverse;
+
         int playlistMax;
 
         int playlistNumber;
@@ -38,6 +41,7 @@ class Audio {
         void playMainMenu();
         void playNext();
         void playPlaylist();
+        void playSfx();
 
         void fadeOutMusic();
         void increaseVolume();
