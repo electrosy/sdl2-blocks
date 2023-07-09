@@ -67,7 +67,7 @@ public:
     void setClear(bool c);
     void setH(unsigned int h) {rect.h = h;};
     void setW(unsigned int w) {rect.w = w;};
-    void rotate(bool); // false for counterclockwise and true for clockwise.
+    bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
     std::array<std::array<ley::BlockTexCode, 4>,4> getBlockParts();
 
     void operator= (const Block &b);

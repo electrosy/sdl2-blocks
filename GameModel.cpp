@@ -260,23 +260,26 @@ void ley::GameModel::setBlock() {
         }
     }
 }
-void ley::GameModel::rotateBlock(bool r) { //ADD FEATURE - add control to Flip horz or vert.
+bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
+    
+    bool rotated = false;
+    
     if(canRotate(r)) {
         activeBlock.rotate(r);
         clearOldBlock();
         oldBlock.rotate(r);
         putBlock(activeBlock);
+        rotated = true;
     }
+
+    return rotated;
 }
 
-//** TODO we need to synchronize the rotation so that it doesn't happen 
-//** TODO when the timer moves the block down.
 bool ley::GameModel::canRotate(bool r) {
     //rotate the block if the game is not paused
     bool canput = false;
 
-    if(!isPaused()) {
-        activeBlock.rotate(r);
+    if(!isPaused() && activeBlock.rotate(r)) {
         canput = canPut(activeBlock, ley::Command::up); //up is a rotation
         activeBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
@@ -309,8 +312,11 @@ void ley::GameModel::fillTop(char num) {
     }
 }
 
-void ley::GameModel::processLines() {
+bool ley::GameModel::processLines() {
     //Check to see how many full lines we have starting from the bottom
+
+    bool linesRemoved = false;
+
     std::pair<char,char> firstAndLast;
     firstAndLast.first = -1;
     firstAndLast.second = -1;
@@ -322,6 +328,7 @@ void ley::GameModel::processLines() {
         char linesToCut = firstAndLast.first - firstAndLast.second + 1;
         clearAndRecordLines(firstAndLast.first, firstAndLast.second);
         addToScore( (linesToCut * (numLevel+1)) * 10 );
+        linesRemoved = true;
         numLevel = numLines / NEW_LVL_AT_LINES;
     
         shiftBoard(firstAndLast.first, linesToCut);
@@ -333,6 +340,7 @@ void ley::GameModel::processLines() {
     }
     
     // TODO also continue to check the rest of the board for full lines. (but is this a valid case?)
+    return linesRemoved;
 }
 
 //pass in start line and returns the number of lines that are full lines from the start line
@@ -400,11 +408,13 @@ void ley::GameModel::updateSpeed() {
 }
 
 //TODO this function should probably go in the controller
-double ley::GameModel::moveBlock(Command d) {
+bool ley::GameModel::moveBlock(Command d) {
 
     if(!active) {
-        return currentSpeed; //don't do any moves while we are paused.
+        return false; //don't do any moves while we are paused.
     }
+
+    bool moved = false;
 
     switch (d) {
         case Command::down :
@@ -412,10 +422,14 @@ double ley::GameModel::moveBlock(Command d) {
                 activeBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
+                moved = true;
             } 
             else { 
                 setBlock();
-                processLines();
+                audSystem.playSfx(ley::sfx::inplace);
+                if(processLines()) {
+                    audSystem.playSfx(ley::sfx::piecesfalling);
+                }
                 if(!newBlock()) {
                     setGameRunning(false);
                 }
@@ -427,6 +441,7 @@ double ley::GameModel::moveBlock(Command d) {
                 activeBlock.moveLeft();
                 clearOldBlock();
                 oldBlock.moveLeft();
+                moved = true;
             }
         break;
 
@@ -435,6 +450,7 @@ double ley::GameModel::moveBlock(Command d) {
                 activeBlock.moveRight();
                 clearOldBlock();
                 oldBlock.moveRight();
+                moved = true;
             }
         break;
 
@@ -444,7 +460,7 @@ double ley::GameModel::moveBlock(Command d) {
     putBlock(activeBlock);
     updateSpeed();
 
-    return currentSpeed;
+    return moved;
 }
 void ley::GameModel::overlayToggle() {
     overlayOn = !overlayOn;

@@ -9,7 +9,6 @@ Date: Feb/15/2020
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
-#include "Audio.h"
 #include "Video.h"
 #include "GameModel.h"
 #include "Clock.h"
@@ -39,8 +38,6 @@ private:
 
     //Textures
     SDL_Texture *blockBits2 = nullptr;
-
-    ley::Audio audSystem; //audio subsystem.
 
 public:
     GameController(ley::Video* , ley::GameModel*);

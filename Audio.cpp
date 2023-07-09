@@ -58,7 +58,12 @@ playlistNumber(0), playlistMax(3) {
 
     //Load Audio SFX
     sfxSwoosh = Mix_LoadWAV("./assets/audio/sfx/swoosh.wav");
-    sfxSwooshReverse = Mix_LoadWAV("./assets/audio/sfx/swoosh_reverse");
+    sfxPause = Mix_LoadWAV("./assets/audio/sfx/pause.wav");
+    sfxUnPause = Mix_LoadWAV("./assets/audio/sfx/unpause.wav");
+    sfxSqueek = Mix_LoadWAV("./assets/audio/sfx/squeek.wav");
+    sfxPiecesFalling = Mix_LoadWAV("./assets/audio/sfx/pieces-falling.wav");
+    sfxInPlace = Mix_LoadWAV("./assets/audio/sfx/human-impact.wav");
+    sfxFallDown = Mix_LoadWAV("./assets/audio/sfx/tick-tock.wav");
 }
 
 ley::Audio::~Audio() {
@@ -68,6 +73,8 @@ ley::Audio::~Audio() {
     }
 
     Mix_CloseAudio();
+
+    //TODO Mix_FreeMusic & MixFreeChunk???
 
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
@@ -137,9 +144,42 @@ void ley::Audio::playPlaylist() {
     }
 }
 
-void ley::Audio::playSfx() {
-    Mix_PlayChannel(-1, sfxSwoosh, 0);
+void ley::Audio::playSfx(ley::sfx sfx) {
+    
+    Mix_Chunk* sfxToPlay;
+
+    switch (sfx) {
+        case ley::sfx::swoosh :
+            sfxToPlay = sfxSwoosh;
+        break;
+        case ley::sfx::pause :
+            sfxToPlay = sfxPause;
+        break;
+        case ley::sfx::unpause :
+            sfxToPlay = sfxUnPause;
+        break;
+        case ley::sfx::squeek :
+            sfxToPlay = sfxSqueek;       
+        break; 
+        case ley::sfx::piecesfalling :
+            sfxToPlay = sfxPiecesFalling;
+        break;
+        case ley::sfx::inplace :
+            sfxToPlay = sfxInPlace;
+        break;
+        case ley::sfx::falldown :
+            sfxToPlay = sfxFallDown;
+        break;
+
+        default :
+        break;
+    }
+
+    if(sfxToPlay) {
+        Mix_PlayChannel(-1, sfxToPlay, 0);
+    }
 }
+
 
 void ley::Audio::fadeOutMusic() {
 

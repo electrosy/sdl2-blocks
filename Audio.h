@@ -16,6 +16,8 @@ Date: Dec/2/2021
 
 namespace ley {
 
+enum class sfx {swoosh, pause, unpause, squeek, piecesfalling, inplace, falldown};
+
 class Audio {
 
     private:
@@ -27,7 +29,12 @@ class Audio {
         Mix_Music *musMelJazz3;
 
         Mix_Chunk* sfxSwoosh;
-        Mix_Chunk* sfxSwooshReverse;
+        Mix_Chunk* sfxPause;
+        Mix_Chunk* sfxUnPause;
+        Mix_Chunk* sfxSqueek;
+        Mix_Chunk* sfxPiecesFalling;
+        Mix_Chunk* sfxInPlace;
+        Mix_Chunk* sfxFallDown;
 
         int playlistMax;
 
@@ -41,7 +48,7 @@ class Audio {
         void playMainMenu();
         void playNext();
         void playPlaylist();
-        void playSfx();
+        void playSfx(ley::sfx sfx);
 
         void fadeOutMusic();
         void increaseVolume();

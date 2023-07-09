@@ -22,7 +22,7 @@ mVideoSystem(v),
 ren(mVideoSystem->getRenderer()),
 gm(g) {
 
-    audSystem.playIntro();
+    gm->audio()->playIntro();
 }
 
 ley::GameController::~GameController() {
@@ -67,11 +67,11 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         if(command == ley::Command::decreaseVolume) {
-            audSystem.decreaseVolume();
+            gm->audio()->decreaseVolume();
         }
 
         if(command == ley::Command::increaseVolume) {
-            audSystem.increaseVolume();
+            gm->audio()->increaseVolume();
         }
 
         gameStateMachine.update(command);
@@ -79,14 +79,14 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         //Only allow paused if the game is not over.
         if(!gameOverState) {
             if(command == ley::Command::pause && gm->isPaused()) {
-                audSystem.playSfx();
                 SDL_Log("Game Paused!");
+                gm->audio()->playSfx(ley::sfx::pause);
                 gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
             }
 
             if(command == ley::Command::pause && !gm->isPaused()) {
-                audSystem.playSfx();
                 SDL_Log("Game Resumed");
+                gm->audio()->playSfx(ley::sfx::unpause);
                 gameStateMachine.popState();
             }
         }
@@ -240,17 +240,17 @@ void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
 }
 
 void ley::GameController::fadeMusic() {
-    audSystem.fadeOutMusic();
+    gm->audio()->fadeOutMusic();
 }
 
 void ley::GameController::playMainMenu() {
-    audSystem.playMainMenu();
+    gm->audio()->playMainMenu();
 }
 
 void ley::GameController::startPlayList() {
-    audSystem.playPlaylist();
+    gm->audio()->playPlaylist();
 }
 
 void ley::GameController::playNext() {
-    audSystem.playNext();
+    gm->audio()->playNext();
 }

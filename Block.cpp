@@ -106,8 +106,15 @@ ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned in
     return block[y][x];
 }
 
-void ley::Block::rotate(bool direction) { //false for counterclockwise, true for clockwise  
+bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for clockwise  
     
+    bool rotated = false;
+
+    //early return if there is no other orientations for block, e.g. cube.
+    if(type == ley::BlockType::cube) { 
+        return false;
+    }
+
     if(direction) {
         if(orientation == 3) {
             orientation = 0;
@@ -126,6 +133,9 @@ void ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     }
 
     setBlock(type,this->orientation);
+    rotated = true;
+
+    return rotated;
 }
 
 //return width for this height value.

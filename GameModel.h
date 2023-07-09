@@ -10,6 +10,7 @@ Date: Feb/15/2020
 
 #include <array>
 
+#include "Audio.h"
 #include "Block.h"
 #include "Clock.h"
 #include "Timer.h"
@@ -46,13 +47,15 @@ private:
     bool canPut(Block&, Command d); //can physically put the block in the board.
     std::pair<char,char> checkForLines(char); //check to see if any solid lines across the board have been made, return -1 for none
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
-    void processLines();
+    bool processLines(); //returns true if any number of lines are removed.
     void clearAndRecordLines(int, int); //clear the completed lines and keep track of the score.
     void shiftBoard(char, char); //start line, number of lines
     void fillTop(char); //fill top of the board after the shift
     ley::Block getRandomBlock();
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
+
+    ley::Audio audSystem; //audio subsystem.
 
 public:
     GameModel();
@@ -61,8 +64,8 @@ public:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
 
-    double moveBlock(Command); //will return a new falldown speed.
-    void rotateBlock(bool);
+    bool moveBlock(Command); //returns true for false if block actually moved
+    bool rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console
     void overlayToggle();
@@ -79,11 +82,14 @@ public:
     ley::Block getNextBlock();
     std::string getRandomTexture();
     void resetGame();
+    double speed() { return currentSpeed; };
     
     void pauseGame(bool);
     bool isPaused();
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit.
+
+    ley::Audio* audio() { return &audSystem; };
 };
 
 }

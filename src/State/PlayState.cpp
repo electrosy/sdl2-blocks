@@ -31,22 +31,31 @@ void PlayState::update(ley::Command command) {
             mGameModel->overlayToggle();
         break;
         case ley::Command::cclockwise :
-            mGameModel->rotateBlock(false);
-            SDL_Log("Rotate counter clockwise");
+            if (mGameModel->rotateBlock(false)) {
+                mGameModel->audio()->playSfx(ley::sfx::swoosh);
+            }
         break;
         case ley::Command::clockwise :
-            mGameModel->rotateBlock(true);
-            SDL_Log("Rotate clockwise");
+            if (mGameModel->rotateBlock(true)) {
+                mGameModel->audio()->playSfx(ley::sfx::swoosh);
+            }
         break;
         case ley::Command::down :
-            mGameModel->moveBlock(ley::Command::down);
+            if(mGameModel->moveBlock(ley::Command::down)) {
+                mGameModel->audio()->playSfx(ley::sfx::squeek);
+            }
+
             fallTimer.reset();
         break;
         case ley::Command::left :
-            mGameModel->moveBlock(ley::Command::left);
+            if(mGameModel->moveBlock(ley::Command::left)) {
+                mGameModel->audio()->playSfx(ley::sfx::squeek);
+            }
         break;
         case ley::Command::right :
-            mGameModel->moveBlock(ley::Command::right);
+            if(mGameModel->moveBlock(ley::Command::right)) {
+                mGameModel->audio()->playSfx(ley::sfx::squeek);
+            }
         break;
         case ley::Command::debugcolide :
             mGameModel->debugBoard(true);
@@ -72,7 +81,7 @@ void PlayState::update(ley::Command command) {
     }
 
     /**** UPDATE ****/
-    fallTimer.runFrame(false, blockFallSpeed);
+    fallTimer.runFrame(false, mGameModel->speed());
     firstTimer.runFrame();
     secondTimer.runFrame();
     thirdTimer.runFrame();
@@ -84,8 +93,9 @@ void PlayState::update(ley::Command command) {
 
     //Check to see if we need to move the block down.
     if(fallTimer.hasExpired()) {
-        blockFallSpeed = mGameModel->moveBlock(ley::Command::down);
+        mGameModel->moveBlock(ley::Command::down);
         fallTimer.reset();
+        mGameModel->audio()->playSfx(ley::sfx::falldown);
     }
 }
 
