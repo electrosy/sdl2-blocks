@@ -20,6 +20,8 @@ const std::string APPLICATION_VER = "0.2.0.0";
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
+const std::string SDL_VERSION_COMP_LABEL = "SDL Compiled Version: ";
+const std::string SDL_VERSION_LINK_LABEL = "SDL Linked Version: ";
 
 const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER + " " +  APPLICATION_PLATFORM + " " +  APPLICATION_REL_TYPE + " " + APPLICATION_ENV);
 
@@ -35,7 +37,9 @@ video_ready(true),
 gm(g),
 renderbg(true),
 mili_adjust(0),
-fontGameOver{255, 190, 100, 35}
+fontGameOver{255, 190, 100, 35},
+SDLCompiled{10, 25, 100, 35},
+SDLLinked{10, 60, 100, 35}
 {
     init();
 }
@@ -92,6 +96,7 @@ void ley::Video::frameDelay() {
 
 /* RAII */
 void ley::Video::createWindow() {
+
     /* create a window to render to */
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) >= 0) {
         // if all good
@@ -144,7 +149,18 @@ void ley::Video::init() {
     mDebugRenderables.push_back(&debugSimpleShape);
     debugSimpleShape.addShape("debugconsole", {0,0,1280,100});
 
-    
+
+    //Add some fonts for the SDL version.
+    SDL_version compiled;
+    SDL_version linked;
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+
+    SDLCompiled.updateMessage(std::to_string(compiled.major) + "!" + std::to_string(compiled.minor) + "!" + std::to_string(compiled.patch));
+    SDLLinked.updateMessage(std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
+    mDebugRenderables.push_back(&SDLCompiled);
+    mDebugRenderables.push_back(&SDLLinked);
+
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool f) {
