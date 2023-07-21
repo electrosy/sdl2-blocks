@@ -38,8 +38,8 @@ gm(g),
 renderbg(true),
 mili_adjust(0),
 fontGameOver{255, 190, 100, 35},
-SDLCompiled{10, 25, 100, 35},
-SDLLinked{10, 60, 100, 35}
+SDLCompiled{10, 25, 175, 35},
+SDLLinked{10, 60, 175, 35}
 {
     init();
 }
@@ -156,8 +156,8 @@ void ley::Video::init() {
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
 
-    SDLCompiled.updateMessage(std::to_string(compiled.major) + "!" + std::to_string(compiled.minor) + "!" + std::to_string(compiled.patch));
-    SDLLinked.updateMessage(std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
+    SDLCompiled.updateMessage("SDLCompiled!" + std::to_string(compiled.major) + "!" + std::to_string(compiled.minor) + "!" + std::to_string(compiled.patch));
+    SDLLinked.updateMessage("SDLLinked!" + std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
     mDebugRenderables.push_back(&SDLCompiled);
     mDebugRenderables.push_back(&SDLLinked);
 
