@@ -19,8 +19,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\include"
+                "${workspaceFolder}\\**",
+                "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\include\\**"
             ],
             "defines": [
                 "_DEBUG",
@@ -32,7 +32,6 @@
             "cppStandard": "gnu++17",
             "intelliSenseMode": "gcc-x64"
         }
-
     ],
     "version": 4
 }
