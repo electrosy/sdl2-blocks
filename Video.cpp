@@ -39,7 +39,8 @@ renderbg(true),
 mili_adjust(0),
 fontGameOver{255, 190, 100, 35},
 SDLCompiled{10, 25, 175, 35},
-SDLLinked{10, 60, 175, 35}
+SDLLinked{10, 60, 175, 35},
+frame_count{0}
 {
     init();
 }
