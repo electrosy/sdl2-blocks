@@ -92,6 +92,52 @@ void ley::UIMenu::addSelector(std::string label, const SDL_Rect src, const SDL_R
     selectors.emplace(label,temp);
 
 }
+void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
+    
+    //Display all the base menu elements
+    for(int i = 0; i < elements.size() && !elements.empty(); ++i) {
+        SDL_Rect source = elements[i].getSource();
+        SDL_Rect destination = elements[i].getDestination();
+        SDL_Texture* baseTexture = elements[i].getBase();
+        
+        SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
+    }
+}
+
+void ley::UIMenu::renderHotItem(ley::Video* v) {
+    //Display either the hot or flicker depending on the current flag
+
+    SDL_Rect src_rect = currentSrc();
+    SDL_Rect dest_rect = currentDest();
+
+    if(count() > 0) {
+        if((SDL_GetTicks() % 50) % 10) {
+            setHot(true);
+            SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
+        } else {
+            setHot(false);
+            SDL_RenderCopy(v->getRenderer(), currentTex(), &dest_rect, &dest_rect);
+        }
+    }
+}
+
+void ley::UIMenu::runCommand(ley::Command command) {
+    if(count() > 0) {
+            
+        if(command == ley::Command::down || command == ley::Command::right) {
+            next();
+        }
+        
+        if(command == ley::Command::cclockwise || command == ley::Command::up || command == ley::Command::left) {
+            previous();
+        }
+
+        if(command == ley::Command::space) {
+            toggle(); //this will toggle the selector
+        }
+    }
+}
+
 int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
     
     bool runmain = true;
@@ -101,18 +147,11 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
     SDL_SetTextureBlendMode(background,SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(background, 255);
 
-    std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> baseElements; //All the elements for this menu.
-    getBaseElements(&baseElements);
-
     SDL_Rect src_rect;
     SDL_Rect dest_rect;
     src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
     dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
 
-    //default - start
-    SDL_Rect current_rect = {0,0,150,60};
-    SDL_Rect current_dest_rect = {29,199,150,60};
-    
     unsigned int alphaFrameIndex = 0;
     bool faddedin = false;
     char fadespeed = 5;
@@ -132,14 +171,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
         SDL_SetTextureAlphaMod(background, alphaFrameIndex);
         SDL_RenderCopy(v->getRenderer(), background, &src_rect, &dest_rect);
 
-        //Display all the base menu elements
-        for(int i = 0; i < baseElements.size() && !baseElements.empty(); ++i) {
-            SDL_Rect source = std::get<0>(baseElements.at(i));
-            SDL_Rect destination = std::get<1>(baseElements.at(i));
-            SDL_Texture* baseTexture = std::get<2>(baseElements.at(i));
-            
-            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
-        }
+        renderBaseMenuItems(v);
 
         //Display all the available selectors
         for (std::multimap<std::string,UIElement>::iterator it = selectors.begin(); it!=selectors.end(); ++it) {
@@ -153,45 +185,15 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
             }
         }
         
-        //Display either the hot or flicker depending on the current flag
-
-        if(count() > 0) {
-            if((SDL_GetTicks() % 50) % 10) {
-                if(faddedin) {
-                    setHot(true);
-                    SDL_RenderCopy(v->getRenderer(), currentTex(), &current_rect, &current_dest_rect);
-                }
-            } else {
-                if(faddedin) {
-                    setHot(false);
-                    SDL_RenderCopy(v->getRenderer(), currentTex(), &current_dest_rect, &current_dest_rect);
-                }
-            }
+        if(faddedin) {
+            renderHotItem(v);
         }
-
+        
         renderables.renderAll(v->getRenderer());
         v->present();
 
-        ley::Command frameDirection = i->pollMainMenuEvents(runmain);
+        runCommand(i->pollMainMenuEvents(runmain));
         
-        if(count() > 0) {
-            
-            if(frameDirection == ley::Command::down || frameDirection == ley::Command::right) {
-                next();
-            }
-            
-            if(frameDirection == ley::Command::up || frameDirection == ley::Command::left) {
-                previous();
-            }
-
-            if(frameDirection == ley::Command::space) {
-                toggle(); //this will toggle the selector
-            }
-
-            current_rect = currentSrc();
-            current_dest_rect = currentDest();
-        }
-
         v->clear();
     }
 

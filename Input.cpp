@@ -126,7 +126,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 }
                 //Rotate Block counter clockwise
                 if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_E]) {
-                    command = ley::Command::cclockwise;
+                    command = ley::Command::cclockwise; // TODO this needs some work, main menu has cclockwise overloaded
                 }
                 //Rotate Block clockwise
                 if (state[SDL_SCANCODE_R]) {

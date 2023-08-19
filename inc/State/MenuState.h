@@ -2,6 +2,8 @@
 
 #include "../../Video.h"
 #include "../../GameModel.h"
+#include "../../UIMenu.h"
+#include "../../UIElement.h"
 
 #ifndef MENUSTATE_H
 #define MENUSTATE_H
@@ -28,8 +30,15 @@ private:
     ley::GameModel * mGameModel;
     static const std::string sMenuID;
 
+    ley::Sprite mBackground;
+
     Renderables mRenderables;
     Renderables mDebugRenderables;
+
+    ley::UIMenu mainUI;
+    int menuItem; //Store the option selected from the main menu.
+    int optionItem; //Store the option selected from the options menu.
+    ley::UIMenu optionUI;
 };
 
 }

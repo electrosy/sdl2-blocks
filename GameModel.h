@@ -17,7 +17,13 @@ Date: Feb/15/2020
 
 #include "Input.h"
  
+
+
 namespace ley {
+
+enum class StateChange {
+    play,
+    none}; //particular states that the game can be in
 
 const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option added, check width of 4 bug case.
 const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can enter play in the right place.
@@ -56,6 +62,7 @@ private:
     bool running; //if true then the program is still runing and has not been asked to exit yet.
 
     ley::Audio audSystem; //audio subsystem.
+    ley::StateChange mStateChange = ley::StateChange::none;
 
 public:
     GameModel();
@@ -90,6 +97,9 @@ public:
     void stopProgram(bool); //sets the program to exit.
 
     ley::Audio* audio() { return &audSystem; };
+
+    ley::StateChange currentStateChange() { return mStateChange; };
+    void stateChange(ley::StateChange state) { mStateChange = state; };
 };
 
 }

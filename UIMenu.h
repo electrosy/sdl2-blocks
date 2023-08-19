@@ -52,6 +52,10 @@ public:
     void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     int getElementId(std::string);
     void runIntroScreen(ley::Video*, ley::Input*, ley::GameModel*, std::string, SDL_Rect, double);
+    
+    void renderBaseMenuItems(ley::Video* v);
+    void renderHotItem(ley::Video* v);
+    void runCommand(ley::Command command);
 
 };
 

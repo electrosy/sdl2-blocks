@@ -34,6 +34,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
     fadeMusic(); // finish up the intro music
 
+//    gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
     gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
@@ -45,7 +46,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
                                     // It would be better to just push/pop the states directly.
     while(gm->isGameRunning() || gm->programRunning()) {
         /**** MUSIC ****/
-        //TODO startPlayList should prbably not be called every frame.
+        //TODO startPlayList should prbably not be called every frame. put this in the play state enter state method
         startPlayList(); //start the main playlist for game play
 
         /**** RENDER ****/
@@ -75,6 +76,15 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         gameStateMachine.update(command);
+
+/*
+        if(gm->currentStateChange() == ley::StateChange::play) {
+            //add the new state
+            gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
+            //remove the statechange flag
+            gm->stateChange(ley::StateChange::none);
+        }
+*/
 
         //Only allow paused if the game is not over.
         if(!gameOverState) {
@@ -110,7 +120,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         mVideoSystem->frameDelay();
     }
 
-    gameStateMachine.popState();
+    gameStateMachine.popState(); //Remove the play state.
 
     /**** CLEAN UP ****/
     runCleanUp();
