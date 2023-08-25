@@ -171,6 +171,10 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 if(state[SDL_SCANCODE_EQUALS]) {
                     command = ley::Command::increaseVolume;
                 }
+
+                if(state[SDL_SCANCODE_SPACE]) {
+                    command = ley::Command::space;
+                }
                 
                 break;
             default:

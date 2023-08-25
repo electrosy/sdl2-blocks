@@ -23,6 +23,8 @@ namespace ley {
 
 enum class StateChange {
     play,
+    options,
+    quitmenu,
     none}; //particular states that the game can be in
 
 const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option added, check width of 4 bug case.

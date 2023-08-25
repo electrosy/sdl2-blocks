@@ -55,6 +55,8 @@ public:
     
     void renderBaseMenuItems(ley::Video* v);
     void renderHotItem(ley::Video* v);
+    void renderSelectors(ley::Video* v);
+    void render(ley::Video* v);
     void runCommand(ley::Command command);
 
 };

@@ -121,6 +121,26 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     }
 }
 
+void ley::UIMenu::renderSelectors(ley::Video* v) {
+    //Display all the available selectors
+    for (std::multimap<std::string,UIElement>::iterator it = selectors.begin(); it!=selectors.end(); ++it) {
+        
+        if(it->second.isActiveSelector()) {
+            SDL_Rect source = it->second.getSource();
+            SDL_Rect destination = it->second.getDestination();
+            SDL_Texture* baseTexture = it->second.getTexture();
+
+            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
+        }
+    }
+}
+
+void ley::UIMenu::render(ley::Video* v) {
+    renderBaseMenuItems(v);
+    renderHotItem(v);
+    renderSelectors(v);
+}
+
 void ley::UIMenu::runCommand(ley::Command command) {
     if(count() > 0) {
             
@@ -173,17 +193,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
 
         renderBaseMenuItems(v);
 
-        //Display all the available selectors
-        for (std::multimap<std::string,UIElement>::iterator it = selectors.begin(); it!=selectors.end(); ++it) {
-            
-            if(it->second.isActiveSelector()) {
-                SDL_Rect source = it->second.getSource();
-                SDL_Rect destination = it->second.getDestination();
-                SDL_Texture* baseTexture = it->second.getTexture();
-
-                SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
-            }
-        }
+        renderSelectors(v);
         
         if(faddedin) {
             renderHotItem(v);

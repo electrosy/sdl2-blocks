@@ -34,7 +34,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
     fadeMusic(); // finish up the intro music
 
-//    gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
+    //gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
     gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
@@ -76,16 +76,26 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         gameStateMachine.update(command);
-
 /*
+        if(gm->currentStateChange() == ley::StateChange::quitmenu) {
+            gameStateMachine.popState();
+            gm->stateChange(ley::StateChange::none);
+        }
+
         if(gm->currentStateChange() == ley::StateChange::play) {
             //add the new state
             gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
             //remove the statechange flag
             gm->stateChange(ley::StateChange::none);
         }
-*/
 
+        if(gm->currentStateChange() == ley::StateChange::options) {
+            //Goto the options menu state
+            gameStateMachine.pushState(new ley::OptionMenuState(mVideoSystem, gm));
+            //clear the statechange flag
+            gm->stateChange(ley::StateChange::none);
+        }
+*/
         //Only allow paused if the game is not over.
         if(!gameOverState) {
             if(command == ley::Command::pause && gm->isPaused()) {
@@ -101,7 +111,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
             }
         }
 
-        //TODO should not use an extra flag for game over, should use the state machine directly.    
+        //TODO should not use an extra flag for game over, should use the state machine directly, or at least use something in the gamemodel.
         if(!gm->isGameRunning() && gameOverState == false) {
             gameOverState = true;
             setHighScores(hs);

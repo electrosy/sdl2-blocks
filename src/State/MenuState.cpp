@@ -31,15 +31,18 @@ void MenuState::update(ley::Command command) {
         mGameModel->stateChange(ley::StateChange::play);
     }
 
+    if(command == ley::Command::enter && mainUI.getIndex() == 2) {
+        mGameModel->stateChange(ley::StateChange::options);
+    }
+
     mainUI.runCommand(command);
 }
 
 void MenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer());
 
-    mainUI.renderBaseMenuItems(mVideoSystem);
-    mainUI.renderHotItem(mVideoSystem);
-
+    mainUI.render(mVideoSystem);
+    
     if(mGameModel->isOverlayOn()) {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer());
     }
