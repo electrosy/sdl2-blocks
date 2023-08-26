@@ -31,8 +31,18 @@ void MenuState::update(ley::Command command) {
         mGameModel->stateChange(ley::StateChange::play);
     }
 
+    if(command == ley::Command::enter && mainUI.getIndex() == 1) {
+        mGameModel->stateChange(ley::StateChange::highscores);
+    }
+
     if(command == ley::Command::enter && mainUI.getIndex() == 2) {
         mGameModel->stateChange(ley::StateChange::options);
+    }
+
+    if(command == ley::Command::enter && mainUI.getIndex() == 3) {
+        mGameModel->stateChange(ley::StateChange::quitmenu);
+        mGameModel->setGameRunning(false);
+        mGameModel->stopProgram(true);
     }
 
     mainUI.runCommand(command);

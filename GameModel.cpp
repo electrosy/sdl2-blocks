@@ -29,6 +29,8 @@ running(true)
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
    putBlock(activeBlock);
+
+   mHighScores.read();
 }
 
 ley::GameModel::~GameModel() {

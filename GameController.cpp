@@ -76,15 +76,22 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         }
 
         gameStateMachine.update(command);
-/*
+
         if(gm->currentStateChange() == ley::StateChange::quitmenu) {
             gameStateMachine.popState();
             gm->stateChange(ley::StateChange::none);
         }
-
+/*
         if(gm->currentStateChange() == ley::StateChange::play) {
             //add the new state
             gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
+            //remove the statechange flag
+            gm->stateChange(ley::StateChange::none);
+        }
+
+        if(gm->currentStateChange() == ley::StateChange::highscores) {
+            //add the new state
+            gameStateMachine.pushState(new ley::HighScoresMenuState(mVideoSystem, gm));
             //remove the statechange flag
             gm->stateChange(ley::StateChange::none);
         }
@@ -96,9 +103,10 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
             gm->stateChange(ley::StateChange::none);
         }
 */
-        //Only allow paused if the game is not over.
+        //Only allow paused/unpause if the game is not over
         if(!gameOverState) {
-            if(command == ley::Command::pause && gm->isPaused()) {
+            //Only allow pause if we are in the playstate.
+            if(command == ley::Command::pause && gm->isPaused() && gameStateMachine.getStateId() == "PLAY") {
                 SDL_Log("Game Paused!");
                 gm->audio()->playSfx(ley::sfx::pause);
                 gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));

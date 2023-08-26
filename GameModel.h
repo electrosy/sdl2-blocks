@@ -14,10 +14,8 @@ Date: Feb/15/2020
 #include "Block.h"
 #include "Clock.h"
 #include "Timer.h"
-
 #include "Input.h"
- 
-
+#include "HighScores.h"
 
 namespace ley {
 
@@ -25,6 +23,7 @@ enum class StateChange {
     play,
     options,
     quitmenu,
+    highscores,
     none}; //particular states that the game can be in
 
 const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option added, check width of 4 bug case.
@@ -66,6 +65,8 @@ private:
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
 
+    ley::HighScores mHighScores;
+
 public:
     GameModel();
     ~GameModel();
@@ -96,12 +97,14 @@ public:
     void pauseGame(bool);
     bool isPaused();
     bool programRunning(); //is the program running?
-    void stopProgram(bool); //sets the program to exit.
+    void stopProgram(bool); //sets the program to exit by setting running to false.
 
     ley::Audio* audio() { return &audSystem; };
 
     ley::StateChange currentStateChange() { return mStateChange; };
     void stateChange(ley::StateChange state) { mStateChange = state; };
+
+    ley::HighScores* highScores() { return &mHighScores; };
 };
 
 }

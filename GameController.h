@@ -19,6 +19,7 @@ Date: Feb/15/2020
 #include "inc/State/GameStateMachine.h"
 #include "inc/State/MenuState.h"
 #include "inc/State/OptionMenuState.h"
+#include "inc/State/HighScoresMenuState.h"
 #include "inc/State/PlayState.h"
 #include "inc/State/PauseState.h"
 #include "inc/State/IntroState.h"
@@ -61,4 +62,5 @@ public:
 
 }
 #endif
+
 

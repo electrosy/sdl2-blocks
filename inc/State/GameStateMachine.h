@@ -16,6 +16,7 @@ public:
     void popState();
     void update(ley::Command command);
     void render();
+    std::string getStateId();
 
 private:
 

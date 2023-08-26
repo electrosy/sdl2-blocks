@@ -107,6 +107,8 @@ void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
 void ley::UIMenu::renderHotItem(ley::Video* v) {
     //Display either the hot or flicker depending on the current flag
 
+    if(elements.size() <= 0) {return; /*EARLY EXIT*/}
+    
     SDL_Rect src_rect = currentSrc();
     SDL_Rect dest_rect = currentDest();
 
@@ -139,6 +141,8 @@ void ley::UIMenu::render(ley::Video* v) {
     renderBaseMenuItems(v);
     renderHotItem(v);
     renderSelectors(v);
+
+    renderables.renderAll(v->getRenderer());
 }
 
 void ley::UIMenu::runCommand(ley::Command command) {

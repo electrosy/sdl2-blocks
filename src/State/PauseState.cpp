@@ -45,7 +45,7 @@ void PauseState::update(ley::Command command) {
         break;
         case ley::Command::quit :
             mGameModel->setGameRunning(false);
-            mGameModel->stopProgram(true);
+            //mGameModel->stopProgram(true);
         break;
         case ley::Command::nextSong :
         break;
