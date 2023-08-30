@@ -27,6 +27,8 @@ private:
 
     static const std::string sGameOverStateID;
 
+    ley::Font fontGameOver; //Game over font
+
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
 

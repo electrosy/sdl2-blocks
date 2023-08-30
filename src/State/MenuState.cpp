@@ -22,7 +22,7 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
 void MenuState::update(ley::Command command) {
     switch (command) {
         case ley::Command::quit :
-            mGameModel->setGameRunning(false);
+//            mGameModel->setGameRunning(false);
             mGameModel->stopProgram(true);
         break;
     }
@@ -40,7 +40,7 @@ void MenuState::update(ley::Command command) {
     }
 
     if(command == ley::Command::enter && mainUI.getIndex() == 3) {
-        mGameModel->stateChange(ley::StateChange::quitmenu);
+        mGameModel->stateChange(ley::StateChange::quitstate);
         mGameModel->setGameRunning(false);
         mGameModel->stopProgram(true);
     }
@@ -65,6 +65,7 @@ void MenuState::loadRenderables() {
 bool MenuState::onEnter() {
     SDL_Log("Entering MenuState");
     loadRenderables();
+    mGameModel->audio()->playMainMenu();
     return true;
 }
 
@@ -77,5 +78,12 @@ bool MenuState::onExit() {
     SDL_Log("Exiting Menustate");
     return true;
 }
+/*
+bool MenuState::onPause() {
+    std::string pause = "Pausing" + getStateID();
+    SDL_Log(pause.c_str());
+    return true;
+}
+*/
 
 }

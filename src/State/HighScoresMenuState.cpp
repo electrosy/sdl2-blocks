@@ -31,7 +31,7 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
 void HighScoresMenuState::update(ley::Command command) {
     switch (command) {
         case ley::Command::quit :
-            mGameModel->stateChange(ley::StateChange::quitmenu);
+            mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
 

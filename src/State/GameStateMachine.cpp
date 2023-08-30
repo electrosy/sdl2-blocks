@@ -3,11 +3,17 @@
 namespace ley {
 
 void ley::GameStateMachine::pushState(GameState *pState) {
+    //Call the OnPause for the current state.
+    
+    
+    //Then push the new state and call onEnter()
     mGameStates.push_back(pState);
     mGameStates.back()->onEnter();
 }
 
 void ley::GameStateMachine::popState() {
+    
+    //Remove the current state
     if(!mGameStates.empty()) {
         if(mGameStates.back()->onExit()) {
             delete mGameStates.back();
@@ -15,6 +21,7 @@ void ley::GameStateMachine::popState() {
         }
     }
 
+    //If there is another state remaining in the state call the onReEnter()
     if(!mGameStates.empty()) {
         mGameStates.back()->onReEnter();
     }

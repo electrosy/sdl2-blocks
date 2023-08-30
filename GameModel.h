@@ -22,8 +22,9 @@ namespace ley {
 enum class StateChange {
     play,
     options,
-    quitmenu,
+    quitstate,
     highscores,
+    gameover,
     none}; //particular states that the game can be in
 
 const auto BOARDSIZE_WIDTH = 10; //ADD FEATURE - this should be the first option added, check width of 4 bug case.
@@ -47,7 +48,7 @@ private:
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
     long score; //the total score the this game (level*linesatonce)
     bool gameRunning;
-    bool active; //not paused
+    bool active; //not paused // TODO this should be called paused and the checks should be reversed
     void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);

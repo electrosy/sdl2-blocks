@@ -65,7 +65,8 @@ void PlayState::update(ley::Command command) {
         break;
         case ley::Command::quit :
             mGameModel->setGameRunning(false);
-            mGameModel->stopProgram(true);
+//            mGameModel->stopProgram(true);
+            mGameModel->stateChange(ley::StateChange::quitstate);
         break;
         case ley::Command::decreaseVolume :
             statusFont.updateMessage("Volume down");
@@ -147,6 +148,8 @@ void PlayState::resetGame() {
         mGameModel->pauseGame(false);
         fallTimer.pause(false);
     }
+
+    mGameModel->resetGame();
 }
 
 }

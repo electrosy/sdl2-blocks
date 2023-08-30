@@ -27,7 +27,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 void OptionMenuState::update(ley::Command command) {
     switch (command) {
         case ley::Command::quit :
-            mGameModel->stateChange(ley::StateChange::quitmenu);
+            mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
 

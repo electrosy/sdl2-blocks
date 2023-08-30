@@ -37,7 +37,6 @@ video_ready(true),
 gm(g),
 renderbg(true),
 mili_adjust(0),
-fontGameOver{255, 190, 100, 35},
 SDLCompiled{10, 25, 175, 35},
 SDLLinked{10, 60, 175, 35},
 frame_count{0}
@@ -133,7 +132,6 @@ void ley::Video::init() {
     fontLvl = { LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
     fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
     
-    mRenderables.push_back(&fontGameOver);
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
@@ -197,12 +195,6 @@ void ley::Video::setBackgroundTexture() {
 void ley::Video::render() {
 
     setRenderBackground(gm->isGameRunning()); // TODO this should go in the controller
-    
-    if(gm->isGameRunning()) { //TODO all this fontGameOver update should go in the controller
-        fontGameOver.updateMessage("");
-    } else if(!gm->isGameRunning()) {
-        fontGameOver.updateMessage("Game Over!!!");
-    }
 
     //Render background
     if(renderbg) {

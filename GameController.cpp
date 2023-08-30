@@ -30,34 +30,30 @@ ley::GameController::~GameController() {
 /* Accessors */
 
 /* Functions */
-void ley::GameController::runGameLoop(ley::HighScores &hs) {
-
-    fadeMusic(); // finish up the intro music
-
-    //gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
-    gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
+void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
+    
+    gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
+    //gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
-    
-    bool gameOverState = false; // TODO we need to make this work without this extra 
-                                    // gameOverState flag/token which indicates if the
-                                    // state has been updated once the game resumes.
-                                    // It would be better to just push/pop the states directly.
-    while(gm->isGameRunning() || gm->programRunning()) {
+
+    while(gm->programRunning()) {
         /**** MUSIC ****/
-        //TODO startPlayList should prbably not be called every frame. put this in the play state enter state method
-        startPlayList(); //start the main playlist for game play
+        
 
         /**** RENDER ****/
         mVideoSystem->render();
         renderBoard();
         gameStateMachine.render();
+        
         /**** PRESENT ****/
         mVideoSystem->present(); // output to the video system.
+        
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
         ley::Command command = mainInput.pollEvents(fs);
+        
         /**** INPUT PROCESSING ****/
         if(command == ley::Command::nextSong) {
             playNext();
@@ -77,13 +73,21 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
 
         gameStateMachine.update(command);
 
-        if(gm->currentStateChange() == ley::StateChange::quitmenu) {
+        //Don't quit the state for pause this way.
+        if((command == ley::Command::quit || gm->currentStateChange() == ley::StateChange::quitstate)
+            && !(gameStateMachine.getStateId() == "PAUSE")) {
+
+            if(gameStateMachine.getStateId() == "GAMEOVER" && !gm->isGameRunning()) {
+                gameStateMachine.popState(); //Assume we have to exit two states if we are in game over. assume STACK=MENU|PLAY|GAMEOVER
+            }
+
             gameStateMachine.popState();
             gm->stateChange(ley::StateChange::none);
         }
-/*
+
         if(gm->currentStateChange() == ley::StateChange::play) {
             //add the new state
+            startPlayList(); //start the main playlist for game play
             gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
             //remove the statechange flag
             gm->stateChange(ley::StateChange::none);
@@ -102,35 +106,30 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
             //clear the statechange flag
             gm->stateChange(ley::StateChange::none);
         }
-*/
-        //Only allow paused/unpause if the game is not over
-        if(!gameOverState) {
+
+        //If the game stops running and we are in the play state then go to the game over state.
+        if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
+//            setHighScores(hs); //TODO need this.
+            gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
+            gm->stateChange(ley::StateChange::none);
+        }
+
+        //Only allow paused/unpause if we are in the play or pause states
+        if(command == ley::Command::pause && (gameStateMachine.getStateId() == "PLAY" || gameStateMachine.getStateId() == "PAUSE")) {
             //Only allow pause if we are in the playstate.
-            if(command == ley::Command::pause && gm->isPaused() && gameStateMachine.getStateId() == "PLAY") {
+            if(gm->isPaused()) {
                 SDL_Log("Game Paused!");
-                gm->audio()->playSfx(ley::sfx::pause);
+                gm->audio()->playSfx(ley::sfx::pause); //TODO sfx can probably go in the pause state
                 gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
             }
 
-            if(command == ley::Command::pause && !gm->isPaused()) {
-                SDL_Log("Game Resumed");
-                gm->audio()->playSfx(ley::sfx::unpause);
+            if(!gm->isPaused()) {
+                SDL_Log("Game Resumed");    
+                gm->audio()->playSfx(ley::sfx::unpause); //TODO sfx can probably go in the pause state
                 gameStateMachine.popState();
             }
         }
-
-        //TODO should not use an extra flag for game over, should use the state machine directly, or at least use something in the gamemodel.
-        if(!gm->isGameRunning() && gameOverState == false) {
-            gameOverState = true;
-            setHighScores(hs);
-            gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
-        }
-
-        if(gm->isGameRunning() && gameOverState == true) {
-            gameOverState = false;
-            gameStateMachine.popState(); // remove the game over state.
-        }
-                
+ 
         /**** CLEAR ****/
         mVideoSystem->clear(); //clear the backbuffer
         
@@ -138,7 +137,7 @@ void ley::GameController::runGameLoop(ley::HighScores &hs) {
         mVideoSystem->frameDelay();
     }
 
-    gameStateMachine.popState(); //Remove the play state.
+    gameStateMachine.popState(); //Remove the mainmenu state.
 
     /**** CLEAN UP ****/
     runCleanUp();

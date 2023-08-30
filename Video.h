@@ -85,7 +85,6 @@ private:
     ley::Font fontLines; //Create the renderable font object for lines
     ley::Font fontLvl; //Create the font for the level ouput
     ley::Font fontScore; //Create the font for the score output
-    ley::Font fontGameOver; //Game over font
     ley::Font fontDebugMode; //Debug sign
     ley::Font SDLCompiled;
     ley::Font SDLLinked;
