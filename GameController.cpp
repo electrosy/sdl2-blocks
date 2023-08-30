@@ -33,7 +33,6 @@ ley::GameController::~GameController() {
 void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
     
     gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
-    //gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
@@ -109,7 +108,7 @@ void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
 
         //If the game stops running and we are in the play state then go to the game over state.
         if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
-//            setHighScores(hs); //TODO need this.
+            setHighScores(gm->highScores());
             gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
             gm->stateChange(ley::StateChange::none);
         }
@@ -142,11 +141,11 @@ void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
     /**** CLEAN UP ****/
     runCleanUp();
 }
-void ley::GameController::setHighScores(ley::HighScores &hs) {
+void ley::GameController::setHighScores(ley::HighScores* hs) {
     //push on the new high score
-    hs.push(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
-    hs.write();
-    hs.setClean(false);
+    hs->push(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
+    hs->write();
+    hs->setClean(false);
 }
 
 void ley::GameController::runCleanUp() {

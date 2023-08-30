@@ -11,7 +11,6 @@ mGameModel(gm),
 fontGameOver{255, 190, 100, 35} {
 
     fontGameOver.updateMessage("Game Over!!!");
-
 }
 
 void GameOverState::update(ley::Command command) {
@@ -22,7 +21,6 @@ void GameOverState::update(ley::Command command) {
         break;
         case ley::Command::quit :
             mGameModel->setGameRunning(false);
-//            mGameModel->stopProgram(true);
             mGameModel->stateChange(ley::StateChange::quitstate);
     }
 }

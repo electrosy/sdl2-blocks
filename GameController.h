@@ -46,7 +46,7 @@ public:
     ~GameController();
 
     void runGameLoop(/*ley::HighScores &hs*/); // TODO temporary pass through params for the timers.
-    void setHighScores(ley::HighScores &hs);
+    void setHighScores(ley::HighScores* hs);
     void runCleanUp(); //run clean up after the game is completly over
     
     void renderBoard(); //renders the board to the video.

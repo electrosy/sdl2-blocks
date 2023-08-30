@@ -44,8 +44,6 @@ void PauseState::update(ley::Command command) {
             mGameModel->debugBoard(false);
         break;
         case ley::Command::quit :
-            //mGameModel->setGameRunning(false);
-            //mGameModel->stopProgram(true);
         break;
         case ley::Command::nextSong :
         break;
@@ -66,9 +64,6 @@ void PauseState::render() {
 void PauseState::loadRenderables() {
     
     mRenderables.push_back(&controlsSprite);
-
-    //mDebugRenderables.push_back(&firstTimer);
-   
 }
 
 bool PauseState::onEnter() {
