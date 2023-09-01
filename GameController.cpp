@@ -86,7 +86,7 @@ void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
 
         if(gm->currentStateChange() == ley::StateChange::play) {
             //add the new state
-            startPlayList(); //start the main playlist for game play
+            gm->audio()->fadeOutMusic();
             gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
             //remove the statechange flag
             gm->stateChange(ley::StateChange::none);

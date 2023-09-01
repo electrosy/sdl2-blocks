@@ -54,4 +54,10 @@ bool GameOverState::onExit() {
     return true;
 }
 
+bool GameOverState::onPause() {
+    GameState::onPause();
+    
+    return true;
+}
+
 }

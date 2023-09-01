@@ -97,6 +97,8 @@ void PlayState::update(ley::Command command) {
         fallTimer.reset();
         mGameModel->audio()->playSfx(ley::sfx::falldown);
     }
+
+    mGameModel->audio()->playPlaylist();
 }
 
 void PlayState::render() {
@@ -123,6 +125,7 @@ bool PlayState::onEnter() {
     resetGame();
     SDL_Log("Entering PlayState and loading renderables");
     loadRenderables();
+
     return true;
 }
 
@@ -131,11 +134,21 @@ bool PlayState::onReEnter() {
         fallTimer.pause(false);
     }
     SDL_Log("ReEntering PlayState");
+
     return true;
 }
 
 bool PlayState::onExit() {    
     SDL_Log("Exiting Playstate");
+
+    mGameModel->audio()->fadeOutMusic();
+    
+    return true;
+}
+
+bool PlayState::onPause() {
+    GameState::onPause();
+    
     return true;
 }
 

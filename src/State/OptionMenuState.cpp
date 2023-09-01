@@ -64,4 +64,10 @@ bool OptionMenuState::onExit() {
     return true;
 }
 
+bool OptionMenuState::onPause() {
+    GameState::onPause();
+    
+    return true;
+}
+
 }

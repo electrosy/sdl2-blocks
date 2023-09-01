@@ -33,7 +33,7 @@ playlistNumber(0), playlistMax(3) {
         printf("Mix_LoadMUS(musIntro): %s\n", Mix_GetError());
     }
 
-    musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi.mp3");
+    musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi__mixed.mp3");
     if(!musMainMenu) {
         printf("Mix_LoadMUS(musMainMenu): %s\n", Mix_GetError());
     }

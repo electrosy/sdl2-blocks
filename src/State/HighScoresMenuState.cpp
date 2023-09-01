@@ -74,4 +74,10 @@ bool HighScoresMenuState::onExit() {
     return true;
 }
 
+bool HighScoresMenuState::onPause() {
+    GameState::onPause();
+    
+    return true;
+}
+
 }

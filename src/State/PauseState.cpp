@@ -50,7 +50,7 @@ void PauseState::update(ley::Command command) {
     }
 
     /**** UPDATE ****/
-    
+    mGameModel->audio()->playPlaylist();
 }
 
 void PauseState::render() {
@@ -79,6 +79,11 @@ bool PauseState::onReEnter() {
 
 bool PauseState::onExit() {    
     SDL_Log("Exiting Pausestate");
+    return true;
+}
+
+bool PauseState::onPause() {
+    GameState::onPause();
     return true;
 }
 

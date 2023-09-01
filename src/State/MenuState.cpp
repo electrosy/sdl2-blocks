@@ -45,6 +45,8 @@ void MenuState::update(ley::Command command) {
     }
 
     mainUI.runCommand(command);
+
+    mGameModel->audio()->playMainMenu();
 }
 
 void MenuState::render() {
@@ -62,9 +64,8 @@ void MenuState::loadRenderables() {
 }
 
 bool MenuState::onEnter() {
-    SDL_Log("Entering MenuState");
+    SDL_Log("Entering MenuState");    
     loadRenderables();
-    mGameModel->audio()->playMainMenu();
     return true;
 }
 
@@ -75,14 +76,16 @@ bool MenuState::onReEnter() {
 
 bool MenuState::onExit() {
     SDL_Log("Exiting Menustate");
+    mGameModel->audio()->fadeOutMusic();
     return true;
 }
-/*
+
 bool MenuState::onPause() {
-    std::string pause = "Pausing" + getStateID();
-    SDL_Log(pause.c_str());
+    GameState::onPause();
+
+//    mGameModel->audio()->fadeOutMusic();
+
     return true;
 }
-*/
 
 }

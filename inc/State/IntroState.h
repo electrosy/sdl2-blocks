@@ -19,6 +19,7 @@ public:
     virtual bool onEnter();
     virtual bool onExit();
     virtual bool onReEnter();
+    virtual bool onPause();
 
     virtual std::string getStateID() const { return sIntroID; }
 

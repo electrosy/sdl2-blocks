@@ -41,4 +41,10 @@ bool IntroState::onExit() {
     return true;
 }
 
+bool IntroState::onPause() {
+    GameState::onPause();
+    
+    return true;
+}
+
 }
