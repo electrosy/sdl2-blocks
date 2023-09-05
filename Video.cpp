@@ -194,7 +194,7 @@ void ley::Video::setBackgroundTexture() {
 
 void ley::Video::render() {
 
-    setRenderBackground(gm->isGameRunning()); // TODO this should go in the controller
+    setRenderBackground(gm->isGameRunning());
 
     //Render background
     if(renderbg) {
