@@ -5,8 +5,8 @@ Copyright (C) 2020 Steven Philley
 Purpose: Video System for the game.
 Date: Feb/14/2020
 */
-#ifndef VIDEO_H
-#define VIDEO_H
+
+#pragma once
 
 #include <SDL2/SDL.h>
 
@@ -15,6 +15,7 @@ Date: Feb/14/2020
 #include "Sprite.h"
 #include "Textures.h"
 #include "Font.h"
+#include "./inc/RectContainer.h"
 
 auto const LINES_POS_X_PX = 800; //Score text
 auto const LINES_POS_Y_PX = 40; 
@@ -53,8 +54,8 @@ private:
     double mili_adjust; //number of mili seconds to delay the frame
     ley::Renderables mRenderables;
     ley::Renderables mDebugRenderables;
-    ley::SimpleShape firstSimpleShape;
-    ley::SimpleShape debugSimpleShape;
+    ley::RectContainer firstRectContainer;
+    ley::RectContainer debugRectContainer;
 
     SDL_Rect cat_frame1 = {0,75,100,100};
     SDL_Rect cat_frame2 = {132,75,100,100};
@@ -81,7 +82,6 @@ private:
     void setBackgroundTexture(); //Create and set sprite object for the background.
     void updateScores(); //Update the fonts for scores with new model data.
 
-    
     ley::Font fontLines; //Create the renderable font object for lines
     ley::Font fontLvl; //Create the font for the level ouput
     ley::Font fontScore; //Create the font for the score output
@@ -113,4 +113,3 @@ public:
 };
 
 }
-#endif

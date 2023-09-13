@@ -137,17 +137,16 @@ void ley::Video::init() {
     mRenderables.push_back(&fontScore);
     updateScores(); //TODO the model should call this
 
-    //SimpleShape
-    firstSimpleShape(renderer);
-    mRenderables.push_back(&firstSimpleShape);
-    firstSimpleShape.addShape("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
-    firstSimpleShape.addShape("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
+    //RectContainer
+    firstRectContainer(renderer);
+    mRenderables.push_back(&firstRectContainer);
+    firstRectContainer.addRect("nextboundry", {ley::START_X_OFFSET_PX - 145,39,130,130});
+    firstRectContainer.addRect("boardboundry", {ley::START_X_OFFSET_PX-1,39,302,602});
 
-    //debugShape
-    debugSimpleShape(renderer);
-    mDebugRenderables.push_back(&debugSimpleShape);
-    debugSimpleShape.addShape("debugconsole", {0,0,1280,100});
-
+    //debug RectContainer
+    debugRectContainer(renderer);
+    mDebugRenderables.push_back(&debugRectContainer);
+    debugRectContainer.addRect("debugconsole", {0,0,1280,100});
 
     //Add some fonts for the SDL version.
     SDL_version compiled;

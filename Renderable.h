@@ -8,8 +8,6 @@ Date: Feb/17/2020
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
-
-
 #include <string>
 #include <vector>
 
