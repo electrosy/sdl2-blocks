@@ -11,26 +11,25 @@ Date: Feb/20/2020
 #define TIMER_H
 
 #include <SDL2/SDL.h>
-#include "SimpleShape.h"
+#include "./inc/ProgressBar.h"
+#include "Renderable.h"
 #include "Clock.h"
+
 
 namespace ley {
 
-class Timer : public SimpleShape {
+class Timer : public Renderable {
 
 private:
     bool sdlTimerReady;
-    SDL_Rect rect_border;
     SDL_Rect rect_progress;
+    ProgressBar progressBar;
     float mili; //how many miliseconds this timer runs
     ley::Clock clock;
     bool expired; //expired flag that can get picked up.
     bool active; //activly running, not paused.
-    void adjustProgress(float);
-
-    SDL_Surface *s;
 public:
-    Timer(SDL_Renderer * r, unsigned int, SDL_Rect rect);
+    Timer(unsigned int, SDL_Rect rect);
     ~Timer();
     
     void fill(SDL_Renderer * r);
@@ -41,6 +40,7 @@ public:
     float getSpeed();
     bool isPaused();
     void pause(bool);
+    void render(SDL_Renderer* r);
 };
 
 }

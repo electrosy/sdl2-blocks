@@ -9,7 +9,6 @@ Date: Feb/14/2020
 #include <string>
 
 #include "Video.h"
-#include "SimpleShape.h"
 
 const auto START_DELAY = 1; //start delay for the game loop
 const auto TARGET_FPS = 144.0; //provide at least this many frames per second.

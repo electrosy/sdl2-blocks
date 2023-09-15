@@ -8,64 +8,33 @@ Date: Feb/20/2020
 #include "Timer.h"
 
 /* RAII */
-ley::Timer::Timer(SDL_Renderer* r, unsigned int m, SDL_Rect rect) 
-: SimpleShape(), 
+ley::Timer::Timer(unsigned int m, SDL_Rect rect) 
+: Renderable(),
 mili(m),
-rect_border(rect), 
 rect_progress(rect), 
 active(true), 
 expired(false), 
-sdlTimerReady(true) {
+sdlTimerReady(true),
+progressBar(rect) {
     
-
     if(SDL_Init(SDL_INIT_TIMER) >= 0) {
         // if all good
     } else {
         printf("Can't Initialize SDL2 Timer");
         sdlTimerReady = 0;
     }
-
-    rect_tex.x = 0; rect_tex.y = 0; //rectange for internal texture
-    rect_tex.w = rect_border.w;
-    rect_tex.h = rect_border.h;
-    addShape("timer-border", rect_border);
-    addShape("timer-progress", rect_progress);
-    destRect_tex.x=rect_progress.x; destRect_tex.y=rect_progress.y;
-    destRect_tex.w=rect_progress.w; destRect_tex.h=rect_progress.h;
-
-    s = SDL_CreateRGBSurface(0, rect_border.w, rect_border.h, 32, 0, 0, 0, 0);
-    SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
-    tex = SDL_CreateTextureFromSurface(r,s);
-
-    fill(r);
 }
 
 ley::Timer::~Timer() {
-    SDL_FreeSurface(s);
-
-     if(sdlTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
+    if(sdlTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
         SDL_QuitSubSystem(SDL_INIT_TIMER);
     }
 }
 /* Functions */
-void ley::Timer::fill(SDL_Renderer * r) {
-
-    SDL_RenderCopy(r, tex, &rect_tex, &rect_progress); //TODO SDL_RenderCopy should be in the view.
-    
-}
 void ley::Timer::reset() {
 
     if(!isPaused()) {
         clock.reset();
-    }
-}
-
-void ley::Timer::adjustProgress(float m) {
-
-    if(mili != 0) {
-        destRect_tex.w = ceil(((m/mili)*rect_progress.w));
-    } else {
-        destRect_tex.w = 0;
     }
 }
 
@@ -87,7 +56,8 @@ void ley::Timer::runFrame(bool autoRestart, double newTime) {
         expired = 1;
        if(autoRestart) { reset(); }
     }
-    adjustProgress(miliFromStart);
+    
+    progressBar.adjustProgress(miliFromStart, mili);
 }
 
 bool ley::Timer::hasExpired() {
@@ -116,4 +86,8 @@ bool ley::Timer::isPaused() {
 void ley::Timer::pause(bool paused) {
     clock.pause(paused);
     active = !paused;
+}
+
+void ley::Timer::render(SDL_Renderer* r) {
+    progressBar.render(r);
 }
