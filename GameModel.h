@@ -46,6 +46,7 @@ private:
     double currentSpeed; //how many miliseconds until the block falls down.
     int numLines; //number of lines the player has successfully completed. (Lines)
     int numLevel; //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
+    bool newLevelToReport{true}; //true if the level has changed but has not been passed along yet, start with true for game init.
     long score; //the total score the this game (level*linesatonce)
     bool gameRunning;
     bool active; //not paused // TODO this should be called paused and the checks should be reversed
@@ -62,6 +63,7 @@ private:
     ley::Block getRandomBlock();
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
+    int calcLevel(); //Calculate current level based on number of lines completed
 
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
@@ -99,6 +101,7 @@ public:
     bool isPaused();
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit by setting running to false.
+    bool newLevel(); //retruns true if there is a new level to report.
 
     ley::Audio* audio() { return &audSystem; };
 

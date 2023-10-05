@@ -9,7 +9,7 @@ Date: Feb/14/2020
 ley::Sprite::Sprite()
 :
 Renderable() {
-    
+    SDL_Log("Sprite() called");
 }
 
 ley::Sprite::Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v)
@@ -17,6 +17,8 @@ ley::Sprite::Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v)
 Renderable(),
 animSpeed(s),
 texture(t) {
+
+    SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) called");
 
     if (!texture) {
         return;//EARLY EXIT

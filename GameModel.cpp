@@ -313,6 +313,20 @@ void ley::GameModel::fillTop(char num) {
         board[i].fill(std::make_pair(BlockTexCode::O,false));
     }
 }
+bool ley::GameModel::newLevel() {
+    bool report = false;
+    
+    if(newLevelToReport) {
+        report = true;
+        newLevelToReport = false; //Flip back to false because we are going to pass along a true.
+    }
+
+    return report;
+}
+
+int ley::GameModel::calcLevel() {
+    return numLines / NEW_LVL_AT_LINES;
+}
 
 bool ley::GameModel::processLines() {
     //Check to see how many full lines we have starting from the bottom
@@ -331,7 +345,10 @@ bool ley::GameModel::processLines() {
         clearAndRecordLines(firstAndLast.first, firstAndLast.second);
         addToScore( (linesToCut * (numLevel+1)) * 10 );
         linesRemoved = true;
-        numLevel = numLines / NEW_LVL_AT_LINES;
+        if(numLevel != calcLevel()) {
+            numLevel = calcLevel();
+            newLevelToReport = true;
+        }
     
         shiftBoard(firstAndLast.first, linesToCut);
         //Be sore to fill the top of the board again with clear values after shifting.

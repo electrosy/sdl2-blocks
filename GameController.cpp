@@ -218,6 +218,7 @@ void ley::GameController::runIntros() {
 }
 
 //TODO runIntroScreens need better FPS throttling.
+//TODO this needs to go into a runIntro state.
 void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
     /**** Intro Screen Loop ****/
     bool intro = true;

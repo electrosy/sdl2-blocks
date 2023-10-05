@@ -5,6 +5,8 @@
 
 #pragma once
 
+// NiceToHave: Instead of solid red for the progress bar a more creative rainbow type faded colors could be used.
+
 namespace ley {
 
 class ProgressBar : public Renderable {

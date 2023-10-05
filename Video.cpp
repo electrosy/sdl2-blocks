@@ -180,14 +180,17 @@ void ley::Video::setBackgroundTexture() {
     start_rect.w = 1280;
     start_rect.h = 720;
  
-    std::string background_level;
-    if(gm->getLevel() <= 9) {
-        background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
-    } else {
-        background_level = "BG_WEST_09";
+
+    if(gm->newLevel()) {
+        std::string background_level;
+        if(gm->getLevel() <= 9) {
+            background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+        } else {
+            background_level = "BG_WEST_09";
+        }
+        
+        spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect});
     }
-    
-    spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect});
 }
 
 void ley::Video::render() {
