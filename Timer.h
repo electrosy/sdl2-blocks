@@ -22,14 +22,13 @@ class Timer : public Renderable {
 
 private:
     bool sdlTimerReady;
-    SDL_Rect rect_progress;
     ProgressBar progressBar;
     float mili; //how many miliseconds this timer runs
     ley::Clock clock;
     bool expired; //expired flag that can get picked up.
     bool active; //activly running, not paused.
 public:
-    Timer(unsigned int, SDL_Rect rect);
+    Timer(int, SDL_Rect rect);
     ~Timer();
     
     void fill(SDL_Renderer * r);
@@ -37,10 +36,13 @@ public:
     void reset();
     bool hasExpired();
     int getElapsed();
+    double pct(); //percent complete.
     float getSpeed();
     bool isPaused();
     void pause(bool);
-    void render(SDL_Renderer* r);
+    void render(SDL_Renderer* r, bool d);
+
+    void operator()(int, SDL_Rect rect);
 };
 
 }

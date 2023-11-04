@@ -9,7 +9,7 @@ void ley::RectContainer::operator()(SDL_Renderer* r) {
     
 }
 
-void ley::RectContainer::render(SDL_Renderer* r) {
+void ley::RectContainer::render(SDL_Renderer* r, bool d) {
 
     SDL_SetRenderDrawColor(r, 255, 255, 255, SDL_ALPHA_OPAQUE);
 

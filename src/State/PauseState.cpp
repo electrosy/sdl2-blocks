@@ -9,9 +9,8 @@ const std::string PauseState::sPauseID = "PAUSE";
 PauseState::PauseState(ley::Video * v, ley::GameModel * gm)
 :
 mVideoSystem(v),
-mGameModel(gm) {
-
-   controlsSprite = ley::Sprite(TextureManager::Instance()->getTexture("game-controls"), 0, {});
+mGameModel(gm),
+controlsSprite{TextureManager::Instance()->getTexture("game-controls"), 0, {}, {0,{0,0,0,0}}} {
 
    SDL_Rect tempRect;
    //Query for width and heigh of texture.
@@ -54,10 +53,10 @@ void PauseState::update(ley::Command command) {
 }
 
 void PauseState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer());
+    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
     if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 }
 

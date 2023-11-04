@@ -9,7 +9,7 @@ const std::string MenuState::sMenuID = "MENU";
 MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mVideoSystem = v;
     mGameModel = gm;
-    mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenu"), 0, {});
+    mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenu"), 0, {}, {1000,{0,0,0,0}});
 
     //Gather elements for the menus
     mainUI.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
@@ -50,12 +50,12 @@ void MenuState::update(ley::Command command) {
 }
 
 void MenuState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer());
+    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
     mainUI.render(mVideoSystem);
     
     if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 }
 
@@ -71,6 +71,7 @@ bool MenuState::onEnter() {
 
 bool MenuState::onReEnter() {
     SDL_Log("ReEntering MenuState");
+    mBackground.resetFader(); //Reset the fader for this sprite so it will fade in again.
     return true;
 }
 
@@ -82,8 +83,6 @@ bool MenuState::onExit() {
 
 bool MenuState::onPause() {
     GameState::onPause();
-
-//    mGameModel->audio()->fadeOutMusic();
 
     return true;
 }

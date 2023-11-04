@@ -109,6 +109,9 @@ public:
     void stateChange(ley::StateChange state) { mStateChange = state; };
 
     ley::HighScores* highScores() { return &mHighScores; };
+
+    void debugNextLevel() {                   numLevel++; newLevelToReport=true; };
+    void debugPrevLevel() { if(numLevel > 0){ numLevel--; } newLevelToReport=true; };
 };
 
 }

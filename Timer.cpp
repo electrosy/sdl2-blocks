@@ -8,14 +8,13 @@ Date: Feb/20/2020
 #include "Timer.h"
 
 /* RAII */
-ley::Timer::Timer(unsigned int m, SDL_Rect rect) 
+ley::Timer::Timer(int m, SDL_Rect rect) 
 : Renderable(),
 mili(m),
-rect_progress(rect), 
 active(true), 
 expired(false), 
 sdlTimerReady(true),
-progressBar(rect) {
+progressBar{rect} {
     
     if(SDL_Init(SDL_INIT_TIMER) >= 0) {
         // if all good
@@ -24,7 +23,10 @@ progressBar(rect) {
         sdlTimerReady = 0;
     }
 }
-
+void ley::Timer::operator()(int i, SDL_Rect rect) {
+    mili = i;
+    progressBar(rect);
+}
 ley::Timer::~Timer() {
     if(sdlTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
         SDL_QuitSubSystem(SDL_INIT_TIMER);
@@ -70,6 +72,18 @@ bool ley::Timer::hasExpired() {
     }
 
 }
+double ley::Timer::pct() {
+    
+    if(getElapsed() > mili) {
+        return 1; //Never return more than 100%;
+    }
+    else if(mili != 0) {
+        return getElapsed() / mili;
+    }
+    else {
+        return 1;
+    }
+} 
 
 int ley::Timer::getElapsed() {
     return clock.miliSecondsFromStart();
@@ -88,6 +102,6 @@ void ley::Timer::pause(bool paused) {
     active = !paused;
 }
 
-void ley::Timer::render(SDL_Renderer* r) {
-    progressBar.render(r);
+void ley::Timer::render(SDL_Renderer* r, bool d) {
+    progressBar.render(r, d);
 }

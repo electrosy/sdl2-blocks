@@ -102,10 +102,10 @@ void PlayState::update(ley::Command command) {
 }
 
 void PlayState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer());
+    mRenderables.renderAll(mVideoSystem->getRenderer(), mGameModel->isOverlayOn());
 
     if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 }
 
@@ -124,6 +124,7 @@ void PlayState::loadRenderables() {
 bool PlayState::onEnter() {
     resetGame();
     SDL_Log("Entering PlayState and loading renderables");
+    mVideoSystem->resetBackgroundFader();
     loadRenderables();
 
     return true;

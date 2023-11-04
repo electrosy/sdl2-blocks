@@ -9,7 +9,7 @@ const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {})) {
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})) {
 
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
@@ -35,10 +35,10 @@ void OptionMenuState::update(ley::Command command) {
 }
 
 void OptionMenuState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer());
+    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
     if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
     optionUI.render(mVideoSystem);

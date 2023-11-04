@@ -26,13 +26,13 @@ void GameOverState::update(ley::Command command) {
 }
 
 void GameOverState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer());
+    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
     if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer());
+        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
-    fontGameOver.render(mVideoSystem->getRenderer());
+    fontGameOver.render(mVideoSystem->getRenderer(), false);
 }
 
 void GameOverState::loadRenderables() {

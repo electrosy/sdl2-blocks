@@ -113,7 +113,7 @@ void ley::Video::createWindow() {
 void ley::Video::createRenderer() {
     /* create a renderer */
     if(window != nullptr) { 
-        renderer = SDL_CreateRenderer(window, -1, 0);
+        renderer = SDL_CreateRenderer(window, -1, 0 /*SDL_RENDERER_PRESENTVSYNC*/);
     } else {
         printf("Can't Initialize Renderer");
         video_ready = false;
@@ -171,9 +171,12 @@ void ley::Video::setRenderBackground(bool inRenderbg) {
     renderbg = inRenderbg;
 }
 
+void ley::Video::resetBackgroundFader() {
+    spriteBackground.resetFader();
+}
+
 /* functions */
 void ley::Video::setBackgroundTexture() {
-    SDL_Texture *bg_west_1 = nullptr;
     SDL_Rect start_rect;
     start_rect.x = 0;
     start_rect.y = 0;
@@ -189,7 +192,7 @@ void ley::Video::setBackgroundTexture() {
             background_level = "BG_WEST_09";
         }
         
-        spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect});
+        spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {1000,{0,0,0,0}});
     }
 }
 
@@ -200,20 +203,20 @@ void ley::Video::render() {
     //Render background
     if(renderbg) {
         setBackgroundTexture();
-        spriteBackground.render(renderer);
-    }
-    
+        spriteBackground.render(renderer, gm->isOverlayOn());
+    }   
+
     //Then render sprites
     renderSprites();
-
+    
     ++frame_count; //TODO - every 10 minutes or so we should 0 (zero) the frame_count and 
                                    // seconds_from_start, so there is no chance of a memory overrun
 }
 void ley::Video::renderSprites() {
     updateScores(); // TODO the controller should call this only when the scores are updated.
-    mRenderables.renderAll(renderer);
+    mRenderables.renderAll(renderer, gm->isOverlayOn());
     if(gm->isOverlayOn()) {
-        mDebugRenderables.renderAll(renderer);
+        mDebugRenderables.renderAll(renderer, false);
     }
 }
 
@@ -296,9 +299,9 @@ void ley::Video::loadTextures() {
 }
 
 void ley::Video::loadSprites() {
-    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, cat_frames);
+    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, cat_frames, {0,{0,0,0,0}});
     catSprite.setPos(25,650);
-    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, cat_frames);
+    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, cat_frames, {0,{0,0,0,0}});
     catSprite2.setPos(1150,650);
 
     mRenderables.push_back(&catSprite);

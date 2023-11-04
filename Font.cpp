@@ -45,7 +45,7 @@ std::string ley::Font::getMessage() {
     return textMessage;
 }
 
-void ley::Font::render(SDL_Renderer * r) {
+void ley::Font::render(SDL_Renderer * r, bool d) {
 
     if(Message != nullptr) {
         SDL_DestroyTexture(Message);

@@ -14,6 +14,7 @@ Date: Feb/17/2020
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Timer.h"
 #include "Renderable.h"
 
 namespace ley {
@@ -23,15 +24,18 @@ class Sprite : public Renderable {
 private:
     std::pair<unsigned int,unsigned int> pos;
     unsigned int animSpeed;
+    Timer fader;
+    bool startFader = false;
 protected:
     SDL_Texture* texture;
     std::vector<SDL_Rect> frames;
     SDL_Rect dest_rect;
 public:
-    Sprite();
-    Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>);
+    Sprite(); //TODO try to remove default constructor for Sprite() as it should not be needed.
+    Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>, std::pair<int, SDL_Rect> f);
     ~Sprite();
-    void render(SDL_Renderer * r);
+    void resetFader();
+    void render(SDL_Renderer * r, bool d);
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
 };

@@ -3,11 +3,15 @@
 ley::ProgressBar::ProgressBar(SDL_Rect rect)
 : Renderable(),
 border(rect), 
-progress(border) {
+progress(border) { 
 
-  s = SDL_CreateRGBSurface(0, border.w, border.h, 32, 0, 0, 0, 0);
-  SDL_FillRect(s, NULL, SDL_MapRGB(s->format, 255, 0, 0));
+}
 
+void ley::ProgressBar::operator()(SDL_Rect rect) {
+    border = rect;
+    progress = rect;
+
+    SDL_Log("ProgressBar::operator() called");
 }
 
 void ley::ProgressBar::adjustProgress(float elapsed, float total) {
@@ -17,16 +21,12 @@ void ley::ProgressBar::adjustProgress(float elapsed, float total) {
   }
 }
 
-void ley::ProgressBar::render(SDL_Renderer* r) {
-  SDL_SetRenderDrawColor(r, 255, 255, 255, SDL_ALPHA_OPAQUE);
+void ley::ProgressBar::render(SDL_Renderer* r, bool d) {
+
+  int alpha = SDL_ALPHA_OPAQUE;
   
+  SDL_SetRenderDrawColor(r, 255, 255, 255, alpha);
   SDL_RenderDrawRect(r, &border);
-
-  //If texture is empty, populate it the first time we have the rendering context available
-  if(!t) {
-    t = SDL_CreateTextureFromSurface(r,s);
-  }
-
-  //Render the texture to the portion of progress bar we want to fill in.
-  SDL_RenderCopy(r, t, NULL, &progress);
+  SDL_SetRenderDrawColor(r, 255, 0, 0, alpha);
+  SDL_RenderFillRect(r, &progress);
 }

@@ -142,7 +142,7 @@ void ley::UIMenu::render(ley::Video* v) {
     renderHotItem(v);
     renderSelectors(v);
 
-    renderables.renderAll(v->getRenderer());
+    renderables.renderAll(v->getRenderer(), false);
 }
 
 void ley::UIMenu::runCommand(ley::Command command) {
@@ -162,6 +162,8 @@ void ley::UIMenu::runCommand(ley::Command command) {
     }
 }
 
+// TODO Remove this method
+/*
 int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
     
     bool runmain = true;
@@ -203,7 +205,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
             renderHotItem(v);
         }
         
-        renderables.renderAll(v->getRenderer());
+        renderables.renderAll(v->getRenderer(), false);
         v->present();
 
         runCommand(i->pollMainMenuEvents(runmain));
@@ -213,6 +215,7 @@ int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::s
 
     return getIndex();
 } 
+*/
 
 void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*> > *baseElements) {
     //Iterate through all elements and return only the base elements.

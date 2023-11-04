@@ -42,8 +42,14 @@ void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
         
 
         /**** RENDER ****/
-        mVideoSystem->render();
-        renderBoard();
+        //Only render the game board if we are in PLAY, PAUSE or GAMEOVER.
+        if(gameStateMachine.getStateId() == "PLAY" 
+            || gameStateMachine.getStateId() == "PAUSE"
+            || gameStateMachine.getStateId() == "GAMEOVER") {
+            
+            mVideoSystem->render();
+            renderBoard();
+        }
         gameStateMachine.render();
         
         /**** PRESENT ****/
@@ -56,6 +62,14 @@ void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
         /**** INPUT PROCESSING ****/
         if(command == ley::Command::nextSong) {
             playNext();
+        }
+
+        if(command == ley::Command::debugnextlevel) {
+            gm->debugNextLevel();
+        }
+
+        if(command == ley::Command::debugprevlevel) {
+            gm->debugPrevLevel();
         }
 
         if(fs != mVideoSystem->fullScreen()) {
@@ -153,6 +167,7 @@ void ley::GameController::runCleanUp() {
     fadeMusic();
 }
 
+//TODO the board should be rendered in the state machine like everything else.
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture // TODO this should be dynamic based on image passed in
     int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);

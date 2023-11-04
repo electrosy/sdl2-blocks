@@ -26,6 +26,8 @@ enum class Command {
     clockwise,
     debugcolide,
     debugtexture,
+    debugnextlevel,
+    debugprevlevel,
     enter,
     quit,
     increaseVolume,

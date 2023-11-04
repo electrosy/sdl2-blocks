@@ -29,6 +29,8 @@ private:
     ley::GameModel * mGameModel;
     static const std::string sIntroID;
 
+    ley::Sprite mBackground;
+
     Renderables mRenderables;
     Renderables mDebugRenderables;
 };

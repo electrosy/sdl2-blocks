@@ -155,6 +155,16 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                     command = ley::Command::quit;
                 }
 
+                //debug next level
+                if (state[SDL_SCANCODE_I]) {
+                    command = ley::Command::debugnextlevel;
+                }
+
+                //debug prev level
+                if (state[SDL_SCANCODE_U]) {
+                    command = ley::Command::debugprevlevel;
+                }
+
                 //pause game
                 if(state[SDL_SCANCODE_P] || state[SDL_SCANCODE_SLASH]) {
                     command = ley::Command::pause;

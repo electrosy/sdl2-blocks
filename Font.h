@@ -31,7 +31,7 @@ public:
     ~Font();
     void updateMessage(std::string);
     std::string getMessage();
-    void render(SDL_Renderer * r);
+    void render(SDL_Renderer * r, bool d);
 
 };
 

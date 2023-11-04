@@ -101,6 +101,7 @@ public:
     SDL_Window* getWindow() {return window;};
     void setFullScreen(bool);
     void setRenderBackground(bool inRenderBackGround);
+    void resetBackgroundFader();
 
 /* Functions */
     void render(); //Render additional bits.

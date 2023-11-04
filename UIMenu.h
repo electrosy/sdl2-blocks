@@ -46,7 +46,8 @@ public:
     int getIndex();
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
-    int runMenu(ley::Video*, ley::Input*, ley::GameModel*, std::string, SDL_Rect, double);
+    // TODO remove runMenu
+    /*int runMenu(ley::Video*, ley::Input*, ley::GameModel*, std::string, SDL_Rect, double);*/
     int count();
     void addRenderables(ley::Renderables);
     void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);

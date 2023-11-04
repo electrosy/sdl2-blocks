@@ -35,7 +35,6 @@ private:
     ley::GameModel* gm;
     ley::GameStateMachine gameStateMachine;
     ley::Input mInputSystem;
-
     ley::Input mainInput; //create the input system object.
 
     //Textures

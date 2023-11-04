@@ -15,7 +15,7 @@ public:
     RectContainer();
     void operator()(SDL_Renderer*);
 
-    void render(SDL_Renderer* r);
+    void render(SDL_Renderer* r, bool d);
     void addRect(std::string id, SDL_Rect rect);
 };
 

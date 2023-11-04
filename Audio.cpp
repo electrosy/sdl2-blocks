@@ -91,7 +91,7 @@ void ley::Audio::playMainMenu() {
     //always start the playlist at 0 when returning to the main menu
     playlistNumber = 0;
 
-    if(!Mix_PlayingMusic() || Mix_FadingMusic() == MIX_FADING_OUT) {
+    if(!Mix_PlayingMusic() && !Mix_FadingMusic() == MIX_FADING_OUT) {
             if(Mix_PlayMusic(musMainMenu, -1) == -1) {
                 printf("Mix_PlayMusic(musMainMenu): %s\n", Mix_GetError());
             }

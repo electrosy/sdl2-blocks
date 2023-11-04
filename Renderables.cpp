@@ -27,11 +27,11 @@ void ley::Renderables::push_back(Renderable * r) {
     renderables.push_back(r);
 }
 
-void ley::Renderables::renderAll(SDL_Renderer * r) {           
+void ley::Renderables::renderAll(SDL_Renderer * r, bool d) {           
     
     if(renderables.size() > 0) {
         for(const auto value : renderables) {
-            value->render(r);
+            value->render(r, d);
         }
     }
 }
