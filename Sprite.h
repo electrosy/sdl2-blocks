@@ -17,6 +17,12 @@ Date: Feb/17/2020
 #include "Timer.h"
 #include "Renderable.h"
 
+//Screen dimensions are contained in sprite because both sprite and video have sprite.h
+const auto SCREEN_WIDTH = 1280;
+const auto SCREEN_HEIGHT = 720;
+constexpr auto SCREEN_WCENTER = SCREEN_WIDTH / 2;
+constexpr auto SCREEN_HCENTER = SCREEN_HEIGHT / 2;
+
 namespace ley {
 
 class Sprite : public Renderable {
@@ -38,6 +44,7 @@ public:
     void render(SDL_Renderer * r, bool d);
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
+    void center(); //center this sprite on the screen
 };
 
 }

@@ -67,6 +67,22 @@ ley::Sprite::~Sprite() {
 }
 
 /* Accessors */
+void ley::Sprite::center() {
+    SDL_Rect tempRect;
+    //Query for width and heigh of texture.
+    SDL_QueryTexture(
+            texture,
+            nullptr,
+            nullptr,
+            &tempRect.w,
+            &tempRect.h);
+
+    tempRect.x = SCREEN_WCENTER - (tempRect.w / 2);
+    tempRect.y = SCREEN_HCENTER - (tempRect.h / 2);
+
+    setPos(tempRect.x,tempRect.y);
+}
+
 void ley::Sprite::setPos(unsigned int x, unsigned int y) {
     pos.first = x; pos.second = y;
 }

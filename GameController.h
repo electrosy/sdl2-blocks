@@ -44,7 +44,7 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
-    void runGameLoop(/*ley::HighScores &hs*/); // TODO temporary pass through params for the timers.
+    void runGameLoop();
     void setHighScores(ley::HighScores* hs);
     void runCleanUp(); //run clean up after the game is completly over
     

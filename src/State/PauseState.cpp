@@ -12,19 +12,7 @@ mVideoSystem(v),
 mGameModel(gm),
 controlsSprite{TextureManager::Instance()->getTexture("game-controls"), 0, {}, {0,{0,0,0,0}}} {
 
-   SDL_Rect tempRect;
-   //Query for width and heigh of texture.
-   SDL_QueryTexture(
-        TextureManager::Instance()->getTexture("game-controls"),
-        nullptr,
-        nullptr,
-        &tempRect.w,
-        &tempRect.h);
-
-   tempRect.x = SCREEN_WCENTER - (tempRect.w / 2);
-   tempRect.y = SCREEN_HCENTER - (tempRect.h / 2);
-
-   controlsSprite.setPos(tempRect.x,tempRect.y);
+   controlsSprite.center();
 }
 
 void PauseState::update(ley::Command command) {

@@ -162,61 +162,6 @@ void ley::UIMenu::runCommand(ley::Command command) {
     }
 }
 
-// TODO Remove this method
-/*
-int ley::UIMenu::runMenu(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
-    
-    bool runmain = true;
-    
-    SDL_Texture* background = TextureManager::Instance()->getTexture(t); //Background texture is passed in.
-
-    SDL_SetTextureBlendMode(background,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(background, 255);
-
-    SDL_Rect src_rect;
-    SDL_Rect dest_rect;
-    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
-    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
-
-    unsigned int alphaFrameIndex = 0;
-    bool faddedin = false;
-    char fadespeed = 5;
-    while(runmain == true) {
-        SDL_Delay(fpsDelay);
-
-        if(!faddedin) {
-            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                if(alphaFrameIndex < 255) {
-                    alphaFrameIndex++;
-                }
-                else {
-                    faddedin = true;
-                }
-            }
-        }
-        SDL_SetTextureAlphaMod(background, alphaFrameIndex);
-        SDL_RenderCopy(v->getRenderer(), background, &src_rect, &dest_rect);
-
-        renderBaseMenuItems(v);
-
-        renderSelectors(v);
-        
-        if(faddedin) {
-            renderHotItem(v);
-        }
-        
-        renderables.renderAll(v->getRenderer(), false);
-        v->present();
-
-        runCommand(i->pollMainMenuEvents(runmain));
-        
-        v->clear();
-    }
-
-    return getIndex();
-} 
-*/
-
 void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*> > *baseElements) {
     //Iterate through all elements and return only the base elements.
 
@@ -281,50 +226,4 @@ int ley::UIMenu::getIndex() {
 void ley::UIMenu::clear() {
     elements.clear();
     currentIndex = 0;
-}
-
-void ley::UIMenu::runIntroScreen(ley::Video* v, ley::Input* i, ley::GameModel* m, std::string t, SDL_Rect r, double fpsDelay) {
-    /**** Intro Screen Loop ****/
-    bool intro = true;
-    SDL_Texture* test = nullptr;
-    test = TextureManager::Instance()->getTexture(t);
-    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(test, 255);
-
-    SDL_Rect src_rect;
-    SDL_Rect dest_rect;
-    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
-    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
-
-    unsigned int alphaFrameIndex = 0;
-    bool faddedin = false;
-    char fadespeed = 10;
-    while(intro == true) {
-        if(!faddedin) {
-            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                if(alphaFrameIndex < 255) {
-                    alphaFrameIndex++;
-                }
-                else {
-                    faddedin = true;
-                }
-            }
-        } else {
-             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                 if(alphaFrameIndex != 0) {  
-                    alphaFrameIndex--;
-                 }
-            }
-        }
-        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
-        SDL_RenderCopy(v->getRenderer(), test, &src_rect, &dest_rect);
-        v->present();
-        if(i->pollTitleEvents(intro) == ley::Command::down 
-            || (alphaFrameIndex < 10 && faddedin)) {
-            intro = false;
-        }
-        v->clear();
-
-        SDL_Delay(fpsDelay);
-    }
 }

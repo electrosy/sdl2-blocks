@@ -46,7 +46,6 @@ public:
     // there is likely a way to generalize them.
     ley::Command pollEvents(bool&);
     ley::Command pollTitleEvents(bool&);
-    ley::Command pollMainMenuEvents(bool&);
 };
 
 }

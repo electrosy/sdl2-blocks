@@ -18,55 +18,6 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-ley::Command ley::Input::pollMainMenuEvents(bool &running) {
-    SDL_Event event;
-    ley::Command frameDirection = ley::Command::none; //direction for this frame;
-
-    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        switch (event.type)     {       
-            case SDL_QUIT:         
-                running = false;
-                break;
-            case SDL_KEYDOWN:
-                //TODO these inputs should manipulate the game controller instead of the game model directly.
-                //Full screen mode
-                //continue game
-                if (state[SDL_SCANCODE_UP]) {
-                    frameDirection = ley::Command::up;
-                }
-
-                if (state[SDL_SCANCODE_DOWN]) {
-                    frameDirection = ley::Command::down;
-                }
-
-                if (state[SDL_SCANCODE_RIGHT]) {
-                    frameDirection = ley::Command::right;
-                }
-
-                if (state[SDL_SCANCODE_LEFT]) {
-                    frameDirection = ley::Command::left;
-                }
-
-                if (state[SDL_SCANCODE_SPACE]) {
-                    frameDirection = ley::Command::space;
-                }
-
-                //quite game
-                if ( state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE] || state[SDL_SCANCODE_RETURN]) {
-                    running = false;
-                }
-                
-
-                break;
-            default:
-                break;
-        }
-     }
-
-     return frameDirection;
-}
-
 ley::Command ley::Input::pollTitleEvents(bool &running) {
     SDL_Event event;
     ley::Command frameDirection = ley::Command::none; //direction for this frame;
@@ -109,7 +60,6 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 break;
             
             case SDL_KEYDOWN:
-                //TODO these inputs should manipulate the game controller instead of the game model directly.
                 //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
                     |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])

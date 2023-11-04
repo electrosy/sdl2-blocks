@@ -11,6 +11,8 @@ IntroState::IntroState(ley::Video * v, ley::GameModel * gm) {
     mGameModel = gm;
 
     mBackground = ley::Sprite(TextureManager::Instance()->getTexture("sdl"), 0, {}, {1000,{0,0,0,0}});
+    mBackground.center();
+    
 }
 
 void IntroState::update(ley::Command command) {
@@ -32,6 +34,7 @@ void IntroState::loadRenderables() {
 bool IntroState::onEnter() {
     SDL_Log("Entering IntroState");
     mBackground.resetFader();
+    loadRenderables();
     return true;
 }
 

@@ -33,7 +33,6 @@ const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can en
 const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
 
 const auto NEW_LVL_AT_LINES = 10;
-//TODO rename up to rotate
 
 class GameModel {
 

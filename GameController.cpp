@@ -30,7 +30,9 @@ ley::GameController::~GameController() {
 /* Accessors */
 
 /* Functions */
-void ley::GameController::runGameLoop(/*ley::HighScores &hs*/) {
+void ley::GameController::runGameLoop() {
+
+    //gameStateMachine.pushState(new ley::IntroState(mVideoSystem, gm));
     
     gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
 
