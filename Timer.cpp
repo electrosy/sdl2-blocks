@@ -64,7 +64,8 @@ void ley::Timer::runFrame(bool autoRestart, double newTime) {
 
 bool ley::Timer::hasExpired() {
     
-    if(expired == 1) {
+    //TODO it doesn't appear that this works as a message pass because expired continually gets set back to true anyway.
+    if(expired == 1) { 
         expired = 0;
         return 1;
     } else {

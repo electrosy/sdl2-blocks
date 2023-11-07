@@ -9,4 +9,8 @@ bool GameState::onPause() {
     return true;
 }
 
+bool GameState::isDone() {
+    return done;
+}
+
 }

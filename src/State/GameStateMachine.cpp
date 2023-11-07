@@ -64,4 +64,11 @@ std::string ley::GameStateMachine::getStateId() {
     return "";
 }
 
+bool ley::GameStateMachine::isStateDone() {
+    if(!mGameStates.empty()) {
+        return mGameStates.back()->isDone();
+    }
+    return false;
+}
+
 }

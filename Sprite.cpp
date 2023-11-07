@@ -91,6 +91,18 @@ void ley::Sprite::resetFader() {
     fader.reset();
     fader.pause(true);
 }
+void ley::Sprite::holdFader() {
+    mFaderControl = 2;
+}
+
+void ley::Sprite::reverseFader() {
+    mFaderControl = 1;
+}
+
+bool ley::Sprite::faderFinished() {
+
+    return fader.hasExpired();
+}
 
 void ley::Sprite::render(SDL_Renderer * r, bool d) {
     unsigned int frameIndex = frames.size() > 1 ? 
@@ -99,7 +111,18 @@ void ley::Sprite::render(SDL_Renderer * r, bool d) {
     dest_rect.x = pos.first; dest_rect.y = pos.second;
 
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(texture, 255*fader.pct());
+    
+    char alpha;
+    if(mFaderControl == 2) {
+        alpha = 255;
+    }
+    else if(mFaderControl == 1) {
+        alpha = 255 - (255*fader.pct());
+    }
+    else {
+        alpha = 255*fader.pct();
+    }
+    SDL_SetTextureAlphaMod(texture, alpha);
     SDL_RenderCopy(r, texture, &frames[frameIndex], &dest_rect);
 
     if(!startFader) {

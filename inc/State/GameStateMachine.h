@@ -17,6 +17,7 @@ public:
     void update(ley::Command command);
     void render();
     std::string getStateId();
+    bool isStateDone();
 
 private:
 

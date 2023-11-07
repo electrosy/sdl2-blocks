@@ -19,7 +19,7 @@ Date: Feb/15/2020
 
 namespace ley {
 
-enum class StateChange {
+enum class StateChange { //TODO this can probably be called State
     play,
     options,
     quitstate,
@@ -104,7 +104,7 @@ public:
 
     ley::Audio* audio() { return &audSystem; };
 
-    ley::StateChange currentStateChange() { return mStateChange; };
+    ley::StateChange currentStateChange() { return mStateChange; }; //TODO this can probably be called gotoState
     void stateChange(ley::StateChange state) { mStateChange = state; };
 
     ley::HighScores* highScores() { return &mHighScores; };

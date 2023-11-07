@@ -32,6 +32,7 @@ private:
     unsigned int animSpeed;
     Timer fader;
     bool startFader = false;
+    char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
 protected:
     SDL_Texture* texture;
     std::vector<SDL_Rect> frames;
@@ -41,6 +42,9 @@ public:
     Sprite(SDL_Texture * t, unsigned int, std::vector<SDL_Rect>, std::pair<int, SDL_Rect> f);
     ~Sprite();
     void resetFader();
+    bool faderFinished();
+    void reverseFader();
+    void holdFader();
     void render(SDL_Renderer * r, bool d);
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};

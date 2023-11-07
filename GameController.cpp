@@ -32,17 +32,12 @@ ley::GameController::~GameController() {
 /* Functions */
 void ley::GameController::runGameLoop() {
 
-    //gameStateMachine.pushState(new ley::IntroState(mVideoSystem, gm));
-    
-    gameStateMachine.pushState(new ley::MenuState(mVideoSystem, gm));
+    gameStateMachine.pushState(new ley::IntroState(mVideoSystem, gm));
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
 
     while(gm->programRunning()) {
-        /**** MUSIC ****/
-        
-
         /**** RENDER ****/
         //Only render the game board if we are in PLAY, PAUSE or GAMEOVER.
         if(gameStateMachine.getStateId() == "PLAY" 
@@ -88,9 +83,16 @@ void ley::GameController::runGameLoop() {
 
         gameStateMachine.update(command);
 
+        //Quit the introstate and goto the menu state.
+        if((command == ley::Command::enter || gameStateMachine.isStateDone())
+            && gameStateMachine.getStateId() == "INTRO") {
+            gameStateMachine.changeState(new ley::MenuState(mVideoSystem, gm));
+        }
+
         //Don't quit the state for pause this way.
         if((command == ley::Command::quit || gm->currentStateChange() == ley::StateChange::quitstate)
-            && !(gameStateMachine.getStateId() == "PAUSE")) {
+            && !(gameStateMachine.getStateId() == "PAUSE")
+            && !(gameStateMachine.getStateId() == "INTRO")) {
 
             if(gameStateMachine.getStateId() == "GAMEOVER" && !gm->isGameRunning()) {
                 gameStateMachine.popState(); //Assume we have to exit two states if we are in game over. assume STACK=MENU|PLAY|GAMEOVER
@@ -227,60 +229,6 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         dest_rect.y = dest_rect.y + h;
         dest_rect.x = START_X_OFFSET_PX;
     }
-}
-void ley::GameController::runIntros() {
-    runIntro("sdl", {400,170,414,240}, 1);
-    runIntro("itlogo", {400,155,400,400}, 1);
-    fadeMusic();
-}
-
-//TODO runIntroScreens need better FPS throttling.
-//TODO this needs to go into a runIntro state.
-void ley::GameController::runIntro(std::string t, SDL_Rect r, double fpsDelay) {
-    /**** Intro Screen Loop ****/
-    bool intro = true;
-    SDL_Texture* test = nullptr;
-    test = TextureManager::Instance()->getTexture(t);
-    SDL_SetTextureBlendMode(test,SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(test, 255);
-
-    SDL_Rect src_rect;
-    SDL_Rect dest_rect;
-    src_rect.x = 0; src_rect.y = 0; src_rect.h = r.h ; src_rect.w = r.w;
-    dest_rect.x = r.x; dest_rect.y = r.y; dest_rect.h = r.h; dest_rect.w = r.w;
-
-    unsigned int alphaFrameIndex = 0;
-    bool faddedin = false;
-    char fadespeed = 10;
-    while(intro == true) {
-        if(!faddedin) {
-            if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                if(alphaFrameIndex < 255) {
-                    alphaFrameIndex++;
-                }
-                else {
-                    faddedin = true;
-                }
-            }
-        } else {
-             if(( SDL_GetTicks()  % fadespeed  ) == 0 ) {
-                 if(alphaFrameIndex != 0) {  
-                    alphaFrameIndex--;
-                 }
-            }
-        }
-        SDL_SetTextureAlphaMod(test, alphaFrameIndex);
-        SDL_RenderCopy(mVideoSystem->getRenderer(), test, &src_rect, &dest_rect);
-        mVideoSystem->present();
-        if(mInputSystem.pollTitleEvents(intro) == ley::Command::down 
-            || (alphaFrameIndex < 10 && faddedin)) {
-            intro = false;
-        }
-        mVideoSystem->clear();
-
-        SDL_Delay(fpsDelay);
-    }
-
 }
 
 void ley::GameController::fadeMusic() {

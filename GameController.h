@@ -47,10 +47,7 @@ public:
     void runGameLoop();
     void setHighScores(ley::HighScores* hs);
     void runCleanUp(); //run clean up after the game is completly over
-    
     void renderBoard(); //renders the board to the video.
-    void runIntro(std::string t, SDL_Rect r, double fpsDelay); //run intro screens
-    void runIntros(); //run both intro screens
 
     /* AUDIO */
     void fadeMusic(); //fade out the music
