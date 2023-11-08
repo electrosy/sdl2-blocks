@@ -23,6 +23,13 @@ fader{f.first,f.second} {
 
     SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) called");
 
+    SDL_QueryTexture(
+            texture,
+            nullptr,
+            nullptr,
+            &mWidth,
+            &mHeight);
+
     if (!texture) {
         return;//EARLY EXIT
     }
@@ -34,11 +41,7 @@ fader{f.first,f.second} {
         fader(f.first,{v.at(0)}); // fader is a Timer
     }
     else {
-        int width;
-        int height;
-
-        SDL_QueryTexture(texture, NULL, NULL, &width, &height);
-        fader(f.first,{0,0,width,height});
+        fader(f.first,{0,0,mWidth,mHeight});
     }
 
     multiframe = v.size() > 1;
@@ -53,10 +56,13 @@ fader{f.first,f.second} {
             source_rect.h = dest_rect.h = rect.h;
             frames.push_back(source_rect);
         }
+
+        //Set width and height of multiframe sprites to last frame. NOTE may cause unexpected behavior if frame sizes are different
+        mWidth = source_rect.w; 
+        mHeight = source_rect.h;
     } else {
-        SDL_QueryTexture(texture, NULL, NULL, &source_rect.w, &source_rect.h);
-        dest_rect.w = source_rect.w;
-        dest_rect.h = source_rect.h;
+        dest_rect.w = mWidth;
+        dest_rect.h = mHeight;
         dest_rect.x = source_rect.x = 0;
     }
 }
@@ -70,17 +76,22 @@ ley::Sprite::~Sprite() {
 void ley::Sprite::center() {
     SDL_Rect tempRect;
     //Query for width and heigh of texture.
-    SDL_QueryTexture(
-            texture,
-            nullptr,
-            nullptr,
-            &tempRect.w,
-            &tempRect.h);
 
-    tempRect.x = SCREEN_WCENTER - (tempRect.w / 2);
-    tempRect.y = SCREEN_HCENTER - (tempRect.h / 2);
+    tempRect.x = SCREEN_WCENTER - (mWidth*mScale / 2);
+    tempRect.y = SCREEN_HCENTER - (mHeight*mScale / 2);
 
     setPos(tempRect.x,tempRect.y);
+}
+void ley::Sprite::bottomLeft() {
+    setPos(0, SCREEN_HEIGHT - mHeight*mScale);
+}
+
+void ley::Sprite::bottomRight() {
+    setPos(SCREEN_WIDTH - mWidth*mScale, SCREEN_HEIGHT - mHeight*mScale);
+}
+
+void ley::Sprite::scale(double s) {
+    mScale = s;
 }
 
 void ley::Sprite::setPos(unsigned int x, unsigned int y) {
@@ -108,7 +119,10 @@ void ley::Sprite::render(SDL_Renderer * r, bool d) {
     unsigned int frameIndex = frames.size() > 1 ? 
         (SDL_GetTicks() / animSpeed) % frames.size() : 0;
 
-    dest_rect.x = pos.first; dest_rect.y = pos.second;
+    dest_rect.x = pos.first; 
+    dest_rect.y = pos.second;
+    dest_rect.h = mHeight*mScale;
+    dest_rect.w = mWidth*mScale;
 
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     

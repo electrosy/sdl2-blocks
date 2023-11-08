@@ -36,6 +36,7 @@ void IntroState::update(ley::Command command) {
             case 2 :
                 // switch to the new logo and fade in
                 mLogo = ley::Sprite(TextureManager::Instance()->getTexture("itlogo"), 0, {}, {1533,{0,0,0,0}});
+                mLogo.scale(0.75);
                 mLogo.center();
                 break;
             case 3 :

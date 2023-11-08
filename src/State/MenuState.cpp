@@ -11,6 +11,11 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mGameModel = gm;
     mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenu"), 0, {}, {1000,{0,0,0,0}});
 
+    // TODO ablockalypse title pulses (gets brighter for a moment) every few moments to grab the players attention if they are just sitting in the main menu.
+    mCompanyLogo = ley::Sprite(TextureManager::Instance()->getTexture("itlogo"), 0, {}, {1000,{0,0,0,0}});
+    mCompanyLogo.scale(0.25);
+    mCompanyLogo.bottomRight();
+
     //Gather elements for the menus
     mainUI.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
     mainUI.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
@@ -61,6 +66,7 @@ void MenuState::render() {
 
 void MenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
+    mRenderables.push_back(&mCompanyLogo);
 }
 
 bool MenuState::onEnter() {

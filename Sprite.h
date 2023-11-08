@@ -33,6 +33,9 @@ private:
     Timer fader;
     bool startFader = false;
     char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
+    double mScale = 1; //scale texture using percent
+    int mWidth = -1; //queried from texture
+    int mHeight = -1; //queried from texture
 protected:
     SDL_Texture* texture;
     std::vector<SDL_Rect> frames;
@@ -49,6 +52,9 @@ public:
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
     void center(); //center this sprite on the screen
+    void bottomLeft(); //put sprite at bottom left
+    void bottomRight(); //put sprite at bottom right
+    void scale(double s); //set the scale of the sprite using a percent
 };
 
 }
