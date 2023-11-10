@@ -63,6 +63,7 @@ private:
     ley::Sprite catSprite;
     ley::Sprite catSprite2;
     ley::Sprite spriteBackground;
+    ley::Sprite spriteBackgroundfadeout;
     
     Uint32 avgFPS();
     void createWindow();

@@ -38,7 +38,9 @@ renderbg(true),
 mili_adjust(0),
 SDLCompiled{10, 25, 175, 35},
 SDLLinked{10, 60, 175, 35},
-frame_count{0}
+frame_count{0},
+spriteBackground{Sprite()},
+spriteBackgroundfadeout{Sprite()}
 {
     init();
 }
@@ -172,7 +174,7 @@ void ley::Video::setRenderBackground(bool inRenderbg) {
 }
 
 void ley::Video::resetBackgroundFader() {
-    spriteBackground.resetFader();
+    spriteBackground = Sprite(); //clear this so that spriteBackgroundfadeout gets set to empty in setBackgroundTexture
 }
 
 /* functions */
@@ -192,7 +194,11 @@ void ley::Video::setBackgroundTexture() {
             background_level = "BG_WEST_09";
         }
         
-        spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {1000,{0,0,0,0}});
+        spriteBackgroundfadeout = spriteBackground; //first time spriteBackground is empty and spriteBackgroundfadeout gets set to empty and skips the rendering process
+        spriteBackgroundfadeout.reverseFader();
+        spriteBackgroundfadeout.fadeTime(1200);
+        spriteBackgroundfadeout.resetFader();
+        spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {500,{0,0,0,0}});
     }
 }
 
@@ -204,6 +210,7 @@ void ley::Video::render() {
     if(renderbg) {
         setBackgroundTexture();
         spriteBackground.render(renderer, gm->isOverlayOn());
+        spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
     }   
 
     //Then render sprites

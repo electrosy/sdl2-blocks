@@ -26,6 +26,7 @@ private:
     float mili; //how many miliseconds this timer runs
     ley::Clock clock;
     bool expired; //expired flag that can get picked up.
+    bool mExpiredMessage = true; //is expired state pending to send.
     bool active; //activly running, not paused.
 public:
     Timer(int, SDL_Rect rect);
@@ -35,6 +36,8 @@ public:
     void runFrame(bool = true, double = 0);
     void reset();
     bool hasExpired();
+    bool expiredMessage();
+    void setTime(float m); //change time
     int getElapsed();
     double pct(); //percent complete.
     float getSpeed();

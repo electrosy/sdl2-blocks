@@ -10,7 +10,8 @@ Date: Feb/14/2020
 ley::Sprite::Sprite()
 :
 Renderable(),
-fader(1000,{0,0,0,0}) {
+fader(1000,{0,0,0,0}),
+texture{nullptr} {
     SDL_Log("Sprite() called");
 }
 
@@ -23,16 +24,16 @@ fader{f.first,f.second} {
 
     SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) called");
 
+    if (!texture) {
+        return;//EARLY EXIT
+    }
+    
     SDL_QueryTexture(
             texture,
             nullptr,
             nullptr,
             &mWidth,
             &mHeight);
-
-    if (!texture) {
-        return;//EARLY EXIT
-    }
 
     bool multiframe = false;
     
@@ -115,7 +116,19 @@ bool ley::Sprite::faderFinished() {
     return fader.hasExpired();
 }
 
+bool ley::Sprite::faderFinishedMessage() {
+    return fader.expiredMessage();
+}
+
+void ley::Sprite::fadeTime(float m) {
+    fader.setTime(m);
+}
+
 void ley::Sprite::render(SDL_Renderer * r, bool d) {
+    if(!texture || !isVisible()) {
+        return; // assume this is a null sprite or not visible
+    }
+    
     unsigned int frameIndex = frames.size() > 1 ? 
         (SDL_GetTicks() / animSpeed) % frames.size() : 0;
 

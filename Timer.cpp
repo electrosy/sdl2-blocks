@@ -38,6 +38,8 @@ void ley::Timer::reset() {
     if(!isPaused()) {
         clock.reset();
     }
+
+    mExpiredMessage = true;
 }
 
 void ley::Timer::runFrame(bool autoRestart, double newTime) {
@@ -71,7 +73,17 @@ bool ley::Timer::hasExpired() {
     } else {
         return 0;
     }
+}
+bool ley::Timer::expiredMessage() {
+    
+    bool returnValue = false;
 
+    if(mExpiredMessage && hasExpired()) {
+        returnValue = true;
+        mExpiredMessage = false;
+    }
+
+    return returnValue;
 }
 double ley::Timer::pct() {
     
@@ -85,6 +97,9 @@ double ley::Timer::pct() {
         return 1;
     }
 } 
+void ley::Timer::setTime(float m) {
+    mili = m;
+}
 
 int ley::Timer::getElapsed() {
     return clock.miliSecondsFromStart();

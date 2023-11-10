@@ -37,7 +37,7 @@ private:
     int mWidth = -1; //queried from texture
     int mHeight = -1; //queried from texture
 protected:
-    SDL_Texture* texture;
+    SDL_Texture* texture = nullptr;
     std::vector<SDL_Rect> frames;
     SDL_Rect dest_rect;
 public:
@@ -46,8 +46,10 @@ public:
     ~Sprite();
     void resetFader();
     bool faderFinished();
+    bool faderFinishedMessage();
     void reverseFader();
     void holdFader();
+    void fadeTime(float m); //change fade time.
     void render(SDL_Renderer * r, bool d);
     void setPos(unsigned int, unsigned int);
     unsigned int getX() {return pos.first;}; unsigned int getY() {return pos.second;};
