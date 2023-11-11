@@ -17,8 +17,9 @@ typedef ley::Textures TextureManager;
 ley::UIMenu::UIMenu() 
 : 
 hot(false), 
-currentIndex(0) {
-    
+currentIndex(0),
+fader(1000,{0,0,0,0}) {
+    fader.reset();
 }
 
 ley::UIMenu::~UIMenu() {
@@ -31,7 +32,7 @@ void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect des
     SDL_Texture* tex = TextureManager::Instance()->getTexture(t);
     SDL_Texture* texhot = TextureManager::Instance()->getTexture(th);
 
-    UIElement temp(label, src, dest, base, tex, texhot);
+    UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
     elements.push_back(temp);
 }
 
@@ -75,7 +76,7 @@ void ley::UIMenu::addSelector(std::string label, const SDL_Rect src, const SDL_R
     SDL_Texture* tex = TextureManager::Instance()->getTexture(w);
     SDL_Texture* texhot = TextureManager::Instance()->getTexture(h);
 
-    UIElement temp(label, src, dest, base, tex, texhot);
+    UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
 
     //count activeselectors for this label.
     for (std::multimap<std::string,UIElement>::iterator it=selectors.begin(); it!=selectors.end(); ++it) {
@@ -112,14 +113,48 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     SDL_Rect src_rect = currentSrc();
     SDL_Rect dest_rect = currentDest();
 
+/*
     if(count() > 0) {
         if((SDL_GetTicks() % 50) % 10) {
             setHot(true);
             SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
         } else {
             setHot(false);
-            SDL_RenderCopy(v->getRenderer(), currentTex(), &dest_rect, &dest_rect);
+            SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
         }
+    }
+*/
+    char alpha;
+    if(mFaderControl == 2) {
+        alpha = 255;
+    }
+    else if(mFaderControl == 1) {
+        alpha = 255 - (255*fader.pct());
+    }
+    else {
+        alpha = 255*fader.pct();
+    }
+    
+    setHot(false);
+    SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
+
+    setHot(true);
+    SDL_Texture* texture = currentTex();
+    SDL_SetTextureAlphaMod(texture, alpha);
+    SDL_RenderCopy(v->getRenderer(), texture, &src_rect, &dest_rect);
+
+    fader.runFrame();
+    if(fader.hasExpired()) {
+        if(mFaderControl == 0) {
+            mFaderControl = 2;
+        }
+        else if(mFaderControl == 2) {
+            mFaderControl = 1;
+        }
+        else if(mFaderControl == 1) {
+            mFaderControl = 0;
+        }
+        fader.reset();
     }
 }
 

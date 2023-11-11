@@ -254,6 +254,9 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
     //Buttons for main menu
+    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-base.png", "menufonts-base");
+    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-hot.png", "menufonts-hot");
+    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-white.png", "menufonts-white");
     //Start
     TextureManager::Instance()->loadTexture("assets/btnStart.png", "btnStart");
     TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");

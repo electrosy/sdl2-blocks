@@ -17,10 +17,13 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mCompanyLogo.bottomRight();
 
     //Gather elements for the menus
-    mainUI.push("start",{0,0,139,46},{25,199,139,46},"btnStart","start-white","start-hot-red");
-    mainUI.push("highscore",{0,0,323,64},{29,282,323,64},"btnHighScores","highscores-white","highscores-hot-red");
-    mainUI.push("options",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
-    mainUI.push("exit",{0,0,100,49},{30,451,100,49},"btnExit","exit-white","exit-hot-red");
+    
+    mainUI.push("start",{0,0,382,44},{29,199,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    mainUI.push("highscore",{0,45,382,58},{29,282,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    mainUI.push("options",{0,104,382,57},{29,365,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    mainUI.push("exit",{0,163,382,46},{29,451,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    mainUI.push("credits",{0,210,382,46},{29,533,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    
 
 }
 
