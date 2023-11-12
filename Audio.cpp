@@ -28,28 +28,28 @@ playlistNumber(0), playlistMax(3) {
     }
     
     //Load music files
-    musIntro = Mix_LoadMUS("./assets/audio/MovieTheaterIntro.mp3");
-    if(!musIntro) {
+    musIntro = Mix_LoadMUS("./assets/audio/MovieTheaterIntro.mp3"); // SOURCE https://opengameart.org/content/movie-theater-intro
+    if(!musIntro) {                                                 // AUTHOR Matthew Pablo
         printf("Mix_LoadMUS(musIntro): %s\n", Mix_GetError());
     }
 
-    musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi__mixed.mp3");
-    if(!musMainMenu) {
+    musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi__mixed.mp3"); // SOURCE https://opengameart.org/content/ooame
+    if(!musMainMenu) {                                                       // AUTHOR TAD
         printf("Mix_LoadMUS(musMainMenu): %s\n", Mix_GetError());
     }
 
-    musMelJazz1 = Mix_LoadMUS("./assets/audio/wild_jazz.mp3");
-    if(!musMelJazz1) {
+    musMelJazz1 = Mix_LoadMUS("./assets/audio/wild_jazz.mp3"); // SOURCE https://opengameart.org/content/wild-jazz
+    if(!musMelJazz1) {                                         // AUTHOR Alex McCulloch
         printf("Mix_LoadMUS(musMelJazz1): %s\n", Mix_GetError());
     }
 
-    musMelJazz2 = Mix_LoadMUS("./assets/audio/jazz.ogg");
-    if(!musMelJazz2) {
-        printf("Mix_LoadMUS(musMelJazz2): %s\n", Mix_GetError());
+    musMelJazz2 = Mix_LoadMUS("./assets/audio/jazz.ogg"); // SOURCE https://opengameart.org/content/jazz-1
+    if(!musMelJazz2) {                                    // AUTHOR Spring Spring
+        printf("Mix_LoadMUS(musMelJazz2): %s\n", Mix_GetError()); 
     }
 
-    musMelJazz3 = Mix_LoadMUS("./assets/audio/Shake and Bake.mp3");
-    if(!musMelJazz3) {
+    musMelJazz3 = Mix_LoadMUS("./assets/audio/Shake and Bake.mp3"); // SOURCE https://opengameart.org/content/shake-and-bake 
+    if(!musMelJazz3) {                                              // AUTHOR Matthew Pablo
         printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
     }
 
@@ -57,13 +57,13 @@ playlistNumber(0), playlistMax(3) {
     Mix_VolumeMusic(20);
 
     //Load Audio SFX
-    sfxSwoosh = Mix_LoadWAV("./assets/audio/sfx/swoosh.wav");
-    sfxPause = Mix_LoadWAV("./assets/audio/sfx/pause.wav");
-    sfxUnPause = Mix_LoadWAV("./assets/audio/sfx/unpause.wav");
-    sfxSqueek = Mix_LoadWAV("./assets/audio/sfx/squeek.wav");
-    sfxPiecesFalling = Mix_LoadWAV("./assets/audio/sfx/pieces-falling.wav");
-    sfxInPlace = Mix_LoadWAV("./assets/audio/sfx/human-impact.wav");
-    sfxFallDown = Mix_LoadWAV("./assets/audio/sfx/tick-tock.wav");
+    sfxSwoosh = Mix_LoadWAV("./assets/audio/sfx/swoosh.wav"); // SOURCE https://pixabay.com/sound-effects/sword-movement-single-5-101337/
+    sfxPause = Mix_LoadWAV("./assets/audio/sfx/pause.wav"); // SOURCE https://pixabay.com/sound-effects/pause-89443/
+    sfxUnPause = Mix_LoadWAV("./assets/audio/sfx/unpause.wav"); // SOURCE https://pixabay.com/sound-effects/unpause-106278/
+    sfxSqueek = Mix_LoadWAV("./assets/audio/sfx/squeek.wav"); // SOURCE https://pixabay.com/sound-effects/whiteboard-squeak-90931/
+    sfxPiecesFalling = Mix_LoadWAV("./assets/audio/sfx/pieces-falling.wav"); // SOURCE https://pixabay.com/sound-effects/copper-and-metal-pieces-dropping-on-hardwood-surface-98296/
+    sfxInPlace = Mix_LoadWAV("./assets/audio/sfx/human-impact.wav"); // SOURCE https://pixabay.com/sound-effects/human-impact-on-ground-6982/
+    sfxFallDown = Mix_LoadWAV("./assets/audio/sfx/tick-tock.wav"); // SOURCE https://pixabay.com/sound-effects/mechanical-alarm-clock-14474/
 }
 
 ley::Audio::~Audio() {

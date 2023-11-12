@@ -275,6 +275,9 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
     //Options Background
     TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    //Credits
+    TextureManager::Instance()->loadTexture("assets/graphic/credits.png", "credits");
+    TextureManager::Instance()->loadTexture("assets/graphic/credits-panel.png", "credits-panel");
     //Highscores Background
     TextureManager::Instance()->loadTexture("assets/highscores.png", "highscores");
     //Buttons for options menu.

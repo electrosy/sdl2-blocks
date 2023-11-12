@@ -124,6 +124,13 @@ void ley::GameController::runGameLoop() {
             gm->stateChange(ley::StateChange::none);
         }
 
+        if(gm->currentStateChange() == ley::StateChange::credits) {
+            //Goto the options menu state
+            gameStateMachine.pushState(new ley::CreditsState(mVideoSystem, gm));
+            //clear the statechange flag
+            gm->stateChange(ley::StateChange::none);
+        }
+
         //If the game stops running and we are in the play state then go to the game over state.
         if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
             setHighScores(gm->highScores());

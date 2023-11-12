@@ -52,6 +52,10 @@ void MenuState::update(ley::Command command) {
         mGameModel->stopProgram(true);
     }
 
+    if(command == ley::Command::enter && mainUI.getIndex() == 4) {
+        mGameModel->stateChange(ley::StateChange::credits);
+    }
+
     mainUI.runCommand(command);
 
     mGameModel->audio()->playMainMenu();

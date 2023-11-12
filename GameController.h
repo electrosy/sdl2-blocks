@@ -17,6 +17,7 @@ Date: Feb/15/2020
 #include "Timer.h"
 #include "HighScores.h"
 #include "inc/State/GameStateMachine.h"
+#include "inc/State/CreditsState.h"
 #include "inc/State/MenuState.h"
 #include "inc/State/OptionMenuState.h"
 #include "inc/State/HighScoresMenuState.h"
