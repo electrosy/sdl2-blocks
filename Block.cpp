@@ -72,6 +72,10 @@ void ley::Block::operator=(const Block& b) {
 ley::Block::~Block() {
     
 }
+void ley::Block::debugResetPos() {
+    rect.y = 0;
+
+}
 
 void ley::Block::setClear(bool c) {
     cf = c;

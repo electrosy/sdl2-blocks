@@ -61,6 +61,15 @@ void ley::GameController::runGameLoop() {
             playNext();
         }
 
+        if(command == ley::Command::debugclear) {
+            gm->clearBoard();
+            gm->debugResetActiveBlock();
+        }
+
+        if(command == ley::Command::debugfill) {
+            gm->debugFill();
+        }
+
         if(command == ley::Command::debugnextlevel) {
             gm->debugNextLevel();
         }

@@ -67,6 +67,7 @@ public:
     void setClear(bool c);
     void setH(unsigned int h) {rect.h = h;};
     void setW(unsigned int w) {rect.w = w;};
+    void debugResetPos();
     bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
     std::array<std::array<ley::BlockTexCode, 4>,4> getBlockParts();
 
@@ -77,7 +78,6 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
-    int max_x(int);
     int heightAtWidth(int);
     int widthAtHeight(int); // TODO this method isn't used, clean it up.
     void reset(); //return block to original position for restarting the game.

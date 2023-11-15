@@ -50,17 +50,17 @@ private:
     long score; //the total score the this game (level*linesatonce)
     bool gameRunning;
     bool active; //not paused // TODO this should be called paused and the checks should be reversed
-    void clearBoard();
     void clearOldBlock();
     void putBlock(Block&);
     bool canPut(Block&, Command d); //can physically put the block in the board.
-    std::pair<char,char> checkForLines(char); //check to see if any solid lines across the board have been made, return -1 for none
+    std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     bool processLines(); //returns true if any number of lines are removed.
-    void clearAndRecordLines(int, int); //clear the completed lines and keep track of the score.
+    void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score.
     void shiftBoard(char, char); //start line, number of lines
     void fillTop(char); //fill top of the board after the shift
     ley::Block getRandomBlock();
+    ley::Block debugGetBlock();
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     int calcLevel(); //Calculate current level based on number of lines completed
@@ -76,14 +76,16 @@ public:
 
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
     getBoard();
-
+    void clearBoard();
+    void debugFill();
+    void debugResetActiveBlock();
     bool moveBlock(Command); //returns true for false if block actually moved
     bool rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
     void debugBoard(bool); //print the board to the console
     void overlayToggle();
     bool isOverlayOn();
-    bool canMoveDown(); //Can move down based on Game rules.
+//    bool canMoveDown(); //Can move down based on Game rules. // TODO no longer used.
     bool newBlock();
     void setBlock();
     int getScore();

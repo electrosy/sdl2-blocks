@@ -28,6 +28,8 @@ enum class Command {
     debugtexture,
     debugnextlevel,
     debugprevlevel,
+    debugclear,
+    debugfill,
     enter,
     quit,
     increaseVolume,

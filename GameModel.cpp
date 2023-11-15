@@ -83,6 +83,28 @@ void ley::GameModel::clearBoard() {
     }
 }
 
+void ley::GameModel::debugResetActiveBlock() {
+    
+    activeBlock = debugGetBlock();
+    oldBlock = activeBlock;
+    oldBlock.setClear(true);
+    activeBlock.debugResetPos();
+    oldBlock.debugResetPos();
+}
+
+void ley::GameModel::debugFill() {
+    
+    board[22].fill(std::make_pair(BlockTexCode::d, true));
+    board[22][0] = std::make_pair(BlockTexCode::O, false);
+
+    board[21].fill(std::make_pair(BlockTexCode::e, true));
+    board[21][0] = std::make_pair(BlockTexCode::O, false);
+    board[21][1] = std::make_pair(BlockTexCode::O, false);
+
+    board[20].fill(std::make_pair(BlockTexCode::d, true));
+    board[20][0] = std::make_pair(BlockTexCode::O, false);
+}
+
 void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
@@ -197,6 +219,10 @@ bool ley::GameModel::canPut(Block& b, Command d) {
 void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
 }
+ley::Block ley::GameModel::debugGetBlock() {
+
+    return Block(4,2,BlockType::line,false);
+}
 
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
@@ -289,21 +315,19 @@ bool ley::GameModel::canRotate(bool r) {
     
     return canput;
 }
-void ley::GameModel::clearAndRecordLines(int first, int last) {
-    for(int i = first; i >= last; --i) {
-        ++numLines; //add to the score for each line
-        //If numLines is a multiple of 10 then increase the level as well
-    
-        //simply fill the rows where there are lines with the empty space.
-        board[i].fill(std::make_pair(ley::BlockTexCode::O, false));
-    }
+void ley::GameModel::clearAndRecordLine(int lineNum) {
+
+    ++numLines; //add to the score for each line
+    //simply fill the rows where there are lines with the empty space.
+    board[lineNum].fill(std::make_pair(ley::BlockTexCode::O, false));
+
     SDL_Log("Your Score is:%s" , std::to_string(numLines).c_str());
 }
 void ley::GameModel::shiftBoard(char start, char num) {
     //shift the board down start from the bottom right (backwards).
     char stopLine = start - num;
     for(char i = start; i >= 0; --i) {
-        for(char j = board[i].size() -1; j >= 0; --j) {
+        for(char j = board[i].size() - 1; j >= 0; --j) {
             board[i][j] = board[i-num][j];
         }
     }
@@ -333,53 +357,47 @@ bool ley::GameModel::processLines() {
 
     bool linesRemoved = false;
 
-    std::pair<char,char> firstAndLast;
-    firstAndLast.first = -1;
-    firstAndLast.second = -1;
-    firstAndLast = checkForLines(board.size()-1);
+    std::vector<char> fullLines;
 
-    //remove the lines if neither of them are -1;
-    if(firstAndLast.first != -1 && firstAndLast.second != -1) {
-        //Shift the board down the appropriate number of spaces.
-        char linesToCut = firstAndLast.first - firstAndLast.second + 1;
-        clearAndRecordLines(firstAndLast.first, firstAndLast.second);
-        addToScore( (linesToCut * (numLevel+1)) * 10 );
+    fullLines = checkForLines(board.size()-1);
+
+    //Cut out one line at a time incase there are gaps in between the completed lines
+    if(fullLines.size()>0) {
+        //add to the score based on number of lines completed in a single move
+        addToScore((fullLines.size() * (numLevel+1)) * 10 );
         linesRemoved = true;
-        if(numLevel != calcLevel()) {
-            numLevel = calcLevel();
-            newLevelToReport = true;
-        }
-    
-        shiftBoard(firstAndLast.first, linesToCut);
-        //Be sore to fill the top of the board again with clear values after shifting.
-        fillTop(linesToCut);
-
-        //add to the score based on number of lines completed in a single move 1 to 4 (i dont think this could ever be more than four)
-        
     }
-    
-    // TODO also continue to check the rest of the board for full lines. (but is this a valid case?)
+    while(fullLines.size()>0) {
+        //TODO does order matter for fullLines, should we remove the highest number(bottom) line first?
+        clearAndRecordLine(fullLines.back());
+        shiftBoard(fullLines.back(), 1);
+        //Be sure to fill the top of the board again with clear values after shifting.
+        fillTop(1);
+        fullLines.pop_back();
+    }
+
+    if(numLevel != calcLevel()) {
+        numLevel = calcLevel();
+        newLevelToReport = true;
+    }
+
     return linesRemoved;
 }
-
-//pass in start line and returns the number of lines that are full lines from the start line
-std::pair<char,char> ley::GameModel::checkForLines(char start) {
+//pass in start line and returns the line numbers that are full lines from the start line
+std::vector<char> ley::GameModel::checkForLines(char start) {
     
-    char firstLine = firstLineAt(start);
-    char lastLine = -1;
-    char counterStart = firstLine != -1 ? firstLine : start;
+    std::vector<char> fullLines;
     //check for consecutive lines.
-    for(int i = counterStart; i >= 0; --i){
-        int currentLine = firstLineAt(i);
+    for(char i = start; i >= 0; --i){
+        char currentLine = firstLineAt(i);
         if(currentLine != -1) {
-            lastLine = currentLine;
+            fullLines.push_back(currentLine);
+            i = currentLine;
         }
     }
 
-    SDL_Log("First line: %s -> Last line: %s",std::to_string(firstLine).c_str(), std::to_string(lastLine).c_str());
-    return std::make_pair(firstLine,lastLine);
+    return fullLines;
 }
-
 
 //return the first full line starting from start
 int ley::GameModel::firstLineAt(int start) {
@@ -490,6 +508,8 @@ bool ley::GameModel::isOverlayOn() {
 }
 
 void ley::GameModel::debugBoard(bool setLayer) {
+    
+    SDL_Log("Debug Board");
     std::string sRow = "";
     for(auto row : board) {
             sRow = ""; //clear
