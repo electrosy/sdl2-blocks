@@ -61,21 +61,29 @@ void ley::GameController::runGameLoop() {
             playNext();
         }
 
-        if(command == ley::Command::debugclear) {
-            gm->clearBoard();
-            gm->debugResetActiveBlock();
+        /**** DEBUG INPUT PROCESSING ****/
+        if(command == ley::Command::debugkeystoggle) {
+            gm->debugCommandsToggle();
         }
 
-        if(command == ley::Command::debugfill) {
-            gm->debugFill();
-        }
+        //allow debug commands to be used
+        if(gm->debugCommands()) {
+            if(command == ley::Command::debugclear) {
+                gm->clearBoard();
+                gm->debugResetActiveBlock();
+            }
 
-        if(command == ley::Command::debugnextlevel) {
-            gm->debugNextLevel();
-        }
+            if(command == ley::Command::debugfill) {
+                gm->debugFill();
+            }
 
-        if(command == ley::Command::debugprevlevel) {
-            gm->debugPrevLevel();
+            if(command == ley::Command::debugnextlevel) {
+                gm->debugNextLevel();
+            }
+
+            if(command == ley::Command::debugprevlevel) {
+                gm->debugPrevLevel();
+            }
         }
 
         if(fs != mVideoSystem->fullScreen()) {

@@ -24,6 +24,7 @@ enum class Command {
     console,
     cclockwise,
     clockwise,
+    debugkeystoggle,
     debugcolide,
     debugtexture,
     debugnextlevel,

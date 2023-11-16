@@ -61,6 +61,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
             
             case SDL_KEYDOWN:
                 //debug clear
+                if (state[SDL_SCANCODE_F12]) {
+                    command = ley::Command::debugkeystoggle;
+                }
                 if (state[SDL_SCANCODE_C]) {
                     command = ley::Command::debugclear;
                 }

@@ -548,3 +548,13 @@ void ley::GameModel::pauseGame(bool pause) {
         
         active = !pause;
 }
+
+bool ley::GameModel::debugCommands() {
+    return debugCommandsFlag;
+}
+
+void ley::GameModel::debugCommandsToggle() {
+    debugCommandsFlag = !debugCommandsFlag;
+
+    SDL_Log("Debug command keys have been turned %s", debugCommandsFlag ? "on." : "off.");
+}

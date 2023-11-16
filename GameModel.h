@@ -64,7 +64,7 @@ private:
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     int calcLevel(); //Calculate current level based on number of lines completed
-
+    bool debugCommandsFlag = false; //allow debug commands
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
 
@@ -112,6 +112,8 @@ public:
 
     ley::HighScores* highScores() { return &mHighScores; };
 
+    bool debugCommands(); //get current debugCommands flag
+    void debugCommandsToggle();
     void debugNextLevel() {                   numLevel++; newLevelToReport=true; };
     void debugPrevLevel() { if(numLevel > 0){ numLevel--; } newLevelToReport=true; };
 };
