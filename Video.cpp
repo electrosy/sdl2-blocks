@@ -15,7 +15,7 @@ const auto TARGET_FPS = 144.0; //provide at least this many frames per second.
 const auto FPS_ADJUST_RATE = 1000; // adjust fps every second
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.2.1.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.2.5.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
