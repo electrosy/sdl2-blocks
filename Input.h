@@ -31,6 +31,7 @@ enum class Command {
     debugprevlevel,
     debugclear,
     debugfill,
+    debugonlyline,
     enter,
     quit,
     increaseVolume,

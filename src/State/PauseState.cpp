@@ -21,9 +21,6 @@ void PauseState::update(ley::Command command) {
         case ley::Command::pause :
             mGameModel->pauseGame(!mGameModel->isPaused());
         break;
-        case ley::Command::console :
-            mGameModel->overlayToggle();
-        break;
         case ley::Command::debugcolide :
             mGameModel->debugBoard(true);
         break;

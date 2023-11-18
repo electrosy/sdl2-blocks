@@ -23,7 +23,8 @@ currentSpeed(1000.0f),
 active(true), 
 overlayOn(false),
 score(0),
-running(true)
+running(true),
+mDebugOnlyLine(false)
 {
    clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
@@ -228,6 +229,10 @@ ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
     
+    if(mDebugOnlyLine == true) { //debug return only line
+        return Block(4,2,BlockType::line,false);
+    }
+
     switch(rand0to6()) {
         case 0 : 
             a = Block(4,0,BlockType::tee,false);
@@ -557,4 +562,12 @@ void ley::GameModel::debugCommandsToggle() {
     debugCommandsFlag = !debugCommandsFlag;
 
     SDL_Log("Debug command keys have been turned %s", debugCommandsFlag ? "on." : "off.");
+}
+
+bool ley::GameModel::debugOnlyLine() {
+    return mDebugOnlyLine;
+}
+
+void ley::GameModel::debugOnlyLineToggle() {
+    mDebugOnlyLine = !mDebugOnlyLine;
 }

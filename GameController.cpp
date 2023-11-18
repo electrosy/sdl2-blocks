@@ -68,6 +68,10 @@ void ley::GameController::runGameLoop() {
 
         //allow debug commands to be used
         if(gm->debugCommands()) {
+            if(command == ley::Command::console) {
+                gm->overlayToggle();
+            }
+
             if(command == ley::Command::debugclear) {
                 gm->clearBoard();
                 gm->debugResetActiveBlock();
@@ -83,6 +87,10 @@ void ley::GameController::runGameLoop() {
 
             if(command == ley::Command::debugprevlevel) {
                 gm->debugPrevLevel();
+            }
+
+            if(command == ley::Command::debugonlyline) {
+                gm->debugOnlyLineToggle();
             }
         }
 

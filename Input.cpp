@@ -70,6 +70,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 if (state[SDL_SCANCODE_F]) {
                     command = ley::Command::debugfill;
                 }
+                if (state[SDL_SCANCODE_L]) {
+                    command = ley::Command::debugonlyline;
+                }
                 //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
                     |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
