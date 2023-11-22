@@ -12,7 +12,7 @@ firstTimer(3000,{10,300,100,50}),
 secondTimer(2500,{10,400,100,25}),
 thirdTimer(1000,{10,425,100,30}),
 fourthTimer(333,{10,455,100,5}),
-fallTimer(1000,{ley::START_X_OFFSET_PX-1,641,302,2}),
+fallTimer(1000,{ley::BLOCK_START_POS_X_PX-1,641,302,2}),
 statusTimer(1000,{10,500,100,5}),
 statusFont(VOLUME_POS_X_PX, VOLUME_POS_Y_PX, 100, 20) {
 

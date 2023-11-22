@@ -12,8 +12,6 @@ Date: Feb/18/2020
 
 typedef ley::Textures TextureManager;
 
-const auto NEXTBLOCK_OFFSET_X_PX = 360;
-const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 /* RAII */
 ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
@@ -206,7 +204,7 @@ void ley::GameController::runCleanUp() {
 //TODO the board should be rendered in the state machine like everything else.
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     //get width and height of the texture // TODO this should be dynamic based on image passed in
-    int w = 30, h = 30; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
+    int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
     SDL_Rect start_rect;
     start_rect.x = 0;
@@ -215,8 +213,8 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     start_rect.w = w;
 
     SDL_Rect dest_rect;
-    dest_rect.x = START_X_OFFSET_PX;
-    dest_rect.y = BOARD_OFFSET_PX;
+    dest_rect.x = BLOCK_START_POS_X_PX;
+    dest_rect.y = BLOCK_START_POS_Y_PX;
     dest_rect.h = h;
     dest_rect.w = w;
 
@@ -259,7 +257,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
             dest_rect.x = dest_rect.x + w;
         }
         dest_rect.y = dest_rect.y + h;
-        dest_rect.x = START_X_OFFSET_PX;
+        dest_rect.x = BLOCK_START_POS_X_PX;
     }
 }
 

@@ -28,10 +28,20 @@ enum class StateChange { //TODO this can probably be called State
     credits,
     none}; //particular states that the game can be in
 
-const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
-const auto BOARDSIZE_HEIGHT = 23; //add 3 additional blocks so tetrominos can enter play in the right place.
 
-const auto BOARD_OFFSET_PX = -50; //Number of pixels to offset the board.
+
+const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
+const auto BOARDSIZE_BUFFER = 3;
+const auto BOARDSIZE_HEIGHT = 20 + BOARDSIZE_BUFFER; //add 3 additional blocks so tetrominos can enter play in the right place.
+const auto BLOCKSIZE_PX = 30;
+
+const auto BOARD_POS_X_PX = 490; //Board starting position x for block, when drawing border subtract 1px.
+const auto BOARD_POS_Y_PX = 40; //Board starting position y for block, when drawing border subtract 1px.
+
+const auto BLOCK_START_POS_Y_PX = BOARD_POS_Y_PX - (BLOCKSIZE_PX*BOARDSIZE_BUFFER); //Subtract three rows from board start_y //Number of pixels to offset the board.
+const auto BLOCK_START_POS_X_PX = BOARD_POS_X_PX;
+const auto NEXTBLOCK_OFFSET_X_PX = BLOCK_START_POS_X_PX - 130;
+const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 
 const auto NEW_LVL_AT_LINES = 10;
 

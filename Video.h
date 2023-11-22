@@ -28,8 +28,6 @@ auto const SCORE_POS_Y_PX = 80;
 
 namespace ley {
 
-const auto START_X_OFFSET_PX = 490;
-
 class Video {
 
 private:
