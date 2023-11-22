@@ -373,12 +373,12 @@ void ley::Block::setBlock(BlockType t, int o) {
 
                 case 1 :
                 case 3 :
-                    block[0] = { BlockTexCode::j, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[1] = { BlockTexCode::j, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[2] = { BlockTexCode::j, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[3] = { BlockTexCode::j, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[0] = { BlockTexCode::O, BlockTexCode::j, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::O, BlockTexCode::j, BlockTexCode::O, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::j, BlockTexCode::O, BlockTexCode::O };
+                    block[3] = { BlockTexCode::O, BlockTexCode::j, BlockTexCode::O, BlockTexCode::O };
                     rect.h = 4;
-                    rect.w = 1;
+                    rect.w = 2;
                 break;
             }
         break;
