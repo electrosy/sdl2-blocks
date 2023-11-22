@@ -126,16 +126,16 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
 //   also checks for collision with game board boundry
 bool ley::GameModel::canPut(Block& b, Command d) {
 
-    SDL_Rect rect = b.getRect();
+    SDL_Rect block = b.getRect();
 
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.
     switch (d) {
         case Command::down : 
-           for(int i = 0; i < rect.w; ++i) {
-               for(int j = 0; j < rect.h; ++j) {
-                    bool boardPart = board[rect.y + b.heightAtWidth(i) + 1][rect.x + i].second
-                                    || rect.y + b.heightAtWidth(i) + 1 < 0;
+           for(int i = 0; i < block.w; ++i) {
+               for(int j = 0; j < block.h; ++j) {
+                    bool boardPart = board[block.y + b.heightAtWidth(i) + 1][block.x + i].second
+                                    || block.y + b.heightAtWidth(i) + 1 < 0;
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -145,10 +145,10 @@ bool ley::GameModel::canPut(Block& b, Command d) {
            }
         break;
         case Command::right : 
-            for(int i = 0; i < rect.w; ++i) {
-               for(int j = 0; j < rect.h; ++j) {
-                    bool boardPart = board[rect.y + j][rect.x + i + 1].second
-                                    || (rect.x + i + 1) > (BOARDSIZE_WIDTH - 1);
+            for(int i = 0; i < block.w; ++i) {
+               for(int j = 0; j < block.h; ++j) {
+                    bool boardPart = board[block.y + j][block.x + i + 1].second
+                                    || (block.x + i + 1) > (BOARDSIZE_WIDTH - 1);
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -158,10 +158,10 @@ bool ley::GameModel::canPut(Block& b, Command d) {
            }
         break;
         case Command::left :
-            for(int i = 0; i < rect.w; ++i) {
-               for(int j = 0; j < rect.h; ++j) { 
-                    bool boardPart = board[rect.y + j][ (rect.x - 1) + i ].second
-                                    || ((rect.x -1) + i) < 0;
+            for(int i = 0; i < block.w; ++i) {
+               for(int j = 0; j < block.h; ++j) { 
+                    bool boardPart = board[block.y + j][ (block.x - 1) + i ].second
+                                    || ((block.x -1) + i) < 0;
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -171,13 +171,13 @@ bool ley::GameModel::canPut(Block& b, Command d) {
            }
         break;
         case Command::up : //this is a rotation
-            for(int i = 0; i < rect.w; ++i) {
-               for(int j = 0; j < rect.h; ++j) {
+            for(int i = 0; i < block.w; ++i) {
+               for(int j = 0; j < block.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
-                    bool boardPart = board[rect.y + j][rect.x + i].second //board empty.
-                                    || rect.y + j < 0 || rect.y + j > BOARDSIZE_HEIGHT //above the board
-                                    || rect.x + i > BOARDSIZE_WIDTH - 1 //right of the board
-                                    || rect.x + i < 0; // left of the board
+                    bool boardPart = board[block.y + j][block.x + i].second //board empty.
+                                    || block.y + j < 0 || block.y + j > BOARDSIZE_HEIGHT //above the board
+                                    || block.x + i > BOARDSIZE_WIDTH - 1 //right of the board
+                                    || block.x + i < 0; // left of the board
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
