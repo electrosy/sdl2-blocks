@@ -24,15 +24,15 @@ git clone <https://github.com/electrosy/sdl2-blocks.git>
 
 ###### Develop
 
-sudo dnf install SDL2-devel; sudo dnf install SDL2_image-devel; sudo dnf install SDL2_ttf-devel;
+sudo dnf install SDL2-devel; sudo dnf install SDL2_image-devel; sudo dnf install SDL2_ttf-devel; sudo dnf install SDL2_mixer-devel; 
 
 ###### Run Only
 
-sudo dnf install SDL2; sudo dnf install SDL2_image; sudo dnf install SDL2_ttf;
+sudo dnf install SDL2; sudo dnf install SDL2_image; sudo dnf install SDL2_ttf;  sudo dnf install SDL2_mixer; 
 
 ##### Ubuntu
 
-sudo apt install libsdl2-dev libsdl2-doc libsdl2-image-dev libsdl2-ttf-dev
+sudo apt install libsdl2-dev libsdl2-doc libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 
 #### Run
 
