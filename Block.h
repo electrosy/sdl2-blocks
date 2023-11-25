@@ -46,11 +46,12 @@ class Block {
 private:
     BlockType type; //type empty == null block
     unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
-    SDL_Rect rect; //Position and dimension
+    SDL_Rect rect; //Position and max dimension
     std::array<std::array<BlockTexCode, 4>,4> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     ley::BlockTexCode getRandomTexture();
     void setBlock(BlockType,int = 0);
+    void setBlockOddBalls(BlockType,int = 0);
 
 public:
 
@@ -74,12 +75,14 @@ public:
     void operator= (const Block &b);
     
     /* Functions */
-    BlockTexCode renderPart(unsigned int, unsigned int); /* Return true or false depending on if the block would take up the x,y space */
+    BlockTexCode renderPart(unsigned int, unsigned int); // Return true or false depending on if the block would take up the x,y space
     void moveDown();
     void moveLeft();
     void moveRight();
-    int heightAtWidth(int);
-    int widthAtHeight(int); // TODO this method isn't used, clean it up.
+    int height(); // return the actual height of the block
+    int width(); // return the actual width of the block
+    int heightAtWidth(int); //return the number of blocks high at a particular x location
+    int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
 
 

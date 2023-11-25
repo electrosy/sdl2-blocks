@@ -200,6 +200,16 @@ void ley::GameController::runCleanUp() {
     gm->resetGame();
     fadeMusic();
 }
+std::pair<int, int> ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect inner) {
+    
+    int x = 0;
+    int y = 0;
+
+    x = (outer.w/2) - (inner.w/2);
+    y = (outer.h/2) - (inner.h/2);
+    
+    return std::make_pair(x,y);
+}
 
 //TODO the board should be rendered in the state machine like everything else.
 void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
@@ -220,12 +230,21 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
 
     //TODO - Loop 1 and Loop 2 can probably be rafactored together.
     // Output the nextBlock from the game model
+    
+    ley::Block nextBlock = gm->getNextBlock();
+
+    std::pair<int, int> pos = centerRectInPx({NEXTBOX_POS_X_PX, NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
+                                            {nextBlock.getRect().x, nextBlock.getRect().y, nextBlock.width()*BLOCKSIZE_PX, nextBlock.height()*BLOCKSIZE_PX});
+
     SDL_Rect next_dest_rect;
-    next_dest_rect.x = NEXTBLOCK_OFFSET_X_PX;
-    next_dest_rect.y = 40 + NEXTBLOCK_OFFSET_Y_PX;
+    next_dest_rect.x = NEXTBOX_POS_X_PX + pos.first;
+    next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.second;
     next_dest_rect.h = h;
     next_dest_rect.w = w;
-    ley::Block nextBlock = gm->getNextBlock();
+    
+    SDL_Log("Max Width: %i", nextBlock.width());
+    SDL_Log("Max Height: %i", nextBlock.height());
+    
     for (auto row : nextBlock.getBlockParts())
     {
         for (auto column : row)
@@ -239,7 +258,7 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
             next_dest_rect.x = next_dest_rect.x + w;
         }
         next_dest_rect.y = next_dest_rect.y + h;
-        next_dest_rect.x = NEXTBLOCK_OFFSET_X_PX;
+        next_dest_rect.x = NEXTBOX_POS_X_PX + pos.first;
     }
 
     // TODO loop2 refactor with loop 1 above

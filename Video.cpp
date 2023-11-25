@@ -141,11 +141,11 @@ void ley::Video::init() {
     //RectContainer
     firstRectContainer(renderer);
     mRenderables.push_back(&firstRectContainer);
-    firstRectContainer.addRect("nextboundry", {ley::BLOCK_START_POS_X_PX - 145,39,130,130});
+    firstRectContainer.addRect("nextboundry", {NEXTBOX_POS_X_PX - 1, NEXTBOX_POS_Y_PX - 1, NEXTBOX_SIZE_PX + 2, NEXTBOX_SIZE_PX + 2});
     firstRectContainer.addRect("boardboundry", {
-                                                    BOARD_POS_X_PX - 1, 
-                                                    BOARD_POS_Y_PX - 1, 
-                                                    BLOCKSIZE_PX * BOARDSIZE_WIDTH + 2 , 
+                                                    BOARD_POS_X_PX - 1,
+                                                    BOARD_POS_Y_PX - 1,
+                                                    BLOCKSIZE_PX * BOARDSIZE_WIDTH + 2 ,
                                                     BLOCKSIZE_PX * (BOARDSIZE_HEIGHT - BOARDSIZE_BUFFER) + 2
                                                     });
 
