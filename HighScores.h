@@ -18,6 +18,8 @@ Date: Aug/16/2021
 
 namespace ley {
 
+const auto HIGHSCORES_NUM_DISPLAY = 16; // 15 rows plus 1 for the title row
+
 class HighScores {
 
 private:

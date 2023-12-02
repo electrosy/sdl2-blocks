@@ -242,9 +242,6 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     next_dest_rect.h = h;
     next_dest_rect.w = w;
     
-    SDL_Log("Max Width: %i", nextBlock.width());
-    SDL_Log("Max Height: %i", nextBlock.height());
-    
     for (auto row : nextBlock.getBlockParts())
     {
         for (auto column : row)

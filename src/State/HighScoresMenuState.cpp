@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "../../inc/State/HighScoresMenuState.h"
 
 typedef ley::Textures TextureManager;
@@ -14,20 +16,16 @@ const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}})) {
-    
-    fonts.push_back(&fontHighScores0);
-    fonts.push_back(&fontHighScores1);
-    fonts.push_back(&fontHighScores2);
-    fonts.push_back(&fontHighScores3);
-    fonts.push_back(&fontHighScores4);
-    fonts.push_back(&fontHighScores5);
-    fonts.push_back(&fontHighScores6);
-    fonts.push_back(&fontHighScores7);
-    fonts.push_back(&fontHighScores8);
-    fonts.push_back(&fontHighScores9);
-    fonts.push_back(&fontHighScores10);
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}}))/*,
+    pos_col1{450,0,400,40}*/ {
 
+
+    int yValue = 150;
+    for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
+        font_objects[i] = {450, yValue+=30, 400, 40};
+        font_objects[i].updateMessage(std::to_string(i));
+        fonts_test.push_back(&font_objects[i]);
+    }
 }
 
 void HighScoresMenuState::update(ley::Command command) {
@@ -58,7 +56,7 @@ bool HighScoresMenuState::onEnter() {
     SDL_Log("Entering HighScoresMenuState");
 
     mGameModel->highScores()->read();
-    mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts);
+    mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test);
     highscoresmenu.addRenderables(highScoreRenderables);
     mGameModel->highScores()->setClean(true);
     

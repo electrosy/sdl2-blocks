@@ -26,6 +26,8 @@ public:
     bool isDone(); // Returns true when everything in this state is finished.
 
     virtual std::string getStateID() const = 0;
+
+    virtual ~GameState() {SDL_Log("Gamestate dtor()");};
 };
 
 }

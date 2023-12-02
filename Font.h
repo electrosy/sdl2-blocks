@@ -22,13 +22,15 @@ private:
     TTF_Font* Classic;
     SDL_Color White = {255, 255, 255};
     
-
 protected:
 
 public:
     
     Font(int = 0, int = 0, int = 0, int = 0);
     ~Font();
+    Font& operator=(Font other); //copy assignment
+    Font operator()(Font& other); //copy constructor
+    
     void updateMessage(std::string);
     std::string getMessage();
     void render(SDL_Renderer * r, bool d);

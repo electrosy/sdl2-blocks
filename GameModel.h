@@ -42,11 +42,10 @@ const auto NEXTBOX_PADDING_PX = 15; // padding from the game board
 const auto NEXTBOX_SIZE_PX = (BLOCKSIZE_PX * 4) + 6; // four blocks can fit in the next border plus 5px padding.
 const auto NEXTBOX_POS_X_PX = BOARD_POS_X_PX - NEXTBOX_PADDING_PX - NEXTBOX_SIZE_PX;
 const auto NEXTBOX_POS_Y_PX = BOARD_POS_Y_PX;
-
 const auto NEXTBLOCK_OFFSET_X_PX = BLOCK_START_POS_X_PX - 130;
 const auto NEXTBLOCK_OFFSET_Y_PX = 10;
-
 const auto NEW_LVL_AT_LINES = 10;
+
 
 class GameModel {
 

@@ -34,18 +34,18 @@ bool ley::HighScores::isClean() {
 
 void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts) {
 
-    (*fonts.begin())->updateMessage("     Name                    Level                 Lines                   Score");
+    (*fonts.begin())->updateMessage("Name                           Level                 Lines                   Score");
     re->push_back(*fonts.begin());
 
     std::multimap<unsigned long, std::tuple<std::string, int, int>>::reverse_iterator it;
     int counter = 1; //max 11
-    for(it = highscoresdata.rbegin(); it != highscoresdata.rend() && counter < 11; ++it, ++counter) {
+    for(it = highscoresdata.rbegin(); it != highscoresdata.rend() && counter < HIGHSCORES_NUM_DISPLAY; ++it, ++counter) {
       
       std::string score = std::to_string(it->first);
 
       (*fonts.at(counter)).updateMessage(std::get<0>(it->second) + "     " + std::to_string((std::get<2>(it->second))) + "         " + std::to_string(std::get<1>(it->second))  + "     " + score);
       
-      re->push_back( (fonts.at(counter)) );
+      re->push_back((fonts.at(counter)) );
     }
 }
 
@@ -79,10 +79,10 @@ int ley::HighScores::read() {
             std::stringstream ss(line);
 
             std::string name, level, lines, score;
-            std::getline(ss,score,','); std::cout<<"\""<<score<<"\"";
-            std::getline(ss,name,','); std::cout<<", \""<<name<<"\"";
-            std::getline(ss,lines,','); std::cout<<", \""<<lines<<"\"";
-            std::getline(ss,level,','); std::cout<<", \""<<level<<"\"";
+            std::getline(ss,score,',');
+            std::getline(ss,name,',');
+            std::getline(ss,lines,',');
+            std::getline(ss,level,',');
 
             int nLevel, nLines;
             unsigned long dScore;
@@ -92,8 +92,6 @@ int ley::HighScores::read() {
             dScore = std::stol(score);
 
             highscoresdata.emplace(dScore, std::make_tuple(name,nLines,nLevel));
-            
-            SDL_Log("Test Read in File, Name: %s Level: %s Lines: %s Score: %s", name.c_str(), level.c_str(), lines.c_str(), score.c_str());
         }
     }
     return 0;

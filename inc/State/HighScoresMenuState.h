@@ -41,18 +41,11 @@ private:
     ley::UIMenu highscoresmenu;
     ley::Renderables highScoreRenderables;
 
+    SDL_Rect pos_col1; // name
+
     std::vector<ley::Font*> fonts;
-    ley::Font fontHighScores0 = {450, 190, 400, 40};
-    ley::Font fontHighScores1 = {450, 225, 400, 40};
-    ley::Font fontHighScores2 = {450, 260, 400, 40};
-    ley::Font fontHighScores3 = {450, 295, 400, 40};
-    ley::Font fontHighScores4 = {450, 330, 400, 40};
-    ley::Font fontHighScores5 = {450, 365, 400, 40};
-    ley::Font fontHighScores6 = {450, 400, 400, 40};
-    ley::Font fontHighScores7 = {450, 435, 400, 40};
-    ley::Font fontHighScores8 = {450, 470, 400, 40};
-    ley::Font fontHighScores9 = {450, 505, 400, 40};
-    ley::Font fontHighScores10 = {450, 540, 400, 40};
+    std::vector<ley::Font*> fonts_test;
+    ley::Font font_objects[HIGHSCORES_NUM_DISPLAY];
 };
 
 }

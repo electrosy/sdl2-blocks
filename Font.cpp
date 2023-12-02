@@ -16,22 +16,61 @@ Message(nullptr) {
         SDL_Log("TTF_Init failed");
     }
 
+    SDL_Log("Open font");
     Classic = TTF_OpenFont("assets/arcadeclassic.ttf", 16);
     if(!Classic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
 
-    Message_rect.x = x;  //controls the rect's x coordinate
-    Message_rect.y = y; // controls the rect's y coordinte
-    Message_rect.w = w; // controls the width of the rect
-    Message_rect.h = h; // controls the height of the rect
+    Message_rect.x = x;
+    Message_rect.y = y;
+    Message_rect.w = w;
+    Message_rect.h = h;
 
     updateMessage("");
 }
+
 ley::Font::~Font() {
 
-    SDL_DestroyTexture(Message);
+    if(Message) {
+        SDL_DestroyTexture(Message);
+    }
+    SDL_Log("Close font");
+    TTF_CloseFont(Classic);
     TTF_Quit();
+}
+//copy assignment operator
+ley::Font& ley::Font::operator=(ley::Font other) {
+    
+    Message = nullptr;
+
+    Message_rect.x = other.Message_rect.x;
+    Message_rect.y = other.Message_rect.y;
+    Message_rect.w = other.Message_rect.w;
+    Message_rect.h = other.Message_rect.h;
+
+    updateMessage("");
+
+    return *this;
+}
+ley::Font ley::Font::operator()(ley::Font& other) {
+
+    Message = nullptr;
+
+    SDL_Log("Open font");
+    Classic = TTF_OpenFont("assets/arcadeclassic.ttf", 16);
+    if(!Classic) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+    }
+
+    Message_rect.x = other.Message_rect.x;  //controls the rect's x coordinate
+    Message_rect.y = other.Message_rect.y; // controls the rect's y coordinte
+    Message_rect.w = other.Message_rect.w; // controls the width of the rect
+    Message_rect.h = other.Message_rect.h; // controls the height of the rect
+
+    updateMessage("");
+
+    return *this;
 }
 
 void ley::Font::updateMessage(std::string s) {
@@ -47,15 +86,11 @@ std::string ley::Font::getMessage() {
 
 void ley::Font::render(SDL_Renderer * r, bool d) {
 
-    if(Message != nullptr) {
-        SDL_DestroyTexture(Message);
-        Message = nullptr;
-    }
-
     SDL_Surface* surfaceMessage;
-    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White); 
+    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White);
     Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
     SDL_FreeSurface(surfaceMessage);
 
     SDL_RenderCopy(r, Message, NULL, &Message_rect);
+    SDL_DestroyTexture(Message);
 }
