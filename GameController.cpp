@@ -36,6 +36,8 @@ void ley::GameController::runGameLoop() {
     SDL_Log("Starting Game loop!");
 
     while(gm->programRunning()) {
+        mVideoSystem->frameStart(); //Need to call this at the begenning of the frame, for the frame delay.
+
         /**** RENDER ****/
         //Only render the game board if we are in PLAY, PAUSE or GAMEOVER.
         if(gameStateMachine.getStateId() == "PLAY" 

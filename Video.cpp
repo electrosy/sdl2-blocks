@@ -11,11 +11,11 @@ Date: Feb/14/2020
 #include "Video.h"
 
 const auto START_DELAY = 1; //start delay for the game loop
-const auto TARGET_FPS = 144.0; //provide at least this many frames per second.
-const auto FPS_ADJUST_RATE = 1000; // adjust fps every second
+const auto TARGET_FPS = 144; //provide at least this many frames per second.
+const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.2.5.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.2.5.1"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -61,38 +61,17 @@ void ley::Video::addRenderable(bool layer, ley::Renderable * r) {
         mRenderables.push_back(r);
     }
 }
+void ley::Video::frameStart() {
+    frame_start = SDL_GetTicks();
+}
+
 void ley::Video::frameDelay() {
+    Uint32 frame_time = SDL_GetTicks() - frame_start;
 
-    if(SDL_GetTicks() % FPS_ADJUST_RATE == 0 && avgFPS() > 0) { // once per second
-    
-        float fps_ratio = avgFPS() / TARGET_FPS;
-        
-        SDL_Log("Video::fps_ratio: %f", fps_ratio);
-
-        if(fps_ratio > 2.5) {
-            mili_adjust += 5; //add 5 mili seconds
-        }
-        else if (fps_ratio > 1) {
-            mili_adjust += 1; //add 1 mili second
-        } 
-        else if (fps_ratio < 1 ) {
-            mili_adjust -= 1; //subtract 1 mili second
-        }
-        else if (fps_ratio < 0.7) {
-            mili_adjust -= 7;
-        }
-        else if (fps_ratio < 0.5) {
-            mili_adjust -= 10; //subtract 5 mili seconds
-        }
-
-        if(mili_adjust < 0) { //mili_adust should never be negative
-            mili_adjust = 0;
-        }
-                
-        SDL_Log("Video::miliadjust: %f", mili_adjust);
+    if(frame_time < DELAY_TIME) {
+        SDL_Delay((int)DELAY_TIME - frame_time);
     }
 
-    SDL_Delay(START_DELAY + mili_adjust);
 }
 
 /* RAII */
@@ -164,7 +143,6 @@ void ley::Video::init() {
     SDLLinked.updateMessage("SDLLinked!" + std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
     mDebugRenderables.push_back(&SDLCompiled);
     mDebugRenderables.push_back(&SDLLinked);
-
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool f) {
@@ -330,18 +308,6 @@ void ley::Video::updateScores() {
     fontLines.updateMessage("Lines  " + std::to_string(int(gm->getLines())));
     fontLvl.updateMessage("Level  " + std::to_string(int(gm->getLevel())));
     fontScore.updateMessage("Score  " + std::to_string(int(gm->getScore())));
-}
-
-Uint32 ley::Video::avgFPS() {
-
-    if(SDL_GetTicks() % 1000 == 0) { //recalculate the AVG fps only once per second.
-        avg_fps = mainClock.secondsFromStart() == 0 ? mainClock.secondsFromStart() : frame_count / mainClock.secondsFromStart();
-        SDL_Log("Video::frameCount(): %u", frame_count);
-        SDL_Log("Video::secondsFromStart(): %u", mainClock.secondsFromStart());
-        SDL_Log("Video::avgFPS(): %u", avg_fps);
-    }
-
-    return avg_fps;
 }
 
 void ley::Video::resetClock() {

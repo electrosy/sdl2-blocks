@@ -31,7 +31,6 @@ namespace ley {
 class Video {
 
 private:
-    
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -43,6 +42,7 @@ private:
     ley::GameModel* gm;
     bool renderbg; //render background or not.
     double mili_adjust; //number of mili seconds to delay the frame
+    Uint32 frame_start;
     ley::Renderables mRenderables;
     ley::Renderables mDebugRenderables;
     ley::RectContainer firstRectContainer;
@@ -62,11 +62,8 @@ private:
     ley::Sprite catSprite2;
     ley::Sprite spriteBackground;
     ley::Sprite spriteBackgroundfadeout;
-    
-    Uint32 avgFPS();
     void createWindow();
     void createRenderer();
-
     void init();
     void loadTextures();
     void loadSprites();
@@ -85,6 +82,7 @@ public:
     Video(ley::GameModel*);
     ~Video();
 
+    void frameStart(); //Record time when game loops starts for locking the frame rate.
     void frameDelay(); //Calls SDL_Delay to delay frame based on mili_adjust
 /* Accessors */
     bool fullScreen() {return fs;};
