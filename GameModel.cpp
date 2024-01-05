@@ -135,11 +135,15 @@ bool ley::GameModel::canPut(Block& b, Command d) {
         case Command::down : 
            for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
+                    
+                    bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
                     bool boardPart = board[block.y + j + 1][block.x + i].second
-                                    || block.y + j < 0;
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
+                                        || block.y + j + 1 >= BOARDSIZE_HEIGHT; //the space is already occupied
+                    
+                    SDL_Log("Part to render: %d.", b.renderPart(i, j) != BlockTexCode::O);
+                    SDL_Log("Space occupied: %d.", boardPart == true);
+
+                    if(renderPart && boardPart) {
                             return false; /*** EARLY EXIT! ***/
                     }
                }
@@ -198,7 +202,7 @@ void ley::GameModel::clearOldBlock() {
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
-    return Block(4,2,BlockType::line,false);
+    return Block(4,0,BlockType::tee,false);
 }
 
 ley::Block ley::GameModel::getRandomBlock() {
