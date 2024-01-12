@@ -17,7 +17,7 @@ Message(nullptr) {
     }
 
     SDL_Log("Open font");
-    Classic = TTF_OpenFont("assets/arcadeclassic.ttf", 16);
+    Classic = TTF_OpenFont("assets/fonts/MartianMono-Regular.ttf", 24);
     if(!Classic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
@@ -58,7 +58,7 @@ ley::Font ley::Font::operator()(ley::Font& other) {
     Message = nullptr;
 
     SDL_Log("Open font");
-    Classic = TTF_OpenFont("assets/arcadeclassic.ttf", 16);
+    Classic = TTF_OpenFont("assets/fonts/MartianMono-Regular.ttf", 24);
     if(!Classic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
@@ -84,12 +84,24 @@ std::string ley::Font::getMessage() {
     return textMessage;
 }
 
+std::string* ley::Font::getMessagePtr() {
+    return &textMessage;
+}
+
 void ley::Font::render(SDL_Renderer * r, bool d) {
 
     SDL_Surface* surfaceMessage;
     surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White);
     Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
     SDL_FreeSurface(surfaceMessage);
+    
+    int w;
+    int h;
+    SDL_QueryTexture(Message,
+                     NULL, NULL,
+                     &w, &h);
+    Message_rect.h = h;
+    Message_rect.w = w;
 
     SDL_RenderCopy(r, Message, NULL, &Message_rect);
     SDL_DestroyTexture(Message);

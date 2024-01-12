@@ -28,6 +28,13 @@ Date: Feb/15/2020
 
 namespace ley {
 
+enum class InputWindow {
+    goto_textBox,
+    textBox,
+    goto_game,
+    game
+};
+
 class GameController {
 
 private:
@@ -45,6 +52,8 @@ public:
     GameController(ley::Video* , ley::GameModel*);
     ~GameController();
 
+    void processCommands(ley::Command command);
+    void processStates(ley::Command command);
     void runGameLoop();
     void setHighScores(ley::HighScores* hs);
     void runCleanUp(); //run clean up after the game is completly over

@@ -85,6 +85,8 @@ void ley::Video::createWindow() {
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN /*SDL_WINDOW_FULLSCREEN*/);
+
+        SDL_StopTextInput();
     } else {
         printf("Can't Initialize SDL2 Video");
         video_ready = 0;
@@ -115,6 +117,8 @@ void ley::Video::init() {
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
+//    mRenderables.push_back(&textEntry);
+
     updateScores(); //TODO the model should call this
 
     //RectContainer
@@ -312,6 +316,31 @@ void ley::Video::updateScores() {
 
 void ley::Video::resetClock() {
     mainClock.reset();
+}
+
+void ley::Video::processTextBox(ley::Character c) {
+    
+    std::string character;
+
+    switch(c) {
+        
+        case ley::Character::backspace : character = "backspace";
+        break;
+
+        default:
+            break;
+
+    }
+    
+    textEntry.processInput(character);
+}
+
+std::string* ley::Video::getTextBoxField() {
+    return textEntry.getTextBoxField();
+}
+
+ley::TextEntry* ley::Video::getTextEntry() {
+    return &textEntry;
 }
 
 

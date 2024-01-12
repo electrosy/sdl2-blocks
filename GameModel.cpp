@@ -139,10 +139,6 @@ bool ley::GameModel::canPut(Block& b, Command d) {
                     bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
                     bool boardPart = board[block.y + j + 1][block.x + i].second
                                         || block.y + j + 1 >= BOARDSIZE_HEIGHT; //the space is already occupied
-                    
-                    SDL_Log("Part to render: %d.", b.renderPart(i, j) != BlockTexCode::O);
-                    SDL_Log("Space occupied: %d.", boardPart == true);
-
                     if(renderPart && boardPart) {
                             return false; /*** EARLY EXIT! ***/
                     }

@@ -10,6 +10,8 @@ Date: Feb/14/2020
 #define INPUT_H
 
 #include <SDL2/SDL.h>
+#include <vector>
+#include <string>
 
 namespace ley {
 
@@ -37,7 +39,13 @@ enum class Command {
     increaseVolume,
     decreaseVolume,
     nextSong,
-    previousSong}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+    previousSong,
+    tab,
+    backspace}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+
+enum class Character {
+    backspace,enter,none
+};
 
 class Input {
 
@@ -48,8 +56,10 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool&);
+    ley::Command pollEvents(bool& fullscreen, std::string* ptr_s);
+    void pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len);
     ley::Command pollTitleEvents(bool&);
+
 };
 
 }

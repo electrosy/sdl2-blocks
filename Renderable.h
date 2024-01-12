@@ -34,7 +34,7 @@ public:
     bool isVisible();
 
     /* Functions */
-    void virtual render(SDL_Renderer * r, bool d) = 0;
+    void virtual render(SDL_Renderer * r, bool d) = 0; // d = debug
 };
 
 }

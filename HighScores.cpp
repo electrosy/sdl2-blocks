@@ -10,6 +10,7 @@ Date: Aug/16/2021
 #include <sstream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include <SDL2/SDL.h>
 
@@ -34,7 +35,7 @@ bool ley::HighScores::isClean() {
 
 void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts) {
 
-    (*fonts.begin())->updateMessage("Name                           Level                 Lines                   Score");
+    (*fonts.begin())->updateMessage("Name              Level      Lines   Score");
     re->push_back(*fonts.begin());
 
     std::multimap<unsigned long, std::tuple<std::string, int, int>>::reverse_iterator it;
@@ -43,7 +44,11 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
       
       std::string score = std::to_string(it->first);
 
-      (*fonts.at(counter)).updateMessage(std::get<0>(it->second) + "     " + std::to_string((std::get<2>(it->second))) + "         " + std::to_string(std::get<1>(it->second))  + "     " + score);
+      std::string hs_line = std::get<0>(it->second) + "               " + std::to_string((std::get<2>(it->second))) + "         " + std::to_string(std::get<1>(it->second))  + "     " + score;
+
+      std::replace( hs_line.begin(), hs_line.end(), ' ', '.');
+
+      (*fonts.at(counter)).updateMessage(hs_line);
       
       re->push_back((fonts.at(counter)) );
     }

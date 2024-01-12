@@ -32,6 +32,8 @@ void ley::GameController::runGameLoop() {
 
     gameStateMachine.pushState(new ley::IntroState(mVideoSystem, gm));
 
+    InputWindow inputWindow = ley::InputWindow::game;
+
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
 
@@ -54,131 +56,45 @@ void ley::GameController::runGameLoop() {
         
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
-        ley::Command command = mainInput.pollEvents(fs);
-        
+        if(inputWindow == ley::InputWindow::goto_textBox) {
+            SDL_StartTextInput();
+            mVideoSystem->getTextEntry()->toggleFocus();
+            inputWindow = ley::InputWindow::textBox;
+        }
+        else if(inputWindow == ley::InputWindow::goto_game){
+            SDL_StopTextInput();
+            mVideoSystem->getTextEntry()->toggleFocus();
+            inputWindow = ley::InputWindow::game;
+        }
+        ley::Command command = mainInput.pollEvents(fs, mVideoSystem->getTextBoxField());
+
         /**** INPUT PROCESSING ****/
-        if(command == ley::Command::nextSong) {
-            playNext();
-        }
-
-        /**** DEBUG INPUT PROCESSING ****/
-        if(command == ley::Command::debugkeystoggle) {
-            gm->debugCommandsToggle();
-        }
-
-        //allow debug commands to be used
-        if(gm->debugCommands()) {
-            if(command == ley::Command::console) {
-                gm->overlayToggle();
-            }
-
-            if(command == ley::Command::debugclear) {
-                gm->clearBoard();
-                gm->debugResetActiveBlock();
-            }
-
-            if(command == ley::Command::debugfill) {
-                gm->debugFill();
-            }
-
-            if(command == ley::Command::debugnextlevel) {
-                gm->debugNextLevel();
-            }
-
-            if(command == ley::Command::debugprevlevel) {
-                gm->debugPrevLevel();
-            }
-
-            if(command == ley::Command::debugonlyline) {
-                gm->debugOnlyLineToggle();
-            }
-        }
-
         if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
         }
-
-        if(command == ley::Command::decreaseVolume) {
-            gm->audio()->decreaseVolume();
-        }
-
-        if(command == ley::Command::increaseVolume) {
-            gm->audio()->increaseVolume();
-        }
-
-        gameStateMachine.update(command);
-
-        //Quit the introstate and goto the menu state.
-        if((command == ley::Command::enter || gameStateMachine.isStateDone())
-            && gameStateMachine.getStateId() == "INTRO") {
-            gameStateMachine.changeState(new ley::MenuState(mVideoSystem, gm));
-        }
-
-        //Don't quit the state for pause this way.
-        if((command == ley::Command::quit || gm->currentStateChange() == ley::StateChange::quitstate)
-            && !(gameStateMachine.getStateId() == "PAUSE")
-            && !(gameStateMachine.getStateId() == "INTRO")) {
-
-            if(gameStateMachine.getStateId() == "GAMEOVER" && !gm->isGameRunning()) {
-                gameStateMachine.popState(); //Assume we have to exit two states if we are in game over. assume STACK=MENU|PLAY|GAMEOVER
+/*
+        if(command == ley::Command::tab) {
+            if (inputWindow == ley::InputWindow::game) {
+                inputWindow = ley::InputWindow::goto_textBox;
             }
-
-            gameStateMachine.popState();
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        if(gm->currentStateChange() == ley::StateChange::play) {
-            //add the new state
-            gm->audio()->fadeOutMusic();
-            gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
-            //remove the statechange flag
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        if(gm->currentStateChange() == ley::StateChange::highscores) {
-            //add the new state
-            gameStateMachine.pushState(new ley::HighScoresMenuState(mVideoSystem, gm));
-            //remove the statechange flag
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        if(gm->currentStateChange() == ley::StateChange::options) {
-            //Goto the options menu state
-            gameStateMachine.pushState(new ley::OptionMenuState(mVideoSystem, gm));
-            //clear the statechange flag
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        if(gm->currentStateChange() == ley::StateChange::credits) {
-            //Goto the options menu state
-            gameStateMachine.pushState(new ley::CreditsState(mVideoSystem, gm));
-            //clear the statechange flag
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        //If the game stops running and we are in the play state then go to the game over state.
-        if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
-            setHighScores(gm->highScores());
-            gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
-            gm->stateChange(ley::StateChange::none);
-        }
-
-        //Only allow paused/unpause if we are in the play or pause states
-        if(command == ley::Command::pause && (gameStateMachine.getStateId() == "PLAY" || gameStateMachine.getStateId() == "PAUSE")) {
-            //Only allow pause if we are in the playstate.
-            if(gm->isPaused()) {
-                SDL_Log("Game Paused!");
-                gm->audio()->playSfx(ley::sfx::pause); //TODO sfx can probably go in the pause state
-                gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
-            }
-
-            if(!gm->isPaused()) {
-                SDL_Log("Game Resumed");    
-                gm->audio()->playSfx(ley::sfx::unpause); //TODO sfx can probably go in the pause state
-                gameStateMachine.popState();
+            else {
+                inputWindow = ley::InputWindow::goto_game;
             }
         }
- 
+*/
+
+        if(inputWindow == ley::InputWindow::game) {
+            processCommands(command);
+            gameStateMachine.update(command);
+            processStates(command);
+        }
+        else if(inputWindow == ley::InputWindow::textBox) {
+            //throw away the command but continue to run the game state machine
+            mVideoSystem->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
+            //keyinput.second = ley::Character::none;
+            gameStateMachine.update(ley::Command::none);
+        }
+
         /**** CLEAR ****/
         mVideoSystem->clear(); //clear the backbuffer
         
@@ -190,6 +106,126 @@ void ley::GameController::runGameLoop() {
 
     /**** CLEAN UP ****/
     runCleanUp();
+}
+void ley::GameController::processCommands(ley::Command command) {
+    if(command == ley::Command::nextSong) {
+        playNext();
+    }
+
+    if(command == ley::Command::decreaseVolume) {
+        gm->audio()->decreaseVolume();
+    }
+
+    if(command == ley::Command::increaseVolume) {
+        gm->audio()->increaseVolume();
+    }
+
+    /**** DEBUG INPUT PROCESSING ****/
+    if(command == ley::Command::debugkeystoggle) {
+        gm->debugCommandsToggle();
+    }
+
+    //allow debug commands to be used
+    if(gm->debugCommands()) {
+        if(command == ley::Command::console) {
+            gm->overlayToggle();
+        }
+
+        if(command == ley::Command::debugclear) {
+            gm->clearBoard();
+            gm->debugResetActiveBlock();
+        }
+
+        if(command == ley::Command::debugfill) {
+            gm->debugFill();
+        }
+
+        if(command == ley::Command::debugnextlevel) {
+            gm->debugNextLevel();
+        }
+
+        if(command == ley::Command::debugprevlevel) {
+            gm->debugPrevLevel();
+        }
+
+        if(command == ley::Command::debugonlyline) {
+            gm->debugOnlyLineToggle();
+        }
+    }
+}
+void ley::GameController::processStates(ley::Command command) {
+    //NOTE game state machine update was here.
+
+    //Quit the introstate and goto the menu state.
+    if((command == ley::Command::enter || gameStateMachine.isStateDone())
+        && gameStateMachine.getStateId() == "INTRO") {
+        gameStateMachine.changeState(new ley::MenuState(mVideoSystem, gm));
+    }
+
+    //Don't quit the state for pause this way.
+    if((command == ley::Command::quit || gm->currentStateChange() == ley::StateChange::quitstate)
+        && !(gameStateMachine.getStateId() == "PAUSE")
+        && !(gameStateMachine.getStateId() == "INTRO")) {
+
+        if(gameStateMachine.getStateId() == "GAMEOVER" && !gm->isGameRunning()) {
+            gameStateMachine.popState(); //Assume we have to exit two states if we are in game over. assume STACK=MENU|PLAY|GAMEOVER
+        }
+
+        gameStateMachine.popState();
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    if(gm->currentStateChange() == ley::StateChange::play) {
+        //add the new state
+        gm->audio()->fadeOutMusic();
+        gameStateMachine.pushState(new ley::PlayState(mVideoSystem, gm));
+        //remove the statechange flag
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    if(gm->currentStateChange() == ley::StateChange::highscores) {
+        //add the new state
+        gameStateMachine.pushState(new ley::HighScoresMenuState(mVideoSystem, gm));
+        //remove the statechange flag
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    if(gm->currentStateChange() == ley::StateChange::options) {
+        //Goto the options menu state
+        gameStateMachine.pushState(new ley::OptionMenuState(mVideoSystem, gm));
+        //clear the statechange flag
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    if(gm->currentStateChange() == ley::StateChange::credits) {
+        //Goto the options menu state
+        gameStateMachine.pushState(new ley::CreditsState(mVideoSystem, gm));
+        //clear the statechange flag
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    //If the game stops running and we are in the play state then go to the game over state.
+    if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
+        setHighScores(gm->highScores());
+        gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
+        gm->stateChange(ley::StateChange::none);
+    }
+
+    //Only allow paused/unpause if we are in the play or pause states
+    if(command == ley::Command::pause && (gameStateMachine.getStateId() == "PLAY" || gameStateMachine.getStateId() == "PAUSE")) {
+        //Only allow pause if we are in the playstate.
+        if(gm->isPaused()) {
+            SDL_Log("Game Paused!");
+            gm->audio()->playSfx(ley::sfx::pause); //TODO sfx can probably go in the pause state
+            gameStateMachine.pushState(new ley::PauseState(mVideoSystem, gm));
+        }
+
+        if(!gm->isPaused()) {
+            SDL_Log("Game Resumed");    
+            gm->audio()->playSfx(ley::sfx::unpause); //TODO sfx can probably go in the pause state
+            gameStateMachine.popState();
+        }
+    }
 }
 void ley::GameController::setHighScores(ley::HighScores* hs) {
     //push on the new high score

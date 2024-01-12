@@ -31,8 +31,9 @@ public:
     Font& operator=(Font other); //copy assignment
     Font operator()(Font& other); //copy constructor
     
-    void updateMessage(std::string);
+    void updateMessage(std::string s);
     std::string getMessage();
+    std::string* getMessagePtr();
     void render(SDL_Renderer * r, bool d);
 
 };

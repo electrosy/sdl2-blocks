@@ -48,15 +48,65 @@ ley::Command ley::Input::pollTitleEvents(bool &running) {
      return frameDirection;
 }
 
-ley::Command ley::Input::pollEvents(bool& fullscreen) {
+void ley::Input::pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len) {
+
+    bool done;
+    SDL_StartTextInput();
+    while (!done) {
+        SDL_Event event;
+        if (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    /* Quit */
+                    done = true;
+                    break;
+                case SDL_TEXTINPUT:
+                    /* Add new text onto the end of our text */
+                    (*ptr_s).append(event.text.text);
+
+                    break;
+                case SDL_TEXTEDITING:
+                    /*
+                    Update the composition text.
+                    Update the cursor position.
+                    Update the selection length (if any).
+                    */
+                    (*ptr_s) = event.edit.text;
+                    cursor = event.edit.start;
+                    selection_len = event.edit.length;
+                    break;
+            }
+        }
+    }
+    SDL_StopTextInput();
+}
+
+ley::Command ley::Input::pollEvents(bool& fullscreen, std::string* ptr_s) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
+    //std::vector<ley::Character> characters;
 
     while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         switch (event.type)     {       
             case SDL_QUIT:         
                 command = ley::Command::quit;
+                break;
+
+            case SDL_TEXTINPUT:
+                /* Add new text onto the end of our text */
+                (*ptr_s).append(event.text.text);
+
+                break;
+            case SDL_TEXTEDITING:
+                /*
+                Update the composition text.
+                Update the cursor position.
+                Update the selection length (if any).
+                */
+                //(*ptr_s) = event.edit.text;
+                //cursor = event.edit.start;
+                //selection_len = event.edit.length;
                 break;
             
             case SDL_KEYDOWN:
@@ -69,6 +119,12 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 }
                 if (state[SDL_SCANCODE_F]) {
                     command = ley::Command::debugfill;
+                }
+                if (state[SDL_SCANCODE_Q]) {
+                    command = ley::Command::quit;
+                }                
+                if (state[SDL_SCANCODE_BACKSPACE]) {
+                    command = ley::Command::backspace;
                 }
                 if (state[SDL_SCANCODE_L]) {
                     command = ley::Command::debugonlyline;
@@ -113,11 +169,6 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                     command = ley::Command::nextSong;
                 }
 
-                //quite game
-                if (state[SDL_SCANCODE_Q]) {
-                    command = ley::Command::quit;
-                }
-
                 //debug next level
                 if (state[SDL_SCANCODE_I]) {
                     command = ley::Command::debugnextlevel;
@@ -148,12 +199,19 @@ ley::Command ley::Input::pollEvents(bool& fullscreen) {
                 if(state[SDL_SCANCODE_SPACE]) {
                     command = ley::Command::space;
                 }
+
+                if(state[SDL_SCANCODE_TAB]) {
+                    command = ley::Command::tab;
+                }
                 
                 break;
-            default:
-                break;
-        }
-     }
 
-     return command;
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    return command;
 }

@@ -16,15 +16,16 @@ Date: Feb/14/2020
 #include "Textures.h"
 #include "Font.h"
 #include "./inc/RectContainer.h"
+#include "./inc/TextEntry.h"
 
 auto const LINES_POS_X_PX = 800; //Score text
 auto const LINES_POS_Y_PX = 40; 
 
 auto const LVL_POS_X_PX = 800; //Level text
-auto const LVL_POS_Y_PX = 60;
+auto const LVL_POS_Y_PX = 65;
 
 auto const SCORE_POS_X_PX = 800;
-auto const SCORE_POS_Y_PX = 80;
+auto const SCORE_POS_Y_PX = 90;
 
 namespace ley {
 
@@ -77,6 +78,8 @@ private:
     ley::Font fontDebugMode; //Debug sign
     ley::Font SDLCompiled;
     ley::Font SDLLinked;
+
+    ley::TextEntry textEntry;
     
 public:
     Video(ley::GameModel*);
@@ -99,7 +102,9 @@ public:
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
-
+    void processTextBox(ley::Character c);
+    std::string* getTextBoxField();
+    ley::TextEntry* getTextEntry();
     void resetClock();
 };
 

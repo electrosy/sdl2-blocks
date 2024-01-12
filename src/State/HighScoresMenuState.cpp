@@ -22,7 +22,7 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
 
     int yValue = 150;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
-        font_objects[i] = {450, yValue+=30, 400, 40};
+        font_objects[i] = {300, yValue+=30, 400, 40};
         font_objects[i].updateMessage(std::to_string(i));
         fonts_test.push_back(&font_objects[i]);
     }
