@@ -117,7 +117,8 @@ void ley::Video::init() {
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
-//    mRenderables.push_back(&textEntry);
+    mRenderablesTopLayer.push_back(&textEntry);
+    textEntry.setVisible(false);
 
     updateScores(); //TODO the model should call this
 
@@ -187,6 +188,9 @@ void ley::Video::setBackgroundTexture() {
         spriteBackgroundfadeout.resetFader();
         spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {500,{0,0,0,0}});
     }
+}
+void ley::Video::renderTopLayer() {
+    mRenderablesTopLayer.renderAll(renderer, gm->isOverlayOn());
 }
 
 void ley::Video::render() {

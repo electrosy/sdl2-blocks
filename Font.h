@@ -35,7 +35,9 @@ public:
     std::string getMessage();
     std::string* getMessagePtr();
     void render(SDL_Renderer * r, bool d);
-
+    TTF_Font* getTTFFont();
+    void setPos(SDL_Point p);
+    
 };
 
 }

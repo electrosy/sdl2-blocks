@@ -106,3 +106,12 @@ void ley::Font::render(SDL_Renderer * r, bool d) {
     SDL_RenderCopy(r, Message, NULL, &Message_rect);
     SDL_DestroyTexture(Message);
 }
+
+TTF_Font* ley::Font::getTTFFont() {
+    return Classic;
+}
+
+void ley::Font::setPos(SDL_Point p) {
+    Message_rect.x = p.x;
+    Message_rect.y = p.y;
+}

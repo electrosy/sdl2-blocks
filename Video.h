@@ -45,6 +45,7 @@ private:
     double mili_adjust; //number of mili seconds to delay the frame
     Uint32 frame_start;
     ley::Renderables mRenderables;
+    ley::Renderables mRenderablesTopLayer;
     ley::Renderables mDebugRenderables;
     ley::RectContainer firstRectContainer;
     ley::RectContainer debugRectContainer;
@@ -97,6 +98,7 @@ public:
     void resetBackgroundFader();
 
 /* Functions */
+    void renderTopLayer();
     void render(); //Render additional bits.
     void renderSprites();
     void present(); //Present the rendered items to the user.

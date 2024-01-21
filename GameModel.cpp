@@ -518,7 +518,7 @@ void ley::GameModel::resetGame() {
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
     newLevelToReport = true; //we always want to reset the game background when we restart the game.
-    
+    mNewHighScore = false;
     stopProgram(false);   
 }
 bool ley::GameModel::isPaused() {
@@ -546,4 +546,12 @@ bool ley::GameModel::debugOnlyLine() {
 
 void ley::GameModel::debugOnlyLineToggle() {
     mDebugOnlyLine = !mDebugOnlyLine;
+}
+
+void ley::GameModel::newHighScore(bool flag) {
+    mNewHighScore = flag;
+}
+
+bool ley::GameModel::newHighScore() {
+    return mNewHighScore;
 }

@@ -16,12 +16,7 @@ Date: Feb/17/2020
 #include <SDL2/SDL_image.h>
 #include "Timer.h"
 #include "Renderable.h"
-
-//Screen dimensions are contained in sprite because both sprite and video have sprite.h
-const auto SCREEN_WIDTH = 1280;
-const auto SCREEN_HEIGHT = 720;
-constexpr auto SCREEN_WCENTER = SCREEN_WIDTH / 2;
-constexpr auto SCREEN_HCENTER = SCREEN_HEIGHT / 2;
+#include "./inc/Screen.h"
 
 namespace ley {
 

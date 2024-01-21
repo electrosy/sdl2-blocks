@@ -11,6 +11,10 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
+const auto ROW_START_Y = 150;
+const auto ROW_START_X = 300;
+const auto ROW_SPACING = 30;
+
 const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
@@ -20,11 +24,19 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     pos_col1{450,0,400,40}*/ {
 
 
-    int yValue = 150;
+    int yValue = ROW_START_Y;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
-        font_objects[i] = {300, yValue+=30, 400, 40};
+        font_objects[i] = {ROW_START_X, yValue+=ROW_SPACING, 400, 40};
         font_objects[i].updateMessage(std::to_string(i));
         fonts_test.push_back(&font_objects[i]);
+    }
+}
+void HighScoresMenuState::onCommandEnter() {
+
+    if(mGameModel->newHighScore()) {
+        SDL_Log("You entered it with high score!!!");
+        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mVideoSystem->getTextEntry()->getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
+        mGameModel->newHighScore(false);
     }
 }
 
@@ -33,6 +45,10 @@ void HighScoresMenuState::update(ley::Command command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
+        case ley::Command::enter :
+            onCommandEnter();
+        break;
+            
     }
 
     highscoresmenu.runCommand(command);
@@ -55,11 +71,25 @@ void HighScoresMenuState::loadRenderables() {
 bool HighScoresMenuState::onEnter() {
     SDL_Log("Entering HighScoresMenuState");
 
+    int newHighRow = (mGameModel->highScores()->isNewHigh(mGameModel->getScore()));
+    if(mGameModel->newHighScore()) {
+        mVideoSystem->getTextEntry()->setVisible(true);
+        mGameModel->highScores()->isNewHigh(mGameModel->getScore());
+
+        mVideoSystem->getTextEntry()->setPos(
+            {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
+    }
+
     mGameModel->highScores()->read();
-    mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test);
+    if(mGameModel->newHighScore()) {
+        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test, {mGameModel->getScore(),{"",mGameModel->getLevel(),mGameModel->getLines()}}, newHighRow);
+    }
+    else {
+        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test, {0,{"",0,0}}, -1);
+    }
     highscoresmenu.addRenderables(highScoreRenderables);
     mGameModel->highScores()->setClean(true);
-    
+
     loadRenderables();
     return true;
 }
@@ -70,6 +100,9 @@ bool HighScoresMenuState::onReEnter() {
 }
 
 bool HighScoresMenuState::onExit() {
+
+    mVideoSystem->getTextEntry()->setVisible(false);
+
     SDL_Log("Exiting HighScoresMenustate");
     return true;
 }

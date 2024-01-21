@@ -15,6 +15,8 @@ Date: Aug/16/2021
 #ifndef HIGHSCORES_H
 #define HIGHSCORES_H
 
+typedef std::pair<int, std::tuple<std::string, int, int>> HighScoresRow; //score, name, level, lines
+typedef std::multimap<unsigned long, std::tuple<std::string, int, int>> HighScoresType;
 
 namespace ley {
 
@@ -25,7 +27,7 @@ class HighScores {
 private:
 
     //key: score Value: Name, Level, Lines
-    std::multimap<unsigned long, std::tuple<std::string, int, int>> highscoresdata;
+    HighScoresType highscoresdata;
     bool clean; //a flag to know when to reload the highschores data.
 
 protected:
@@ -37,9 +39,11 @@ public:
     void write();
     int read();
     void push(unsigned long, std::string, int, int);
-    void renderScoreFonts(ley::Renderables*, std::vector<ley::Font*>);
+    void renderScoreFonts(ley::Renderables*, std::vector<ley::Font*>, HighScoresRow placeholder, int placeholderrow);
     void setClean(bool c);
     bool isClean();
+    int isNewHigh(int n);
+    void setHighScore(int score, std::string name, int lines, int level);
 };
 }
 #endif

@@ -50,6 +50,7 @@ void ley::GameController::runGameLoop() {
             renderBoard();
         }
         gameStateMachine.render();
+        mVideoSystem->renderTopLayer();
         
         /**** PRESENT ****/
         mVideoSystem->present(); // output to the video system.
@@ -72,7 +73,7 @@ void ley::GameController::runGameLoop() {
         if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
         }
-/*
+
         if(command == ley::Command::tab) {
             if (inputWindow == ley::InputWindow::game) {
                 inputWindow = ley::InputWindow::goto_textBox;
@@ -81,7 +82,6 @@ void ley::GameController::runGameLoop() {
                 inputWindow = ley::InputWindow::goto_game;
             }
         }
-*/
 
         if(inputWindow == ley::InputWindow::game) {
             processCommands(command);
@@ -206,8 +206,19 @@ void ley::GameController::processStates(ley::Command command) {
 
     //If the game stops running and we are in the play state then go to the game over state.
     if(!gm->isGameRunning() && gameStateMachine.getStateId() == "PLAY") {
-        setHighScores(gm->highScores());
+      //  setHighScores(gm->highScores());
+
+        // if new high score
+        if(gm->highScores()->isNewHigh(gm->getScore()) > 0) {
+            gm->newHighScore(true);
+        }
+        
         gameStateMachine.pushState(new ley::GameOverState(mVideoSystem, gm));
+
+        if(gm->newHighScore()) {
+            gameStateMachine.pushState(new ley::HighScoresMenuState(mVideoSystem, gm));
+        }
+        
         gm->stateChange(ley::StateChange::none);
     }
 
@@ -229,9 +240,7 @@ void ley::GameController::processStates(ley::Command command) {
 }
 void ley::GameController::setHighScores(ley::HighScores* hs) {
     //push on the new high score
-    hs->push(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
-    hs->write();
-    hs->setClean(false);
+    hs->setHighScore(gm->getScore(), "Steve", gm->getLevel(), gm->getLines());
 }
 
 void ley::GameController::runCleanUp() {

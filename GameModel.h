@@ -82,6 +82,7 @@ private:
     ley::StateChange mStateChange = ley::StateChange::none;
 
     ley::HighScores mHighScores;
+    bool mNewHighScore = false;
 
 public:
     GameModel();
@@ -131,6 +132,9 @@ public:
     void debugOnlyLineToggle();
     void debugNextLevel() {                   numLevel++; newLevelToReport=true; };
     void debugPrevLevel() { if(numLevel > 0){ numLevel--; } newLevelToReport=true; };
+
+    void newHighScore(bool flag);
+    bool newHighScore();
 };
 
 }

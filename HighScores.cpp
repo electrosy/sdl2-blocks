@@ -33,23 +33,49 @@ bool ley::HighScores::isClean() {
   return clean;
 }
 
-void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts) {
+void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts, HighScoresRow placeholder, int placeholderrow) {
 
-    (*fonts.begin())->updateMessage("Name              Level      Lines   Score");
+    (*fonts.begin())->updateMessage("Name              Level      Lines    Score");
     re->push_back(*fonts.begin());
 
-    std::multimap<unsigned long, std::tuple<std::string, int, int>>::reverse_iterator it;
-    int counter = 1; //max 11
+    HighScoresType::reverse_iterator it;
+    int counter = 1;
+    const auto COLUMN_SIZE_NAME = 20;
+    const auto COLUMN_SIZE_LEVEL = 10;
+    const auto COLUMN_SIZE_LINES = 7;
+    const auto COLUMN_SIZE_SCORE = 6;
     for(it = highscoresdata.rbegin(); it != highscoresdata.rend() && counter < HIGHSCORES_NUM_DISPLAY; ++it, ++counter) {
       
-      std::string score = std::to_string(it->first);
+      std::string score;
+      std::string name;
+      std::string level;
+      std::string lines;
+      std::string hs_line;
 
-      std::string hs_line = std::get<0>(it->second) + "               " + std::to_string((std::get<2>(it->second))) + "         " + std::to_string(std::get<1>(it->second))  + "     " + score;
+      if(placeholderrow == counter) {
 
-      std::replace( hs_line.begin(), hs_line.end(), ' ', '.');
+        score = std::to_string(placeholder.first);
+        name = std::get<0>(placeholder.second);
+        level = std::to_string(std::get<1>(placeholder.second));
+        lines = std::to_string(std::get<2>(placeholder.second));
+
+      } else {
+
+        score = std::to_string(it->first);
+        name = std::get<0>(it->second);
+        level = std::to_string(std::get<2>(it->second));
+        lines = std::to_string(std::get<1>(it->second));
+        
+      }
+
+      name.append(COLUMN_SIZE_NAME - name.length(), '.');
+      level.append(COLUMN_SIZE_LEVEL - level.length(), '.');
+      lines.append(COLUMN_SIZE_LINES - lines.length(), '.');
+      score.insert(score.begin(), COLUMN_SIZE_SCORE - score.length(), '.');
+
+      hs_line = name + level + lines + score;
 
       (*fonts.at(counter)).updateMessage(hs_line);
-      
       re->push_back((fonts.at(counter)) );
     }
 }
@@ -62,9 +88,10 @@ void ley::HighScores::write() {
   std::ofstream myfile;
   myfile.open ("highscores.csv");
 
-  std::multimap<unsigned long, std::tuple<std::string, int, int>>::reverse_iterator it;
+  HighScoresType::reverse_iterator it;
+  int counter = 1;
   for(it = highscoresdata.rbegin(); it != highscoresdata.rend(); ++it) {
-    myfile << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
+    myfile << counter++ << ',' << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
   }
 
   myfile.close();
@@ -83,7 +110,8 @@ int ley::HighScores::read() {
         {
             std::stringstream ss(line);
 
-            std::string name, level, lines, score;
+            std::string name, level, lines, score, index;
+            std::getline(ss,index,',');
             std::getline(ss,score,',');
             std::getline(ss,name,',');
             std::getline(ss,lines,',');
@@ -100,4 +128,27 @@ int ley::HighScores::read() {
         }
     }
     return 0;
+}
+
+int ley::HighScores::isNewHigh(int n) {
+
+  auto it = highscoresdata.rbegin();
+  auto i = 0;
+  for(; it != highscoresdata.rend(); ++it) {
+    i++;
+    if(it->first <= n) {
+      SDL_Log("Your new high score is at position:%d", i);
+      break;
+    }
+    SDL_Log("HighScores Test: %d", it->first);
+  }
+  
+  return i <= HIGHSCORES_NUM_DISPLAY-1 ? i : 0;
+}
+
+void ley::HighScores::setHighScore(int score, std::string name, int level, int lines) {
+    //push on the new high score
+    push(score, name, level, lines);
+    write();
+    setClean(false);
 }
