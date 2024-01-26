@@ -71,4 +71,19 @@ bool ley::GameStateMachine::isStateDone() {
     return false;
 }
 
+ley::TextEntry* ley::GameStateMachine::textEntry() {
+    if(!mGameStates.empty()) {
+        return mGameStates.back()->textEntry();
+    }
+    else {
+        return nullptr;
+    }
+}
+
+void ley::GameStateMachine::commitUI() {
+    if(!mGameStates.empty()) {
+        return mGameStates.back()->onCommandEnter();
+    }
+}
+
 }

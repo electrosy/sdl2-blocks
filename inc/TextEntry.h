@@ -1,5 +1,9 @@
 #include <SDL2/SDL.h>
 #include "../Font.h"
+#include "../Input.h"
+
+#ifndef TEXTENTRY_H
+#define TEXTENTRY_H
 
 namespace ley {
 
@@ -11,7 +15,7 @@ private:
     SDL_Rect background;
     Font value;
     bool visible = true;
-    bool hasFocus = false;
+    bool mHasFocus = false;
 
 public:
     TextEntry();
@@ -20,6 +24,11 @@ public:
     std::string getTextBoxValue();
     std::string* getTextBoxField();
     void toggleFocus();
+    bool hasFocus() {return mHasFocus;};
     void setPos(SDL_Point p);
+    void processTextBox(ley::Character c);
 };
+
 }
+
+#endif

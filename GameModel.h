@@ -28,6 +28,12 @@ enum class StateChange { //TODO this can probably be called State
     credits,
     none}; //particular states that the game can be in
 
+enum class UIFocusChange {
+    goto_textBox,
+    textBox,
+    goto_game,
+    game
+};
 
 
 const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
@@ -84,6 +90,8 @@ private:
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
 
+    ley::UIFocusChange mUIFocusChange;
+
 public:
     GameModel();
     ~GameModel();
@@ -135,6 +143,10 @@ public:
 
     void newHighScore(bool flag);
     bool newHighScore();
+
+    UIFocusChange UIInputFocus();
+    void UIInputFocus(ley::UIFocusChange fc);
+    
 };
 
 }

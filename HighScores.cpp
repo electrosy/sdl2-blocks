@@ -40,34 +40,19 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
 
     HighScoresType::reverse_iterator it;
     int counter = 1;
+    bool placeholderadded = false;
     const auto COLUMN_SIZE_NAME = 20;
     const auto COLUMN_SIZE_LEVEL = 10;
     const auto COLUMN_SIZE_LINES = 7;
     const auto COLUMN_SIZE_SCORE = 6;
-    for(it = highscoresdata.rbegin(); it != highscoresdata.rend() && counter < HIGHSCORES_NUM_DISPLAY; ++it, ++counter) {
-      
-      std::string score;
-      std::string name;
-      std::string level;
-      std::string lines;
-      std::string hs_line;
 
-      if(placeholderrow == counter) {
+    std::string score;
+    std::string name;
+    std::string level;
+    std::string lines;
+    std::string hs_line;
 
-        score = std::to_string(placeholder.first);
-        name = std::get<0>(placeholder.second);
-        level = std::to_string(std::get<1>(placeholder.second));
-        lines = std::to_string(std::get<2>(placeholder.second));
-
-      } else {
-
-        score = std::to_string(it->first);
-        name = std::get<0>(it->second);
-        level = std::to_string(std::get<2>(it->second));
-        lines = std::to_string(std::get<1>(it->second));
-        
-      }
-
+    auto set_hs_line = [&score, &name, &level, &lines, &hs_line, &fonts, &counter, &re]() {
       name.append(COLUMN_SIZE_NAME - name.length(), '.');
       level.append(COLUMN_SIZE_LEVEL - level.length(), '.');
       lines.append(COLUMN_SIZE_LINES - lines.length(), '.');
@@ -77,6 +62,37 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
 
       (*fonts.at(counter)).updateMessage(hs_line);
       re->push_back((fonts.at(counter)) );
+    };
+
+    for(it = highscoresdata.rbegin(); it != highscoresdata.rend() && counter < HIGHSCORES_NUM_DISPLAY; ++counter) {
+      
+      if(placeholderrow == counter) {
+
+        score = std::to_string(placeholder.first);
+        name = std::get<0>(placeholder.second);
+        level = std::to_string(std::get<1>(placeholder.second));
+        lines = std::to_string(std::get<2>(placeholder.second));
+        placeholderadded = true;
+
+      } else {
+
+        score = std::to_string(it->first);
+        name = std::get<0>(it->second);
+        level = std::to_string(std::get<2>(it->second));
+        lines = std::to_string(std::get<1>(it->second));
+        ++it; //only increment the iterator when we use the stored data.
+      }
+
+      set_hs_line();
+    }
+
+    if(!placeholderadded && placeholderrow > 0) {
+      score = std::to_string(placeholder.first);
+      name = std::get<0>(placeholder.second);
+      level = std::to_string(std::get<1>(placeholder.second));
+      lines = std::to_string(std::get<2>(placeholder.second));
+
+      set_hs_line();
     }
 }
 

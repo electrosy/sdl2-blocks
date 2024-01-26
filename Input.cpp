@@ -95,8 +95,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::string* ptr_s) {
 
             case SDL_TEXTINPUT:
                 /* Add new text onto the end of our text */
-                (*ptr_s).append(event.text.text);
-
+                if(ptr_s && ptr_s->size() < 19) {
+                    (*ptr_s).append(event.text.text);
+                }
                 break;
             case SDL_TEXTEDITING:
                 /*

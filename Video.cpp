@@ -117,8 +117,6 @@ void ley::Video::init() {
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
-    mRenderablesTopLayer.push_back(&textEntry);
-    textEntry.setVisible(false);
 
     updateScores(); //TODO the model should call this
 
@@ -321,30 +319,4 @@ void ley::Video::updateScores() {
 void ley::Video::resetClock() {
     mainClock.reset();
 }
-
-void ley::Video::processTextBox(ley::Character c) {
-    
-    std::string character;
-
-    switch(c) {
-        
-        case ley::Character::backspace : character = "backspace";
-        break;
-
-        default:
-            break;
-
-    }
-    
-    textEntry.processInput(character);
-}
-
-std::string* ley::Video::getTextBoxField() {
-    return textEntry.getTextBoxField();
-}
-
-ley::TextEntry* ley::Video::getTextEntry() {
-    return &textEntry;
-}
-
 

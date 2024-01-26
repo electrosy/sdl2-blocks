@@ -13,4 +13,12 @@ bool GameState::isDone() {
     return done;
 }
 
+void GameState::onCommandEnter() {
+    ;
+}
+
+ley::TextEntry* GameState::textEntry() {
+    return &mTextEntry;
+}
+
 }

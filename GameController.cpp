@@ -32,7 +32,7 @@ void ley::GameController::runGameLoop() {
 
     gameStateMachine.pushState(new ley::IntroState(mVideoSystem, gm));
 
-    InputWindow inputWindow = ley::InputWindow::game;
+    gm->UIInputFocus(ley::UIFocusChange::game);
 
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
@@ -57,41 +57,40 @@ void ley::GameController::runGameLoop() {
         
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
-        if(inputWindow == ley::InputWindow::goto_textBox) {
+
+        if(gm->UIInputFocus() == ley::UIFocusChange::goto_textBox) {
             SDL_StartTextInput();
-            mVideoSystem->getTextEntry()->toggleFocus();
-            inputWindow = ley::InputWindow::textBox;
+            gameStateMachine.textEntry()->toggleFocus();
+            gm->UIInputFocus(ley::UIFocusChange::textBox);
         }
-        else if(inputWindow == ley::InputWindow::goto_game){
+        else if(gm->UIInputFocus() == ley::UIFocusChange::goto_game){
             SDL_StopTextInput();
-            mVideoSystem->getTextEntry()->toggleFocus();
-            inputWindow = ley::InputWindow::game;
+            gameStateMachine.textEntry()->toggleFocus();
+            gm->UIInputFocus(ley::UIFocusChange::game);
         }
-        ley::Command command = mainInput.pollEvents(fs, mVideoSystem->getTextBoxField());
+
+        ley::Command command = mainInput.pollEvents(fs, gameStateMachine.textEntry()->getTextBoxField());
 
         /**** INPUT PROCESSING ****/
         if(fs != mVideoSystem->fullScreen()) {
             mVideoSystem->setFullScreen(fs);
         }
 
-        if(command == ley::Command::tab) {
-            if (inputWindow == ley::InputWindow::game) {
-                inputWindow = ley::InputWindow::goto_textBox;
-            }
-            else {
-                inputWindow = ley::InputWindow::goto_game;
-            }
-        }
-
-        if(inputWindow == ley::InputWindow::game) {
+        if(gm->UIInputFocus() == ley::UIFocusChange::game) {
             processCommands(command);
             gameStateMachine.update(command);
             processStates(command);
         }
-        else if(inputWindow == ley::InputWindow::textBox) {
+        else if(gm->UIInputFocus() == ley::UIFocusChange::textBox) {
             //throw away the command but continue to run the game state machine
-            mVideoSystem->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
-            //keyinput.second = ley::Character::none;
+            //mVideoSystem->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
+            gameStateMachine.textEntry()->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
+            
+            if(command == ley::Command::enter) {
+                gm->UIInputFocus(ley::UIFocusChange::goto_game);
+                gameStateMachine.commitUI();
+            }
+            
             gameStateMachine.update(ley::Command::none);
         }
 

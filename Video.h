@@ -80,8 +80,6 @@ private:
     ley::Font SDLCompiled;
     ley::Font SDLLinked;
 
-    ley::TextEntry textEntry;
-    
 public:
     Video(ley::GameModel*);
     ~Video();
@@ -104,9 +102,6 @@ public:
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
-    void processTextBox(ley::Character c);
-    std::string* getTextBoxField();
-    ley::TextEntry* getTextEntry();
     void resetClock();
 };
 

@@ -18,6 +18,8 @@ public:
     void render();
     std::string getStateId();
     bool isStateDone();
+    ley::TextEntry* textEntry();
+    void commitUI();
 
 private:
 

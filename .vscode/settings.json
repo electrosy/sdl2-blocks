@@ -53,6 +53,8 @@
         "concepts": "cpp",
         "numbers": "cpp",
         "chrono": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     }
 }

@@ -555,3 +555,11 @@ void ley::GameModel::newHighScore(bool flag) {
 bool ley::GameModel::newHighScore() {
     return mNewHighScore;
 }
+
+ley::UIFocusChange ley::GameModel::UIInputFocus() {
+    return mUIFocusChange;
+}
+
+void ley::GameModel::UIInputFocus(ley::UIFocusChange fc) {
+    mUIFocusChange = fc;
+}

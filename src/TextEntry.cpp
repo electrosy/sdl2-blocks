@@ -22,7 +22,7 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
         SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
         SDL_RenderFillRect(r, &background);
         
-        if(hasFocus) {
+        if(mHasFocus) {
             SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
             SDL_RenderDrawRect(r, &background);
         }
@@ -48,7 +48,7 @@ std::string* ley::TextEntry::getTextBoxField() {
 }
 
 void ley::TextEntry::toggleFocus() {
-    hasFocus = !hasFocus;
+    mHasFocus = !mHasFocus;
 }
 
 void ley::TextEntry::setPos(SDL_Point p) {
@@ -56,4 +56,21 @@ void ley::TextEntry::setPos(SDL_Point p) {
     background.x = p.x;
     background.y = p.y;
     value.setPos({p.x,p.y});
+}
+
+void ley::TextEntry::processTextBox(ley::Character c) {
+    
+    std::string character;
+
+    switch(c) {
+        
+        case ley::Character::backspace : character = "backspace";
+        break;
+
+        default:
+            break;
+
+    }
+    
+    processInput(character);
 }

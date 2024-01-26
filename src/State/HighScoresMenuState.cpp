@@ -30,12 +30,14 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
         font_objects[i].updateMessage(std::to_string(i));
         fonts_test.push_back(&font_objects[i]);
     }
+
+    mTextEntry.setVisible(false);
 }
 void HighScoresMenuState::onCommandEnter() {
 
     if(mGameModel->newHighScore()) {
         SDL_Log("You entered it with high score!!!");
-        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mVideoSystem->getTextEntry()->getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
+        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mTextEntry.getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
         mGameModel->newHighScore(false);
     }
 }
@@ -48,7 +50,8 @@ void HighScoresMenuState::update(ley::Command command) {
         case ley::Command::enter :
             onCommandEnter();
         break;
-            
+        case ley::Command::tab :
+            mTextEntry.toggleFocus();
     }
 
     highscoresmenu.runCommand(command);
@@ -66,6 +69,7 @@ void HighScoresMenuState::render() {
 
 void HighScoresMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
+    mRenderables.push_back(&mTextEntry);
 }
 
 bool HighScoresMenuState::onEnter() {
@@ -73,10 +77,11 @@ bool HighScoresMenuState::onEnter() {
 
     int newHighRow = (mGameModel->highScores()->isNewHigh(mGameModel->getScore()));
     if(mGameModel->newHighScore()) {
-        mVideoSystem->getTextEntry()->setVisible(true);
+        mTextEntry.setVisible(true);
+        mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
         mGameModel->highScores()->isNewHigh(mGameModel->getScore());
 
-        mVideoSystem->getTextEntry()->setPos(
+        mTextEntry.setPos(
             {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
     }
 
@@ -101,7 +106,7 @@ bool HighScoresMenuState::onReEnter() {
 
 bool HighScoresMenuState::onExit() {
 
-    mVideoSystem->getTextEntry()->setVisible(false);
+    mTextEntry.setVisible(false);
 
     SDL_Log("Exiting HighScoresMenustate");
     return true;
