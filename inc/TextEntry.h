@@ -13,6 +13,7 @@ class TextEntry : public Renderable
 private:
     SDL_Point pos;
     SDL_Rect background;
+    SDL_Rect cursor;
     Font value;
     bool visible = true;
     bool mHasFocus = false;
@@ -26,7 +27,8 @@ public:
     void toggleFocus();
     bool hasFocus() {return mHasFocus;};
     void setPos(SDL_Point p);
-    void processTextBox(ley::Character c);
+    void onKeyDown(ley::Character c);
+    void onTextInput();
 };
 
 }

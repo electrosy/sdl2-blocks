@@ -69,7 +69,8 @@ void ley::GameController::runGameLoop() {
             gm->UIInputFocus(ley::UIFocusChange::game);
         }
 
-        ley::Command command = mainInput.pollEvents(fs, gameStateMachine.textEntry()->getTextBoxField());
+        ley::Command command = mainInput.pollEvents(fs, gameStateMachine.textEntry()->getTextBoxField(), 
+            [this](ley::Command c) {gameStateMachine.textEntry()->onKeyDown(c == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);}); /*gameStateMachine.textEntry()->getTextBoxField()*/
 
         /**** INPUT PROCESSING ****/
         if(fs != mVideoSystem->fullScreen()) {
@@ -83,8 +84,6 @@ void ley::GameController::runGameLoop() {
         }
         else if(gm->UIInputFocus() == ley::UIFocusChange::textBox) {
             //throw away the command but continue to run the game state machine
-            //mVideoSystem->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
-            gameStateMachine.textEntry()->processTextBox(command == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);
             
             if(command == ley::Command::enter) {
                 gm->UIInputFocus(ley::UIFocusChange::goto_game);

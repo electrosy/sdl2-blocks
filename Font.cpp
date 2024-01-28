@@ -115,3 +115,14 @@ void ley::Font::setPos(SDL_Point p) {
     Message_rect.x = p.x;
     Message_rect.y = p.y;
 }
+
+std::pair<int, int> ley::Font::size() {
+    int width = -1;
+    int height = -1;
+
+    TTF_SizeText(Classic, textMessage.c_str(), &width, &height);
+
+    SDL_Log("Font Size is: Width->%d, Height->%d", width, height);
+
+    return std::make_pair(width, height);
+}

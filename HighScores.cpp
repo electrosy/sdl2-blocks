@@ -159,6 +159,10 @@ int ley::HighScores::isNewHigh(int n) {
     SDL_Log("HighScores Test: %d", it->first);
   }
   
+  if(i == highscoresdata.size() && i <= HIGHSCORES_NUM_DISPLAY) {
+    i++; // we must be at the end of the high scores.
+  }
+
   return i <= HIGHSCORES_NUM_DISPLAY-1 ? i : 0;
 }
 

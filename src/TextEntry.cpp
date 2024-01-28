@@ -6,7 +6,8 @@ const auto TEXTENTRY_WIDTH = 300;
 ley::TextEntry::TextEntry()
 :
 pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
-value{pos.x, pos.y, 0, 30}
+value{pos.x, pos.y, 0, 30},
+cursor{pos.x, pos.y, 10, 20}
 {
     background.x = pos.x;
     background.y = pos.y;
@@ -25,6 +26,9 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
         if(mHasFocus) {
             SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
             SDL_RenderDrawRect(r, &background);
+
+            //draw cursor
+            SDL_RenderFillRect(r, &cursor);
         }
 
         value.render(r, d);
@@ -32,6 +36,8 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
 }
 
 void ley::TextEntry::processInput(std::string s) {
+
+    value.size();
 
     if(s == "backspace") {
         value.updateMessage(value.getMessage().substr(0, value.getMessage().size()-1));
@@ -55,10 +61,13 @@ void ley::TextEntry::setPos(SDL_Point p) {
     
     background.x = p.x;
     background.y = p.y;
+    cursor.x = p.x;
+    cursor.y = p.y;
     value.setPos({p.x,p.y});
+    
 }
 
-void ley::TextEntry::processTextBox(ley::Character c) {
+void ley::TextEntry::onKeyDown(ley::Character c) {
     
     std::string character;
 
@@ -73,4 +82,8 @@ void ley::TextEntry::processTextBox(ley::Character c) {
     }
     
     processInput(character);
+}
+
+void ley::TextEntry::onTextInput() {
+    
 }

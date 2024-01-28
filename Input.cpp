@@ -8,6 +8,7 @@ Date: Feb/14/2020
 #include "Input.h"
 #include "Video.h"
 
+
 /* RAII */
 ley::Input::Input() {
     
@@ -81,7 +82,7 @@ void ley::Input::pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 select
     SDL_StopTextInput();
 }
 
-ley::Command ley::Input::pollEvents(bool& fullscreen, std::string* ptr_s) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, /*ley::GameStateMachine* gsm*/std::string* ptr_s, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
     //std::vector<ley::Character> characters;
@@ -95,7 +96,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::string* ptr_s) {
 
             case SDL_TEXTINPUT:
                 /* Add new text onto the end of our text */
-                if(ptr_s && ptr_s->size() < 19) {
+                if(ptr_s && ptr_s->size() < 19) {          
                     (*ptr_s).append(event.text.text);
                 }
                 break;
@@ -205,6 +206,8 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::string* ptr_s) {
                     command = ley::Command::tab;
                 }
                 
+                function(command);
+
                 break;
 
             break;

@@ -12,6 +12,9 @@ Date: Feb/14/2020
 #include <SDL2/SDL.h>
 #include <vector>
 #include <string>
+#include <functional>
+
+
 
 namespace ley {
 
@@ -56,7 +59,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool& fullscreen, std::string* ptr_s);
+    ley::Command pollEvents(bool& fullscreen, /*ley::GameStateMachine* gsm*/std::string* ptr_s, const std::function<void(ley::Command c)>& function);
     void pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len);
     ley::Command pollTitleEvents(bool&);
 

@@ -50,8 +50,6 @@ void HighScoresMenuState::update(ley::Command command) {
         case ley::Command::enter :
             onCommandEnter();
         break;
-        case ley::Command::tab :
-            mTextEntry.toggleFocus();
     }
 
     highscoresmenu.runCommand(command);
@@ -79,7 +77,7 @@ bool HighScoresMenuState::onEnter() {
     if(mGameModel->newHighScore()) {
         mTextEntry.setVisible(true);
         mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
-        mGameModel->highScores()->isNewHigh(mGameModel->getScore());
+        //mGameModel->highScores()->isNewHigh(mGameModel->getScore());
 
         mTextEntry.setPos(
             {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
