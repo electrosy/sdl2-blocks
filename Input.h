@@ -13,7 +13,7 @@ Date: Feb/14/2020
 #include <vector>
 #include <string>
 #include <functional>
-
+#include "./inc/TextEntry.h"
 
 
 namespace ley {
@@ -46,10 +46,6 @@ enum class Command {
     tab,
     backspace}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
-enum class Character {
-    backspace,enter,none
-};
-
 class Input {
 
 private:
@@ -59,7 +55,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool& fullscreen, /*ley::GameStateMachine* gsm*/std::string* ptr_s, const std::function<void(ley::Command c)>& function);
+    ley::Command pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley::TextEntry* te, const std::function<void(ley::Command c)>& function);
     void pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len);
     ley::Command pollTitleEvents(bool&);
 

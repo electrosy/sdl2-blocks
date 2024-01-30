@@ -7,11 +7,15 @@
 
 namespace ley {
 
+enum class Character {
+    backspace,enter,none
+};
+
 class TextEntry : public Renderable
 {
 
 private:
-    SDL_Point pos;
+    SDL_Point pos; //Position of TextEntry field top/left.
     SDL_Rect background;
     SDL_Rect cursor;
     Font value;
@@ -28,7 +32,8 @@ public:
     bool hasFocus() {return mHasFocus;};
     void setPos(SDL_Point p);
     void onKeyDown(ley::Character c);
-    void onTextInput();
+    void onTextInput(const char* cstr);
+    void adjustCursor();
 };
 
 }

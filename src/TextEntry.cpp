@@ -7,7 +7,7 @@ ley::TextEntry::TextEntry()
 :
 pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
-cursor{pos.x, pos.y, 10, 20}
+cursor{pos.x, pos.y, 2, 25}
 {
     background.x = pos.x;
     background.y = pos.y;
@@ -59,12 +59,11 @@ void ley::TextEntry::toggleFocus() {
 
 void ley::TextEntry::setPos(SDL_Point p) {
     
+    pos = p;
     background.x = p.x;
     background.y = p.y;
-    cursor.x = p.x;
-    cursor.y = p.y;
     value.setPos({p.x,p.y});
-    
+    adjustCursor();
 }
 
 void ley::TextEntry::onKeyDown(ley::Character c) {
@@ -82,8 +81,23 @@ void ley::TextEntry::onKeyDown(ley::Character c) {
     }
     
     processInput(character);
+    adjustCursor();
 }
 
-void ley::TextEntry::onTextInput() {
-    
+void ley::TextEntry::onTextInput(const char* cstr) {
+
+    if(value.getMessagePtr()->size() < 19) {
+                    
+        value.getMessagePtr()->append(cstr);
+    }
+
+    adjustCursor();
+
+    SDL_Log("onTextInput %s", cstr);
+}
+
+void ley::TextEntry::adjustCursor() {
+    std::pair<int, int> size = value.size();
+    cursor.x = pos.x + size.first;
+    cursor.y = pos.y + 2;
 }
