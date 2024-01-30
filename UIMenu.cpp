@@ -106,56 +106,21 @@ void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
 }
 
 void ley::UIMenu::renderHotItem(ley::Video* v) {
-    //Display either the hot or flicker depending on the current flag
-
+    
     if(elements.size() <= 0) {return; /*EARLY EXIT*/}
     
     SDL_Rect src_rect = currentSrc();
     SDL_Rect dest_rect = currentDest();
-
-/*
-    if(count() > 0) {
-        if((SDL_GetTicks() % 50) % 10) {
-            setHot(true);
-            SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
-        } else {
-            setHot(false);
-            SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
-        }
-    }
-*/
-    char alpha;
-    if(mFaderControl == 2) {
-        alpha = 255;
-    }
-    else if(mFaderControl == 1) {
-        alpha = 255 - (255*fader.pct());
-    }
-    else {
-        alpha = 255*fader.pct();
-    }
     
     setHot(false);
     SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
 
     setHot(true);
     SDL_Texture* texture = currentTex();
-    SDL_SetTextureAlphaMod(texture, alpha);
+    SDL_SetTextureAlphaMod(texture, mFader.alpha());
     SDL_RenderCopy(v->getRenderer(), texture, &src_rect, &dest_rect);
 
-    fader.runFrame();
-    if(fader.hasExpired()) {
-        if(mFaderControl == 0) {
-            mFaderControl = 2;
-        }
-        else if(mFaderControl == 2) {
-            mFaderControl = 1;
-        }
-        else if(mFaderControl == 1) {
-            mFaderControl = 0;
-        }
-        fader.reset();
-    }
+    mFader.runFrame(); // NOTE This actually goes in update, but this works for now.
 }
 
 void ley::UIMenu::renderSelectors(ley::Video* v) {

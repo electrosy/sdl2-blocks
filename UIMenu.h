@@ -16,6 +16,7 @@ Date: Jul/17/2021
 #include "Textures.h"
 #include "Renderables.h"
 #include "Timer.h"
+#include "./inc/Fader.h"
 
 namespace ley {
 
@@ -29,6 +30,7 @@ private:
     bool hot; //indicates that this menu item is currently selected.
     ley::Renderables renderables;
     ley::Timer fader;
+    ley::Fader mFader;
     char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
 
 protected:

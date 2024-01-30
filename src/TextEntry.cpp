@@ -29,10 +29,16 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
 
             //draw cursor
             SDL_RenderFillRect(r, &cursor);
+
+            //draw cursor higlight
+            SDL_SetRenderDrawColor(r, 238, 50, 83, mCursorFader.alpha());
+            SDL_RenderFillRect(r, &cursor);
         }
 
         value.render(r, d);
     }
+
+    mCursorFader.runFrame();
 }
 
 void ley::TextEntry::processInput(std::string s) {

@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "../Font.h"
 #include "../Input.h"
+#include "Fader.h"
 
 #ifndef TEXTENTRY_H
 #define TEXTENTRY_H
@@ -18,6 +19,7 @@ private:
     SDL_Point pos; //Position of TextEntry field top/left.
     SDL_Rect background;
     SDL_Rect cursor;
+    ley::Fader mCursorFader;
     Font value;
     bool visible = true;
     bool mHasFocus = false;
