@@ -1,7 +1,11 @@
+#include <functional>
+
 #include <SDL2/SDL.h>
+
 #include "../Font.h"
 #include "../Input.h"
 #include "Fader.h"
+
 
 #ifndef TEXTENTRY_H
 #define TEXTENTRY_H
@@ -24,6 +28,8 @@ private:
     Font value;
     bool visible = true;
     bool mHasFocus = false;
+    std::function<void()> mEnterCharSound;
+    std::function<void()> mBackspaceSound;
 
 public:
     TextEntry();
@@ -37,6 +43,8 @@ public:
     void onKeyDown(ley::Character c);
     void onTextInput(const char* cstr);
     void adjustCursor();
+    void setCharSound(const std::function<void()> &func);
+    void setBackspaceSound(const std::function<void()> &func);
 };
 
 }

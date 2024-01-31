@@ -32,6 +32,8 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     }
 
     mTextEntry.setVisible(false);
+    mTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 }
 void HighScoresMenuState::onCommandEnter() {
 
