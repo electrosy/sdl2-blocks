@@ -52,8 +52,13 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
     std::string lines;
     std::string hs_line;
 
-    auto set_hs_line = [&score, &name, &level, &lines, &hs_line, &fonts, &counter, &re]() {
-      name.append(COLUMN_SIZE_NAME - name.length(), '.');
+    auto set_hs_line = [&score, &name, &level, &lines, &hs_line, &fonts, &counter, &re](bool appendName) {
+      if(appendName) {
+        name.append(COLUMN_SIZE_NAME - name.length(), '.');
+      }
+      else {
+        name.append(COLUMN_SIZE_NAME - name.length(), ' ');
+      }
       level.append(COLUMN_SIZE_LEVEL - level.length(), '.');
       lines.append(COLUMN_SIZE_LINES - lines.length(), '.');
       score.insert(score.begin(), COLUMN_SIZE_SCORE - score.length(), '.');
@@ -74,6 +79,8 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
         lines = std::to_string(std::get<2>(placeholder.second));
         placeholderadded = true;
 
+        set_hs_line(false);
+
       } else {
 
         score = std::to_string(it->first);
@@ -81,9 +88,9 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
         level = std::to_string(std::get<2>(it->second));
         lines = std::to_string(std::get<1>(it->second));
         ++it; //only increment the iterator when we use the stored data.
-      }
 
-      set_hs_line();
+        set_hs_line(true);
+      }
     }
 
     if(!placeholderadded && placeholderrow > 0) {
@@ -92,7 +99,7 @@ void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Fo
       level = std::to_string(std::get<1>(placeholder.second));
       lines = std::to_string(std::get<2>(placeholder.second));
 
-      set_hs_line();
+      set_hs_line(false);
     }
 }
 

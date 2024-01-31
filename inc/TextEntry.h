@@ -19,6 +19,7 @@ private:
     SDL_Point pos; //Position of TextEntry field top/left.
     SDL_Rect background;
     SDL_Rect cursor;
+    SDL_Rect mUnderLine;
     ley::Fader mCursorFader;
     Font value;
     bool visible = true;

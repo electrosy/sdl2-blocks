@@ -39,6 +39,7 @@ void HighScoresMenuState::onCommandEnter() {
         SDL_Log("You entered it with high score!!!");
         mGameModel->highScores()->setHighScore(mGameModel->getScore(), mTextEntry.getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
         mGameModel->newHighScore(false);
+        mGameModel->audio()->playSfx(ley::sfx::piecesfalling);
     }
 }
 
@@ -77,8 +78,6 @@ bool HighScoresMenuState::onEnter() {
     if(mGameModel->newHighScore()) {
         mTextEntry.setVisible(true);
         mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
-        //mGameModel->highScores()->isNewHigh(mGameModel->getScore());
-
         mTextEntry.setPos(
             {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
     }

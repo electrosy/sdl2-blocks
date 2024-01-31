@@ -1,13 +1,16 @@
 #include "../inc/TextEntry.h"
 #include "../inc/Screen.h"
 
-const auto TEXTENTRY_WIDTH = 300;
+const auto TEXTENTRY_WIDTH = 731;
+constexpr auto UNDERLINE_WIDTH = 321;
+constexpr auto MAX_CHAR_LENGTH = 18;
 
 ley::TextEntry::TextEntry()
 :
 pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
-cursor{pos.x, pos.y, 2, 25}
+cursor{pos.x, pos.y, 2, 25},
+mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1}
 {
     background.x = pos.x;
     background.y = pos.y;
@@ -26,6 +29,9 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
         if(mHasFocus) {
             SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
             SDL_RenderDrawRect(r, &background);
+
+            //draw underline
+            SDL_RenderFillRect(r, &mUnderLine);
 
             //draw cursor
             SDL_RenderFillRect(r, &cursor);
@@ -68,6 +74,8 @@ void ley::TextEntry::setPos(SDL_Point p) {
     pos = p;
     background.x = p.x;
     background.y = p.y;
+    mUnderLine.x = p.x;
+    mUnderLine.y = p.y + 25;
     value.setPos({p.x,p.y});
     adjustCursor();
 }
@@ -92,7 +100,7 @@ void ley::TextEntry::onKeyDown(ley::Character c) {
 
 void ley::TextEntry::onTextInput(const char* cstr) {
 
-    if(value.getMessagePtr()->size() < 19) {
+    if(value.getMessagePtr()->size() <= MAX_CHAR_LENGTH) {
                     
         value.getMessagePtr()->append(cstr);
     }
