@@ -111,9 +111,9 @@ void ley::HighScores::write() {
   std::ofstream myfile;
   myfile.open ("highscores.csv");
 
-  HighScoresType::reverse_iterator it;
+  HighScoresType::iterator it;
   int counter = 1;
-  for(it = highscoresdata.rbegin(); it != highscoresdata.rend(); ++it) {
+  for(it = highscoresdata.begin(); it != highscoresdata.end(); ++it) {
     myfile << counter++ << ',' << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
   }
 
