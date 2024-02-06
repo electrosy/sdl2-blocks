@@ -122,7 +122,5 @@ std::pair<int, int> ley::Font::size() {
 
     TTF_SizeText(Classic, textMessage.c_str(), &width, &height);
 
-    SDL_Log("Font Size is: Width->%d, Height->%d", width, height);
-
     return std::make_pair(width, height);
 }

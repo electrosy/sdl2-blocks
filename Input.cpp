@@ -119,7 +119,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley
                 if (state[SDL_SCANCODE_F]) {
                     command = ley::Command::debugfill;
                 }
-                if (state[SDL_SCANCODE_Q]) {
+                if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
                     command = ley::Command::quit;
                 }                
                 if (state[SDL_SCANCODE_BACKSPACE]) {

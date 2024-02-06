@@ -112,9 +112,8 @@ void ley::HighScores::write() {
   myfile.open ("highscores.csv");
 
   HighScoresType::iterator it;
-  int counter = 1;
   for(it = highscoresdata.begin(); it != highscoresdata.end(); ++it) {
-    myfile << counter++ << ',' << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
+    myfile << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
   }
 
   myfile.close();
@@ -133,8 +132,7 @@ int ley::HighScores::read() {
         {
             std::stringstream ss(line);
 
-            std::string name, level, lines, score, index;
-            std::getline(ss,index,',');
+            std::string name, level, lines, score;
             std::getline(ss,score,',');
             std::getline(ss,name,',');
             std::getline(ss,lines,',');
