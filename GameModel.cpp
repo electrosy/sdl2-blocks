@@ -402,26 +402,30 @@ int ley::GameModel::firstLineAt(int start) {
 
 void ley::GameModel::updateSpeed() {
 
+    //a much more natural curve for speed increases.
+    // original https://www.desmos.com/calculator/7xuo8jryb9
+    // percent  https://www.desmos.com/calculator/hivnmiyedk
+
     switch(numLevel) {
         case 0 : currentSpeed = 1000;
             break;
-        case 1 : currentSpeed = 900;
+        case 1 : currentSpeed = 800; //-200 22.2222% 
             break;
-        case 2 : currentSpeed = 800;
+        case 2 : currentSpeed = 624; // 24.7191%
             break;
-        case 3 : currentSpeed = 700;
+        case 3 : currentSpeed = 487; // 24.6624%
             break;
-        case 4 : currentSpeed = 600;
+        case 4 : currentSpeed = 380; // 24.6828%
             break;
-        case 5 : currentSpeed = 500;
+        case 5 : currentSpeed = 297; // 21.8421%
             break;
-        case 6 : currentSpeed = 400;
+        case 6 : currentSpeed = 232; // 24.5746%
             break;
-        case 7 : currentSpeed = 300;
+        case 7 : currentSpeed = 181; // 24.6973%
             break;
-        case 8 : currentSpeed = 200;
+        case 8 : currentSpeed = 142; // 24.148%
             break;
-        case 9 : currentSpeed = 100;
+        case 9 : currentSpeed = 111; // 24.5059%
     }
 }
 
