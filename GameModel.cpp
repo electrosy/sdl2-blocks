@@ -405,21 +405,21 @@ void ley::GameModel::updateSpeed() {
     switch(numLevel) {
         case 0 : currentSpeed = 1000;
             break;
-        case 1 : currentSpeed = 900;
+        case 1 : currentSpeed = 800;
             break;
-        case 2 : currentSpeed = 800;
+        case 2 : currentSpeed = 700;
             break;
-        case 3 : currentSpeed = 700;
+        case 3 : currentSpeed = 600;
             break;
-        case 4 : currentSpeed = 600;
+        case 4 : currentSpeed = 500;
             break;
-        case 5 : currentSpeed = 500;
+        case 5 : currentSpeed = 400;
             break;
-        case 6 : currentSpeed = 400;
+        case 6 : currentSpeed = 300;
             break;
-        case 7 : currentSpeed = 300;
+        case 7 : currentSpeed = 200;
             break;
-        case 8 : currentSpeed = 200;
+        case 8 : currentSpeed = 150;
             break;
         case 9 : currentSpeed = 100;
     }
