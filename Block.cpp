@@ -207,30 +207,6 @@ int ley::Block::heightAtWidth(int width) {
     }
     return heightAtX;
 }
-//Generate a random texture code.
-ley::BlockTexCode ley::Block::getRandomTexture() {
-
-    ley::BlockTexCode tex_code;
-    
-    ley::Rand_int rand0to5(0,5);
-
-    switch(rand0to5()) {
-        case 0 : tex_code = BlockTexCode::d;
-            break;
-        case 1 : tex_code = BlockTexCode::e;
-            break;
-        case 2 : tex_code = BlockTexCode::f;
-            break;
-        case 3 : tex_code = BlockTexCode::g;
-            break;
-        case 4 : tex_code = BlockTexCode::h;
-            break;
-        case 5 : tex_code = BlockTexCode::i;
-            break;
-    }
-
-    return tex_code;
-}
 
 //cube,tee,rLee,zee,mzee,lLee,line,empty
 void ley::Block::setBlock(BlockType t, int o) {

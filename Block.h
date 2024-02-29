@@ -49,7 +49,6 @@ private:
     SDL_Rect rect; //Position and max dimension
     std::array<std::array<BlockTexCode, 4>,4> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
-    ley::BlockTexCode getRandomTexture();
     void setBlock(BlockType,int = 0);
     void setBlockOddBalls(BlockType,int = 0);
 

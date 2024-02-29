@@ -11,9 +11,15 @@ Date: Nov/11/2020
 #include "Rand_int.h"
 /* RAII */
 ley::Rand_int::Rand_int (int low, int high) :
-gen(SDL_GetTicks()),
+gen(rd()),
 dis{low,high} {
 
+	SDL_Log("Random device entropy %f", rd.entropy());
+
+	if(rd.entropy() == 0) {
+		SDL_Log("Setting random generator from rd() to SDL_GetTicks()");
+		gen.seed(SDL_GetTicks());
+	}
 }
 
 ley::Rand_int::~Rand_int() {

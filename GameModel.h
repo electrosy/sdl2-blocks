@@ -117,7 +117,6 @@ public:
     bool isGameRunning();
     void setGameRunning(bool running);
     ley::Block getNextBlock();
-    std::string getRandomTexture();
     void resetGame();
     double speed() { return currentSpeed; };
     
