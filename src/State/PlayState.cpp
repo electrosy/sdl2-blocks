@@ -75,6 +75,13 @@ void PlayState::update(ley::Command command) {
         case ley::Command::nextSong :
             statusFont.updateMessage("Next song");
             statusTimer.reset();
+        break;
+        case ley::Command::space :
+            mGameModel->hardDrop();
+        break;
+        
+        defaut:
+        break;
     }
 
     /**** UPDATE ****/

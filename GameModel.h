@@ -145,6 +145,7 @@ public:
 
     UIFocusChange UIInputFocus();
     void UIInputFocus(ley::UIFocusChange fc);
+    void hardDrop();
     
 };
 
