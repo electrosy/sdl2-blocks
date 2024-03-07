@@ -27,6 +27,8 @@ const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
+
+
 // TODO the Video should not have a pointer to the game model. The Controller should update the model and then notify Video of changes.
 ley::Video::Video(ley::GameModel* g)
 :
@@ -42,7 +44,10 @@ frame_count{0},
 spriteBackground{Sprite()},
 spriteBackgroundfadeout{Sprite()}
 {
+    SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
     init();
+    
 }
 
 ley::Video::~Video() {
@@ -152,7 +157,12 @@ void ley::Video::setFullScreen(bool f) {
 
     if(f) {
         SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN);
-    } else { SDL_SetWindowFullscreen(window,SDL_WINDOW_SHOWN); }
+        SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    } else { 
+        SDL_SetWindowFullscreen(window,SDL_WINDOW_SHOWN);
+        SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+
     fs = f;
 }
 void ley::Video::setRenderBackground(bool inRenderbg) {
