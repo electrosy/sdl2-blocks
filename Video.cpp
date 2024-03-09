@@ -45,7 +45,7 @@ spriteBackground{Sprite()},
 spriteBackgroundfadeout{Sprite()}
 {
     SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1");
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
     init();
     
 }
