@@ -183,7 +183,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley
                     command = ley::Command::pause;
                 }
 
-                if(state[SDL_SCANCODE_RETURN]) {
+                if(state[SDL_SCANCODE_RETURN] && !(state[SDL_SCANCODE_LALT] || state[SDL_SCANCODE_RALT])) {
                     command = ley::Command::enter;
                 }
 
