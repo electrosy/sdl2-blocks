@@ -52,6 +52,11 @@ const auto NEXTBLOCK_OFFSET_X_PX = BLOCK_START_POS_X_PX - 130;
 const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 const auto NEW_LVL_AT_LINES = 10;
 
+const auto PTS_DROP = 5;
+const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
+const auto PTS_2LINE_MULT = 5;
+const auto PTS_3LINE_MULT = 15;
+const auto PTS_4LINE_MULT = 45;
 
 class GameModel {
 
@@ -68,12 +73,13 @@ private:
     long score; //the total score the this game (level*linesatonce)
     bool gameRunning;
     bool active; //not paused // TODO this should be called paused and the checks should be reversed
+    int mComboCount = 0;
     void clearOldBlock();
     void putBlock(Block&);
     bool canPut(Block&, Command d); //can physically put the block in the board.
     std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
-    bool processLines(); //returns true if any number of lines are removed.
+    bool processLines(int &numLines); //returns true if any number of lines are removed.
     void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score.
     void shiftBoard(char, char); //start line, number of lines
     void fillTop(char); //fill top of the board after the shift
@@ -91,6 +97,8 @@ private:
     bool mNewHighScore = false;
 
     ley::UIFocusChange mUIFocusChange;
+    void onLine(int numLines, int level); //Handler when a line is completed.
+    void onDrop();
 
 public:
     GameModel();
@@ -146,7 +154,8 @@ public:
     UIFocusChange UIInputFocus();
     void UIInputFocus(ley::UIFocusChange fc);
     void hardDrop();
-    
+
+    int comboCount() { return mComboCount;};
 };
 
 }

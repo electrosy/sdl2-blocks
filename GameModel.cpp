@@ -17,7 +17,7 @@ activeBlock(getRandomBlock()),
 oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
 nextBlock(getRandomBlock()),
 numLines(0),
-numLevel(0),
+numLevel(1),
 gameRunning(true), 
 currentSpeed(1000.0f), 
 active(true), 
@@ -75,7 +75,7 @@ ley::GameModel::getBoard() {
 /* Functions */
 
 void ley::GameModel::addToScore(long p) {
-    score+=p;
+    score += p;
 }
 
 void ley::GameModel::clearBoard() {
@@ -330,10 +330,10 @@ bool ley::GameModel::newLevel() {
 }
 
 int ley::GameModel::calcLevel() {
-    return numLines / NEW_LVL_AT_LINES;
+    return (numLines / NEW_LVL_AT_LINES) + 1;
 }
 
-bool ley::GameModel::processLines() {
+bool ley::GameModel::processLines(int &numLines) {
     //Check to see how many full lines we have starting from the bottom
 
     bool linesRemoved = false;
@@ -341,11 +341,11 @@ bool ley::GameModel::processLines() {
     std::vector<char> fullLines;
 
     fullLines = checkForLines(board.size()-1);
+    numLines = fullLines.size();
 
     //Cut out one line at a time incase there are gaps in between the completed lines
     if(fullLines.size()>0) {
         //add to the score based on number of lines completed in a single move
-        addToScore((fullLines.size() * (numLevel+1)) * 10 );
         linesRemoved = true;
     }
     while(fullLines.size()>0) {
@@ -407,25 +407,26 @@ void ley::GameModel::updateSpeed() {
     // percent  https://www.desmos.com/calculator/hivnmiyedk
 
     switch(numLevel) {
-        case 0 : currentSpeed = 1000;
+        case 0 :
+        case 1 : currentSpeed = 1000;
             break;
-        case 1 : currentSpeed = 800; //-200 22.2222% 
+        case 2 : currentSpeed = 800; //-200 22.2222% 
             break;
-        case 2 : currentSpeed = 624; // 24.7191%
+        case 3 : currentSpeed = 624; // 24.7191%
             break;
-        case 3 : currentSpeed = 487; // 24.6624%
+        case 4 : currentSpeed = 487; // 24.6624%
             break;
-        case 4 : currentSpeed = 380; // 24.6828%
+        case 5 : currentSpeed = 380; // 24.6828%
             break;
-        case 5 : currentSpeed = 297; // 21.8421%
+        case 6 : currentSpeed = 297; // 21.8421%
             break;
-        case 6 : currentSpeed = 232; // 24.5746%
+        case 7 : currentSpeed = 232; // 24.5746%
             break;
-        case 7 : currentSpeed = 181; // 24.6973%
+        case 8 : currentSpeed = 181; // 24.6973%
             break;
-        case 8 : currentSpeed = 142; // 24.148%
+        case 9 : currentSpeed = 142; // 24.148%
             break;
-        case 9 : currentSpeed = 111; // 24.5059%
+        case 10 : currentSpeed = 111; // 24.5059%
     }
 }
 
@@ -449,8 +450,13 @@ bool ley::GameModel::moveBlock(Command d) {
             else { 
                 setBlock();
                 audSystem.playSfx(ley::sfx::inplace);
-                if(processLines()) {
-                    audSystem.playSfx(ley::sfx::piecesfalling);
+                int currentLevel = numLevel; //Store the current level for points calculation which should happen for current level
+                int turnLines = 0; //lines cleared for this single turn.
+                if(processLines(turnLines)) {
+                    onLine(turnLines, currentLevel);
+                }
+                else {
+                    onDrop();
                 }
                 if(!newBlock()) {
                     setGameRunning(false);
@@ -484,6 +490,30 @@ bool ley::GameModel::moveBlock(Command d) {
 
     return moved;
 }
+void ley::GameModel::onDrop() {
+    addToScore(PTS_DROP * numLevel);
+    mComboCount = 0;
+}
+/* Use the level that the player is on while the lines are made */
+void ley::GameModel::onLine(int lineCount, int level) {
+    audSystem.playSfx(ley::sfx::piecesfalling);
+
+    int linesSameTime = 1;
+
+    switch(lineCount) {
+        case 2 : linesSameTime = PTS_2LINE_MULT;
+        break;
+
+        case 3 : linesSameTime = PTS_3LINE_MULT;
+        break;
+
+        case 4 : linesSameTime = PTS_4LINE_MULT;
+        break;
+    }
+
+    addToScore(PTS_LINE * level * linesSameTime * (mComboCount + 1));
+    mComboCount++;
+}
 void ley::GameModel::overlayToggle() {
     overlayOn = !overlayOn;
 }
@@ -516,7 +546,7 @@ void ley::GameModel::resetGame() {
     clearBoard();
     setGameRunning(true);
     numLines = 0;
-    numLevel = 0;
+    numLevel = 1;
     score = 0;
 
     activeBlock.reset();

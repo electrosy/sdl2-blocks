@@ -27,6 +27,9 @@ auto const LVL_POS_Y_PX = 65;
 auto const SCORE_POS_X_PX = 800;
 auto const SCORE_POS_Y_PX = 90;
 
+auto const COMBO_POS_X_PX = 220;
+auto const COMBO_POS_Y_PX = 215;
+
 namespace ley {
 
 class Video {
@@ -79,6 +82,7 @@ private:
     ley::Font fontDebugMode; //Debug sign
     ley::Font SDLCompiled;
     ley::Font SDLLinked;
+    ley::Font mFontCombo;
 
 public:
     Video(ley::GameModel*);

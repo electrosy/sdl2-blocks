@@ -15,7 +15,7 @@ const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.2.6.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.3.0.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -118,10 +118,12 @@ void ley::Video::init() {
     fontLines = { LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
     fontLvl = { LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
     fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
+    mFontCombo = { COMBO_POS_X_PX, COMBO_POS_Y_PX, 100, 35 };
     
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
+    mRenderables.push_back(&mFontCombo);
 
     updateScores(); //TODO the model should call this
 
@@ -324,6 +326,7 @@ void ley::Video::updateScores() {
     fontLines.updateMessage("Lines  " + std::to_string(int(gm->getLines())));
     fontLvl.updateMessage("Level  " + std::to_string(int(gm->getLevel())));
     fontScore.updateMessage("Score  " + std::to_string(int(gm->getScore())));
+    mFontCombo.updateMessage("Combo: " + std::to_string(int(gm->comboCount())));
 }
 
 void ley::Video::resetClock() {
