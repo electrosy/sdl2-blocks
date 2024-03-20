@@ -598,9 +598,9 @@ void ley::GameModel::UIInputFocus(ley::UIFocusChange fc) {
     mUIFocusChange = fc;
 }
 
-void ley::GameModel::hardDrop() {
+void ley::GameModel::quickDrop() {
 
-    SDL_Log("Hard drop");
+    SDL_Log("Quick drop");
     while(ley::GameModel::moveBlock(ley::Command::down))
     {
 

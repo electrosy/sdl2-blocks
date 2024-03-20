@@ -77,7 +77,7 @@ void PlayState::update(ley::Command command) {
             statusTimer.reset();
         break;
         case ley::Command::space :
-            mGameModel->hardDrop();
+            mGameModel->quickDrop();
         break;
         
         defaut:

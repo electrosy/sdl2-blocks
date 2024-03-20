@@ -153,7 +153,7 @@ public:
 
     UIFocusChange UIInputFocus();
     void UIInputFocus(ley::UIFocusChange fc);
-    void hardDrop();
+    void quickDrop();
 
     int comboCount() { return mComboCount;};
 };
