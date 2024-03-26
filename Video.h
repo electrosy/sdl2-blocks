@@ -18,18 +18,6 @@ Date: Feb/14/2020
 #include "./inc/RectContainer.h"
 #include "./inc/TextEntry.h"
 
-auto const LINES_POS_X_PX = 800; //Score text
-auto const LINES_POS_Y_PX = 40; 
-
-auto const LVL_POS_X_PX = 800; //Level text
-auto const LVL_POS_Y_PX = 65;
-
-auto const SCORE_POS_X_PX = 800;
-auto const SCORE_POS_Y_PX = 90;
-
-auto const COMBO_POS_X_PX = 220;
-auto const COMBO_POS_Y_PX = 215;
-
 namespace ley {
 
 class Video {
