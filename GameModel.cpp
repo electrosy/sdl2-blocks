@@ -32,6 +32,7 @@ mDebugOnlyLine(false)
    putBlock(activeBlock);
 
    mHighScores.read();
+   mConfig.read();
 }
 
 ley::GameModel::~GameModel() {
