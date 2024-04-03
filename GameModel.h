@@ -18,6 +18,7 @@ Date: Feb/15/2020
 #include "HighScores.h"
 #include "./inc/Screen.h"
 #include "inc/Config.h"
+#include "inc/Board.h"
 
 namespace ley {
 
@@ -87,6 +88,7 @@ class GameModel {
 
 private:
     std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
+    Board mBoard;
     Block activeBlock;
     Block oldBlock;
     Block nextBlock;

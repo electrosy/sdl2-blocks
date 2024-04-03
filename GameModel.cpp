@@ -33,6 +33,10 @@ mDebugOnlyLine(false)
 
    mHighScores.read();
    mConfig.read();
+
+    mBoard.assign(10,20);
+    SDL_Log("Debug new board");
+    mBoard.debugOutput();
 }
 
 ley::GameModel::~GameModel() {
