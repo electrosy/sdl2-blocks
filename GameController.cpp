@@ -48,6 +48,8 @@ void ley::GameController::runGameLoop() {
             
             mVideoSystem->render();
             renderBoard();
+            renderNextBlock();
+//            gm->getNewBoard()->render(ren, false);
         }
         gameStateMachine.render();
         mVideoSystem->renderTopLayer();
@@ -255,10 +257,8 @@ std::pair<int, int> ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect
     
     return std::make_pair(x,y);
 }
+void ley::GameController::renderNextBlock() {
 
-//TODO the board should be rendered in the state machine like everything else.
-void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
-    //get width and height of the texture // TODO this should be dynamic based on image passed in
     int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
     SDL_Rect start_rect;
@@ -267,15 +267,6 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
     start_rect.h = h;
     start_rect.w = w;
 
-    SDL_Rect dest_rect;
-    dest_rect.x = BLOCK_START_POS_X_PX;
-    dest_rect.y = BLOCK_START_POS_Y_PX;
-    dest_rect.h = h;
-    dest_rect.w = w;
-
-    //TODO - Loop 1 and Loop 2 can probably be rafactored together.
-    // Output the nextBlock from the game model
-    
     ley::Block nextBlock = gm->getNextBlock();
 
     std::pair<int, int> pos = centerRectInPx({NEXTBOX_POS_X_PX, NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
@@ -302,9 +293,24 @@ void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
         next_dest_rect.y = next_dest_rect.y + h;
         next_dest_rect.x = NEXTBOX_POS_X_PX + pos.first;
     }
+}
+//TODO the board should be rendered in the state machine like everything else.
+void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
+    //get width and height of the texture // TODO this should be dynamic based on image passed in
+    int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
-    // TODO loop2 refactor with loop 1 above
-    // Loop through the game model and output a representation to the video screen.
+    SDL_Rect start_rect;
+    start_rect.x = 0;
+    start_rect.y = 0;
+    start_rect.h = h;
+    start_rect.w = w;
+
+    SDL_Rect dest_rect;
+    dest_rect.x = BLOCK_START_POS_X_PX;
+    dest_rect.y = BLOCK_START_POS_Y_PX;
+    dest_rect.h = h;
+    dest_rect.w = w;
+
     SDL_Texture *blockBits2 = nullptr;
     for (auto row : *gm->getBoard()) {
         for (auto column : row) {

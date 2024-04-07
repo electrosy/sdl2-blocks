@@ -34,9 +34,16 @@ mDebugOnlyLine(false)
    mHighScores.read();
    mConfig.read();
 
-    mBoard.assign(10,20);
+    //new board
+/*    
+    mBoard.assign(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
     SDL_Log("Debug new board");
-    mBoard.debugOutput();
+    mBoard.debugOutput(false);
+    SDL_Log("--------------------");
+    mBoard.debugOutput(true);
+    mBoard.setBlockSizeAndPos(BLOCKSIZE_PX, BLOCKSIZE_PX, 0, 0);
+*/
+
 }
 
 ley::GameModel::~GameModel() {
@@ -200,6 +207,9 @@ bool ley::GameModel::canPut(Block& b, Command d) {
 
 void ley::GameModel::clearOldBlock() {
     putBlock(oldBlock);
+
+    //new board
+//    mBoard.putBlock(oldBlock);
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
@@ -283,6 +293,10 @@ bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add cont
         clearOldBlock();
         oldBlock.rotate(r);
         putBlock(activeBlock);
+
+        // new board
+//        mBoard.putBlock(activeBlock);
+
         rotated = true;
     }
 
@@ -454,6 +468,10 @@ bool ley::GameModel::moveBlock(Command d) {
             } 
             else { 
                 setBlock();
+
+                // new board
+//                mBoard.setBlock(activeBlock);
+
                 audSystem.playSfx(ley::sfx::inplace);
                 int currentLevel = numLevel; //Store the current level for points calculation which should happen for current level
                 int turnLines = 0; //lines cleared for this single turn.
@@ -491,6 +509,10 @@ bool ley::GameModel::moveBlock(Command d) {
     }
 
     putBlock(activeBlock);
+
+    // new board
+//    mBoard.putBlock(activeBlock);
+    
     updateSpeed();
 
     return moved;
@@ -549,6 +571,10 @@ void ley::GameModel::setGameRunning(bool running) {
 
 void ley::GameModel::resetGame() {
     clearBoard();
+
+    // new board
+//    mBoard.clear();
+
     setGameRunning(true);
     numLines = 0;
     numLevel = 1;

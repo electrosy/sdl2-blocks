@@ -59,6 +59,7 @@ public:
     void runCleanUp(); //run clean up after the game is completly over
     std::pair<int, int> centerRectInPx(SDL_Rect outer, SDL_Rect inner); // returns the x y for the inner rect to be in center of the outer rect
     void renderBoard(); //renders the board to the video.
+    void renderNextBlock();
 
     /* AUDIO */
     void fadeMusic(); //fade out the music

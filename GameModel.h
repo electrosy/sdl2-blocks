@@ -184,6 +184,8 @@ public:
     void quickDrop();
 
     int comboCount() { return mComboCount;};
+
+    Board* getNewBoard() { return &mBoard;};
 };
 
 }
