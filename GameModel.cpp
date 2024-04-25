@@ -26,23 +26,28 @@ score(0),
 running(true),
 mDebugOnlyLine(false)
 {
-   clearBoard();
+    //old board
+   //clearBoard();
    oldBlock.setH(activeBlock.getRect().h);
    oldBlock.setW(activeBlock.getRect().w);
-   putBlock(activeBlock);
+      
+   //old board
+   //putBlock(activeBlock);
 
    mHighScores.read();
    mConfig.read();
 
     //new board
-/*    
+    
     mBoard.assign(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
     SDL_Log("Debug new board");
     mBoard.debugOutput(false);
     SDL_Log("--------------------");
     mBoard.debugOutput(true);
-    mBoard.setBlockSizeAndPos(BLOCKSIZE_PX, BLOCKSIZE_PX, 0, 0);
-*/
+    mBoard.setBlockSizeAndPos(BLOCKSIZE_PX, BLOCKSIZE_PX, BLOCK_START_POS_X_PX, BLOCK_START_POS_Y_PX);
+
+    //new board
+   mBoard.putBlock(activeBlock);
 
 }
 
@@ -79,9 +84,17 @@ int ley::GameModel::getLevel() {
     return numLevel;
 }
 
+//old block
+/*
 std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
 ley::GameModel::getBoard() {
     return &board;
+}
+*/
+
+//new block
+ley::Board* ley::GameModel::getBoard() {
+    return &mBoard;
 }
 
 /* Functions */
@@ -90,11 +103,14 @@ void ley::GameModel::addToScore(long p) {
     score += p;
 }
 
+//old board
+/*
 void ley::GameModel::clearBoard() {
     for(auto i = 0; i < BOARDSIZE_HEIGHT; ++i) {
         board[i].fill(std::make_pair(BlockTexCode::O,false));
     }
 }
+*/
 
 void ley::GameModel::debugResetActiveBlock() {
     
@@ -105,6 +121,8 @@ void ley::GameModel::debugResetActiveBlock() {
     oldBlock.debugResetPos();
 }
 
+//old block
+/*
 void ley::GameModel::debugFill() {
     
     board[22].fill(std::make_pair(BlockTexCode::d, true));
@@ -117,7 +135,10 @@ void ley::GameModel::debugFill() {
     board[20].fill(std::make_pair(BlockTexCode::d, true));
     board[20][0] = std::make_pair(BlockTexCode::O, false);
 }
+*/
 
+//old block
+/*
 void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
@@ -133,83 +154,89 @@ void ley::GameModel::putBlock(Block& b) { //put the active block onto the board.
         }
     }
 }
+*/
 
 // **check for collision with the other blocks that have been put in place, 
 //   also checks for collision with game board boundry
-bool ley::GameModel::canPut(Block& b, Command d) {
+//old board
 
-    SDL_Rect block = b.getRect();
+// bool ley::GameModel::canPut(Block& b, Command d) {
 
-    // TODO these 4 nested loops can probably be combined into one as there are only minor differences.
-    //Iterate through the block and check and see if the board is empty where we need to put a block part.
-    //Check if there is already a block along the edge of the existing block.
-    switch (d) {
-        case Command::down : 
-           for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
+//     SDL_Rect block = b.getRect();
+
+//     // TODO these 4 nested loops can probably be combined into one as there are only minor differences.
+//     //Iterate through the block and check and see if the board is empty where we need to put a block part.
+//     //Check if there is already a block along the edge of the existing block.
+//     switch (d) {
+//         case Command::down : 
+//            for(int i = 0; i < block.w; ++i) {
+//                for(int j = 0; j < block.h; ++j) {
                     
-                    bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
-                    bool boardPart = board[block.y + j + 1][block.x + i].second
-                                        || block.y + j + 1 >= BOARDSIZE_HEIGHT; //the space is already occupied
-                    if(renderPart && boardPart) {
-                            return false; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        case Command::right : 
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
-                    bool boardPart = board[block.y + j][block.x + i + 1].second
-                                    || ((block.x + 1) + i) > (BOARDSIZE_WIDTH - 1);
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
-                           return false; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        case Command::left :
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) { 
-                    bool boardPart = board[block.y + j][ (block.x - 1) + i ].second
-                                    || ((block.x - 1) + i) < 0;
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
-                            return false; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        case Command::up : //this is a rotation
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
-                    //if there is a block piece to put,then check to see if it can be put.
-                    bool boardPart = board[block.y + j][block.x + i].second //board empty.
-                                    || block.y + j < 0 || block.y + j > BOARDSIZE_HEIGHT //above the board
-                                    || block.x + i > BOARDSIZE_WIDTH - 1 //right of the board
-                                    || block.x + i < 0; // left of the board
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
-                            return false; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        default : break;
-    }
+//                     bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
+//                     bool boardPart = board[block.y + j + 1][block.x + i].second
+//                                         || block.y + j + 1 >= BOARDSIZE_HEIGHT; //the space is already occupied
+//                     if(renderPart && boardPart) {
+//                             return false; /*** EARLY EXIT! ***/
+//                     }
+//                }
+//            }
+//         break;
+//         case Command::right : 
+//             for(int i = 0; i < block.w; ++i) {
+//                for(int j = 0; j < block.h; ++j) {
+//                     bool boardPart = board[block.y + j][block.x + i + 1].second
+//                                     || ((block.x + 1) + i) > (BOARDSIZE_WIDTH - 1);
+//                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
+//                         && (boardPart == true)//the space is already occupied
+//                     ) {
+//                            return false; /*** EARLY EXIT! ***/
+//                     }
+//                }
+//            }
+//         break;
+//         case Command::left :
+//             for(int i = 0; i < block.w; ++i) {
+//                for(int j = 0; j < block.h; ++j) { 
+//                     bool boardPart = board[block.y + j][ (block.x - 1) + i ].second
+//                                     || ((block.x - 1) + i) < 0;
+//                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
+//                         && (boardPart == true)//the space is already occupied
+//                     ) {
+//                             return false; /*** EARLY EXIT! ***/
+//                     }
+//                }
+//            }
+//         break;
+//         case Command::up : //this is a rotation
+//             for(int i = 0; i < block.w; ++i) {
+//                for(int j = 0; j < block.h; ++j) {
+//                     //if there is a block piece to put,then check to see if it can be put.
+//                     bool boardPart = board[block.y + j][block.x + i].second //board empty.
+//                                     || block.y + j < 0 || block.y + j > BOARDSIZE_HEIGHT //above the board
+//                                     || block.x + i > BOARDSIZE_WIDTH - 1 //right of the board
+//                                     || block.x + i < 0; // left of the board
+//                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
+//                         && (boardPart == true)//the space is already occupied
+//                     ) {
+//                             return false; /*** EARLY EXIT! ***/
+//                     }
+//                }
+//            }
+//         break;
+//         default : break;
+//     }
 
-    return true;
-}
+//     return true;
+// }
+
 
 void ley::GameModel::clearOldBlock() {
-    putBlock(oldBlock);
+    
+    //old board
+    //putBlock(oldBlock);
 
     //new board
-//    mBoard.putBlock(oldBlock);
+    mBoard.putBlock(oldBlock);
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
@@ -261,11 +288,16 @@ bool ley::GameModel::newBlock() {
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    if(!canPut(activeBlock, ley::Command::up)) {
+    //old block
+    //new block
+    if(/*!canPut(activeBlock, ley::Command::up)*/ !mBoard.canPut(activeBlock, ley::Command::up)) {
         return false;
     }
     else {
-        putBlock(activeBlock);
+        //old block
+        //putBlock(activeBlock);
+        //new block
+        mBoard.putBlock(activeBlock);
         return true;
     }
    
@@ -274,6 +306,8 @@ bool ley::GameModel::newBlock() {
 
 //Iterate through the height and width of the block and set
 //the board action layer elements to isset.
+//old block
+/*
 void ley::GameModel::setBlock() {
     SDL_Rect blockRect = activeBlock.getRect();
     for(auto i=0; i<blockRect.w; ++i) {
@@ -284,6 +318,7 @@ void ley::GameModel::setBlock() {
         }
     }
 }
+*/
 bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
     
     bool rotated = false;
@@ -292,10 +327,12 @@ bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add cont
         activeBlock.rotate(r);
         clearOldBlock();
         oldBlock.rotate(r);
-        putBlock(activeBlock);
+
+        //old board
+        //putBlock(activeBlock);
 
         // new board
-//        mBoard.putBlock(activeBlock);
+        mBoard.putBlock(activeBlock);
 
         rotated = true;
     }
@@ -308,7 +345,10 @@ bool ley::GameModel::canRotate(bool r) {
     bool canput = false;
 
     if(!isPaused() && activeBlock.rotate(r)) {
-        canput = canPut(activeBlock, ley::Command::up); //up is a rotation
+        //old block
+        //canput = canPut(activeBlock, ley::Command::up); //up is a rotation
+        //new block
+        canput = mBoard.canPut(activeBlock, ley::Command::up);
         activeBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
     }
@@ -319,7 +359,11 @@ void ley::GameModel::clearAndRecordLine(int lineNum) {
 
     ++numLines; //add to the score for each line
     //simply fill the rows where there are lines with the empty space.
-    board[lineNum].fill(std::make_pair(ley::BlockTexCode::O, false));
+    //old board
+    //board[lineNum].fill(std::make_pair(ley::BlockTexCode::O, false));
+
+    //new board
+    mBoard.fillLine(lineNum, std::make_pair(ley::BlockTexCode::O, false));
 
     SDL_Log("Your Score is:%s" , std::to_string(numLines).c_str());
 }
@@ -327,14 +371,27 @@ void ley::GameModel::shiftBoard(char start, char num) {
     //shift the board down start from the bottom right (backwards).
     char stopLine = start - num;
     for(char i = start; i >= 0; --i) {
-        for(char j = board[i].size() - 1; j >= 0; --j) {
-            board[i][j] = board[i-num][j];
+        for(char j = /*board[i].size()*/ mBoard.width() - 1; j >= 0; --j) {
+            
+            //old board
+            //board[i][j] = board[i-num][j];
+
+            //new board
+            if(i-num > -1) {
+                mBoard.at(j,i)->first = mBoard.at(j,i-num)->first;
+                mBoard.at(j,i)->second = mBoard.at(j,i-num)->second;
+            }
         }
     }
 }
 void ley::GameModel::fillTop(char num) {
     for(char i = 0; i < num; i++) {
-        board[i].fill(std::make_pair(BlockTexCode::O,false));
+        
+        //old board
+        //board[i].fill(std::make_pair(BlockTexCode::O,false));
+
+        //new board
+        mBoard.fillLine(0, std::make_pair(ley::BlockTexCode::O, false));
     }
 }
 bool ley::GameModel::newLevel() {
@@ -359,7 +416,9 @@ bool ley::GameModel::processLines(int &numLines) {
 
     std::vector<char> fullLines;
 
-    fullLines = checkForLines(board.size()-1);
+    //old board
+    //new board
+    fullLines = checkForLines(mBoard.height() - 1 /*board.size()-1*/);
     numLines = fullLines.size();
 
     //Cut out one line at a time incase there are gaps in between the completed lines
@@ -405,8 +464,10 @@ int ley::GameModel::firstLineAt(int start) {
 
     for(int i = start; i >= 0; --i) {
         fullline = false;
-        for(int j = board[i].size() - 1; j >= 0; --j) {
-            if(!board[i][j].second) {
+        //old board
+        //new board
+        for(int j = /*board[i].size()*/ mBoard.width() - 1; j >= 0; --j) {
+            if(/*!board[i][j].second*/ !mBoard.at(j,i)->second) {
                 fullline = false;
                 break;
             } 
@@ -460,17 +521,20 @@ bool ley::GameModel::moveBlock(Command d) {
 
     switch (d) {
         case Command::down :
-            if (canPut(activeBlock, Command::down)) {
+            //old block
+            //new block
+            if (/*canPut(activeBlock, Command::down)*/ mBoard.canPut(activeBlock, Command::down)) {
                 activeBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
                 moved = true;
             } 
             else { 
-                setBlock();
+                //old board
+                //setBlock();
 
                 // new board
-//                mBoard.setBlock(activeBlock);
+                mBoard.setBlock(activeBlock);
 
                 audSystem.playSfx(ley::sfx::inplace);
                 int currentLevel = numLevel; //Store the current level for points calculation which should happen for current level
@@ -488,7 +552,9 @@ bool ley::GameModel::moveBlock(Command d) {
         break;
 
         case Command::left :
-            if (canPut(activeBlock, Command::left)) {
+            //old board
+            //new board
+            if (mBoard.canPut(activeBlock, Command::left) /*canPut(activeBlock, Command::left)*/) {
                 activeBlock.moveLeft();
                 clearOldBlock();
                 oldBlock.moveLeft();
@@ -497,7 +563,9 @@ bool ley::GameModel::moveBlock(Command d) {
         break;
 
         case Command::right :
-            if (canPut(activeBlock, Command::right)) {
+            //old board
+            //new board
+            if (mBoard.canPut(activeBlock, Command::right) /*canPut(activeBlock, Command::right)*/) {
                 activeBlock.moveRight();
                 clearOldBlock();
                 oldBlock.moveRight();
@@ -508,10 +576,11 @@ bool ley::GameModel::moveBlock(Command d) {
         default : ;
     }
 
-    putBlock(activeBlock);
+    //old board
+    //putBlock(activeBlock);
 
     // new board
-//    mBoard.putBlock(activeBlock);
+    mBoard.putBlock(activeBlock);
     
     updateSpeed();
 
@@ -549,6 +618,8 @@ bool ley::GameModel::isOverlayOn() {
     return overlayOn;
 }
 
+//old board
+/*
 void ley::GameModel::debugBoard(bool setLayer) {
     
     SDL_Log("Debug Board");
@@ -565,15 +636,19 @@ void ley::GameModel::debugBoard(bool setLayer) {
         SDL_Log("%s",sRow.c_str());
     }
 }
+*/
+
 void ley::GameModel::setGameRunning(bool running) {
     gameRunning = running;
 }
 
 void ley::GameModel::resetGame() {
-    clearBoard();
+    
+    //old board
+    //clearBoard();
 
     // new board
-//    mBoard.clear();
+    mBoard.clear();
 
     setGameRunning(true);
     numLines = 0;

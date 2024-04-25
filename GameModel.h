@@ -87,7 +87,9 @@ const auto BOARDSIZE_HEIGHT_PX = (BOARDSIZE_HEIGHT - BOARDSIZE_BUFFER) * BLOCKSI
 class GameModel {
 
 private:
-    std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
+    //old board
+    //std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
+    //new board
     Board mBoard;
     Block activeBlock;
     Block oldBlock;
@@ -131,16 +133,22 @@ private:
 public:
     GameModel();
     ~GameModel();
+    Board* getBoard();
+    
+    //old board
+    //void clearBoard();
+    
+    //old board
+    //void debugFill();
 
-    std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT >*
-    getBoard();
-    void clearBoard();
-    void debugFill();
     void debugResetActiveBlock();
     bool moveBlock(Command); //returns true for false if block actually moved
     bool rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
-    void debugBoard(bool); //print the board to the console
+
+    //old board
+    //void debugBoard(bool); //print the board to the console
+    
     void overlayToggle();
     bool isOverlayOn();
 //    bool canMoveDown(); //Can move down based on Game rules. // TODO no longer used.

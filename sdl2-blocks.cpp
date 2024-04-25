@@ -34,7 +34,10 @@ enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in 
 
 int main(int argv, char** args) {
     ley::GameModel mainGameModel;
-    mainGameModel.debugBoard(false); 
+
+    //old board
+    //mainGameModel.debugBoard(false); 
+
     ley::Video mainVideo(&mainGameModel);
     ley::GameController mainGameController(&mainVideo,&mainGameModel);
     mainGameController.runGameLoop();

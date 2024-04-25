@@ -101,8 +101,8 @@ bool ley::Board::canPut(Block& b, Command d) {
                for(int j = 0; j < block.h; ++j) {
                     
                     bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
-                    bool boardPart = at(block.y + j + 1,block.x + i)->second
-                                        || block.y + j + 1 >= mHeight; //the space is already occupied
+                    bool boardPart = block.y + j + 1 >= mHeight
+                                        || at(block.x + i, block.y + j + 1)->second; //the space is already occupied
                     if(renderPart && boardPart) {
                             return false; /*** EARLY EXIT! ***/
                     }
@@ -112,8 +112,9 @@ bool ley::Board::canPut(Block& b, Command d) {
         case Command::right : 
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
-                    bool boardPart = at(block.y + j,block.x + i + 1)->second
-                                    || ((block.x + 1) + i) > (mWidth - 1);
+                    bool boardPart = ((block.x + 1) + i) > (mWidth - 1)
+                                        || at(block.x + i + 1, block.y + j)->second;
+                                    
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -125,8 +126,9 @@ bool ley::Board::canPut(Block& b, Command d) {
         case Command::left :
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) { 
-                    bool boardPart = at(block.y + j, (block.x - 1) + i )->second
-                                    || ((block.x - 1) + i) < 0;
+                    bool boardPart = ((block.x - 1) + i) < 0
+                                     || at((block.x - 1) + i, block.y + j)->second;
+                                    
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -139,10 +141,11 @@ bool ley::Board::canPut(Block& b, Command d) {
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
-                    bool boardPart = at(block.y + j,block.x + i)->second //board empty.
-                                    || block.y + j < 0 || block.y + j > mHeight //above the board
+                    bool boardPart =  //board empty.
+                                    block.y + j < 0 || block.y + j > mHeight //above the board
                                     || block.x + i > mWidth - 1 //right of the board
-                                    || block.x + i < 0; // left of the board
+                                    || block.x + i < 0 // left of the board
+                                    || at(block.x + i, block.y + j)->second;
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
@@ -181,10 +184,29 @@ void ley::Board::setBlock(Block& b) {
 
 void ley::Board::fillLine(int l, std::pair<ley::BlockTexCode, bool> p) {
 
+    if(l>height()-1) {
+        SDL_Log("Tring to debug fill the board beyod bounds.");
+        return;
+    }
+
     for(int i = 0; i < mWidth; ++i) {
         at(i,l)->first = p.first;
         at(i,l)->second = p.second;
     }
+}
+
+void ley::Board::debugFill() {
+    fillLine(20, std::make_pair(ley::BlockTexCode::e, true));
+    fillLine(21, std::make_pair(ley::BlockTexCode::e, true));
+    fillLine(22, std::make_pair(ley::BlockTexCode::e, true));
+
+    *at(0,20) = std::make_pair(ley::BlockTexCode::O, false);
+    *at(1,20) = std::make_pair(ley::BlockTexCode::O, false);
+
+    *at(0,21) = std::make_pair(ley::BlockTexCode::O, false);
+    
+    *at(0,22) = std::make_pair(ley::BlockTexCode::O, false);
+    *at(1,22) = std::make_pair(ley::BlockTexCode::O, false);
 }
 
 /* TODO left off here, this needs work

@@ -27,9 +27,9 @@ private:
     int mBlockStartX = 0;
     int mBlockStartY = 0;
     BoardType mBoard;
-    std::vector<int> test;
 public:
     void debugOutput(bool inLayer);
+    void debugFill();
     void assign(int inX, int inY);
     std::pair<ley::BlockTexCode, bool>* at(int inX, int inY);
     void setBlockSizeAndPos(int inWidth, int inHeight, int inX, int inY);
@@ -39,6 +39,8 @@ public:
     void setBlock(Block& b);
     void putBlock(Block& b);
     void fillLine(int l, std::pair<ley::BlockTexCode, bool> p);
+    int width() { return mWidth; };
+    int height() { return mHeight; };
  //   void shiftBoard(char start, char num);
 };
 }

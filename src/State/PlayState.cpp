@@ -55,10 +55,12 @@ void PlayState::update(ley::Command command) {
             }
         break;
         case ley::Command::debugcolide :
-            mGameModel->debugBoard(true);
+            //mGameModel->debugBoard(true);
+            mGameModel->getNewBoard()->debugOutput(true);
         break;
         case ley::Command::debugtexture :
-            mGameModel->debugBoard(false);
+            //mGameModel->debugBoard(false);
+            mGameModel->getNewBoard()->debugOutput(false);
         break;
         case ley::Command::quit :
             mGameModel->setGameRunning(false);

@@ -47,9 +47,13 @@ void ley::GameController::runGameLoop() {
             || gameStateMachine.getStateId() == "GAMEOVER") {
             
             mVideoSystem->render();
-            renderBoard();
+
+            //old board
+            //renderBoard();
+
             renderNextBlock();
-//            gm->getNewBoard()->render(ren, false);
+            //new board
+            gm->getNewBoard()->render(ren, false);
         }
         gameStateMachine.render();
         mVideoSystem->renderTopLayer();
@@ -132,12 +136,22 @@ void ley::GameController::processCommands(ley::Command command) {
         }
 
         if(command == ley::Command::debugclear) {
-            gm->clearBoard();
+            
+            //old board
+            //gm->clearBoard();
+
+            //new board
+            gm->getNewBoard()->clear();
+
             gm->debugResetActiveBlock();
         }
 
         if(command == ley::Command::debugfill) {
-            gm->debugFill();
+            //old board
+            //gm->debugFill();
+
+            //new board
+            gm->getNewBoard()->debugFill();
         }
 
         if(command == ley::Command::debugnextlevel) {
@@ -295,38 +309,39 @@ void ley::GameController::renderNextBlock() {
     }
 }
 //TODO the board should be rendered in the state machine like everything else.
-void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
-    //get width and height of the texture // TODO this should be dynamic based on image passed in
-    int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
+//old board
+// void ley::GameController::renderBoard(/*SDL_Texture* t*/) {
+//     //get width and height of the texture // TODO this should be dynamic based on image passed in
+//     int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
-    SDL_Rect start_rect;
-    start_rect.x = 0;
-    start_rect.y = 0;
-    start_rect.h = h;
-    start_rect.w = w;
+//     SDL_Rect start_rect;
+//     start_rect.x = 0;
+//     start_rect.y = 0;
+//     start_rect.h = h;
+//     start_rect.w = w;
 
-    SDL_Rect dest_rect;
-    dest_rect.x = BLOCK_START_POS_X_PX;
-    dest_rect.y = BLOCK_START_POS_Y_PX;
-    dest_rect.h = h;
-    dest_rect.w = w;
+//     SDL_Rect dest_rect;
+//     dest_rect.x = BLOCK_START_POS_X_PX;
+//     dest_rect.y = BLOCK_START_POS_Y_PX;
+//     dest_rect.h = h;
+//     dest_rect.w = w;
 
-    SDL_Texture *blockBits2 = nullptr;
-    for (auto row : *gm->getBoard()) {
-        for (auto column : row) {
-            if (column.first != BlockTexCode::O) { 
-            // TODO Change BlockTexCode::O to BlockTexCode::d to reverse textures(clear blocks)
-                blockBits2 = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column.first));
+//     SDL_Texture *blockBits2 = nullptr;
+//     for (auto row : *gm->getBoard()) {
+//         for (auto column : row) {
+//             if (column.first != BlockTexCode::O) { 
+//             // TODO Change BlockTexCode::O to BlockTexCode::d to reverse textures(clear blocks)
+//                 blockBits2 = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column.first));
 
-                //TODO - all rendering should be done in the View(Video.cpp)
-                SDL_RenderCopy(ren, blockBits2, &start_rect, &dest_rect);
-            }
-            dest_rect.x = dest_rect.x + w;
-        }
-        dest_rect.y = dest_rect.y + h;
-        dest_rect.x = BLOCK_START_POS_X_PX;
-    }
-}
+//                 //TODO - all rendering should be done in the View(Video.cpp)
+//                 SDL_RenderCopy(ren, blockBits2, &start_rect, &dest_rect);
+//             }
+//             dest_rect.x = dest_rect.x + w;
+//         }
+//         dest_rect.y = dest_rect.y + h;
+//         dest_rect.x = BLOCK_START_POS_X_PX;
+//     }
+// }
 
 void ley::GameController::fadeMusic() {
     gm->audio()->fadeOutMusic();
