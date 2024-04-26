@@ -22,6 +22,7 @@ public:
     virtual bool onExit();
     virtual bool onReEnter();
     virtual bool onPause();
+    virtual void onCommandEnter();
 
     virtual std::string getStateID() const { return sOptionMenuID; }
 

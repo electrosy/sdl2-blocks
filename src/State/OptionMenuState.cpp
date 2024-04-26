@@ -1,5 +1,8 @@
 #include "../../inc/State/OptionMenuState.h"
 
+#include <fstream>
+#include <sstream>
+
 typedef ley::Textures TextureManager;
 
 namespace ley {
@@ -22,6 +25,10 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
+
+    mTextEntry.setVisible(false);
+    mTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -29,9 +36,20 @@ void OptionMenuState::update(ley::Command command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
+        case ley::Command::tab :
+            mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
     }
 
     optionUI.runCommand(command);
+}
+
+void OptionMenuState::onCommandEnter() {
+    SDL_Log("OptionMenuState::onCommandEnter()");
+
+    std::ofstream myfile;
+    myfile.open ("config.csv");
+    myfile << mTextEntry.getTextBoxValue() << std::endl;
+    myfile.close();
 }
 
 void OptionMenuState::render() {
@@ -46,11 +64,31 @@ void OptionMenuState::render() {
 
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
+    mRenderables.push_back(&mTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
+
+    mTextEntry.setPos({10,10});
+    mTextEntry.setVisible(true);
+
     loadRenderables();
+
+
+    //load config
+    std::ifstream inFile("config.csv");
+    if (inFile.is_open())
+    {
+        std::string line;
+        std::getline(inFile,line);
+        std::stringstream ss(line);
+        
+        SDL_Log("Config read in: %s", line.c_str());
+
+        *mTextEntry.getTextBoxField() = line;
+    }
+
     return true;
 }
 
