@@ -7,7 +7,7 @@ void ley::Config::read() {
      
     SDL_Log("Read Config Function called!");
 
-    std::ifstream inFile("config.cfg");
+    std::ifstream inFile("config.csv");
     if (inFile.is_open())
     {
         std::string line;
@@ -16,11 +16,11 @@ void ley::Config::read() {
             std::stringstream ss(line);
 
             std::string sHeight, sWidth;
-            std::getline(ss,sHeight,',');
-            std::getline(ss,sWidth,',');
+            std::getline(ss,sWidth,'x');
+            std::getline(ss,sHeight,'x');
 
-            mBoardHeight = std::stoi(sHeight);
             mBoardWidth = std::stoi(sWidth);
+            mBoardHeight = std::stoi(sHeight);
         }
     }
 

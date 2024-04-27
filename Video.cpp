@@ -134,7 +134,7 @@ void ley::Video::init() {
     firstRectContainer.addRect("boardboundry", {
                                                     BOARD_POS_X_PX - 1,
                                                     BOARD_POS_Y_PX - 1,
-                                                    BLOCKSIZE_PX * BOARDSIZE_WIDTH + 2 ,
+                                                    BLOCKSIZE_PX * gm->getBoard()->width() + 2 ,
                                                     BLOCKSIZE_PX * (BOARDSIZE_HEIGHT - BOARDSIZE_BUFFER) + 2
                                                     });
 

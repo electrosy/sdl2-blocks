@@ -9,6 +9,8 @@ mBlockHeightPX(BLOCKSIZE_PX),
 mBlockStartX(BLOCK_START_POS_X_PX),
 mBlockStartY(BLOCK_START_POS_Y_PX) {
 
+assign(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
+
 }
 
 void ley::Board::assign(int inX, int inY) {

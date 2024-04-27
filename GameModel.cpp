@@ -37,9 +37,11 @@ mDebugOnlyLine(false)
    mHighScores.read();
    mConfig.read();
 
+    if(mConfig.height() > 8 and mConfig.width() > 8) {
+        mBoard.assign(mConfig.width(), mConfig.height() + BOARDSIZE_BUFFER);
+    }
+
     //new board
-    
-    mBoard.assign(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
     SDL_Log("Debug new board");
     mBoard.debugOutput(false);
     SDL_Log("--------------------");
@@ -47,7 +49,6 @@ mDebugOnlyLine(false)
 
     //new board
    mBoard.putBlock(activeBlock);
-
 }
 
 ley::GameModel::~GameModel() {

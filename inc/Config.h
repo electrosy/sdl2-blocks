@@ -20,6 +20,8 @@ private:
 
 public:
     void read();
+    int height() { return mBoardHeight; };
+    int width() { return mBoardWidth; };
 };
 
 }
