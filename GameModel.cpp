@@ -44,7 +44,6 @@ mDebugOnlyLine(false)
     mBoard.debugOutput(false);
     SDL_Log("--------------------");
     mBoard.debugOutput(true);
-    mBoard.setBlockSizeAndPos(BLOCKSIZE_PX, BLOCKSIZE_PX, BLOCK_START_POS_X_PX, BLOCK_START_POS_Y_PX);
 
     //new board
    mBoard.putBlock(activeBlock);

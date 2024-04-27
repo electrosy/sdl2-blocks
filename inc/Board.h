@@ -31,15 +31,10 @@ const auto NEXTBLOCK_OFFSET_Y_PX = 10;
 const auto NEW_LVL_AT_LINES = 10;
 auto const COMBO_POS_Y_PX = NEXTBOX_POS_Y_PX + NEXTBOX_SIZE_PX + 40;
 
-auto const LINES_POS_Y_PX = 40;
-auto const LVL_POS_Y_PX = 65;
-auto const SCORE_POS_Y_PX = 90;
-
 const auto PTS_DROP = 5;
 const auto PTS_2LINE_MULT = 5;
 const auto PTS_3LINE_MULT = 15;
 const auto PTS_4LINE_MULT = 45;
-
 
 //changes based on board width and height
 const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
@@ -53,7 +48,6 @@ const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
 const auto BLOCK_START_POS_X_PX = BOARD_POS_X_PX;
 const auto NEXTBOX_POS_X_PX = BOARD_POS_X_PX - NEXTBOX_PADDING_PX - NEXTBOX_SIZE_PX;
 
-const auto NEXTBLOCK_OFFSET_X_PX = BLOCK_START_POS_X_PX - 130;
 auto const COMBO_POS_X_PX = NEXTBOX_POS_X_PX;
 
 //changes based on board height
@@ -72,11 +66,11 @@ private:
     int mBlockStartY = 0;
     BoardType mBoard;
 public:
+    Board();
     void debugOutput(bool inLayer);
     void debugFill();
     void assign(int inX, int inY);
     std::pair<ley::BlockTexCode, bool>* at(int inX, int inY);
-    void setBlockSizeAndPos(int inWidth, int inHeight, int inX, int inY);
     void render(SDL_Renderer * r, bool d);
     void clear();
     bool canPut(Block& b, Command d);
@@ -85,6 +79,11 @@ public:
     void fillLine(int l, std::pair<ley::BlockTexCode, bool> p);
     int width() { return mWidth; };
     int height() { return mHeight; };
+
+    struct layout
+    {
+        int v;
+    };
  //   void shiftBoard(char start, char num);
 };
 }

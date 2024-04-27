@@ -20,6 +20,10 @@ Date: Feb/14/2020
 
 namespace ley {
 
+auto const LINES_POS_Y_PX = 40;
+auto const LVL_POS_Y_PX = 65;
+auto const SCORE_POS_Y_PX = 90;
+
 class Video {
 
 private:

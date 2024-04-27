@@ -2,6 +2,15 @@
 
 typedef ley::Textures TextureManager;
 
+ley::Board::Board()
+:
+mBlockWidthPX(BLOCKSIZE_PX),
+mBlockHeightPX(BLOCKSIZE_PX),
+mBlockStartX(BLOCK_START_POS_X_PX),
+mBlockStartY(BLOCK_START_POS_Y_PX) {
+
+}
+
 void ley::Board::assign(int inX, int inY) {
     
     if(inX > 0 && inY > 0)
@@ -74,13 +83,6 @@ void ley::Board::render(SDL_Renderer * r, bool d) {
         dest_rect.x = mBlockStartX;
     }
 
-}
- 
-void ley::Board::setBlockSizeAndPos(int inWidth, int inHeight, int inX, int inY) {
-    mBlockWidthPX = inWidth;
-    mBlockHeightPX = inHeight;
-    mBlockStartX = inX;
-    mBlockStartY = inY;
 }
 
 void ley::Board::clear() {
