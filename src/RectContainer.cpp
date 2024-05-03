@@ -21,3 +21,8 @@ void ley::RectContainer::render(SDL_Renderer* r, bool d) {
 void ley::RectContainer::addRect(std::string id, SDL_Rect rect) {
   rects.insert(std::make_pair(id,rect));
 }
+
+SDL_Rect* ley::RectContainer::getRect(std::string id) {
+  
+  return &rects.find(id)->second;
+}

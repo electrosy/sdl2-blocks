@@ -27,28 +27,16 @@ running(true),
 mDebugOnlyLine(false)
 {
     //old board
-   //clearBoard();
-   oldBlock.setH(activeBlock.getRect().h);
-   oldBlock.setW(activeBlock.getRect().w);
+    //clearBoard();
+    oldBlock.setH(activeBlock.getRect().h);
+    oldBlock.setW(activeBlock.getRect().w);
       
-   //old board
-   //putBlock(activeBlock);
+    //old board
+    //putBlock(activeBlock);
 
-   mHighScores.read();
-   mConfig.read();
+    mHighScores.read();
+//    resizeBoard();
 
-    if(mConfig.height() > 8 and mConfig.width() > 8) {
-        mBoard.assign(mConfig.width(), mConfig.height() + BOARDSIZE_BUFFER);
-    }
-
-    //new board
-    SDL_Log("Debug new board");
-    mBoard.debugOutput(false);
-    SDL_Log("--------------------");
-    mBoard.debugOutput(true);
-
-    //new board
-   mBoard.putBlock(activeBlock);
 }
 
 ley::GameModel::~GameModel() {
@@ -607,7 +595,7 @@ void ley::GameModel::onLine(int lineCount, int level) {
         break;
     }
 
-    addToScore(PTS_LINE * level * linesSameTime * (mComboCount + 1));
+    addToScore(mPts_Line * level * linesSameTime * (mComboCount + 1));
     mComboCount++;
 }
 void ley::GameModel::overlayToggle() {
@@ -712,4 +700,17 @@ void ley::GameModel::quickDrop() {
 
     }
 
+}
+
+void ley::GameModel::resizeBoard() {
+
+    mConfig.read();
+
+    if(mConfig.height() > 7 and mConfig.width() > 7) {
+        mBoard.setSize(mConfig.width(), mConfig.height() + BOARDSIZE_BUFFER);
+    }
+
+    mPts_Line = mBoard.width() * (PTS_DROP * 2);
+
+    mBoard.putBlock(activeBlock);
 }

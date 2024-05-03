@@ -38,6 +38,10 @@ enum class UIFocusChange {
 };
 
 
+
+//const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
+
+
 class GameModel {
 
 private:
@@ -83,6 +87,10 @@ private:
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
+
+    
+
+    int mPts_Line;
 
 public:
     GameModel();
@@ -148,6 +156,7 @@ public:
     int comboCount() { return mComboCount;};
 
     Board* getNewBoard() { return &mBoard;};
+    void resizeBoard();
 };
 
 }

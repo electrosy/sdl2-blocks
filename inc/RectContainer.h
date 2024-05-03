@@ -17,6 +17,7 @@ public:
 
     void render(SDL_Renderer* r, bool d);
     void addRect(std::string id, SDL_Rect rect);
+    SDL_Rect* getRect(std::string id);
 };
 
 }

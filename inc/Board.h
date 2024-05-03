@@ -40,12 +40,11 @@ const auto PTS_4LINE_MULT = 45;
 const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
 const auto BOARDSIZE_WIDTH_PX = BOARDSIZE_WIDTH * BLOCKSIZE_PX;
 const auto BOARD_POS_X_PX =  (SCREEN_WIDTH / 2) - (BOARDSIZE_WIDTH_PX / 2);//490; //Board starting position x for block, when drawing border subtract 1px.
-auto const LINES_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Lines text
-auto const LVL_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Level text
-auto const SCORE_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Score text;
-const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
+//auto const LINES_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Lines text
+//auto const LVL_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Level text
+//auto const SCORE_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Score text;
 
-const auto BLOCK_START_POS_X_PX = BOARD_POS_X_PX;
+//const auto BLOCK_START_POS_X_PX = BOARD_POS_X_PX;
 const auto NEXTBOX_POS_X_PX = BOARD_POS_X_PX - NEXTBOX_PADDING_PX - NEXTBOX_SIZE_PX;
 
 auto const COMBO_POS_X_PX = NEXTBOX_POS_X_PX;
@@ -60,16 +59,21 @@ private:
     typedef std::vector<std::pair<ley::BlockTexCode,bool>> BoardType;
     int mWidth = 0;
     int mHeight = 0;
-    int mBlockWidthPX = 0;
-    int mBlockHeightPX = 0;
-    int mBlockStartX = 0;
+    int mWidthPx = 0;
+    int mHeightPx = 0;
+    int mBlockWidthPx = 0;
+    int mBlockHeightPx = 0;
+    int mBoardPosXPx = 0;
+//    int mBlockStartX = 0;
     int mBlockStartY = 0;
+    int mNextBoxPosXPx = 0;
+    int mScorePosXPx = 0;
     BoardType mBoard;
 public:
     Board();
     void debugOutput(bool inLayer);
     void debugFill();
-    void assign(int inX, int inY);
+    void setSize(int inX, int inY);
     std::pair<ley::BlockTexCode, bool>* at(int inX, int inY);
     void render(SDL_Renderer * r, bool d);
     void clear();
@@ -77,8 +81,14 @@ public:
     void setBlock(Block& b);
     void putBlock(Block& b);
     void fillLine(int l, std::pair<ley::BlockTexCode, bool> p);
+    
     int width() { return mWidth; };
     int height() { return mHeight; };
+    int widthpx() { return mWidthPx; };
+    int heightpx() { return mHeightPx; };
+    int boardPosXPx() { return mBoardPosXPx; };
+    int nextBoxPosXPx() { return mNextBoxPosXPx; };
+    int scorePosXPx() { return mScorePosXPx; };
 
     struct layout
     {

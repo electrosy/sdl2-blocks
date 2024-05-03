@@ -4,21 +4,25 @@ typedef ley::Textures TextureManager;
 
 ley::Board::Board()
 :
-mBlockWidthPX(BLOCKSIZE_PX),
-mBlockHeightPX(BLOCKSIZE_PX),
-mBlockStartX(BLOCK_START_POS_X_PX),
+mBlockWidthPx(BLOCKSIZE_PX),
+mBlockHeightPx(BLOCKSIZE_PX),
 mBlockStartY(BLOCK_START_POS_Y_PX) {
 
-assign(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
+//setSize(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
 
 }
 
-void ley::Board::assign(int inX, int inY) {
+void ley::Board::setSize(int inX, int inY) {
     
     if(inX > 0 && inY > 0)
     {
         mWidth = inX;
         mHeight = inY;
+        mWidthPx = mWidth * mBlockWidthPx;
+        mHeightPx = mHeight * mBlockHeightPx;
+        mBoardPosXPx = (SCREEN_WIDTH / 2) - (mWidthPx / 2);
+        mNextBoxPosXPx = mBoardPosXPx - NEXTBOX_PADDING_PX - NEXTBOX_SIZE_PX;
+        mScorePosXPx = mBoardPosXPx + mWidthPx + NEXTBOX_PADDING_PX;
         mBoard.assign(inX * inY, std::make_pair(ley::BlockTexCode::O, false));
     }
 
@@ -68,9 +72,9 @@ void ley::Board::debugOutput(bool inLayer) {
 
 void ley::Board::render(SDL_Renderer * r, bool d) {
     //get width and height of the texture // TODO this should be dynamic based on image passed in
-    int w = mBlockWidthPX, h = mBlockHeightPX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
+    int w = mBlockWidthPx, h = mBlockHeightPx; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
     SDL_Rect start_rect{0,0,w,h};
-    SDL_Rect dest_rect {mBlockStartX, mBlockStartY, w, h};
+    SDL_Rect dest_rect {mBoardPosXPx, mBlockStartY, w, h};
     SDL_Texture *blockBit = nullptr;
 
     for(int i = 0; i < mHeight; ++i) {
@@ -82,14 +86,14 @@ void ley::Board::render(SDL_Renderer * r, bool d) {
             dest_rect.x = dest_rect.x + w;
         }
         dest_rect.y = dest_rect.y + h;
-        dest_rect.x = mBlockStartX;
+        dest_rect.x = mBoardPosXPx;
     }
 
 }
 
 void ley::Board::clear() {
     mBoard.clear();
-    assign(mWidth, mHeight);
+    setSize(mWidth, mHeight);
 }
 
 bool ley::Board::canPut(Block& b, Command d) {
@@ -146,7 +150,7 @@ bool ley::Board::canPut(Block& b, Command d) {
                for(int j = 0; j < block.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
                     bool boardPart =  //board empty.
-                                    block.y + j < 0 || block.y + j > mHeight //above the board
+                                    block.y + j > mHeight - 1 || block.y + j > mHeight //above the board
                                     || block.x + i > mWidth - 1 //right of the board
                                     || block.x + i < 0 // left of the board
                                     || at(block.x + i, block.y + j)->second;
@@ -200,6 +204,8 @@ void ley::Board::fillLine(int l, std::pair<ley::BlockTexCode, bool> p) {
 }
 
 void ley::Board::debugFill() {
+
+    //TODO this need to take account of the actual board height because if we fill a row that doesn't exist we get a crash.
     fillLine(20, std::make_pair(ley::BlockTexCode::e, true));
     fillLine(21, std::make_pair(ley::BlockTexCode::e, true));
     fillLine(22, std::make_pair(ley::BlockTexCode::e, true));

@@ -12,6 +12,9 @@ Date: Mar/27/2024
 
 namespace ley {
 
+const auto BOARDWIDTH_DEFAULT = 10;
+const auto BOARDHEIGHT_DEFAULT = 20;
+
 class Config {
 
 private:

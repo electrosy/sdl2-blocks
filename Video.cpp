@@ -113,12 +113,10 @@ void ley::Video::init() {
     createRenderer();
     loadTextures();
     loadSprites();
-    //load fonts
-    //initialize the fonts for line, level, score
-    fontLines = { LINES_POS_X_PX, LINES_POS_Y_PX, 100, 35 };
-    fontLvl = { LVL_POS_X_PX, LVL_POS_Y_PX, 100, 35 };
-    fontScore = { SCORE_POS_X_PX, SCORE_POS_Y_PX, 100, 35 };
-    mFontCombo = { COMBO_POS_X_PX, COMBO_POS_Y_PX, 100, 35 };
+ 
+    firstRectContainer.addRect("nextboundry", {});
+    firstRectContainer.addRect("boardboundry", {});
+    videoResizeBoard();
     
     mRenderables.push_back(&fontLines);
     mRenderables.push_back(&fontLvl);
@@ -130,13 +128,7 @@ void ley::Video::init() {
     //RectContainer
     firstRectContainer(renderer);
     mRenderables.push_back(&firstRectContainer);
-    firstRectContainer.addRect("nextboundry", {NEXTBOX_POS_X_PX - 1, NEXTBOX_POS_Y_PX - 1, NEXTBOX_SIZE_PX + 2, NEXTBOX_SIZE_PX + 2});
-    firstRectContainer.addRect("boardboundry", {
-                                                    BOARD_POS_X_PX - 1,
-                                                    BOARD_POS_Y_PX - 1,
-                                                    BLOCKSIZE_PX * gm->getBoard()->width() + 2 ,
-                                                    BLOCKSIZE_PX * (BOARDSIZE_HEIGHT - BOARDSIZE_BUFFER) + 2
-                                                    });
+    videoResizeBoard();
 
     //debug RectContainer
     debugRectContainer(renderer);
@@ -153,6 +145,21 @@ void ley::Video::init() {
     SDLLinked.updateMessage("SDLLinked!" + std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
     mDebugRenderables.push_back(&SDLCompiled);
     mDebugRenderables.push_back(&SDLLinked);
+}
+void ley::Video::videoResizeBoard() {
+
+    *firstRectContainer.getRect("nextboundry") = {gm->getBoard()->nextBoxPosXPx() - 1, NEXTBOX_POS_Y_PX - 1, NEXTBOX_SIZE_PX + 2, NEXTBOX_SIZE_PX + 2};
+    *firstRectContainer.getRect("boardboundry") = {
+                                                    gm->getBoard()->boardPosXPx() - 1,
+                                                    BOARD_POS_Y_PX - 1,
+                                                    gm->getBoard()->widthpx() + 2 ,
+                                                    BLOCKSIZE_PX * (gm->getBoard()->height() - BOARDSIZE_BUFFER) + 2
+                                                    };
+
+    mFontCombo = { gm->getBoard()->nextBoxPosXPx(), COMBO_POS_Y_PX, 100, 35 };
+    fontLines = { gm->getBoard()->scorePosXPx(), LINES_POS_Y_PX, 100, 35 };
+    fontLvl = { gm->getBoard()->scorePosXPx(), LVL_POS_Y_PX, 100, 35 };
+    fontScore = { gm->getBoard()->scorePosXPx(), SCORE_POS_Y_PX, 100, 35 };
 }
 /* Accessors */
 void ley::Video::setFullScreen(bool f) {

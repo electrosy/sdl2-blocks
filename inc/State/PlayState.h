@@ -6,8 +6,8 @@
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
 
-auto constexpr VOLUME_POS_X_PX = 800;
-auto constexpr VOLUME_POS_Y_PX = 20;
+auto constexpr VOLUME_POS_X_PX = 500;
+auto constexpr VOLUME_POS_Y_PX = 10;
 
 namespace ley {
 
@@ -29,7 +29,7 @@ public:
 
 private:
 
-    int blockFallSpeed = 1000; //how many milisecond to make the block fall
+//    int blockFallSpeed = 1000; //how many milisecond to make the block fall // not used
 
     Renderables mRenderables;
     Renderables mDebugRenderables;

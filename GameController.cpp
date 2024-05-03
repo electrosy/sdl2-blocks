@@ -283,11 +283,11 @@ void ley::GameController::renderNextBlock() {
 
     ley::Block nextBlock = gm->getNextBlock();
 
-    std::pair<int, int> pos = centerRectInPx({NEXTBOX_POS_X_PX, NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
+    std::pair<int, int> pos = centerRectInPx({gm->getBoard()->nextBoxPosXPx(), NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
                                             {nextBlock.getRect().x, nextBlock.getRect().y, nextBlock.width()*BLOCKSIZE_PX, nextBlock.height()*BLOCKSIZE_PX});
 
     SDL_Rect next_dest_rect;
-    next_dest_rect.x = NEXTBOX_POS_X_PX + pos.first;
+    next_dest_rect.x = gm->getBoard()->nextBoxPosXPx() + pos.first;
     next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.second;
     next_dest_rect.h = h;
     next_dest_rect.w = w;
@@ -305,7 +305,7 @@ void ley::GameController::renderNextBlock() {
             next_dest_rect.x = next_dest_rect.x + w;
         }
         next_dest_rect.y = next_dest_rect.y + h;
-        next_dest_rect.x = NEXTBOX_POS_X_PX + pos.first;
+        next_dest_rect.x = gm->getBoard()->nextBoxPosXPx() + pos.first;
     }
 }
 //TODO the board should be rendered in the state machine like everything else.

@@ -62,6 +62,7 @@ private:
     void createWindow();
     void createRenderer();
     void init();
+    
     void loadTextures();
     void loadSprites();
 
@@ -99,6 +100,7 @@ public:
     void clear(); //Clear the backbuffer.
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
     void resetClock();
+    void videoResizeBoard();
 };
 
 }
