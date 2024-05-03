@@ -19,7 +19,7 @@ void ley::Config::read() {
             std::getline(ss,sWidth,'x');
             std::getline(ss,sHeight,'x');
 
-            if(std::stoi(sWidth)) {
+            if(sWidth != "") {
                 mBoardWidth = std::stoi(sWidth);
             }
             if(sHeight != "") {
