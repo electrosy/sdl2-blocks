@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <regex>
 
 typedef ley::Textures TextureManager;
 
@@ -12,7 +13,8 @@ const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})) {
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
+    mTextErrorTimer(2000, {0,0,0,0}) {
 
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
@@ -29,6 +31,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mTextEntry.setVisible(false);
     mTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+
+    mTextErrorMessage.updateMessage("");
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -38,16 +42,34 @@ void OptionMenuState::update(ley::Command command) {
         break;
         case ley::Command::tab :
             mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
+            previousOptionsValue = mTextEntry.getTextBoxValue();
     }
 
     optionUI.runCommand(command);
+    mTextErrorTimer.runFrame(false, 0.0);
+    if(mTextErrorTimer.hasExpired()) {
+        mTextErrorMessage.updateMessage("");
+    }
 }
 
 void OptionMenuState::onCommandEnter() {
+
     SDL_Log("OptionMenuState::onCommandEnter()");
 
     std::ofstream myfile;
     myfile.open ("config.csv");
+
+    if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-5])\\b") )) {
+        SDL_Log("Regex matched.");
+    }
+    else {
+        SDL_Log("Regex did not match");
+        mTextErrorMessage.updateMessage("Your Regex did not match");
+        mTextErrorTimer.reset();
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mTextEntry.setTextBoxValue(previousOptionsValue);
+    }
+
     myfile << mTextEntry.getTextBoxValue() << std::endl;
     myfile.close();
 }
@@ -65,6 +87,7 @@ void OptionMenuState::render() {
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mTextEntry);
+    mRenderables.push_back(&mTextErrorMessage);
 }
 
 bool OptionMenuState::onEnter() {

@@ -62,6 +62,10 @@ std::string ley::TextEntry::getTextBoxValue() {
     return value.getMessage();
 }
 
+void ley::TextEntry::setTextBoxValue(std::string s) {
+    value.updateMessage(s);
+}
+
 std::string* ley::TextEntry::getTextBoxField() {
     return value.getMessagePtr();
 }

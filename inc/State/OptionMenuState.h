@@ -41,6 +41,12 @@ private:
 
     ley::UIMenu optionUI;
 
+    ley::Font mTextErrorMessage;
+
+    ley::Timer mTextErrorTimer;
+
+    std::string previousOptionsValue;
+
 };
 
 }

@@ -1,4 +1,5 @@
 #include <functional>
+#include <regex>
 
 #include <SDL2/SDL.h>
 
@@ -36,6 +37,7 @@ public:
     void render(SDL_Renderer* r, bool d);
     void processInput(std::string s);
     std::string getTextBoxValue();
+    void setTextBoxValue(std::string s);
     std::string* getTextBoxField();
     void toggleFocus();
     bool hasFocus() {return mHasFocus;};
