@@ -113,7 +113,11 @@ void ley::HighScores::write() {
 
   HighScoresType::iterator it;
   for(it = highscoresdata.begin(); it != highscoresdata.end(); ++it) {
-    myfile << it->first << ',' << std::get<0>(it->second) << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
+
+    std::string tempName = std::get<0>(it->second);
+    std::replace( tempName.begin(), tempName.end(), ',', '.'); //replace commas with a period.
+
+    myfile << it->first << ',' << tempName << "," << std::get<1>(it->second) << "," << std::get<2>(it->second) <<std::endl;
   }
 
   myfile.close();
