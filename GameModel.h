@@ -45,9 +45,6 @@ enum class UIFocusChange {
 class GameModel {
 
 private:
-    //old board
-    //std::array<std::array<std::pair<BlockTexCode,bool>, BOARDSIZE_WIDTH>, BOARDSIZE_HEIGHT> board;
-    //new board
     Board mBoard;
     Block activeBlock;
     Block oldBlock;
@@ -62,8 +59,6 @@ private:
     bool active; //not paused // TODO this should be called paused and the checks should be reversed
     int mComboCount = 0;
     void clearOldBlock();
-    void putBlock(Block&);
-    bool canPut(Block&, Command d); //can physically put the block in the board.
     std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     bool processLines(int &numLines); //returns true if any number of lines are removed.
@@ -96,24 +91,13 @@ public:
     GameModel();
     ~GameModel();
     Board* getBoard();
-    
-    //old board
-    //void clearBoard();
-    
-    //old board
-    //void debugFill();
 
     void debugResetActiveBlock();
     bool moveBlock(Command); //returns true for false if block actually moved
     bool rotateBlock(bool);
     bool canRotate(bool); //false for counterclockwise and true for clockwise
-
-    //old board
-    //void debugBoard(bool); //print the board to the console
-    
     void overlayToggle();
     bool isOverlayOn();
-//    bool canMoveDown(); //Can move down based on Game rules. // TODO no longer used.
     bool newBlock();
     void setBlock();
     int getScore();

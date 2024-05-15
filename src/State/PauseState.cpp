@@ -22,18 +22,10 @@ void PauseState::update(ley::Command command) {
             mGameModel->pauseGame(!mGameModel->isPaused());
         break;
         case ley::Command::debugcolide :
-
-            //old board
-            //mGameModel->debugBoard(true);
-
             //new board
             mGameModel->getBoard()->debugOutput(true);
         break;
         case ley::Command::debugtexture :
-
-            //old board
-            //mGameModel->debugBoard(false);
-
             //new board
             mGameModel->getBoard()->debugOutput(true);
             
