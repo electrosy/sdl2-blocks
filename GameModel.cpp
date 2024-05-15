@@ -501,6 +501,7 @@ void ley::GameModel::updateSpeed() {
 //TODO this function should probably go in the controller
 bool ley::GameModel::moveBlock(Command d) {
 
+    // TODO, should we just not call moveBlock at all?
     if(!active) {
         return false; //don't do any moves while we are paused.
     }

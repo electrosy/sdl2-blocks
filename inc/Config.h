@@ -14,6 +14,8 @@ namespace ley {
 
 const auto BOARDWIDTH_DEFAULT = 10;
 const auto BOARDHEIGHT_DEFAULT = 20;
+const auto BOARDWIDTH_MAX = 25;
+const auto BOARDHEIGHT_MAX = 22;
 
 class Config {
 

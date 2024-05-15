@@ -14,7 +14,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
-    mTextErrorTimer(2000, {0,0,0,0}) {
+    mTextErrorTimer(2500, {0,0,0,0}) {
 
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
@@ -59,12 +59,12 @@ void OptionMenuState::onCommandEnter() {
     std::ofstream myfile;
     myfile.open ("config.csv");
 
-    if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-5])\\b") )) {
+    if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
         SDL_Log("Regex matched.");
     }
     else {
         SDL_Log("Regex did not match");
-        mTextErrorMessage.updateMessage("Your Regex did not match");
+        mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x23");
         mTextErrorTimer.reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mTextEntry.setTextBoxValue(previousOptionsValue);
