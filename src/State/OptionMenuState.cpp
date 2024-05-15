@@ -64,7 +64,7 @@ void OptionMenuState::onCommandEnter() {
     }
     else {
         SDL_Log("Regex did not match");
-        mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x23");
+        mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
         mTextErrorTimer.reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mTextEntry.setTextBoxValue(previousOptionsValue);
