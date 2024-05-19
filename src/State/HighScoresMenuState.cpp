@@ -45,6 +45,10 @@ void HighScoresMenuState::onCommandEnter() {
     }
 }
 
+void HighScoresMenuState::UI_ToggleFocus() {
+    mTextEntry.toggleFocus();
+}
+
 void HighScoresMenuState::update(ley::Command command) {
     switch (command) {
         case ley::Command::quit :

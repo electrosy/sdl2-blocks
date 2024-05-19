@@ -23,6 +23,7 @@ public:
     virtual bool onReEnter();
     virtual bool onPause();
     virtual void onCommandEnter();
+    virtual void UI_ToggleFocus();
 
     virtual std::string getStateID() const { return sOptionMenuID; }
 
@@ -42,6 +43,7 @@ private:
     ley::UIMenu optionUI;
 
     ley::Font mTextErrorMessage;
+    ley::Font mTextEntryHelpMessage;
 
     ley::Timer mTextErrorTimer;
 

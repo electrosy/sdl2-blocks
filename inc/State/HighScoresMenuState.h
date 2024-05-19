@@ -47,6 +47,7 @@ private:
     ley::Font font_objects[HIGHSCORES_NUM_DISPLAY];
 
     void onCommandEnter();
+    void UI_ToggleFocus();
 };
 
 }

@@ -47,6 +47,7 @@ public:
     void adjustCursor();
     void setCharSound(const std::function<void()> &func);
     void setBackspaceSound(const std::function<void()> &func);
+    std::string getHelpMessage();
 };
 
 }

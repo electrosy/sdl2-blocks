@@ -14,7 +14,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
-    mTextErrorTimer(2500, {0,0,0,0}) {
+    mTextErrorTimer(2500, {0,0,0,0}),
+    mTextEntryHelpMessage({50,50,100,100}) {
 
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
@@ -33,6 +34,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 
     mTextErrorMessage.updateMessage("");
+    mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -56,11 +58,14 @@ void OptionMenuState::onCommandEnter() {
 
     SDL_Log("OptionMenuState::onCommandEnter()");
 
-    std::ofstream myfile;
-    myfile.open ("config.csv");
-
     if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
         SDL_Log("Regex matched.");
+
+        //save the config only if we have a new value that is valid.
+        std::ofstream myfile;
+        myfile.open ("config.csv");
+        myfile << mTextEntry.getTextBoxValue() << std::endl;
+        myfile.close();
     }
     else {
         SDL_Log("Regex did not match");
@@ -68,10 +73,13 @@ void OptionMenuState::onCommandEnter() {
         mTextErrorTimer.reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mTextEntry.setTextBoxValue(previousOptionsValue);
+        mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
     }
+}
 
-    myfile << mTextEntry.getTextBoxValue() << std::endl;
-    myfile.close();
+void OptionMenuState::UI_ToggleFocus() {
+    textEntry()->toggleFocus();
+    mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::render() {
@@ -88,6 +96,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mTextEntry);
     mRenderables.push_back(&mTextErrorMessage);
+    mRenderables.push_back(&mTextEntryHelpMessage);
 }
 
 bool OptionMenuState::onEnter() {

@@ -210,8 +210,8 @@ int ley::Block::heightAtWidth(int width) {
 
 //cube,tee,rLee,zee,mzee,lLee,line,empty
 void ley::Block::setBlock(BlockType t, int o) {
-//    setBlockOddBalls(t, o); // TODO handle switching to oddBalls better.
-//    return;
+    //setBlockOddBalls(t, o); // TODO handle switching to oddBalls better.
+    //return;
     
     orientation = o;
 

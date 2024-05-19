@@ -80,6 +80,12 @@ ley::TextEntry* ley::GameStateMachine::textEntry() {
     }
 }
 
+void ley::GameStateMachine::UI_ToggleFocus() {
+    if(!mGameStates.empty()) {
+        return mGameStates.back()->UI_ToggleFocus();
+    }
+}
+
 void ley::GameStateMachine::commitUI() {
     if(!mGameStates.empty()) {
         return mGameStates.back()->onCommandEnter();

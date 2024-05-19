@@ -20,6 +20,7 @@ public:
     bool isStateDone();
     ley::TextEntry* textEntry();
     void commitUI();
+    void UI_ToggleFocus();
 
 private:
 

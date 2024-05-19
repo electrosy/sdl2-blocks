@@ -129,3 +129,12 @@ void ley::TextEntry::setCharSound(const std::function<void()> &func) {
 void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
     mBackspaceSound = func;
 }
+
+std::string ley::TextEntry::getHelpMessage() {
+    if (hasFocus()) {
+        return "Press enter to complete entry.";
+    }
+    else {
+        return "Press tab to modify field.";
+    }
+}
