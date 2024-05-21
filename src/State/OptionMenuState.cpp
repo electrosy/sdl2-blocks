@@ -58,6 +58,7 @@ void OptionMenuState::onCommandEnter() {
 
     SDL_Log("OptionMenuState::onCommandEnter()");
 
+    // TODO the regex should probably be a part of the TextEntry object
     if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
         SDL_Log("Regex matched.");
 

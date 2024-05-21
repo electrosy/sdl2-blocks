@@ -132,7 +132,7 @@ void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
 
 std::string ley::TextEntry::getHelpMessage() {
     if (hasFocus()) {
-        return "Press enter to complete entry.";
+        return "Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press enter .";
     }
     else {
         return "Press tab to modify field.";
