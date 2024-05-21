@@ -78,7 +78,7 @@ void OptionMenuState::onCommandEnter() {
 }
 
 void OptionMenuState::UI_ToggleFocus() {
-    textEntry()->toggleFocus();
+    mTextEntry.toggleFocus();
     mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
 }
 
