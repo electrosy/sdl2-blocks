@@ -24,6 +24,11 @@ fader(1000,{0,0,0,0}) {
 
 ley::UIMenu::~UIMenu() {
 
+    //remove the fonts that are used
+    for(auto fontPtr : fontsUsed ) {
+        delete fontPtr;
+        fontPtr = nullptr;
+    }
 }
 void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect dest, const std::string b, const std::string t, const std::string th) {
     //push a UI Element into the UI Menu
@@ -33,6 +38,44 @@ void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect des
     SDL_Texture* texhot = TextureManager::Instance()->getTexture(th);
 
     UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
+    elements.push_back(temp);
+}
+void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
+
+    SDL_Color White = {255, 255, 255};
+    SDL_Color BrightRed = {238, 51, 84};
+    SDL_Color DarkTeal = {32, 85, 83};
+    // TODO this should use only one font and on render the font change color.
+
+    // TODO - Do we really need to use new?
+    ley::Font* baseFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
+    baseFont->setColor(DarkTeal);
+    ley::Font* texFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
+    texFont->setColor(White);
+    ley::Font* texHotFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
+    texHotFont->setColor(BrightRed);
+
+    //These will get deleted in the destructor.
+    fontsUsed.push_back(baseFont);
+    fontsUsed.push_back(texFont);
+    fontsUsed.push_back(texHotFont);
+
+    baseFont->updateMessage(s);
+    texFont->updateMessage(s);
+    texHotFont->updateMessage(s);
+
+    baseFont->preRender(r);
+    texFont->preRender(r);
+    texHotFont->preRender(r);
+
+    //Assume that all 3 fonts are the same size.
+    int w;
+    int h;
+    SDL_QueryTexture(baseFont->getTexturePtr(),
+                     NULL, NULL,
+                     &w, &h);
+
+    UIElement temp(label, {0,0,w,h}, {dest.x, dest.y, w, h}, baseFont->getTexturePtr(), texFont->getTexturePtr(), texHotFont->getTexturePtr());
     elements.push_back(temp);
 }
 

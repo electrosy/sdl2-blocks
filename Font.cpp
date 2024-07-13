@@ -73,6 +73,10 @@ ley::Font ley::Font::operator()(ley::Font& other) {
     return *this;
 }
 
+void ley::Font::setColor(SDL_Color c) {
+    color = c;
+}
+
 void ley::Font::updateMessage(std::string s) {
     //Only update the texture if the message has changed.
     if(s != textMessage) {
@@ -88,12 +92,21 @@ std::string* ley::Font::getMessagePtr() {
     return &textMessage;
 }
 
-void ley::Font::render(SDL_Renderer * r, bool d) {
+SDL_Texture* ley::Font::getTexturePtr() {
+    return Message;
+}
 
+void ley::Font::preRender(SDL_Renderer* r) 
+{
     SDL_Surface* surfaceMessage;
-    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), White);
+    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), color);
     Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
     SDL_FreeSurface(surfaceMessage);
+}
+
+void ley::Font::render(SDL_Renderer * r, bool d) {
+
+    preRender(r);
     
     int w;
     int h;

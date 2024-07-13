@@ -25,6 +25,7 @@ class UIMenu {
 private:
 
     std::vector<ley::UIElement> elements;
+    std::vector<ley::Font*> fontsUsed;
     std::multimap<std::string,ley::UIElement> selectors; //element id, and selectors
     int currentIndex;
     bool hot; //indicates that this menu item is currently selected.
@@ -48,6 +49,7 @@ public:
     SDL_Rect currentDest();
     void setHot(bool);
     void push(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
+    void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r);
     int getIndex();
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.

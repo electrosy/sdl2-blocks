@@ -20,7 +20,7 @@ private:
     SDL_Texture* Message;
     SDL_Rect Message_rect;
     TTF_Font* Classic;
-    SDL_Color White = {255, 255, 255};
+    SDL_Color color = {255, 255, 255};
     
 protected:
 
@@ -34,10 +34,13 @@ public:
     void updateMessage(std::string s);
     std::string getMessage();
     std::string* getMessagePtr();
+    SDL_Texture* getTexturePtr();
+    void preRender(SDL_Renderer* r);
     void render(SDL_Renderer * r, bool d);
     TTF_Font* getTTFFont();
     void setPos(SDL_Point p);
     std::pair<int, int> size();
+    void setColor(SDL_Color c);
     
 };
 
