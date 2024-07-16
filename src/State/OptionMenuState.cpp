@@ -48,6 +48,10 @@ void OptionMenuState::update(ley::Command command) {
             previousOptionsValue = mTextEntry.getTextBoxValue();
     }
 
+    if(command == ley::Command::enter && optionUI.getIndex() == 0) {
+        mGameModel->stateChange(ley::StateChange::keyboardoptions);
+    }
+
     optionUI.runCommand(command);
     mTextErrorTimer.runFrame(false, 0.0);
     if(mTextErrorTimer.hasExpired()) {

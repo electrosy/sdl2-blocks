@@ -28,6 +28,7 @@ enum class StateChange { //TODO this can probably be called State
     highscores,
     gameover,
     credits,
+    keyboardoptions,
     none}; //particular states that the game can be in
 
 enum class UIFocusChange {
