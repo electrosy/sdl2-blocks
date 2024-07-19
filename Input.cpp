@@ -1,6 +1,6 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020 Steven Philley
+Copyright (C) 2020 Steven Philley. All rights reserved.
 
 Purpose: see header.
 Date: Feb/14/2020
@@ -18,73 +18,15 @@ ley::Input::~Input() {
 }
 
 /* Functions */
-ley::Command ley::Input::pollTitleEvents(bool &running) {
-    SDL_Event event;
-    ley::Command frameDirection = ley::Command::none; //direction for this frame;
-
-    while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        switch (event.type)     {       
-            case SDL_QUIT:         
-                running = false;
-                break;
-            case SDL_KEYDOWN:
-                //TODO these inputs should manipulate the game controller instead of the game model directly.
-                //Full screen mode
-                //continue game
-                if (state[SDL_SCANCODE_RETURN]) {
-                    frameDirection = ley::Command::down;
-                }
-                //quite game
-                if (state[SDL_SCANCODE_Q]) {
-                    running = false;
-                }
-                break;
-            default:
-                break;
-        }
-     }
-
-     return frameDirection;
-}
-
-void ley::Input::pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len) {
-
-    bool done;
-    SDL_StartTextInput();
-    while (!done) {
-        SDL_Event event;
-        if (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    /* Quit */
-                    done = true;
-                    break;
-                case SDL_TEXTINPUT:
-                    /* Add new text onto the end of our text */
-                    (*ptr_s).append(event.text.text);
-
-                    break;
-                case SDL_TEXTEDITING:
-                    /*
-                    Update the composition text.
-                    Update the cursor position.
-                    Update the selection length (if any).
-                    */
-                    (*ptr_s) = event.edit.text;
-                    cursor = event.edit.start;
-                    selection_len = event.edit.length;
-                    break;
-            }
-        }
-    }
-    SDL_StopTextInput();
-}
-
-ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
     //std::vector<ley::Character> characters;
+
+    // TODO it would be cool if we could come up with some token language for 
+    // storing parens or and && so that we can do this key or that key or these 
+    // two keys or those two keys e.g. shitching full screen. for now multiple 
+    // or keys will have to suffice.
 
     while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -110,8 +52,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley
             
             case SDL_KEYDOWN:
                 //debug clear
-                if (state[SDL_SCANCODE_F12]) {
-                    command = ley::Command::debugkeystoggle;
+                if (state[bindings->debugkeystoggle.second[0]]) {
+                    command = bindings->debugkeystoggle.first;
+                    SDL_Log(SDL_GetScancodeName(SDL_SCANCODE_F12));
                 }
                 if (state[SDL_SCANCODE_C]) {
                     command = ley::Command::debugclear;
@@ -130,8 +73,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley
                 }
                 //Full screen mode
                 if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
-                    |(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])
-                    ) { fullscreen = !fullscreen; }
+                    ||(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])) { 
+                        fullscreen = !fullscreen; 
+                }
                 if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_D]) {
                     command = ley::Command::debugtexture;
                 }
@@ -156,8 +100,8 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley
                     command = ley::Command::down;
                 }
                 //move block left
-                if (state[SDL_SCANCODE_LEFT]) {
-                    command = ley::Command::left;
+                if (state[bindings->left.second[0]]) {
+                    command = bindings->left.first;
                 }
                 //move block right
                 if (state[SDL_SCANCODE_RIGHT]) {

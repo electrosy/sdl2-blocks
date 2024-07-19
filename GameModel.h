@@ -75,6 +75,7 @@ private:
     bool mDebugOnlyLine = false; //use only the line block for testing purposes
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
+    ley::KeyBindings mKeyBindings;
 
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
@@ -83,6 +84,7 @@ private:
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
+    void loadKeyBindings();
 
     
 
@@ -142,6 +144,7 @@ public:
 
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard();
+    KeyBindings* getKeyBindingsPtr();
 };
 
 }

@@ -23,7 +23,6 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}}))/*,
     pos_col1{450,0,400,40}*/ {
 
-
     int yValue = ROW_START_Y;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
         font_objects[i] = {ROW_START_X, yValue+=ROW_SPACING, 400, 40};

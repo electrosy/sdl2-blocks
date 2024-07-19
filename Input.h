@@ -27,10 +27,7 @@ public:
     ~Input();
     // TODO we may not need to have all these different function,
     // there is likely a way to generalize them.
-    ley::Command pollEvents(bool& fullscreen, /*std::string* ptr_s*/ ley::TextEntry* te, const std::function<void(ley::Command c)>& function);
-    void pollTextEvents(std::string* ptr_s, Sint32 cursor, Sint32 selection_len);
-    ley::Command pollTitleEvents(bool&);
-
+    ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }

@@ -43,6 +43,7 @@ private:
 
     SDL_Rect pos_col1; // name
     std::vector<ley::Font*> fonts;
+    //TODO what is fonts_test?
     std::vector<ley::Font*> fonts_test;
     ley::Font font_objects[HIGHSCORES_NUM_DISPLAY];
 

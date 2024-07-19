@@ -30,6 +30,8 @@ mDebugOnlyLine(false)
     oldBlock.setW(activeBlock.getRect().w);
       
     mHighScores.read();
+
+    loadKeyBindings();
 }
 
 ley::GameModel::~GameModel() {
@@ -550,4 +552,17 @@ void ley::GameModel::resizeBoard() {
     mPts_Line = mBoard.width() * (PTS_DROP * 2);
 
     mBoard.putBlock(activeBlock);
+}
+
+void ley::GameModel::loadKeyBindings() {
+
+    mKeyBindings.debugkeystoggle.first = ley::Command::debugkeystoggle;
+    mKeyBindings.debugkeystoggle.second.push_back(SDL_SCANCODE_F12);
+
+    mKeyBindings.left.first = ley::Command::left;
+    mKeyBindings.left.second.push_back(SDL_SCANCODE_LEFT);
+}
+
+ley::KeyBindings* ley::GameModel::getKeyBindingsPtr() {
+    return &mKeyBindings;
 }

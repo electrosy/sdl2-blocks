@@ -30,6 +30,8 @@ private:
     static const std::string sKeyboardOptionsID;
 
     ley::Font mTitleFont;
+    ley::Font font_objects[1];
+    std::vector<ley::Font*> fonts;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;

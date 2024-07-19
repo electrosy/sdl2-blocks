@@ -12,6 +12,10 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     mTitleFont{20,20,100,50} {
 
     mTitleFont.updateMessage("Keyboard Options");
+
+    font_objects[0] = {20, 200, 400, 40};
+    font_objects[0].updateMessage("Left: " + std::string(SDL_GetScancodeName( (SDL_Scancode)gm->getKeyBindingsPtr()->left.second[0] )) );
+    fonts.push_back(&font_objects[0]);
 }
 
 void KeyboardOptionsState::update(ley::Command command) {
@@ -32,6 +36,10 @@ void KeyboardOptionsState::render() {
 
 void KeyboardOptionsState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
+
+    for(auto font : fonts) {
+       mRenderables.push_back(font);
+    }
 }
 
 bool KeyboardOptionsState::onEnter() {
