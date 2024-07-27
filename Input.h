@@ -21,6 +21,7 @@ namespace ley {
 class Input {
 
 private:
+    bool anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs);
   
 public:
     Input();

@@ -16,6 +16,16 @@ ley::Input::Input() {
 ley::Input::~Input() {
 
 }
+bool ley::Input::anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs) {
+
+    for (auto it = inputs->begin(); it != inputs->end(); ++it) {
+        if(state[(*it)]) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 /* Functions */
 ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
@@ -52,7 +62,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
             
             case SDL_KEYDOWN:
                 //debug clear
-                if (state[bindings->debugkeystoggle.second[0]]) {
+                if (anyInputsMatch(state, &bindings->debugkeystoggle.second)) {
                     command = bindings->debugkeystoggle.first;
                     SDL_Log(SDL_GetScancodeName(SDL_SCANCODE_F12));
                 }
@@ -62,9 +72,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                 if (state[SDL_SCANCODE_F]) {
                     command = ley::Command::debugfill;
                 }
-                if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
-                    command = ley::Command::quit;
-                }                
+                if (anyInputsMatch(state, &bindings->quit.second)) {
+                    command = bindings->quit.first;
+                }
                 if (state[SDL_SCANCODE_BACKSPACE]) {
                     command = ley::Command::backspace;
                 }
@@ -87,29 +97,33 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                     command = ley::Command::console;
                 }
                 //Rotate Block counter clockwise
-                if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_E]) {
-                    command = ley::Command::cclockwise; // TODO this needs some work, main menu has cclockwise overloaded
+                if (anyInputsMatch(state, &bindings->cclockwise.second)) {
+                    command = bindings->cclockwise.first; // TODO this needs some work, main menu has cclockwise overloaded
                 }
                 //Rotate Block clockwise
-                if (state[SDL_SCANCODE_R]) {
-                    command = ley::Command::clockwise;
+                if (anyInputsMatch(state, &bindings->clockwise.second)) {
+                    command = bindings->clockwise.first;
                 }
 
                 //move block down
-                if (state[SDL_SCANCODE_DOWN]) {
-                    command = ley::Command::down;
+                if (anyInputsMatch(state, &bindings->down.second)) {
+                    command = bindings->down.first;
                 }
                 //move block left
-                if (state[bindings->left.second[0]]) {
+                if (anyInputsMatch(state, &bindings->left.second)) {
                     command = bindings->left.first;
                 }
                 //move block right
-                if (state[SDL_SCANCODE_RIGHT]) {
-                    command = ley::Command::right;
+                if (anyInputsMatch(state, &bindings->right.second)) {
+                    command = bindings->right.first;
                 }
                 //play next audio music track
-                if (state[SDL_SCANCODE_N]) {
-                    command = ley::Command::nextSong;
+                if (anyInputsMatch(state, &bindings->nextSong.second)) {
+                    command = bindings->nextSong.first;
+                }
+                //play previous audio music track
+                if (anyInputsMatch(state, &bindings->previousSong.second)) {
+                    command = bindings->previousSong.first;
                 }
 
                 //debug next level
@@ -123,24 +137,24 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                 }
 
                 //pause game
-                if(state[SDL_SCANCODE_P] || state[SDL_SCANCODE_SLASH]) {
-                    command = ley::Command::pause;
+                if (anyInputsMatch(state, &bindings->pause.second)) {
+                    command = bindings->pause.first;
                 }
 
                 if(state[SDL_SCANCODE_RETURN] && !(state[SDL_SCANCODE_LALT] || state[SDL_SCANCODE_RALT])) {
                     command = ley::Command::enter;
                 }
 
-                if(state[SDL_SCANCODE_MINUS]) {
-                    command = ley::Command::decreaseVolume;
+                if (anyInputsMatch(state, &bindings->decreaseVolume.second)) {
+                    command = bindings->decreaseVolume.first;
                 }
 
-                if(state[SDL_SCANCODE_EQUALS]) {
-                    command = ley::Command::increaseVolume;
+                if (anyInputsMatch(state, &bindings->increaseVolume.second)) {
+                    command = bindings->increaseVolume.first;
                 }
 
-                if(state[SDL_SCANCODE_SPACE]) {
-                    command = ley::Command::space;
+                if (anyInputsMatch(state, &bindings->space.second)) {
+                    command = bindings->space.first;
                 }
 
                 if(state[SDL_SCANCODE_TAB]) {

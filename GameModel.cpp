@@ -561,8 +561,63 @@ void ley::GameModel::loadKeyBindings() {
 
     mKeyBindings.left.first = ley::Command::left;
     mKeyBindings.left.second.push_back(SDL_SCANCODE_LEFT);
+
+    mKeyBindings.right.first = ley::Command::right;
+    mKeyBindings.right.second.push_back(SDL_SCANCODE_RIGHT);
+
+    mKeyBindings.down.first = ley::Command::down;
+    mKeyBindings.down.second.push_back(SDL_SCANCODE_DOWN);
+
+    mKeyBindings.cclockwise.first = ley::Command::cclockwise;
+    mKeyBindings.cclockwise.second.push_back(SDL_SCANCODE_UP);
+    mKeyBindings.cclockwise.second.push_back(SDL_SCANCODE_E);
+
+    mKeyBindings.clockwise.first = ley::Command::clockwise;
+    mKeyBindings.clockwise.second.push_back(SDL_SCANCODE_R);
+
+    mKeyBindings.quit.first = ley::Command::quit;
+    mKeyBindings.quit.second.push_back(SDL_SCANCODE_Q);
+    mKeyBindings.quit.second.push_back(SDL_SCANCODE_ESCAPE);
+
+    mKeyBindings.nextSong.first = ley::Command::nextSong;
+    mKeyBindings.nextSong.second.push_back(SDL_SCANCODE_N);
+
+    mKeyBindings.previousSong.first = ley::Command::previousSong;
+    mKeyBindings.previousSong.second.push_back(SDL_SCANCODE_B);
+
+    mKeyBindings.space.first = ley::Command::space;
+    mKeyBindings.space.second.push_back(SDL_SCANCODE_SPACE);
+
+    mKeyBindings.pause.first = ley::Command::pause;
+    mKeyBindings.pause.second.push_back(SDL_SCANCODE_P);
+    mKeyBindings.pause.second.push_back(SDL_SCANCODE_SLASH);
+
+    mKeyBindings.decreaseVolume.first = ley::Command::decreaseVolume;
+    mKeyBindings.decreaseVolume.second.push_back(SDL_SCANCODE_MINUS);
+    mKeyBindings.decreaseVolume.second.push_back(SDL_SCANCODE_KP_MINUS);
+
+    mKeyBindings.increaseVolume.first = ley::Command::increaseVolume;
+    mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_EQUALS);
+    mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_KP_PLUS);
 }
 
 ley::KeyBindings* ley::GameModel::getKeyBindingsPtr() {
     return &mKeyBindings;
+}
+
+std::string ley::GameModel::getInputsString(std::string seperator, std::vector<Uint8>* inputs) {
+
+    std::string output;
+    for(auto it = inputs->begin(); it != inputs->end(); ++it) {
+
+        std::string keyname = SDL_GetScancodeName((SDL_Scancode)(*it));
+        output += keyname;
+
+        //If its not the last item add a comma
+        if(it + 1 != inputs->end()) {
+            output += seperator + " ";
+        }
+    }
+
+    return output;
 }

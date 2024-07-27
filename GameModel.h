@@ -86,8 +86,6 @@ private:
     void onDrop();
     void loadKeyBindings();
 
-    
-
     int mPts_Line;
 
 public:
@@ -145,6 +143,7 @@ public:
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard();
     KeyBindings* getKeyBindingsPtr();
+    static std::string getInputsString(std::string seperator, std::vector<Uint8>* inputs);
 };
 
 }
