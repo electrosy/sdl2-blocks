@@ -46,6 +46,7 @@ enum class UIFocusChange {
 class GameModel {
 
 private:
+    bool mDebugOnlyLine = false; //use only the line block for testing purposes
     Board mBoard;
     Block activeBlock;
     Block oldBlock;
@@ -72,7 +73,6 @@ private:
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     int calcLevel(); //Calculate current level based on number of lines completed
     bool debugCommandsFlag = false; //allow debug commands
-    bool mDebugOnlyLine = false; //use only the line block for testing purposes
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
     ley::KeyBindings mKeyBindings;

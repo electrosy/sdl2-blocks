@@ -17,4 +17,4 @@ OBJ_NAME = sdl2-blocks
 
 #
 all : $(OBJS)
-	g++ $(OBJS) -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o $(OBJ_NAME)
+	g++ -g $(OBJS) -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o $(OBJ_NAME)
