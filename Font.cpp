@@ -96,12 +96,15 @@ SDL_Texture* ley::Font::getTexturePtr() {
     return Message;
 }
 
-void ley::Font::preRender(SDL_Renderer* r) 
+void ley::Font::preRender(SDL_Renderer* r)
 {
-    SDL_Surface* surfaceMessage;
-    surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), color);
-    Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
-    SDL_FreeSurface(surfaceMessage);
+    if(!Message) {
+        SDL_Surface* surfaceMessage;
+        surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), color);
+        Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
+        SDL_FreeSurface(surfaceMessage);
+        surfaceMessage = nullptr;
+    }
 }
 
 void ley::Font::render(SDL_Renderer * r, bool d) {
@@ -117,7 +120,6 @@ void ley::Font::render(SDL_Renderer * r, bool d) {
     Message_rect.w = w;
 
     SDL_RenderCopy(r, Message, NULL, &Message_rect);
-    SDL_DestroyTexture(Message);
 }
 
 TTF_Font* ley::Font::getTTFFont() {
