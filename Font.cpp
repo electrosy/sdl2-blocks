@@ -81,6 +81,12 @@ void ley::Font::updateMessage(std::string s) {
     //Only update the texture if the message has changed.
     if(s != textMessage) {
         textMessage = (s);
+
+        //then invalidate the texture
+        if(Message) {
+            SDL_DestroyTexture(Message);
+            Message = nullptr;
+        }
     }
 }
 
@@ -111,6 +117,7 @@ void ley::Font::render(SDL_Renderer * r, bool d) {
 
     preRender(r);
     
+    // TODO this query texture should probably go in the setpos method and be called only when the position changes.
     int w;
     int h;
     SDL_QueryTexture(Message,

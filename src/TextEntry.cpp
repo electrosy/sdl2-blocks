@@ -105,9 +105,8 @@ void ley::TextEntry::onKeyDown(ley::Character c) {
 
 void ley::TextEntry::onTextInput(const char* cstr) {
 
-    if(value.getMessagePtr()->size() <= MAX_CHAR_LENGTH) {
-                    
-        value.getMessagePtr()->append(cstr);
+    if(value.getMessage().size() <= MAX_CHAR_LENGTH) {
+        value.updateMessage(value.getMessage() + cstr);
     }
 
     adjustCursor();
