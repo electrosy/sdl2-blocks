@@ -33,6 +33,7 @@ private:
 
     ley::Sprite mBackground;
     ley::Sprite mCompanyLogo;
+    ley::Sprite mAblockalypseLogo;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;

@@ -16,6 +16,9 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mCompanyLogo.scale(0.25);
     mCompanyLogo.bottomRight();
 
+    mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo"), 0, {}, {1000,{0,0,0,0}});
+    mAblockalypseLogo.setPos(260,-75);
+
     //Gather elements for the menus
     
     mainUI.push("start",{0,0,382,44},{29,199,0,0},"menufonts-base","menufonts-white","menufonts-hot");
@@ -74,6 +77,7 @@ void MenuState::render() {
 void MenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mCompanyLogo);
+    mRenderables.push_back(&mAblockalypseLogo);
 }
 
 bool MenuState::onEnter() {
@@ -85,6 +89,7 @@ bool MenuState::onEnter() {
 bool MenuState::onReEnter() {
     SDL_Log("ReEntering MenuState");
     mBackground.resetFader(); //Reset the fader for this sprite so it will fade in again.
+    mAblockalypseLogo.resetFader();
     return true;
 }
 

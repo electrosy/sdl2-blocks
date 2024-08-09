@@ -258,6 +258,7 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_yl_30x30.bmp", "i");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_cy_30x30.bmp", "j");
     //Logos
+    TextureManager::Instance()->loadTexture("assets/graphic/AblockalypseLogo.png", "ablockalypse-logo");
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
