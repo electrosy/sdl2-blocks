@@ -1,20 +1,32 @@
-##sdl2-blocks
-##Copyright (C) 2020 Steven Philley
+# OBJS defines files to compile as part of the project
+OBJS = sdl2-blocks.o Video.o Input.o Sprite.o Block.o GameModel.o \
+       Clock.o Renderable.o Renderables.o GameController.o \
+       Timer.o Textures.o Font.o Rand_int.o UIElement.o UIMenu.o \
+       HighScores.o Audio.o ./src/RectContainer.o ./src/ProgressBar.o ./src/State/GameState.o \
+       ./src/State/MenuState.o ./src/State/OptionMenuState.o ./src/State/HighScoresMenuState.o ./src/State/PlayState.o \
+       ./src/State/PauseState.o ./src/State/IntroState.o ./src/State/GameStateMachine.o \
+       ./src/State/GameOverState.o ./src/State/CreditsState.o ./src/State/KeyboardOptionsState.o \
+       ./src/TextEntry.o ./src/Fader.o ./src/Config.o ./src/Board.o
 
-#OBJS defines files to compile as part of the project
-OBJS = sdl2-blocks.cpp Video.cpp Input.cpp Sprite.cpp Block.cpp GameModel.cpp \
-		Clock.cpp Renderable.cpp Renderables.cpp GameController.cpp \
-		Timer.cpp Textures.cpp Font.cpp Rand_int.cpp UIElement.cpp UIMenu.cpp \
-		HighScores.cpp Audio.cpp ./src/RectContainer.cpp ./src/ProgressBar.cpp ./src/State/GameState.cpp ./src/State/MenuState.cpp \
-		./src/State/OptionMenuState.cpp ./src/State/HighScoresMenuState.cpp ./src/State/PlayState.cpp \
-		./src/State/PauseState.cpp ./src/State/IntroState.cpp ./src/State/GameStateMachine.cpp \
-		./src/State/GameOverState.cpp ./src/State/CreditsState.cpp ./src/State/KeyboardOptionsState.cpp \
-		./src/TextEntry.cpp ./src/Fader.cpp ./src/Config.cpp ./src/Board.cpp
-		
-
-#OBJ_NAME name of executable
+# OBJ_NAME name of executable
 OBJ_NAME = sdl2-blocks
 
-#
-all : $(OBJS)
-	g++ -g $(OBJS) -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -o $(OBJ_NAME)
+# Compiler options
+CXX = g++
+CXXFLAGS = -g -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+# Default target
+all: $(OBJ_NAME)
+
+# Linking step
+$(OBJ_NAME): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(CXXFLAGS)
+
+# Compilation step for each source file
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean target to remove compiled files
+clean:
+	rm -f $(OBJS) $(OBJ_NAME)
+
