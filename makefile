@@ -1,5 +1,6 @@
 # Directory for object files
 OBJDIR = ./build
+SRCDIR = ./src
 
 # OBJS defines files to compile as part of the project
 OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/Sprite.o $(OBJDIR)/Block.o $(OBJDIR)/GameModel.o \
@@ -19,8 +20,15 @@ CXX = g++
 CXXFLAGS = -std=gnu++1z -g -fPIE -w
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie
 
+# Directories to create
+DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State
+
 # Default target
-all: $(OBJ_NAME)
+all: $(DIRS) $(OBJ_NAME)
+
+# Create necessary directories only once
+$(DIRS):
+	mkdir -p $(DIRS)
 
 # Linking step
 $(OBJ_NAME): $(OBJS)
@@ -28,7 +36,9 @@ $(OBJ_NAME): $(OBJS)
 
 # Compilation step for each source file
 $(OBJDIR)/%.o: %.cpp
-	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean target to remove compiled files and executable
