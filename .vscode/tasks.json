@@ -113,6 +113,21 @@
             "options": {
                 "cwd": "/usr/bin"
             }
+        },
+        {
+            "label": "Build with Makefile",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "v=1",
+                "-j$(nproc)"  // or specify the number of jobs, e.g., "-j4"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build project using Makefile with parallel jobs"
         }
     ],
     "version": "2.0.0"

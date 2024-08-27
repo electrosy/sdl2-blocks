@@ -13,7 +13,8 @@ OBJ_NAME = sdl2-blocks
 
 # Compiler options
 CXX = g++
-CXXFLAGS = -g -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+CXXFLAGS = -std=gnu++1z -g -fPIE -w -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+LDFLAGS = -pie
 
 # Default target
 all: $(OBJ_NAME)

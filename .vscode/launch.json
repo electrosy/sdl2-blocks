@@ -44,7 +44,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "g++ Linux debug"
+            "preLaunchTask": "Build with Makefile"
         }
         
     ]
