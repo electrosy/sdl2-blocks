@@ -71,7 +71,7 @@ void ley::GameController::runGameLoop() {
             gm->UIInputFocus(ley::UIFocusChange::game);
         }
 
-        ley::Command command = mainInput.pollEvents(fs, gm->getKeyBindingsPtr(), gameStateMachine.textEntry(),
+        ley::Command command = mInputSystem.pollEvents(fs, gm->getKeyBindingsPtr(), gameStateMachine.textEntry(),
             [this](ley::Command c) {gameStateMachine.textEntry()->onKeyDown(c == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);});
 
         /**** INPUT PROCESSING ****/

@@ -22,6 +22,7 @@ class Input {
 
 private:
     bool anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs);
+    SDL_GameController *mControllerPtr = nullptr;
   
 public:
     Input();

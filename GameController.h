@@ -43,8 +43,7 @@ private:
     SDL_Renderer* ren;
     ley::GameModel* gm;
     ley::GameStateMachine gameStateMachine;
-    ley::Input mInputSystem;
-    ley::Input mainInput; //create the input system object.
+    ley::Input mInputSystem; //create the input system object.
 
     //Textures
     SDL_Texture *blockBits2 = nullptr;

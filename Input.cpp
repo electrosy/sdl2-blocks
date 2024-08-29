@@ -10,10 +10,22 @@ Date: Feb/14/2020
 
 /* RAII */
 ley::Input::Input() {
-    
+    SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
+
+    if (SDL_IsGameController(0)) {
+        mControllerPtr = SDL_GameControllerOpen(0);
+        if (mControllerPtr == nullptr) {
+            SDL_Log("Could not open gamecontroller %i: %s\n", 0, SDL_GetError());
+        }
+    }
 }
 
 ley::Input::~Input() {
+    
+    if (mControllerPtr != nullptr) {
+        SDL_GameControllerClose(mControllerPtr);
+    }
+    SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 
 }
 bool ley::Input::anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs) {
@@ -59,7 +71,6 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                 //cursor = event.edit.start;
                 //selection_len = event.edit.length;
                 break;
-            
             case SDL_KEYDOWN:
                 //debug clear
                 if (anyInputsMatch(state, &bindings->debugkeystoggle.second)) {
@@ -165,7 +176,43 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
 
                 break;
 
-            break;
+            case SDL_CONTROLLERBUTTONDOWN :
+
+                switch (event.cbutton.button) {
+                    case SDL_CONTROLLER_BUTTON_A:
+                        command = ley::Command::enter;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_START:
+                        command = ley::Command::pause;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+                        command = ley::Command::left;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+                        command = ley::Command::right;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+                        command = ley::Command::down;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+                        command = ley::Command::cclockwise;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_X:
+                        command = ley::Command::clockwise;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_Y:
+                        command = ley::Command::cclockwise;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_B:
+                        command = ley::Command::space;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_BACK:
+                        command = ley::Command::quit;
+                        break;
+                    // Add more cases for other buttons...
+                }
+                SDL_Log("Controller was pressed");
+                break;
 
             default:
             break;
