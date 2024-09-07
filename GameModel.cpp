@@ -32,6 +32,7 @@ mDebugOnlyLine(false)
     mHighScores.read();
 
     loadKeyBindings();
+    loadButtonBindings();
 }
 
 ley::GameModel::~GameModel() {
@@ -610,8 +611,43 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.enter.second.push_back(SDL_SCANCODE_RETURN);
 }
 
+void ley::GameModel::loadButtonBindings() {
+
+    mButtonBindings.down.first = ley::Command::down;
+    mButtonBindings.down.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+
+    mButtonBindings.right.first = ley::Command::right;
+    mButtonBindings.right.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+
+    mButtonBindings.left.first = ley::Command::left;
+    mButtonBindings.left.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+
+    mButtonBindings.pause.first = ley::Command::pause;
+    mButtonBindings.pause.second.push_back(SDL_CONTROLLER_BUTTON_START);
+
+    mButtonBindings.space.first = ley::Command::space;
+    mButtonBindings.space.second.push_back(SDL_CONTROLLER_BUTTON_B);
+
+    mButtonBindings.cclockwise.first = ley::Command::cclockwise;
+    mButtonBindings.cclockwise.second.push_back(SDL_CONTROLLER_BUTTON_Y);
+    mButtonBindings.cclockwise.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_UP);
+
+    mButtonBindings.clockwise.first = ley::Command::clockwise;
+    mButtonBindings.clockwise.second.push_back(SDL_CONTROLLER_BUTTON_X);
+
+    mButtonBindings.enter.first = ley::Command::enter;
+    mButtonBindings.enter.second.push_back(SDL_CONTROLLER_BUTTON_A);
+
+    mButtonBindings.quit.first = ley::Command::quit;
+    mButtonBindings.quit.second.push_back(SDL_CONTROLLER_BUTTON_BACK);
+}
+
 ley::KeyBindings* ley::GameModel::getKeyBindingsPtr() {
     return &mKeyBindings;
+}
+
+ley::ButtonBindings* ley::GameModel::getButtonBindingsPtr() {
+    return &mButtonBindings;
 }
 
 std::string ley::GameModel::getInputsString(std::string seperator, std::vector<Uint8>* inputs) {

@@ -60,6 +60,20 @@ typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> backspace;
 } KeyBindings;
 
+typedef struct {
+    std::pair<ley::Command, std::vector<Uint8>> down;
+    std::pair<ley::Command, std::vector<Uint8>> right;
+    std::pair<ley::Command, std::vector<Uint8>> up;
+    std::pair<ley::Command, std::vector<Uint8>> left;
+    std::pair<ley::Command, std::vector<Uint8>> none;
+    std::pair<ley::Command, std::vector<Uint8>> pause;
+    std::pair<ley::Command, std::vector<Uint8>> space;
+    std::pair<ley::Command, std::vector<Uint8>> cclockwise;
+    std::pair<ley::Command, std::vector<Uint8>> clockwise;
+    std::pair<ley::Command, std::vector<Uint8>> enter;
+    std::pair<ley::Command, std::vector<Uint8>> quit;
+} ButtonBindings;
+
 }
 
 #endif

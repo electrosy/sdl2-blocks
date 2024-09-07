@@ -61,19 +61,6 @@ bool ley::Input::anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs) 
     return false;
 }
 
-/*
-bool ley::Input::anyInputsMatch(std::vector<Uint8>* inputs) {
-
-    for (auto it = inputs->begin(); it != inputs->end(); ++it) {
-        if(std::get<0>(mKeysPressed[(*it)])) {
-            return true;
-        }
-    }
-
-    return false;
-}
-*/
-
 /* Functions */
 ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
@@ -286,7 +273,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
     return command;
 }
 
-ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
+ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, ley::ButtonBindings* buttonBindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
     //std::vector<ley::Character> characters;
@@ -299,165 +286,153 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
     auto alt_mod = [this]() -> bool  {
         return std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) ||  std::get<0>(mKeysPressed[SDL_SCANCODE_RALT]);
     };
+
+    auto find_button = [this, buttonBindings](Uint8 button) -> ley::Command {
+        if (anyInputsMatch(button, &buttonBindings->right.second)) {
+            return buttonBindings->right.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->left.second)) {
+            return buttonBindings->left.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->up.second)) {
+            return buttonBindings->up.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->down.second)) {
+            return buttonBindings->down.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->enter.second)) {
+            return buttonBindings->enter.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->pause.second)) {
+            return buttonBindings->pause.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->cclockwise.second)) {
+            return buttonBindings->cclockwise.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->clockwise.second)) {
+            return buttonBindings->clockwise.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->space.second)) {
+            return buttonBindings->space.first;
+        }
+
+        if (anyInputsMatch(button, &buttonBindings->quit.second)) {
+            return buttonBindings->quit.first;
+        }
+
+        return ley::Command::none;
+    };
     
     auto find_command = [this, bindings](Uint8 scancode, bool altPressed) -> ley::Command {
-                if (anyInputsMatch(scancode, &bindings->backspace.second)) {
-                    return bindings->backspace.first;
-                }
-                if (anyInputsMatch(scancode, &bindings->quit.second)) {
-                    return bindings->quit.first;
-                }
-                //Rotate Block counter clockwise
-                if (anyInputsMatch(scancode, &bindings->cclockwise.second)) {
-                    return bindings->cclockwise.first; // TODO this needs some work, main menu has cclockwise overloaded
-                }
-                //Rotate Block clockwise
-                if (anyInputsMatch(scancode, &bindings->clockwise.second)) {
-                    return bindings->clockwise.first;
-                }
+        if (anyInputsMatch(scancode, &bindings->backspace.second)) {
+            return bindings->backspace.first;
+        }
+        if (anyInputsMatch(scancode, &bindings->quit.second)) {
+            return bindings->quit.first;
+        }
+        //Rotate Block counter clockwise
+        if (anyInputsMatch(scancode, &bindings->cclockwise.second)) {
+            return bindings->cclockwise.first; // TODO this needs some work, main menu has cclockwise overloaded
+        }
+        //Rotate Block clockwise
+        if (anyInputsMatch(scancode, &bindings->clockwise.second)) {
+            return bindings->clockwise.first;
+        }
 
-                //move block down
-                if (anyInputsMatch(scancode, &bindings->down.second)) {
-                    return bindings->down.first;
-                }
-                //move block left
-                if (anyInputsMatch(scancode, &bindings->left.second)) {
-                    return bindings->left.first;
-                }
-                //move block right
-                if (anyInputsMatch(scancode, &bindings->right.second)) {
-                    return bindings->right.first;
-                }
+        //move block down
+        if (anyInputsMatch(scancode, &bindings->down.second)) {
+            return bindings->down.first;
+        }
+        //move block left
+        if (anyInputsMatch(scancode, &bindings->left.second)) {
+            return bindings->left.first;
+        }
+        //move block right
+        if (anyInputsMatch(scancode, &bindings->right.second)) {
+            return bindings->right.first;
+        }
 
-                if(anyInputsMatch(scancode, &bindings->enter.second) && !altPressed) {
-                    return bindings->enter.first;
-                }
+        if(anyInputsMatch(scancode, &bindings->enter.second) && !altPressed) {
+            return bindings->enter.first;
+        }
 
-                if(anyInputsMatch(scancode, &bindings->tab.second)) {
-                    return bindings->tab.first;
-                }
+        if(anyInputsMatch(scancode, &bindings->tab.second)) {
+            return bindings->tab.first;
+        }
 
-                /////////////////////////////////////////////////////////
-                //debug clear
-                if (anyInputsMatch(scancode, &bindings->debugkeystoggle.second)) {
-                    return bindings->debugkeystoggle.first;
-                }
-                if (scancode == SDL_SCANCODE_C) {
-                    return ley::Command::debugclear;
-                }
-                if (scancode == SDL_SCANCODE_F) {
-                    return ley::Command::debugfill;
-                }
-               
-                if (scancode == SDL_SCANCODE_L) {
-                    return ley::Command::debugonlyline;
-                }
-                if (altPressed && scancode == SDL_SCANCODE_D) {
-                    return ley::Command::debugtexture;
-                }
-                //Output setstate layer on the board
-                if (altPressed && scancode == SDL_SCANCODE_S) {
-                    return ley::Command::debugcolide;                    
-                }
-                if (scancode == SDL_SCANCODE_GRAVE) {
-                    return ley::Command::console;
-                }
-                //play next audio music track
-                if (anyInputsMatch(scancode, &bindings->nextSong.second)) {
-                    return bindings->nextSong.first;
-                }
-                //play previous audio music track
-                if (anyInputsMatch(scancode, &bindings->previousSong.second)) {
-                    return bindings->previousSong.first;
-                }
+        if (anyInputsMatch(scancode, &bindings->debugkeystoggle.second)) {
+            return bindings->debugkeystoggle.first;
+        }
+        if (scancode == SDL_SCANCODE_C) {
+            return ley::Command::debugclear;
+        }
+        if (scancode == SDL_SCANCODE_F) {
+            return ley::Command::debugfill;
+        }
+        
+        if (scancode == SDL_SCANCODE_L) {
+            return ley::Command::debugonlyline;
+        }
+        if (altPressed && scancode == SDL_SCANCODE_D) {
+            return ley::Command::debugtexture;
+        }
+        //Output setstate layer on the board
+        if (altPressed && scancode == SDL_SCANCODE_S) {
+            return ley::Command::debugcolide;                    
+        }
+        if (scancode == SDL_SCANCODE_GRAVE) {
+            return ley::Command::console;
+        }
+        //play next audio music track
+        if (anyInputsMatch(scancode, &bindings->nextSong.second)) {
+            return bindings->nextSong.first;
+        }
+        //play previous audio music track
+        if (anyInputsMatch(scancode, &bindings->previousSong.second)) {
+            return bindings->previousSong.first;
+        }
 
-                //debug next level
-                if (scancode == SDL_SCANCODE_I) {
-                    return ley::Command::debugnextlevel;
-                }
+        //debug next level
+        if (scancode == SDL_SCANCODE_I) {
+            return ley::Command::debugnextlevel;
+        }
 
-                //debug prev level
-                if (scancode == SDL_SCANCODE_U) {
-                    return ley::Command::debugprevlevel;
-                }
+        //debug prev level
+        if (scancode == SDL_SCANCODE_U) {
+            return ley::Command::debugprevlevel;
+        }
 
-                //pause game
-                if (anyInputsMatch(scancode, &bindings->pause.second)) {
-                    return bindings->pause.first;
-                }
+        //pause game
+        if (anyInputsMatch(scancode, &bindings->pause.second)) {
+            return bindings->pause.first;
+        }
 
-                if (anyInputsMatch(scancode, &bindings->decreaseVolume.second)) {
-                    return bindings->decreaseVolume.first;
-                }
+        if (anyInputsMatch(scancode, &bindings->decreaseVolume.second)) {
+            return bindings->decreaseVolume.first;
+        }
 
-                if (anyInputsMatch(scancode, &bindings->increaseVolume.second)) {
-                    return bindings->increaseVolume.first;
-                }
+        if (anyInputsMatch(scancode, &bindings->increaseVolume.second)) {
+            return bindings->increaseVolume.first;
+        }
 
-                if (anyInputsMatch(scancode, &bindings->space.second)) {
-                    return bindings->space.first;
-                }
-                /////////////////////////////////////////////////////////
+        if (anyInputsMatch(scancode, &bindings->space.second)) {
+            return bindings->space.first;
+        }
 
         return ley::Command::none;                
     };
 
-/*
-    auto push_commands = [this, bindings, commandQueuePtr, &command]() {
-
-                if (anyInputsMatch(&bindings->backspace.second)) {
-                    command = bindings->backspace.first;
-                    commandQueuePtr->push(command);
-                }
-                if (anyInputsMatch(&bindings->quit.second)) {
-                    command = bindings->quit.first;
-                    commandQueuePtr->push(command);
-                }
-                
-                //Rotate Block counter clockwise
-                if (anyInputsMatch(&bindings->cclockwise.second)) {
-                    command = bindings->cclockwise.first; // TODO this needs some work, main menu has cclockwise overloaded
-                    commandQueuePtr->push(command);
-                }
-                //Rotate Block clockwise
-                if (anyInputsMatch(&bindings->clockwise.second)) {
-                    command = bindings->clockwise.first;
-                    commandQueuePtr->push(command);
-                }
-
-                //move block down
-                if (anyInputsMatch(&bindings->down.second)) {
-                    command = bindings->down.first;
-                    commandQueuePtr->push(command);
-                }
-                //move block left
-                if (anyInputsMatch(&bindings->left.second)) {
-                    command = bindings->left.first;
-                    commandQueuePtr->push(command);
-                }
-                //move block right
-                if (anyInputsMatch(&bindings->right.second)) {
-                    command = bindings->right.first;
-                    commandQueuePtr->push(command);
-                }
-
-                if(anyInputsMatch(&bindings->enter.second) && !(anyInputsMatch(&bindings->alt.second))) {
-                    command = bindings->enter.first;
-                    commandQueuePtr->push(command);
-                }
-
-                if(anyInputsMatch(&bindings->tab.second)) {
-                    command = bindings->tab.first;
-                    commandQueuePtr->push(command);
-                }
-                
-    };
-*/
-
-    auto check_timers = [this, commandQueuePtr, find_command, alt_mod]() {
+    auto check_timers = [this, commandQueuePtr, find_command, find_button, alt_mod]() {
         
         for(Uint8 i = 0; i < UINT8_MAX; ++i) {
-            
             if (std::get<0>(mKeysPressed[i]) == true) {
                 //Run all input timers
                 std::get<1>(mKeysPressed[i]).runFrame(false); //run delay timer.
@@ -469,6 +444,22 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
                     
                     //reset the repeat timer
                     std::get<2>(mKeysPressed[i]).reset();
+                }
+            }
+        }
+
+        for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
+            if (std::get<0>(mButtonsPressed[i]) == true) {
+                //Run all button timers
+                std::get<1>(mButtonsPressed[i]).runFrame(false); //run delay timer.
+                std::get<2>(mButtonsPressed[i]).runFrame(false); //the repeat timer.
+            
+                //if the delay timer has expired and the repeat timer has expired
+                if(std::get<1>(mButtonsPressed[i]).hasExpired() && std::get<2>(mButtonsPressed[i]).hasExpired()) {
+                    commandQueuePtr->push(find_button(i));
+                    
+                    //reset the repeat timer
+                    std::get<2>(mButtonsPressed[i]).reset();
                 }
             }
         }
@@ -515,7 +506,6 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
                         ||(state[SDL_SCANCODE_RALT] && state[SDL_SCANCODE_RETURN])) { 
                             fullscreen = !fullscreen;
                     }
-
                 }
 
                 if(te->hasFocus()) {
@@ -534,49 +524,31 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
                 break;
 
             case SDL_CONTROLLERBUTTONDOWN :
+                {
+                    Uint8 buttonPressed = event.cbutton.button;
 
-                switch (event.cbutton.button) {
-                    case SDL_CONTROLLER_BUTTON_A:
-                        command = ley::Command::enter;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_START:
-                        command = ley::Command::pause;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-                        command = ley::Command::left;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-                        command = ley::Command::right;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-                        command = ley::Command::down;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_DPAD_UP:
-                        command = ley::Command::cclockwise;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_X:
-                        command = ley::Command::clockwise;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_Y:
-                        command = ley::Command::cclockwise;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_B:
-                        command = ley::Command::space;
-                        break;
-                    case SDL_CONTROLLER_BUTTON_BACK:
-                        command = ley::Command::quit;
-                        break;
-                    default:
-                        command = ley::Command::none;
-                        break;
-                    // Add more cases for other buttons... 
+                    //reset the timers if this key was previously not pressed
+                    if(std::get<0>(mButtonsPressed[buttonPressed]) == false) 
+                    {
+                        std::get<1>(mButtonsPressed[buttonPressed]).reset(); //reset the delay timer.
+                        std::get<2>(mButtonsPressed[buttonPressed]).reset(); //reset the repeat timer.
+                    }
+                    std::get<0>(mButtonsPressed[buttonPressed]) = true;
+
+                    commandQueuePtr->push(find_button(buttonPressed));
+
                 }
-
-                commandQueuePtr->push(command);
                 SDL_Log("Controller was pressed");
                 break;
 
             case SDL_CONTROLLERBUTTONUP:
+                {
+                    Uint8 buttonReleased = event.cbutton.button;
+                    std::get<0>(mButtonsPressed[buttonReleased]) = false;
+                    std::get<1>(mButtonsPressed[buttonReleased]).reset(); //reset the delay timer, just for brevity.
+                    std::get<2>(mButtonsPressed[buttonReleased]).reset(); //reset the repeat timer, just for brevity.
+                }
+
                 break;
 
             default:

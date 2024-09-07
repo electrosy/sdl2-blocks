@@ -25,7 +25,6 @@ class Input {
 private:
     bool anyInputsMatch(const Uint8 scancode, std::vector<Uint8>* inputs);
     bool anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs);
-//    bool anyInputsMatch(std::vector<Uint8>* inputs); //version that uses local mKeysPressed.
     SDL_GameController *mControllerPtr = nullptr;
     std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mKeysPressed; //keyboard
     std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
@@ -34,7 +33,7 @@ public:
     Input();
     ~Input();
     ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
-    ley::Command pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    ley::Command pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, ley::ButtonBindings* buttonBindings,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }

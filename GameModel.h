@@ -75,7 +75,8 @@ private:
     bool debugCommandsFlag = false; //allow debug commands
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
-    ley::KeyBindings mKeyBindings;
+    ley::KeyBindings mKeyBindings; //keyboard
+    ley::ButtonBindings mButtonBindings; //gamepad
 
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
@@ -84,7 +85,8 @@ private:
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
-    void loadKeyBindings();
+    void loadKeyBindings(); //keyboard
+    void loadButtonBindings(); //gamepad
 
     int mPts_Line;
 
@@ -142,7 +144,8 @@ public:
 
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard();
-    KeyBindings* getKeyBindingsPtr();
+    KeyBindings* getKeyBindingsPtr(); //keyboard
+    ButtonBindings* getButtonBindingsPtr(); //gamepad
     static std::string getInputsString(std::string seperator, std::vector<Uint8>* inputs);
 };
 
