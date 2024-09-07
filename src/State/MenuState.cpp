@@ -26,8 +26,6 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mainUI.push("options",{0,104,382,57},{29,365,0,0},"menufonts-base","menufonts-white","menufonts-hot");
     mainUI.push("exit",{0,163,382,46},{29,451,0,0},"menufonts-base","menufonts-white","menufonts-hot");
     mainUI.push("credits",{0,210,382,46},{29,533,0,0},"menufonts-base","menufonts-white","menufonts-hot");
-    
-
 }
 
 void MenuState::update(ley::Command command) {

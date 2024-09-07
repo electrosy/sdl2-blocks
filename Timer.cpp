@@ -8,6 +8,22 @@ Date: Feb/20/2020
 #include "Timer.h"
 
 /* RAII */
+ley::Timer::Timer() 
+: Renderable(),
+mili(1000), 
+active(true),
+expired(false),
+sdlTimerReady(true),
+progressBar({0,0,0,0}) {
+
+    if(SDL_Init(SDL_INIT_TIMER) >= 0) {
+        // if all good
+    } else {
+        printf("Can't Initialize SDL2 Timer");
+        sdlTimerReady = 0;
+    }
+}
+
 ley::Timer::Timer(int m, SDL_Rect rect) 
 : Renderable(),
 mili(m),
@@ -32,6 +48,22 @@ ley::Timer::~Timer() {
         SDL_QuitSubSystem(SDL_INIT_TIMER);
     }
 }
+
+//copy assignment operator
+ley::Timer& ley::Timer::operator=(ley::Timer other) {
+
+    sdlTimerReady = other.sdlTimerReady;
+    progressBar = other.progressBar;
+    mili = other.mili;
+    clock = other.clock;
+    expired = other.expired;
+    mExpiredMessage = other.mExpiredMessage;
+    active = other.active;
+
+    return *this;
+}
+
+
 /* Functions */
 void ley::Timer::reset() {
 

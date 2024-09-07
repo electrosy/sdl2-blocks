@@ -58,8 +58,6 @@ void ley::GameController::runGameLoop() {
         mVideoSystem->present(); // output to the video system.
         
         /**** GET INPUT ****/
-        //pollEvents updates running and full screen flags
-
         if(gm->UIInputFocus() == ley::UIFocusChange::goto_textBox) {
             SDL_StartTextInput();
             gameStateMachine.UI_ToggleFocus();
@@ -71,8 +69,16 @@ void ley::GameController::runGameLoop() {
             gm->UIInputFocus(ley::UIFocusChange::game);
         }
 
-        ley::Command command = mInputSystem.pollEvents(fs, gm->getKeyBindingsPtr(), gameStateMachine.textEntry(),
+        //pollEvents updates running and full screen flags
+        /* ley::Command command =  */
+        mInputSystem.pollEvents2(fs, gm->getKeyBindingsPtr(), &mCommandQueue, gameStateMachine.textEntry(),
             [this](ley::Command c) {gameStateMachine.textEntry()->onKeyDown(c == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);});
+
+        ley::Command command = ley::Command::none;
+        if(!mCommandQueue.empty()) {
+            command = mCommandQueue.front();
+            mCommandQueue.pop();
+        }
 
         /**** INPUT PROCESSING ****/
         if(fs != mVideoSystem->fullScreen()) {
@@ -305,7 +311,7 @@ void ley::GameController::renderNextBlock() {
     }
 }
 
-void ley::GameController::fadeMusic() {
+void ley::GameController::fadeMusic() { 
     gm->audio()->fadeOutMusic();
 }
 

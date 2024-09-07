@@ -15,21 +15,27 @@ Date: Feb/14/2020
 #include <functional>
 #include "./inc/TextEntry.h"
 #include "./inc/Command.h"
+#include "queue"
+#include "map"
 
 namespace ley {
 
 class Input {
 
 private:
+    bool anyInputsMatch(const Uint8 scancode, std::vector<Uint8>* inputs);
     bool anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs);
+//    bool anyInputsMatch(std::vector<Uint8>* inputs); //version that uses local mKeysPressed.
     SDL_GameController *mControllerPtr = nullptr;
-  
+    std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mKeysPressed;
+    std::tuple<bool, ley::Timer, ley::Timer> mTupleTest;
+
+    
 public:
     Input();
     ~Input();
-    // TODO we may not need to have all these different function,
-    // there is likely a way to generalize them.
-    ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    ley::Command pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }

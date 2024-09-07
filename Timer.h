@@ -16,6 +16,8 @@ Date: Feb/20/2020
 #include "Clock.h"
 
 
+// TODO IMPORTANT - We really should remove the diplay sutff from the Timer and create a renderable timer.
+
 namespace ley {
 
 class Timer : public Renderable {
@@ -29,8 +31,10 @@ private:
     bool mExpiredMessage = true; //is expired state pending to send.
     bool active; //activly running, not paused.
 public:
+    Timer();
     Timer(int, SDL_Rect rect);
     ~Timer();
+    Timer& operator=(Timer other); //copy assignment
     
     void fill(SDL_Renderer * r);
     void runFrame(bool = true, double = 0);

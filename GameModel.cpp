@@ -599,6 +599,15 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.increaseVolume.first = ley::Command::increaseVolume;
     mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_EQUALS);
     mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_KP_PLUS);
+
+    mKeyBindings.backspace.first = ley::Command::backspace;
+    mKeyBindings.backspace.second.push_back(SDL_SCANCODE_BACKSPACE);
+
+    mKeyBindings.tab.first = ley::Command::tab;
+    mKeyBindings.tab.second.push_back(SDL_SCANCODE_TAB);
+
+    mKeyBindings.enter.first = ley::Command::enter;
+    mKeyBindings.enter.second.push_back(SDL_SCANCODE_RETURN);
 }
 
 ley::KeyBindings* ley::GameModel::getKeyBindingsPtr() {

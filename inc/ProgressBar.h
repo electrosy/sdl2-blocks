@@ -16,7 +16,8 @@ private:
     SDL_Rect progress; // Width of progress is updated to fill in only progress area
 public:
     ProgressBar(SDL_Rect rect);
-    ProgressBar(const ProgressBar &pb) = delete;
+//    ProgressBar(const ProgressBar &pb) = delete;
+
     void operator()(SDL_Rect rect);
     void init();
     void render(SDL_Renderer* r, bool d);

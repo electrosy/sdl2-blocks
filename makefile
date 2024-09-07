@@ -1,4 +1,4 @@
-# Directory for object files
+# Directory for object and dependency files
 OBJDIR = ./build
 SRCDIR = ./src
 
@@ -17,7 +17,7 @@ OBJ_NAME = sdl2-blocks
 
 # Compiler options
 CXX = g++
-CXXFLAGS = -std=gnu++1z -g -fPIE -w
+CXXFLAGS = -std=gnu++1z -g -fPIE -w -MMD -MP
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie
 
 # Directories to create
@@ -34,13 +34,24 @@ $(DIRS):
 $(OBJ_NAME): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-# Compilation step for each source file
+# Compilation step for each source file, generates object and dependency files
 $(OBJDIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean target to remove compiled files and executable
+# This pattern will generate the `.d` files alongside `.o` files
+$(OBJDIR)/%.d: %.cpp
+	$(CXX) $(CXXFLAGS) -MM -MP -MT '$(@:.d=.o)' -MF $@ $<
+
+$(OBJDIR)/src/%.d: src/%.cpp
+	$(CXX) $(CXXFLAGS) -MM -MP -MT '$(@:.d=.o)' -MF $@ $<
+
+# Include all generated dependency files
+DEPS = $(OBJS:.o=.d)
+-include $(DEPS)
+
+# Clean target to remove compiled files, executable, and dependency files
 clean:
 	rm -rf $(OBJDIR) $(OBJ_NAME)
