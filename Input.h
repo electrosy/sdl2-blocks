@@ -27,9 +27,8 @@ private:
     bool anyInputsMatch(const Uint8* state, std::vector<Uint8>* inputs);
 //    bool anyInputsMatch(std::vector<Uint8>* inputs); //version that uses local mKeysPressed.
     SDL_GameController *mControllerPtr = nullptr;
-    std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mKeysPressed;
-    std::tuple<bool, ley::Timer, ley::Timer> mTupleTest;
-
+    std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mKeysPressed; //keyboard
+    std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
     
 public:
     Input();

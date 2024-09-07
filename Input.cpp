@@ -25,6 +25,11 @@ ley::Input::Input() {
     for(Uint8 i = 0; i < UINT8_MAX; ++i) {
         mKeysPressed.insert({i, std::make_tuple(false, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
     }
+
+    for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
+        mButtonsPressed.insert({i, std::make_tuple(false, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+    }
+
 }
 
 ley::Input::~Input() {
@@ -493,24 +498,17 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
             case SDL_KEYDOWN:
                 
                 if(event.key.repeat == 0) {
-                
-                    //Anytime we have a keydown event lets see which buttons are currently set to down
-    //TODO profile this loop.
-                    for(Uint8 i = 0; i < UINT8_MAX; ++i) {
-                        //copy the SDL keyboard state into the keypressed object
-                        if(state[i]) {
-                            //reset the timers if this key was previously not pressed
-                            if(std::get<0>(mKeysPressed[i]) == false) 
-                            {
-                                std::get<1>(mKeysPressed[i]).reset(); //reset the delay timer.
-                                std::get<2>(mKeysPressed[i]).reset(); //reset the repeat timer.
-                            }
-                            std::get<0>(mKeysPressed[i]) = true;
-                        }
+                                        
+                    Uint8 pressedKey = event.key.keysym.scancode;
+                    //reset the timers if this key was previously not pressed
+                    if(std::get<0>(mKeysPressed[pressedKey]) == false) 
+                    {
+                        std::get<1>(mKeysPressed[pressedKey]).reset(); //reset the delay timer.
+                        std::get<2>(mKeysPressed[pressedKey]).reset(); //reset the repeat timer.
                     }
+                    std::get<0>(mKeysPressed[pressedKey]) = true;
 
-                    //push_commands(); //updates command
-                    command = find_command(event.key.keysym.scancode, alt_mod());
+                    command = find_command(pressedKey, alt_mod());
                     commandQueuePtr->push(command);
 
                     if ((state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_RETURN])
@@ -527,16 +525,12 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
                 break;
 
             case SDL_KEYUP :
-
-                for(Uint8 i = 0; i < UINT8_MAX; ++i) {
-                    //copy the SDL keyboard state into the keypressed object
-                    if(!state[i]) {
-                        std::get<0>(mKeysPressed[i]) = false;
-                        std::get<1>(mKeysPressed[i]).reset(); //reset the delay timer, just for brevity.
-                        std::get<2>(mKeysPressed[i]).reset(); //reset the repeat timer, just for brevity.
-                    }
+                {
+                    Uint8 releasedKey = event.key.keysym.scancode;
+                    std::get<0>(mKeysPressed[releasedKey]) = false;
+                    std::get<1>(mKeysPressed[releasedKey]).reset(); //reset the delay timer, just for brevity.
+                    std::get<2>(mKeysPressed[releasedKey]).reset(); //reset the repeat timer, just for brevity.
                 }
-
                 break;
 
             case SDL_CONTROLLERBUTTONDOWN :
@@ -580,6 +574,9 @@ ley::Command ley::Input::pollEvents2(bool& fullscreen, ley::KeyBindings* binding
 
                 commandQueuePtr->push(command);
                 SDL_Log("Controller was pressed");
+                break;
+
+            case SDL_CONTROLLERBUTTONUP:
                 break;
 
             default:
