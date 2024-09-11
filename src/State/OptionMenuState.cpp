@@ -17,7 +17,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mTextErrorTimer(2500, {0,0,0,0}),
     mTextEntryHelpMessage({50,50,100,100}) {
 
-    optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Keyboard Options", v->getRenderer());
+    optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Input Options", v->getRenderer());
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("back",{0,0,100,49},{30,451,100,49},"opt-back","opt-white","opt-hot");

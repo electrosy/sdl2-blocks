@@ -650,12 +650,18 @@ ley::ButtonBindings* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
 }
 
-std::string ley::GameModel::getInputsString(std::string seperator, std::vector<Uint8>* inputs) {
+std::string ley::GameModel::getInputsString(std::string seperator, std::vector<Uint8>* inputs, bool gamepad) {
 
     std::string output;
     for(auto it = inputs->begin(); it != inputs->end(); ++it) {
 
-        std::string keyname = SDL_GetScancodeName((SDL_Scancode)(*it));
+        std::string keyname = "";
+        if(!gamepad) { //assume keyboard
+            keyname = SDL_GetScancodeName((SDL_Scancode)(*it));
+        }
+        else { //assume gamepad
+            keyname = SDL_GameControllerGetStringForButton((SDL_GameControllerButton)(*it));
+        }
         output += keyname;
 
         //If its not the last item add a comma

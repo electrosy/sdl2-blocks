@@ -146,7 +146,7 @@ public:
     void resizeBoard();
     KeyBindings* getKeyBindingsPtr(); //keyboard
     ButtonBindings* getButtonBindingsPtr(); //gamepad
-    static std::string getInputsString(std::string seperator, std::vector<Uint8>* inputs);
+    static std::string getInputsString(std::string seperator, std::vector<Uint8>* inputs, bool gamepad);
 };
 
 }
