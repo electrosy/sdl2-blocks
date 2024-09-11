@@ -32,8 +32,7 @@ private:
 public:
     Input();
     ~Input();
-    ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
-    ley::Command pollEvents2(bool& fullscreen, ley::KeyBindings* bindings, ley::ButtonBindings* buttonBindings,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    ley::Command pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::ButtonBindings* buttonBindings,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }
