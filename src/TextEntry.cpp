@@ -72,6 +72,9 @@ std::string* ley::TextEntry::getTextBoxField() {
 
 void ley::TextEntry::toggleFocus() {
     mHasFocus = !mHasFocus;
+    if(mHasFocus) {
+        adjustCursor();
+    }
 }
 
 void ley::TextEntry::setPos(SDL_Point p) {
