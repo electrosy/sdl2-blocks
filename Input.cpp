@@ -50,8 +50,26 @@ bool ley::Input::anyInputsMatch(const Uint8 scancode, std::vector<Uint8>* inputs
     return false;
 }
 
+ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings) {
+
+    if(bindings->find(scancode) != bindings->end()) {
+        return bindings->at(scancode);
+    }
+
+    return ley::Command::none;
+}
+
+ley::Command ley::Input::lookupButton(const Uint8 scancode, std::map<Uint8, ley::Command>* buttonBindings) {
+
+    if(buttonBindings->find(scancode) != buttonBindings->end()) {
+        return buttonBindings->at(scancode);
+    }
+
+    return ley::Command::none;
+}
+
 /* Functions */
-ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings, ley::ButtonBindings* buttonBindings, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, /*ley::KeyBindings* bindings,*/ ley::ButtonBindings* buttonBindings, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
     //std::vector<ley::Character> characters;
@@ -65,6 +83,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
         return std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) ||  std::get<0>(mKeysPressed[SDL_SCANCODE_RALT]);
     };
 
+/*
     auto find_button = [this, buttonBindings](Uint8 button) -> ley::Command {
         if (anyInputsMatch(button, &buttonBindings->right.second)) {
             return buttonBindings->right.first;
@@ -108,7 +127,34 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
 
         return ley::Command::none;
     };
-    
+*/
+    auto find_button2 = [this, buttonBindings2](Uint8 button) -> ley::Command {
+        return lookupCommand(button, buttonBindings2);
+    };
+
+    auto find_command2 = [this, bindings2](Uint8 scancode, bool altPressed) -> ley::Command {
+        
+        ley::Command command = lookupCommand(scancode, bindings2);
+
+        if(command == ley::Command::enter && altPressed) {
+            //we want to do the enter command only if alt is not pressed.
+            command = ley::Command::none;
+        }
+
+        if(command == ley::Command::debugtexture && !altPressed) {
+            //requires alt key
+            command = ley::Command::none;
+        }
+
+        if(command == ley::Command::debugcolide && !altPressed) {
+            //requires alt key
+            command = ley::Command::none;
+        }
+
+        return command;
+    };
+
+/*    
     auto find_command = [this, bindings](Uint8 scancode, bool altPressed) -> ley::Command {
         if (anyInputsMatch(scancode, &bindings->backspace.second)) {
             return bindings->backspace.first;
@@ -207,8 +253,8 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
 
         return ley::Command::none;                
     };
-
-    auto check_timers = [this, commandQueuePtr, find_command, find_button, alt_mod]() {
+*/
+    auto check_timers = [this, commandQueuePtr, find_command2, find_button2, alt_mod]() {
         
         for(Uint8 i = 0; i < UINT8_MAX; ++i) {
             if (std::get<0>(mKeysPressed[i]) == true) {
@@ -218,7 +264,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
             
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(mKeysPressed[i]).hasExpired() && std::get<2>(mKeysPressed[i]).hasExpired()) {
-                    commandQueuePtr->push(find_command(i, alt_mod()));
+                    commandQueuePtr->push(find_command2(i, alt_mod()));
                     
                     //reset the repeat timer
                     std::get<2>(mKeysPressed[i]).reset();
@@ -234,7 +280,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
             
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(mButtonsPressed[i]).hasExpired() && std::get<2>(mButtonsPressed[i]).hasExpired()) {
-                    commandQueuePtr->push(find_button(i));
+                    commandQueuePtr->push(find_button2(i));
                     
                     //reset the repeat timer
                     std::get<2>(mButtonsPressed[i]).reset();
@@ -276,7 +322,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                     }
                     std::get<0>(mKeysPressed[pressedKey]) = true;
 
-                    command = find_command(pressedKey, alt_mod());
+                    command = find_command2(pressedKey, alt_mod());
                     commandQueuePtr->push(command);
 
                     if ((std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) && std::get<0>(mKeysPressed[SDL_SCANCODE_RETURN]))
@@ -312,7 +358,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, ley::KeyBindings* bindings
                     }
                     std::get<0>(mButtonsPressed[buttonPressed]) = true;
 
-                    commandQueuePtr->push(find_button(buttonPressed));
+                    commandQueuePtr->push(find_button2(buttonPressed));
 
                 }
                 SDL_Log("Controller was pressed");

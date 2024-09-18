@@ -31,6 +31,7 @@ enum class Command {
     tab,
     backspace}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
+/*
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;
     std::pair<ley::Command, std::vector<Uint8>> right;
@@ -59,6 +60,7 @@ typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> tab;
     std::pair<ley::Command, std::vector<Uint8>> backspace;
 } KeyBindings;
+*/
 
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;

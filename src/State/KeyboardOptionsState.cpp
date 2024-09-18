@@ -17,53 +17,53 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
     Uint16 startY = 100;
     font_objects[0] = {20, startY, 400, 40};
-    font_objects[0].updateMessage("             Left: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->left.second, false));
+    font_objects[0].updateMessage("             Left: " + gm->getInputsString2(",", ley::Command::left, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[0]);
 
     font_objects[1] = {20, startY+=40, 400, 40};
-    font_objects[1].updateMessage("            Right: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->right.second, false));
+    font_objects[1].updateMessage("            Right: " + gm->getInputsString2(",", ley::Command::right, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[1]);
 
     font_objects[2] = {20, startY+=40, 400, 40};
-    font_objects[2].updateMessage("             Down: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->down.second, false));
+    font_objects[2].updateMessage("             Down: " + gm->getInputsString2(",", ley::Command::down, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[2]);
 
     font_objects[3] = {20, startY+=40, 400, 40};
-    font_objects[3].updateMessage("Counter Clockwise: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->cclockwise.second, false));
+    font_objects[3].updateMessage("Counter Clockwise: " + gm->getInputsString2(",", ley::Command::cclockwise, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[3]);
 
     font_objects[4] = {20, startY+=40, 400, 40};
-    font_objects[4].updateMessage("        Clockwise: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->clockwise.second, false));
+    font_objects[4].updateMessage("        Clockwise: " + gm->getInputsString2(",", ley::Command::clockwise, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[4]);
 
     font_objects[5] = {20, startY+=40, 400, 40};
-    font_objects[5].updateMessage("       Quick Drop: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->space.second, false));
+    font_objects[5].updateMessage("       Quick Drop: " + gm->getInputsString2(",", ley::Command::space, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[5]);
 
     font_objects[6] = {20, startY+=40, 400, 40};
-    font_objects[6].updateMessage("             Quit: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->quit.second, false));
+    font_objects[6].updateMessage("             Quit: " + gm->getInputsString2(",", ley::Command::quit, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[6]);
 
 
     Uint16 col2Y = 100;
     font_objects[7] = {500, col2Y, 400, 40};
-    font_objects[7].updateMessage("        Next Song: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->nextSong.second, false));
+    font_objects[7].updateMessage("        Next Song: " + gm->getInputsString2(",", ley::Command::nextSong, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[7]);
 
     font_objects[8] = {500, col2Y += 40, 400, 40};
-    font_objects[8].updateMessage("       Pause Game: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->pause.second, false));
+    font_objects[8].updateMessage("       Pause Game: " + gm->getInputsString2(",", ley::Command::pause, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[8]);
 
     font_objects[9] = {500, col2Y += 40, 400, 40};
-    font_objects[9].updateMessage("  Decrease Volume: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->decreaseVolume.second, false));
+    font_objects[9].updateMessage("  Decrease Volume: " + gm->getInputsString2(",", ley::Command::decreaseVolume, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[9]);
 
     font_objects[10] = {500, col2Y += 40, 400, 40};
-    font_objects[10].updateMessage("  Increase Volume: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->increaseVolume.second, false));
+    font_objects[10].updateMessage("  Increase Volume: " + gm->getInputsString2(",", ley::Command::increaseVolume, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[10]);
 
     font_objects[11] = {500, col2Y += 40, 400, 40};
-    font_objects[11].updateMessage("            Enter: " + gm->getInputsString(",", &gm->getKeyBindingsPtr()->enter.second, false));
+    font_objects[11].updateMessage("            Enter: " + gm->getInputsString2(",", ley::Command::enter, gm->getKeyBindingsPtr2()));
     fonts.push_back(&font_objects[11]);
 
     Uint16 colButtonY = 460;
