@@ -18,7 +18,7 @@ typedef ley::Textures TextureManager;
 ley::GameController::GameController(ley::Video * v, ley::GameModel *g)
 : 
 mVideoSystem(v),
-ren(mVideoSystem->getRenderer()),
+mRen(mVideoSystem->getRenderer()),
 mGm(g) {
 
     mGm->audio()->playIntro();
@@ -50,7 +50,7 @@ void ley::GameController::runGameLoop() {
             mVideoSystem->render();
             renderNextBlock();
             //new board
-            mGm->getNewBoard()->render(ren, false);
+            mGm->getNewBoard()->render(mRen, false);
         }
         mGameStateMachine.render();
         mVideoSystem->renderTopLayer();
@@ -163,17 +163,17 @@ void ley::GameController::processCommands(ley::Command command) {
         }
     }
 }
-void ley::GameController::processStates(ley::Command command) {
+void ley::GameController::processStates(ley::Command inCommand) {
     //NOTE game state machine update was here.
 
     //Quit the introstate and goto the menu state.
-    if((command == ley::Command::enter || mGameStateMachine.isStateDone())
+    if((inCommand == ley::Command::enter || mGameStateMachine.isStateDone())
         && mGameStateMachine.getStateId() == "INTRO") {
         mGameStateMachine.changeState(new ley::MenuState(mVideoSystem, mGm));
     }
 
     //Don't quit the state for pause this way.
-    if((command == ley::Command::quit || mGm->currentStateChange() == ley::StateChange::quitstate)
+    if((inCommand == ley::Command::quit || mGm->currentStateChange() == ley::StateChange::quitstate)
         && !(mGameStateMachine.getStateId() == "PAUSE")
         && !(mGameStateMachine.getStateId() == "INTRO")) {
 
@@ -240,7 +240,7 @@ void ley::GameController::processStates(ley::Command command) {
     }
 
     //Only allow paused/unpause if we are in the play or pause states
-    if(command == ley::Command::pause && (mGameStateMachine.getStateId() == "PLAY" || mGameStateMachine.getStateId() == "PAUSE")) {
+    if(inCommand == ley::Command::pause && (mGameStateMachine.getStateId() == "PLAY" || mGameStateMachine.getStateId() == "PAUSE")) {
         //Only allow pause if we are in the playstate.
         if(mGm->isPaused()) {
             SDL_Log("Game Paused!");
@@ -302,7 +302,7 @@ void ley::GameController::renderNextBlock() {
             if (column != BlockTexCode::O)
             {
                 //TODO - all rendering should be done in the View(Video.cpp)
-                SDL_RenderCopy(ren, TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)), 
+                SDL_RenderCopy(mRen, TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)), 
                     &start_rect, &next_dest_rect);
             }
             next_dest_rect.x = next_dest_rect.x + w;

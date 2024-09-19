@@ -40,14 +40,14 @@ class GameController {
 
 private:
     ley::Video* mVideoSystem;
-    SDL_Renderer* ren;
+    SDL_Renderer* mRen;
     ley::GameModel* mGm;
     ley::GameStateMachine mGameStateMachine;
     ley::Input mInputSystem; //create the input system object.
     std::queue<ley::Command> mCommandQueue;
 
     //Textures
-    SDL_Texture *blockBits2 = nullptr;
+    SDL_Texture *mBlockBits2Ptr = nullptr;
 
 public:
     GameController(ley::Video* , ley::GameModel*);
