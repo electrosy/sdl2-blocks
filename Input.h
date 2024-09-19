@@ -34,7 +34,7 @@ private:
 public:
     Input();
     ~Input();
-    ley::Command pollEvents(bool& fullscreen, /*ley::KeyBindings* bindings,*/ ley::ButtonBindings* buttonBindings, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    ley::Command pollEvents(bool& fullscreen, /*ley::KeyBindings* bindings,*/ /*ley::ButtonBindings* buttonBindings,*/ std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }

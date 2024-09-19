@@ -150,10 +150,10 @@ public:
     void resizeBoard();
 //    KeyBindings* getKeyBindingsPtr(); //keyboard
     std::map<Uint8, ley::Command>* getKeyBindingsPtr2();
-    ButtonBindings* getButtonBindingsPtr(); //gamepad
+//    ButtonBindings* getButtonBindingsPtr(); //gamepad
     std::map<Uint8, ley::Command>* getButtonBindings2Ptr(); //gamepad
     static std::string getInputsString(std::string seperator, std::vector<Uint8>* inputs, bool gamepad);
-    static std::string getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings);
+    static std::string getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
 };
 
 }

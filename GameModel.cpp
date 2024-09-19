@@ -731,9 +731,11 @@ std::map<Uint8, ley::Command>* ley::GameModel::getKeyBindingsPtr2() {
     return &mKeyBindings2;
 }
 
+/*
 ley::ButtonBindings* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
 }
+*/
 
 std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindings2Ptr() {
     return &mButtonBindings2;
@@ -762,7 +764,7 @@ std::string ley::GameModel::getInputsString(std::string seperator, std::vector<U
     return output;
 }
 
-std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings) {
+std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad) {
 
     std::string output = "";
     for(const auto& kv : *bindings) {
@@ -771,7 +773,13 @@ std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command
                 //assume we already have a command and postpend the seperator
                 output += seperator + " ";
             }
-            output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
+            if(gamepad) {
+                output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
+                
+            }
+            else {
+                output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
+            }
         }
     }
 

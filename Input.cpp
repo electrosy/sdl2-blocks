@@ -69,7 +69,7 @@ ley::Command ley::Input::lookupButton(const Uint8 scancode, std::map<Uint8, ley:
 }
 
 /* Functions */
-ley::Command ley::Input::pollEvents(bool& fullscreen, /*ley::KeyBindings* bindings,*/ ley::ButtonBindings* buttonBindings, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
+ley::Command ley::Input::pollEvents(bool& fullscreen, /*ley::KeyBindings* bindings,*/ /*ley::ButtonBindings* buttonBindings,*/ std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
     //std::vector<ley::Character> characters;
