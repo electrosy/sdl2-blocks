@@ -41,8 +41,8 @@ class GameController {
 private:
     ley::Video* mVideoSystem;
     SDL_Renderer* ren;
-    ley::GameModel* gm;
-    ley::GameStateMachine gameStateMachine;
+    ley::GameModel* mGm;
+    ley::GameStateMachine mGameStateMachine;
     ley::Input mInputSystem; //create the input system object.
     std::queue<ley::Command> mCommandQueue;
 
