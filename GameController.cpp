@@ -72,7 +72,7 @@ void ley::GameController::runGameLoop() {
 
         //pollEvents updates running and full screen flags
         /* ley::Command command =  */
-        mInputSystem.pollEvents(fs, /*gm->getKeyBindingsPtr(),*/ /*gm->getButtonBindingsPtr(),*/ mGm->getButtonBindings2Ptr(), mGm->getKeyBindingsPtr2(), &mCommandQueue, mGameStateMachine.textEntry(),
+        mInputSystem.pollEvents(fs, mGm->getButtonBindings2Ptr(), mGm->getKeyBindingsPtr2(), &mCommandQueue, mGameStateMachine.textEntry(),
             [this](ley::Command c) {mGameStateMachine.textEntry()->onKeyDown(c == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);});
 
         ley::Command command = ley::Command::none;
