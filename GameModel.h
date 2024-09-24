@@ -38,10 +38,8 @@ enum class UIFocusChange {
     game
 };
 
-
-
+// TODO what is this PTS_LINE used for?
 //const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
-
 
 class GameModel {
 
@@ -75,30 +73,22 @@ private:
     bool debugCommandsFlag = false; //allow debug commands
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
-//    ley::KeyBindings mKeyBindings; //keyboard
-    std::map<Uint8, ley::Command> mKeyBindings2; // keybindings version 2
-    std::map<Uint8, ley::Command> mButtonBindings2; // keybindings version 2
-    ley::ButtonBindings mButtonBindings; //gamepad
-
+    std::map<Uint8, ley::Command> mKeyBindings; // keyboard bindings
+    std::map<Uint8, ley::Command> mButtonBindings; // gamepad bindings
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
-
+    int mPts_Line;
     ley::UIFocusChange mUIFocusChange;
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
-//    void loadKeyBindings(); //keyboard
-    void loadKeyBindings2(); //keyboard // keybindings version 2
-    void loadButtonBindings2();
+    void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
-
-    int mPts_Line;
 
 public:
     GameModel();
     ~GameModel();
     Board* getBoard();
-
     void debugResetActiveBlock();
     bool moveBlock(Command); //returns true for false if block actually moved
     bool rotateBlock(bool);
@@ -116,41 +106,32 @@ public:
     ley::Block getNextBlock();
     void resetGame();
     double speed() { return currentSpeed; };
-    
     void pauseGame(bool);
     bool isPaused();
     bool programRunning(); //is the program running?
     void stopProgram(bool); //sets the program to exit by setting running to false.
     bool newLevel(); //retruns true if there is a new level to report.
-
     ley::Audio* audio() { return &audSystem; };
-
     ley::StateChange currentStateChange() { return mStateChange; }; //TODO this can probably be called gotoState
     void stateChange(ley::StateChange state) { mStateChange = state; };
-
     ley::HighScores* highScores() { return &mHighScores; };
-
     bool debugCommands(); //get current debugCommands flag
     void debugCommandsToggle();
     bool debugOnlyLine();
     void debugOnlyLineToggle();
     void debugNextLevel() {                   numLevel++; newLevelToReport=true; };
     void debugPrevLevel() { if(numLevel > 0){ numLevel--; } newLevelToReport=true; };
-
     void newHighScore(bool flag);
     bool newHighScore();
-
     UIFocusChange UIInputFocus();
     void UIInputFocus(ley::UIFocusChange fc);
     void quickDrop();
-
     int comboCount() { return mComboCount;};
-
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard();
-    std::map<Uint8, ley::Command>* getKeyBindingsPtr2();
-    std::map<Uint8, ley::Command>* getButtonBindings2Ptr(); //gamepad
-    static std::string getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
+    std::map<Uint8, ley::Command>* getKeyBindingsPtr(); //keyboard
+    std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
+    static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
 };
 
 }

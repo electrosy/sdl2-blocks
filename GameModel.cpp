@@ -31,9 +31,7 @@ mDebugOnlyLine(false)
       
     mHighScores.read();
 
-//    loadKeyBindings();
-    loadKeyBindings2();
-    loadButtonBindings2();
+    loadKeyBindings();
     loadButtonBindings();
 }
 
@@ -556,60 +554,60 @@ void ley::GameModel::resizeBoard() {
 
     mBoard.putBlock(activeBlock);
 }
-void ley::GameModel::loadKeyBindings2() {
+void ley::GameModel::loadKeyBindings() {
 
-    mKeyBindings2.insert({SDL_SCANCODE_F12, ley::Command::debugkeystoggle});
+    mKeyBindings.insert({SDL_SCANCODE_F12, ley::Command::debugkeystoggle});
 
-    mKeyBindings2.insert({SDL_SCANCODE_LEFT, ley::Command::left});
+    mKeyBindings.insert({SDL_SCANCODE_LEFT, ley::Command::left});
 
-    mKeyBindings2.insert({SDL_SCANCODE_RIGHT, ley::Command::right});
+    mKeyBindings.insert({SDL_SCANCODE_RIGHT, ley::Command::right});
 
-    mKeyBindings2.insert({SDL_SCANCODE_DOWN, ley::Command::down});
+    mKeyBindings.insert({SDL_SCANCODE_DOWN, ley::Command::down});
 
-    mKeyBindings2.insert({SDL_SCANCODE_UP, ley::Command::cclockwise});
-    mKeyBindings2.insert({SDL_SCANCODE_E, ley::Command::cclockwise});
+    mKeyBindings.insert({SDL_SCANCODE_UP, ley::Command::cclockwise});
+    mKeyBindings.insert({SDL_SCANCODE_E, ley::Command::cclockwise});
     
-    mKeyBindings2.insert({SDL_SCANCODE_R, ley::Command::clockwise});
+    mKeyBindings.insert({SDL_SCANCODE_R, ley::Command::clockwise});
 
-    mKeyBindings2.insert({SDL_SCANCODE_Q, ley::Command::quit});
-    mKeyBindings2.insert({SDL_SCANCODE_ESCAPE, ley::Command::quit});
+    mKeyBindings.insert({SDL_SCANCODE_Q, ley::Command::quit});
+    mKeyBindings.insert({SDL_SCANCODE_ESCAPE, ley::Command::quit});
 
-    mKeyBindings2.insert({SDL_SCANCODE_RETURN, ley::Command::enter});
+    mKeyBindings.insert({SDL_SCANCODE_RETURN, ley::Command::enter});
 
-    mKeyBindings2.insert({SDL_SCANCODE_N, ley::Command::nextSong});
+    mKeyBindings.insert({SDL_SCANCODE_N, ley::Command::nextSong});
 
-    mKeyBindings2.insert({SDL_SCANCODE_B, ley::Command::previousSong});
+    mKeyBindings.insert({SDL_SCANCODE_B, ley::Command::previousSong});
 
-    mKeyBindings2.insert({SDL_SCANCODE_SPACE, ley::Command::space});
+    mKeyBindings.insert({SDL_SCANCODE_SPACE, ley::Command::space});
 
-    mKeyBindings2.insert({SDL_SCANCODE_P, ley::Command::pause});
-    mKeyBindings2.insert({SDL_SCANCODE_SLASH, ley::Command::pause});
+    mKeyBindings.insert({SDL_SCANCODE_P, ley::Command::pause});
+    mKeyBindings.insert({SDL_SCANCODE_SLASH, ley::Command::pause});
 
-    mKeyBindings2.insert({SDL_SCANCODE_MINUS, ley::Command::decreaseVolume});
-    mKeyBindings2.insert({SDL_SCANCODE_KP_MINUS, ley::Command::decreaseVolume});
+    mKeyBindings.insert({SDL_SCANCODE_MINUS, ley::Command::decreaseVolume});
+    mKeyBindings.insert({SDL_SCANCODE_KP_MINUS, ley::Command::decreaseVolume});
 
-    mKeyBindings2.insert({SDL_SCANCODE_EQUALS, ley::Command::increaseVolume});
-    mKeyBindings2.insert({SDL_SCANCODE_KP_PLUS, ley::Command::increaseVolume});
+    mKeyBindings.insert({SDL_SCANCODE_EQUALS, ley::Command::increaseVolume});
+    mKeyBindings.insert({SDL_SCANCODE_KP_PLUS, ley::Command::increaseVolume});
 
-    mKeyBindings2.insert({SDL_SCANCODE_BACKSPACE, ley::Command::backspace});
+    mKeyBindings.insert({SDL_SCANCODE_BACKSPACE, ley::Command::backspace});
 
-    mKeyBindings2.insert({SDL_SCANCODE_TAB, ley::Command::tab});
+    mKeyBindings.insert({SDL_SCANCODE_TAB, ley::Command::tab});
 
-    mKeyBindings2.insert({SDL_SCANCODE_C, ley::Command::debugclear});
+    mKeyBindings.insert({SDL_SCANCODE_C, ley::Command::debugclear});
 
-    mKeyBindings2.insert({SDL_SCANCODE_F, ley::Command::debugfill});
+    mKeyBindings.insert({SDL_SCANCODE_F, ley::Command::debugfill});
 
-    mKeyBindings2.insert({SDL_SCANCODE_L, ley::Command::debugonlyline});
+    mKeyBindings.insert({SDL_SCANCODE_L, ley::Command::debugonlyline});
 
-    mKeyBindings2.insert({SDL_SCANCODE_D, ley::Command::debugtexture});
+    mKeyBindings.insert({SDL_SCANCODE_D, ley::Command::debugtexture});
 
-    mKeyBindings2.insert({SDL_SCANCODE_S, ley::Command::debugcolide});
+    mKeyBindings.insert({SDL_SCANCODE_S, ley::Command::debugcolide});
 
-    mKeyBindings2.insert({SDL_SCANCODE_GRAVE, ley::Command::console});
+    mKeyBindings.insert({SDL_SCANCODE_GRAVE, ley::Command::console});
 
-    mKeyBindings2.insert({SDL_SCANCODE_I, ley::Command::debugnextlevel});
+    mKeyBindings.insert({SDL_SCANCODE_I, ley::Command::debugnextlevel});
 
-    mKeyBindings2.insert({SDL_SCANCODE_U, ley::Command::debugprevlevel});
+    mKeyBindings.insert({SDL_SCANCODE_U, ley::Command::debugprevlevel});
 }
 
 /*
@@ -669,27 +667,28 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.enter.second.push_back(SDL_SCANCODE_RETURN);
 }
 */
-void ley::GameModel::loadButtonBindings2() {
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
+void ley::GameModel::loadButtonBindings() {
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_LEFT, ley::Command::left});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_LEFT, ley::Command::left});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::cclockwise});
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::cclockwise});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::cclockwise});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::cclockwise});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::clockwise});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::clockwise});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
 
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 }
 
+/*
 void ley::GameModel::loadButtonBindings() {
 
     mButtonBindings.down.first = ley::Command::down;
@@ -720,16 +719,17 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.quit.first = ley::Command::quit;
     mButtonBindings.quit.second.push_back(SDL_CONTROLLER_BUTTON_BACK);
 }
+*/
 
-std::map<Uint8, ley::Command>* ley::GameModel::getKeyBindingsPtr2() {
-    return &mKeyBindings2;
+std::map<Uint8, ley::Command>* ley::GameModel::getKeyBindingsPtr() {
+    return &mKeyBindings;
 }
 
-std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindings2Ptr() {
-    return &mButtonBindings2;
+std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindingsPtr() {
+    return &mButtonBindings;
 }
 
-std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad) {
+std::string ley::GameModel::getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad) {
 
     std::string output = "";
     for(const auto& kv : *bindings) {
