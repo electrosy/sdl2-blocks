@@ -10,12 +10,11 @@ Date: Feb/14/2020
 
 #include "Video.h"
 
-const auto START_DELAY = 1; //start delay for the game loop
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.6.2.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.6.2.1"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -27,9 +26,7 @@ const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER
 ley::Textures* ley::Textures::instance = nullptr;
 typedef ley::Textures TextureManager;
 
-
-
-// TODO the Video should not have a pointer to the game model. The Controller should update the model and then notify Video of changes.
+// TODO the Video should not have a pointer to the game model. The Controller should update the model and then notify Video of changes, maybe...
 ley::Video::Video(ley::GameModel* g)
 :
 window(nullptr),

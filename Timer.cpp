@@ -99,11 +99,11 @@ void ley::Timer::runFrame(bool autoRestart, double newTime) {
 bool ley::Timer::hasExpired() {
     
     //TODO it doesn't appear that this works as a message pass because expired continually gets set back to true anyway.
-    if(expired == 1) { 
-        expired = 0;
-        return 1;
+    if(expired) { 
+        expired = false;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 bool ley::Timer::expiredMessage() {

@@ -22,10 +22,6 @@ ley::Input::Input() {
         }
     }
 
-    for(Uint8 i = 0; i < UINT8_MAX; ++i) {
-        mKeysPressed.insert({i, std::make_tuple(false, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
-    }
-
     for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
         mButtonsPressed.insert({i, std::make_tuple(false, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
     }
@@ -109,19 +105,17 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
     };
 
     auto check_timers = [this, commandQueuePtr, find_command2, find_button2, alt_mod]() {
-        
-        for(Uint8 i = 0; i < UINT8_MAX; ++i) {
-            if (std::get<0>(mKeysPressed[i]) == true) {
-                //Run all input timers
-                std::get<1>(mKeysPressed[i]).runFrame(false); //run delay timer.
-                std::get<2>(mKeysPressed[i]).runFrame(false); //the repeat timer.
-            
+     
+        for(auto &key : mKeysPressed) {
+            if(std::get<0>(key.second) == true) {
+                std::get<1>(key.second).runFrame(false);
+                std::get<2>(key.second).runFrame(false);
+
                 //if the delay timer has expired and the repeat timer has expired
-                if(std::get<1>(mKeysPressed[i]).hasExpired() && std::get<2>(mKeysPressed[i]).hasExpired()) {
-                    commandQueuePtr->push(find_command2(i, alt_mod()));
-                    
+                if(std::get<1>(key.second).hasExpired() && std::get<2>(key.second).hasExpired()) {
+                    commandQueuePtr->push(find_command2(key.first, alt_mod()));
                     //reset the repeat timer
-                    std::get<2>(mKeysPressed[i]).reset();
+                    std::get<2>(key.second).reset();
                 }
             }
         }
@@ -135,7 +129,6 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(mButtonsPressed[i]).hasExpired() && std::get<2>(mButtonsPressed[i]).hasExpired()) {
                     commandQueuePtr->push(find_button2(i));
-                    
                     //reset the repeat timer
                     std::get<2>(mButtonsPressed[i]).reset();
                 }
@@ -165,24 +158,26 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 break;
             case SDL_KEYDOWN:
                 
-                if(event.key.repeat == 0) {
+                if(!event.key.repeat) {
                                         
                     Uint8 pressedKey = event.key.keysym.scancode;
                     //reset the timers if this key was previously not pressed
-                    if(std::get<0>(mKeysPressed[pressedKey]) == false) 
-                    {
-                        std::get<1>(mKeysPressed[pressedKey]).reset(); //reset the delay timer.
-                        std::get<2>(mKeysPressed[pressedKey]).reset(); //reset the repeat timer.
-                    }
-                    std::get<0>(mKeysPressed[pressedKey]) = true;
 
+                    if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
+
+                        mKeysPressed.insert({pressedKey, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+
+                        std::get<1>(mKeysPressed[pressedKey]).reset();
+                        std::get<2>(mKeysPressed[pressedKey]).reset();
+                    }
+                    
                     command = find_command2(pressedKey, alt_mod());
                     commandQueuePtr->push(command);
 
                     if ((std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) && std::get<0>(mKeysPressed[SDL_SCANCODE_RETURN]))
                         ||(std::get<0>(mKeysPressed[SDL_SCANCODE_RALT]) && std::get<0>(mKeysPressed[SDL_SCANCODE_RETURN]))) { 
                             fullscreen = !fullscreen;
-                    }
+                    }    
                 }
 
                 if(te->hasFocus()) {
@@ -193,10 +188,8 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
 
             case SDL_KEYUP :
                 {
-                    Uint8 releasedKey = event.key.keysym.scancode;
-                    std::get<0>(mKeysPressed[releasedKey]) = false;
-                    std::get<1>(mKeysPressed[releasedKey]).reset(); //reset the delay timer, just for brevity.
-                    std::get<2>(mKeysPressed[releasedKey]).reset(); //reset the repeat timer, just for brevity.
+                    Uint8 releasedKey = event.key.keysym.scancode;                    
+                    mKeysPressed.erase(releasedKey);
                 }
                 break;
 
