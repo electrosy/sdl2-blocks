@@ -75,49 +75,42 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
     // or keys will have to suffice.
 
     auto alt_mod = [this]() -> bool  {
-        return std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) ||  std::get<0>(mKeysPressed[SDL_SCANCODE_RALT]);
+
+        const Uint8* keysPressed = SDL_GetKeyboardState( NULL );
+
+        return keysPressed[SDL_SCANCODE_LALT] || keysPressed[SDL_SCANCODE_RALT];
     };
 
     auto find_button2 = [this, buttonBindings2](Uint8 button) -> ley::Command {
         return lookupCommand(button, buttonBindings2);
     };
 
-    auto find_command2 = [this, bindings2](Uint8 scancode, bool altPressed) -> ley::Command {
+    auto find_command = [this, bindings2](Uint8 scancode) -> ley::Command {
         
         ley::Command command = lookupCommand(scancode, bindings2);
-
-        if(command == ley::Command::enter && altPressed) {
-            //we want to do the enter command only if alt is not pressed.
-            command = ley::Command::none;
-        }
-
-        if(command == ley::Command::debugtexture && !altPressed) {
-            //requires alt key
-            command = ley::Command::none;
-        }
-
-        if(command == ley::Command::debugcolide && !altPressed) {
-            //requires alt key
-            command = ley::Command::none;
-        }
 
         return command;
     };
 
-    auto check_timers = [this, commandQueuePtr, find_command2, find_button2, alt_mod]() {
+    auto check_timers = [this, commandQueuePtr, find_command, find_button2, alt_mod]() {
      
         for(auto &key : mKeysPressed) {
-            if(std::get<0>(key.second) == true) {
+            //if(/* std::get<0>(key.second) == true */) {
                 std::get<1>(key.second).runFrame(false);
                 std::get<2>(key.second).runFrame(false);
 
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(key.second).hasExpired() && std::get<2>(key.second).hasExpired()) {
-                    commandQueuePtr->push(find_command2(key.first, alt_mod()));
+                    
+                    ley::Command command = find_command(key.first);
+                    //don't repeat the enter button.
+                    if(command != ley::Command::enter) {
+                        commandQueuePtr->push(command);
+                    }
                     //reset the repeat timer
                     std::get<2>(key.second).reset();
                 }
-            }
+            //}
         }
 
         for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
@@ -165,19 +158,25 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
 
                     if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
 
-                        mKeysPressed.insert({pressedKey, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+                        //skip modifiers
+                        if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
+                        {
+                            mKeysPressed.insert({pressedKey, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
 
-                        std::get<1>(mKeysPressed[pressedKey]).reset();
-                        std::get<2>(mKeysPressed[pressedKey]).reset();
+                            std::get<1>(mKeysPressed[pressedKey]).reset();
+                            std::get<2>(mKeysPressed[pressedKey]).reset();
+                        }
                     }
                     
-                    command = find_command2(pressedKey, alt_mod());
-                    commandQueuePtr->push(command);
+                    command = find_command(pressedKey);
 
-                    if ((std::get<0>(mKeysPressed[SDL_SCANCODE_LALT]) && std::get<0>(mKeysPressed[SDL_SCANCODE_RETURN]))
-                        ||(std::get<0>(mKeysPressed[SDL_SCANCODE_RALT]) && std::get<0>(mKeysPressed[SDL_SCANCODE_RETURN]))) { 
-                            fullscreen = !fullscreen;
-                    }    
+                    if(command == ley::Command::enter && alt_mod()) {
+                         fullscreen = !fullscreen;
+                    }
+                    else {
+                        // push on repeatable commands
+                        commandQueuePtr->push(command);
+                    }
                 }
 
                 if(te->hasFocus()) {
