@@ -110,6 +110,8 @@ void ley::Video::init() {
     createRenderer();
     loadTextures();
     loadSprites();
+
+    SDL_ShowCursor(false);
  
     firstRectContainer.addRect("nextboundry", {});
     firstRectContainer.addRect("boardboundry", {});
