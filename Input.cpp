@@ -35,30 +35,11 @@ ley::Input::~Input() {
     }
     SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
-bool ley::Input::anyInputsMatch(const Uint8 scancode, std::vector<Uint8>* inputs) {
-
-    for (auto it = inputs->begin(); it != inputs->end(); ++it) {
-        if(scancode == (*it)) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings) {
 
     if(bindings->find(scancode) != bindings->end()) {
         return bindings->at(scancode);
-    }
-
-    return ley::Command::none;
-}
-
-ley::Command ley::Input::lookupButton(const Uint8 scancode, std::map<Uint8, ley::Command>* buttonBindings) {
-
-    if(buttonBindings->find(scancode) != buttonBindings->end()) {
-        return buttonBindings->at(scancode);
     }
 
     return ley::Command::none;
@@ -81,11 +62,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
         return keysPressed[SDL_SCANCODE_LALT] || keysPressed[SDL_SCANCODE_RALT];
     };
 
-    auto find_button2 = [this, buttonBindings2](Uint8 button) -> ley::Command {
-        return lookupCommand(button, buttonBindings2);
-    };
-
-    auto check_timers = [this, commandQueuePtr, find_button2, alt_mod, bindings2]() {
+    auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
      
         for(auto &key : mKeysPressed) {
             // TODO we don't need to use true/false here as we assume its true if the key exists in the map.
@@ -115,7 +92,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
             
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(mButtonsPressed[i]).hasExpired() && std::get<2>(mButtonsPressed[i]).hasExpired()) {
-                    commandQueuePtr->push(find_button2(i));
+                    commandQueuePtr->push(lookupCommand(i, buttonBindings2));
                     //reset the repeat timer
                     std::get<2>(mButtonsPressed[i]).reset();
                 }
@@ -173,10 +150,10 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     }
                 }
 
+                // TODO how to add repeat key for delete for text edit?
                 if(te->hasFocus()) {
                     function(command);
                 }
-
                 break;
 
             case SDL_KEYUP :
@@ -198,10 +175,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     }
                     std::get<0>(mButtonsPressed[buttonPressed]) = true;
 
-                    commandQueuePtr->push(find_button2(buttonPressed));
+                    commandQueuePtr->push(lookupCommand(buttonPressed, buttonBindings2));
 
                 }
-                SDL_Log("Controller was pressed");
                 break;
 
             case SDL_CONTROLLERBUTTONUP:
@@ -211,7 +187,6 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     std::get<1>(mButtonsPressed[buttonReleased]).reset(); //reset the delay timer, just for brevity.
                     std::get<2>(mButtonsPressed[buttonReleased]).reset(); //reset the repeat timer, just for brevity.
                 }
-
                 break;
 
             default:
