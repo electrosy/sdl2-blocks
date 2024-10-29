@@ -85,16 +85,10 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
         return lookupCommand(button, buttonBindings2);
     };
 
-    auto find_command = [this, bindings2](Uint8 scancode) -> ley::Command {
-        
-        ley::Command command = lookupCommand(scancode, bindings2);
-
-        return command;
-    };
-
-    auto check_timers = [this, commandQueuePtr, find_command, find_button2, alt_mod]() {
+    auto check_timers = [this, commandQueuePtr, find_button2, alt_mod, bindings2]() {
      
         for(auto &key : mKeysPressed) {
+            // TODO we don't need to use true/false here as we assume its true if the key exists in the map.
             //if(/* std::get<0>(key.second) == true */) {
                 std::get<1>(key.second).runFrame(false);
                 std::get<2>(key.second).runFrame(false);
@@ -102,7 +96,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 //if the delay timer has expired and the repeat timer has expired
                 if(std::get<1>(key.second).hasExpired() && std::get<2>(key.second).hasExpired()) {
                     
-                    ley::Command command = find_command(key.first);
+                    ley::Command command = lookupCommand(key.first, bindings2);
                     //don't repeat the enter button.
                     if(command != ley::Command::enter) {
                         commandQueuePtr->push(command);
@@ -168,7 +162,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                         }
                     }
                     
-                    command = find_command(pressedKey);
+                    command = lookupCommand(pressedKey, bindings2);
 
                     if(command == ley::Command::enter && alt_mod()) {
                          fullscreen = !fullscreen;
