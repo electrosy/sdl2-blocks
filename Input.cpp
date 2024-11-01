@@ -21,11 +21,6 @@ ley::Input::Input() {
             SDL_Log("Could not open gamecontroller %i: %s\n", 0, SDL_GetError());
         }
     }
-
-    for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
-        mButtonsPressed.insert({i, std::make_tuple(false, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
-    }
-
 }
 
 ley::Input::~Input() {
@@ -84,18 +79,15 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
             //}
         }
 
-        for(Uint8 i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
-            if (std::get<0>(mButtonsPressed[i]) == true) {
-                //Run all button timers
-                std::get<1>(mButtonsPressed[i]).runFrame(false); //run delay timer.
-                std::get<2>(mButtonsPressed[i]).runFrame(false); //the repeat timer.
+        for(auto &button : mButtonsPressed) {
             
-                //if the delay timer has expired and the repeat timer has expired
-                if(std::get<1>(mButtonsPressed[i]).hasExpired() && std::get<2>(mButtonsPressed[i]).hasExpired()) {
-                    commandQueuePtr->push(lookupCommand(i, buttonBindings2));
-                    //reset the repeat timer
-                    std::get<2>(mButtonsPressed[i]).reset();
-                }
+            std::get<1>(button.second).runFrame(false); //run delay timer.
+            std::get<2>(button.second).runFrame(false); //the repeat timer.
+
+            if(std::get<1>(button.second).hasExpired() && std::get<2>(button.second).hasExpired()) {
+                commandQueuePtr->push(lookupCommand(button.first, buttonBindings2));
+                //reset the repeat timer
+                std::get<2>(button.second).reset();
             }
         }
     };
@@ -167,13 +159,12 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 {
                     Uint8 buttonPressed = event.cbutton.button;
 
-                    //reset the timers if this key was previously not pressed
-                    if(std::get<0>(mButtonsPressed[buttonPressed]) == false) 
-                    {
-                        std::get<1>(mButtonsPressed[buttonPressed]).reset(); //reset the delay timer.
-                        std::get<2>(mButtonsPressed[buttonPressed]).reset(); //reset the repeat timer.
+                    if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {
+                        mButtonsPressed.insert({buttonPressed, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+
+                        std::get<1>(mButtonsPressed[buttonPressed]).reset();
+                        std::get<2>(mButtonsPressed[buttonPressed]).reset();
                     }
-                    std::get<0>(mButtonsPressed[buttonPressed]) = true;
 
                     commandQueuePtr->push(lookupCommand(buttonPressed, buttonBindings2));
 
@@ -183,9 +174,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
             case SDL_CONTROLLERBUTTONUP:
                 {
                     Uint8 buttonReleased = event.cbutton.button;
-                    std::get<0>(mButtonsPressed[buttonReleased]) = false;
-                    std::get<1>(mButtonsPressed[buttonReleased]).reset(); //reset the delay timer, just for brevity.
-                    std::get<2>(mButtonsPressed[buttonReleased]).reset(); //reset the repeat timer, just for brevity.
+                    mButtonsPressed.erase(buttonReleased);
                 }
                 break;
 
