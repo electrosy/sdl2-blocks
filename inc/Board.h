@@ -37,16 +37,10 @@ const auto PTS_3LINE_MULT = 15;
 const auto PTS_4LINE_MULT = 45;
 
 //changes based on board width and height
-const auto BOARDSIZE_WIDTH = 10; // TODO ADD FEATURE - this should be the first option added.
+const auto BOARDSIZE_WIDTH = 10;
 const auto BOARDSIZE_WIDTH_PX = BOARDSIZE_WIDTH * BLOCKSIZE_PX;
 const auto BOARD_POS_X_PX =  (SCREEN_WIDTH / 2) - (BOARDSIZE_WIDTH_PX / 2);//490; //Board starting position x for block, when drawing border subtract 1px.
-//auto const LINES_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Lines text
-//auto const LVL_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Level text
-//auto const SCORE_POS_X_PX = BOARD_POS_X_PX + BOARDSIZE_WIDTH_PX + NEXTBOX_PADDING_PX; //Score text;
-
-//const auto BLOCK_START_POS_X_PX = BOARD_POS_X_PX;
 const auto NEXTBOX_POS_X_PX = BOARD_POS_X_PX - NEXTBOX_PADDING_PX - NEXTBOX_SIZE_PX;
-
 auto const COMBO_POS_X_PX = NEXTBOX_POS_X_PX;
 
 //changes based on board height
