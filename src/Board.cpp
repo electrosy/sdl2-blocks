@@ -8,8 +8,6 @@ mBlockWidthPx(BLOCKSIZE_PX),
 mBlockHeightPx(BLOCKSIZE_PX),
 mBlockStartY(BLOCK_START_POS_Y_PX) {
 
-//setSize(BOARDSIZE_WIDTH,BOARDSIZE_HEIGHT);
-
 }
 
 void ley::Board::setSize(int inX, int inY) {
@@ -25,26 +23,6 @@ void ley::Board::setSize(int inX, int inY) {
         mScorePosXPx = mBoardPosXPx + mWidthPx + NEXTBOX_PADDING_PX;
         mBoard.assign(inX * inY, std::make_pair(ley::BlockTexCode::O, false));
     }
-
-//    fillLine(21,std::make_pair(ley::BlockTexCode::d, false));
-//    shiftBoard(21,1);
-
-/* //testing code
-    at(5,7)->first = ley::BlockTexCode::d;
-    at(5,7)->second = true;
-
-    at(4,9)->first = ley::BlockTexCode::d;
-    at(4,9)->second = true;
-
-    at(9,9)->first = ley::BlockTexCode::e;
-    at(9,9)->second = true;
-
-    at(9,19)->first = ley::BlockTexCode::e;
-    at(9,19)->second = true;
-
-    at(0,0)->first = ley::BlockTexCode::f;
-    at(0,0)->second = true;
-*/
 }
 
 std::pair<ley::BlockTexCode, bool>* ley::Board::at(int inX, int inY) {
@@ -218,16 +196,3 @@ void ley::Board::debugFill() {
     *at(0,22) = std::make_pair(ley::BlockTexCode::O, false);
     *at(1,22) = std::make_pair(ley::BlockTexCode::O, false);
 }
-
-/* TODO left off here, this needs work
-void ley::Board::shiftBoard(char start, char num) {
-    //shift the board down start from the bottom right (backwards).
-    char stopLine = start - num;
-    for(char i = start; i-num >= 0; --i) {
-        for(char j = mWidth - 1; j >= 0; --j) {
-            at(i,j)->first = at(i-num,j)->first;
-            at(i,j)->second = at(i-num,j)->second;
-        }
-    }
-}
-*/

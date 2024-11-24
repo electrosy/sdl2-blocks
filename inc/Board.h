@@ -58,7 +58,6 @@ private:
     int mBlockWidthPx = 0;
     int mBlockHeightPx = 0;
     int mBoardPosXPx = 0;
-//    int mBlockStartX = 0;
     int mBlockStartY = 0;
     int mNextBoxPosXPx = 0;
     int mScorePosXPx = 0;
@@ -88,7 +87,6 @@ public:
     {
         int v;
     };
- //   void shiftBoard(char start, char num);
 };
 }
 
