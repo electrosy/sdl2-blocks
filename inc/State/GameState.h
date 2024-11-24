@@ -23,7 +23,7 @@ public:
     virtual bool onExit() = 0; //when the state is poped off
     virtual bool onReEnter() = 0; //rentering the state after the previous was popped off. //TODO this should probably be called resume
     virtual bool onPause() = 0; //When another state is pushed on after this one.
-    virtual ley::TextEntry* textEntry();
+    virtual ley::TextEntry* activeUIelement();
     virtual void UI_ToggleFocus();
     virtual void onCommandEnter();
     bool isDone(); // Returns true when everything in this state is finished.

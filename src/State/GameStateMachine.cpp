@@ -71,9 +71,9 @@ bool ley::GameStateMachine::isStateDone() {
     return false;
 }
 
-ley::TextEntry* ley::GameStateMachine::textEntry() {
+ley::TextEntry* ley::GameStateMachine::activeUIElement() {
     if(!mGameStates.empty()) {
-        return mGameStates.back()->textEntry();
+        return mGameStates.back()->activeUIelement();
     }
     else {
         return nullptr;

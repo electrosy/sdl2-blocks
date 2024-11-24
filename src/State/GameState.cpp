@@ -18,7 +18,7 @@ void GameState::onCommandEnter() {
 }
 
 // TODO this mTextEntry can no go into the individual states and this method can be removed.
-ley::TextEntry* GameState::textEntry() {
+ley::TextEntry* GameState::activeUIelement() {
     return &mTextEntry;
 }
 
