@@ -7,8 +7,6 @@ typedef ley::Textures TextureManager;
 //TODO it may make sense to create a BaseState that can have the common code for all states.
 //     each of the states have a lot of code that is repeated.
 
-//TODO the high scores menu seems to have a memory leak in it somewhere.
-
 namespace ley {
 
 const auto ROW_START_Y = 150;
@@ -20,8 +18,7 @@ const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}}))/*,
-    pos_col1{450,0,400,40}*/ {
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}})) {
 
     int yValue = ROW_START_Y;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
