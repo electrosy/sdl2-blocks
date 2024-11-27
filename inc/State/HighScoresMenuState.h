@@ -30,6 +30,7 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sHighScoresMenuID;
+    ley::TextEntry mLocalTextEntry;
     
     ley::Sprite mBackground;
 

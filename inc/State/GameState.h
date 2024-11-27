@@ -13,7 +13,7 @@ class GameState {
 
 protected:
     bool done = false;
-    TextEntry mTextEntry;
+    static TextEntry* mActiveUIElement; //TODO does this need to be static to be shared across all the child states?
 public:
     virtual void update(ley::Command command) = 0;
     virtual void render() = 0;
@@ -23,8 +23,8 @@ public:
     virtual bool onExit() = 0; //when the state is poped off
     virtual bool onReEnter() = 0; //rentering the state after the previous was popped off. //TODO this should probably be called resume
     virtual bool onPause() = 0; //When another state is pushed on after this one.
-    virtual ley::TextEntry* activeUIelement();
-    virtual void UI_ToggleFocus();
+    ley::TextEntry* activeUIelement();
+    virtual void UI_ToggleFocus(/*ley::TextEntry* activeUIelement*/);
     virtual void onCommandEnter();
     bool isDone(); // Returns true when everything in this state is finished.
     

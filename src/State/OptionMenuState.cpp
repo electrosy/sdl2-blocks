@@ -30,12 +30,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
 
-    mTextEntry.setVisible(false);
-    mTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mLocalTextEntry.setVisible(false);
+    mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 
     mTextErrorMessage.updateMessage("");
-    mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
+    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -45,7 +45,7 @@ void OptionMenuState::update(ley::Command command) {
         break;
         case ley::Command::tab :
             mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
-            previousOptionsValue = mTextEntry.getTextBoxValue();
+            previousOptionsValue = mLocalTextEntry.getTextBoxValue();
     }
 
     if(command == ley::Command::enter && optionUI.getIndex() == 0) {
@@ -64,13 +64,13 @@ void OptionMenuState::onCommandEnter() {
     SDL_Log("OptionMenuState::onCommandEnter()");
 
     // TODO the regex should probably be a part of the TextEntry object
-    if ( std::regex_match(mTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
+    if ( std::regex_match(mLocalTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
         SDL_Log("Regex matched.");
 
         //save the config only if we have a new value that is valid.
         std::ofstream myfile;
         myfile.open ("config.csv");
-        myfile << mTextEntry.getTextBoxValue() << std::endl;
+        myfile << mLocalTextEntry.getTextBoxValue() << std::endl;
         myfile.close();
     }
     else {
@@ -78,14 +78,23 @@ void OptionMenuState::onCommandEnter() {
         mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
         mTextErrorTimer.reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mTextEntry.setTextBoxValue(previousOptionsValue);
-        mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
+        mLocalTextEntry.setTextBoxValue(previousOptionsValue);
+        mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
     }
 }
 
 void OptionMenuState::UI_ToggleFocus() {
-    mTextEntry.toggleFocus();
-    mTextEntryHelpMessage.updateMessage(mTextEntry.getHelpMessage());
+    
+    if(!mLocalTextEntry.hasFocus()){
+        mActiveUIElement = &mLocalTextEntry;
+    }
+    else {
+        mActiveUIElement = {};
+    }
+
+    mLocalTextEntry.toggleFocus();
+    
+    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::render() {
@@ -100,7 +109,7 @@ void OptionMenuState::render() {
 
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
-    mRenderables.push_back(&mTextEntry);
+    mRenderables.push_back(&mLocalTextEntry);
     mRenderables.push_back(&mTextErrorMessage);
     mRenderables.push_back(&mTextEntryHelpMessage);
 }
@@ -108,8 +117,8 @@ void OptionMenuState::loadRenderables() {
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
-    mTextEntry.setPos({10,10});
-    mTextEntry.setVisible(true);
+    mLocalTextEntry.setPos({10,10});
+    mLocalTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -124,7 +133,7 @@ bool OptionMenuState::onEnter() {
         
         SDL_Log("Config read in: %s", line.c_str());
 
-        *mTextEntry.getTextBoxField() = line;
+        *mLocalTextEntry.getTextBoxField() = line;
     }
 
     return true;

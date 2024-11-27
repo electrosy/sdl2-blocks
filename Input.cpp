@@ -143,9 +143,12 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 }
 
                 // TODO how to add repeat key for delete for text edit?
-                if(te->hasFocus()) {
+                // If there is an active UI element then handle input.
+                if(te && te->hasFocus()) {
                     function(command);
                 }
+                
+
                 break;
 
             case SDL_KEYUP :

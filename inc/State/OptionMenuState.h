@@ -32,6 +32,7 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sOptionMenuID;
+    ley::TextEntry mLocalTextEntry;
 
     ley::Sprite mBackground;
 

@@ -27,22 +27,32 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
         fonts_test.push_back(&font_objects[i]);
     }
 
-    mTextEntry.setVisible(false);
-    mTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mLocalTextEntry.setVisible(false);
+    mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 }
 void HighScoresMenuState::onCommandEnter() {
 
     if(mGameModel->newHighScore()) {
         SDL_Log("You entered it with high score!!!");
-        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mTextEntry.getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
+        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mLocalTextEntry.getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
         mGameModel->newHighScore(false);
         mGameModel->audio()->playSfx(ley::sfx::piecesfalling);
     }
 }
 
 void HighScoresMenuState::UI_ToggleFocus() {
-    mTextEntry.toggleFocus();
+    
+    //GameState::UI_ToggleFocus(&mTextEntry);
+
+    if(!mLocalTextEntry.hasFocus()) {
+        mActiveUIElement = &mLocalTextEntry;
+    }
+    else{
+        mActiveUIElement = {};
+    }
+    
+    mLocalTextEntry.toggleFocus();
 }
 
 void HighScoresMenuState::update(ley::Command command) {
@@ -70,7 +80,7 @@ void HighScoresMenuState::render() {
 
 void HighScoresMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
-    mRenderables.push_back(&mTextEntry);
+    mRenderables.push_back(&mLocalTextEntry);
 }
 
 bool HighScoresMenuState::onEnter() {
@@ -78,9 +88,9 @@ bool HighScoresMenuState::onEnter() {
 
     int newHighRow = (mGameModel->highScores()->isNewHigh(mGameModel->getScore()));
     if(mGameModel->newHighScore()) {
-        mTextEntry.setVisible(true);
+        mLocalTextEntry.setVisible(true);
         mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
-        mTextEntry.setPos(
+        mLocalTextEntry.setPos(
             {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
     }
 
@@ -105,7 +115,7 @@ bool HighScoresMenuState::onReEnter() {
 
 bool HighScoresMenuState::onExit() {
 
-    mTextEntry.setVisible(false);
+    mLocalTextEntry.setVisible(false);
 
     SDL_Log("Exiting HighScoresMenustate");
     return true;
