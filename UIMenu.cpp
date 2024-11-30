@@ -79,6 +79,12 @@ void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::st
     elements.push_back(temp);
 }
 
+void ley::UIMenu::pushTextEntry(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter) {
+
+    UIElement temp(toggle, focus, enter);
+    elements.push_back(temp);
+}
+
 int ley::UIMenu::count() {
     return elements.size();
 }
@@ -151,7 +157,14 @@ void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
 void ley::UIMenu::renderHotItem(ley::Video* v) {
     
     if(elements.size() <= 0) {return; /*EARLY EXIT*/}
-    
+
+    if(elements[currentIndex].getFunction()) {
+
+        if(!elements[currentIndex].getInFocus()) {
+            elements[currentIndex].getFunction()();
+        }
+    }
+
     SDL_Rect src_rect = currentSrc();
     SDL_Rect dest_rect = currentDest();
     
@@ -244,12 +257,32 @@ void ley::UIMenu::toggle() {
 
 void ley::UIMenu::previous() {
     if(currentIndex > 0) {
+
+        //if we have an active ui element untoggle it before moving to the previous
+        if(elements[currentIndex].getFunction()) {
+            if(elements[currentIndex].getInFocus()) {
+                elements[currentIndex].getFunction()();
+            }
+            //also run the enter function
+            elements[currentIndex].getEnterFunction()();
+        }
+
         currentIndex--;
     }
 }
 
 void ley::UIMenu::next() {
     if(currentIndex < elements.size()-1) {
+
+        //if we have an active ui element untoggle it before moving to the next
+        if(elements[currentIndex].getFunction()) {
+            if(elements[currentIndex].getInFocus()) {
+                elements[currentIndex].getFunction()();
+            }
+            //also run the enter function
+            elements[currentIndex].getEnterFunction()();
+        }
+
         currentIndex++;
     }
 }

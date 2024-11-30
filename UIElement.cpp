@@ -7,6 +7,12 @@ Date: Jul/17/2021
 */
 #include "UIElement.h"
 
+ley::UIElement::UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter) {
+    mUIToggleFunc = toggle;
+    mUIInFocus = focus;
+    mOnCommandEnter = enter;
+}
+
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, SDL_Texture* b, SDL_Texture* t, SDL_Texture* th)
 : label(l), source(sr), destination(dr), textureBase(b), texture(t), textureHot(th), hot(false) {
 

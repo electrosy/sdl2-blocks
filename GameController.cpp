@@ -60,12 +60,12 @@ void ley::GameController::runGameLoop() {
         
         /**** GET INPUT ****/
         if(mGm->UIInputFocus() == ley::UIFocusChange::goto_textBox) {
-            SDL_StartTextInput();
+           // SDL_StartTextInput();
             mGameStateMachine.UI_ToggleFocus();
             mGm->UIInputFocus(ley::UIFocusChange::textBox);
         }
         else if(mGm->UIInputFocus() == ley::UIFocusChange::goto_game){
-            SDL_StopTextInput();
+          //  SDL_StopTextInput();
             mGameStateMachine.UI_ToggleFocus();
             mGm->UIInputFocus(ley::UIFocusChange::game);
         }

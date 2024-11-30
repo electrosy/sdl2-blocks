@@ -6,6 +6,7 @@
 #include "../Font.h"
 #include "../Input.h"
 #include "Fader.h"
+#include "../UIElement.h"
 
 
 #ifndef TEXTENTRY_H

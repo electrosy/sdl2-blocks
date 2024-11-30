@@ -17,6 +17,18 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mTextErrorTimer(2500, {0,0,0,0}),
     mTextEntryHelpMessage({50,50,100,100}) {
 
+    mLocalTextEntry.setVisible(false);
+    mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+
+    optionUI.pushTextEntry(
+        [this](){UI_ToggleFocus();}, 
+        [this]() -> bool{return mLocalTextEntry.hasFocus();},
+        [this]() {onCommandEnter();});
+
+    mTextErrorMessage.updateMessage("");
+    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
+
     optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Input Options", v->getRenderer());
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
     optionUI.push("options1",{0,0,218,63},{29,365,218,63},"btnOptions","options-white","options-hot-red");
@@ -29,13 +41,6 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "yes", "yes-white", "yes-hot");
     optionUI.addSelector("back", {0,0,100,49}, {300,451,100,49}, "no", "no-white", "no-hot");
-
-    mLocalTextEntry.setVisible(false);
-    mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-
-    mTextErrorMessage.updateMessage("");
-    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -48,7 +53,7 @@ void OptionMenuState::update(ley::Command command) {
             previousOptionsValue = mLocalTextEntry.getTextBoxValue();
     }
 
-    if(command == ley::Command::enter && optionUI.getIndex() == 0) {
+    if(command == ley::Command::enter && optionUI.getIndex() == 1) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
@@ -87,13 +92,13 @@ void OptionMenuState::UI_ToggleFocus() {
     
     if(!mLocalTextEntry.hasFocus()){
         mActiveUIElement = &mLocalTextEntry;
+        previousOptionsValue = mLocalTextEntry.getTextBoxValue();
     }
     else {
         mActiveUIElement = {};
     }
 
     mLocalTextEntry.toggleFocus();
-    
     mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 }
 
@@ -121,7 +126,6 @@ bool OptionMenuState::onEnter() {
     mLocalTextEntry.setVisible(true);
 
     loadRenderables();
-
 
     //load config
     std::ifstream inFile("config.csv");
