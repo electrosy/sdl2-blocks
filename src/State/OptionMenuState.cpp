@@ -20,11 +20,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setVisible(false);
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mLocalTextEntry.setWidth(200,200,30);
 
     optionUI.pushTextEntry(
-        [this](){UI_ToggleFocus();}, 
-        [this]() -> bool{return mLocalTextEntry.hasFocus();},
-        [this]() {onCommandEnter();});
+        [this](){UI_ToggleFocus();},
+        [this]()->bool{return mLocalTextEntry.hasFocus();},
+        [this](){onCommandEnter();});
 
     mTextErrorMessage.updateMessage("");
     mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
@@ -48,9 +49,6 @@ void OptionMenuState::update(ley::Command command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
-        case ley::Command::tab :
-            mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
-            previousOptionsValue = mLocalTextEntry.getTextBoxValue();
     }
 
     if(command == ley::Command::enter && optionUI.getIndex() == 1) {
@@ -79,12 +77,16 @@ void OptionMenuState::onCommandEnter() {
         myfile.close();
     }
     else {
-        SDL_Log("Regex did not match");
+        SDL_Log("Regex did not match: %s ", mLocalTextEntry.getTextBoxValue().c_str());
         mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
         mTextErrorTimer.reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mLocalTextEntry.setTextBoxValue(previousOptionsValue);
         mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
+    }
+
+    if(mLocalTextEntry.hasFocus()) {
+        UI_ToggleFocus();
     }
 }
 
@@ -150,6 +152,10 @@ bool OptionMenuState::onReEnter() {
 
 bool OptionMenuState::onExit() {
     SDL_Log("Exiting OptionMenustate");
+
+    //Commit the current value into the textentry
+    onCommandEnter();
+
     return true;
 }
 

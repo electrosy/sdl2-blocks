@@ -21,16 +21,14 @@ private:
     SDL_Rect Message_rect;
     TTF_Font* Classic;
     SDL_Color color = {255, 255, 255};
-    
+
 protected:
 
 public:
-    
     Font(int = 0, int = 0, int = 0, int = 0);
     ~Font();
     Font& operator=(Font other); //copy assignment
     Font operator()(Font& other); //copy constructor
-    
     void updateMessage(std::string s);
     std::string getMessage();
     std::string* getMessagePtr();
@@ -41,7 +39,6 @@ public:
     void setPos(SDL_Point p);
     std::pair<int, int> size();
     void setColor(SDL_Color c);
-    
 };
 
 }

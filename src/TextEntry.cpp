@@ -1,10 +1,6 @@
 #include "../inc/TextEntry.h"
 #include "../inc/Screen.h"
 
-const auto TEXTENTRY_WIDTH = 731;
-constexpr auto UNDERLINE_WIDTH = 321;
-constexpr auto MAX_CHAR_LENGTH = 18;
-
 ley::TextEntry::TextEntry()
 :
 pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
@@ -49,8 +45,6 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
 
 void ley::TextEntry::processInput(std::string s) {
 
-    value.size();
-
     if(s == "backspace") {
         value.updateMessage(value.getMessage().substr(0, value.getMessage().size()-1));
         mBackspaceSound();
@@ -92,8 +86,19 @@ void ley::TextEntry::setPos(SDL_Point p) {
     adjustCursor();
 }
 
+void ley::TextEntry::setWidth(int width, int underlineWidth, int maxCharLength) { 
+    mWidth = width;
+    mUnderlineWidth = underlineWidth;
+    mMaxCharLength = maxCharLength;
+
+}
+
 void ley::TextEntry::onKeyDown(ley::Character c) {
     
+    if(c == ley::Character::none) {
+        return;
+    }
+
     std::string character;
 
     switch(c) {
@@ -138,9 +143,9 @@ void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
 
 std::string ley::TextEntry::getHelpMessage() {
     if (hasFocus()) {
-        return "Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press enter .";
+        return "Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down." ;
     }
     else {
-        return "Press tab to modify field.";
+        return "Scroll here to modify field.";
     }
 }

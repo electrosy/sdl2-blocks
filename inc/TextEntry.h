@@ -14,6 +14,10 @@
 
 namespace ley {
 
+const auto TEXTENTRY_WIDTH = 731;
+constexpr auto UNDERLINE_WIDTH = 321;
+constexpr auto MAX_CHAR_LENGTH = 18;
+
 enum class Character {
     backspace,enter,none
 };
@@ -22,6 +26,9 @@ class TextEntry : public Renderable
 {
 
 private:
+    int mWidth = TEXTENTRY_WIDTH;
+    int mUnderlineWidth = UNDERLINE_WIDTH;
+    int mMaxCharLength = MAX_CHAR_LENGTH;
     SDL_Point pos; //Position of TextEntry field top/left.
     SDL_Rect background;
     SDL_Rect cursor;
@@ -32,6 +39,8 @@ private:
     bool mHasFocus = false;
     std::function<void()> mEnterCharSound;
     std::function<void()> mBackspaceSound;
+    
+
 
 public:
     TextEntry();
@@ -49,6 +58,7 @@ public:
     void setCharSound(const std::function<void()> &func);
     void setBackspaceSound(const std::function<void()> &func);
     std::string getHelpMessage();
+    void setWidth(int width, int underlineWidth, int maxCharLength);
 };
 
 }
