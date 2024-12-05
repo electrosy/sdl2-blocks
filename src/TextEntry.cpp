@@ -6,12 +6,16 @@ ley::TextEntry::TextEntry()
 pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
 cursor{pos.x, pos.y, 2, 25},
-mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1}
+mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1},
+mErrorTimer{2500, {0,0,0,0}}
 {
     background.x = pos.x;
     background.y = pos.y;
     background.w = TEXTENTRY_WIDTH;
     background.h = TTF_FontHeight(value.getTTFFont());
+    mFocusHelpFont.updateMessage("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.");
+    mNonFocusHelpFont.updateMessage("Scroll here to modify field.");
+    mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
 }
 
 void ley::TextEntry::render(SDL_Renderer * r, bool d) {
@@ -143,9 +147,9 @@ void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
 
 std::string ley::TextEntry::getHelpMessage() {
     if (hasFocus()) {
-        return "Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down." ;
+        return mFocusHelpFont.getMessage();
     }
     else {
-        return "Scroll here to modify field.";
+        return mNonFocusHelpFont.getMessage();
     }
 }

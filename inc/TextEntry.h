@@ -39,9 +39,12 @@ private:
     bool mHasFocus = false;
     std::function<void()> mEnterCharSound;
     std::function<void()> mBackspaceSound;
+    ley::Font mErrorFont;
+    ley::Font mFocusHelpFont;
+    ley::Font mNonFocusHelpFont;
+    std::string mRegEx;
+    ley::Timer mErrorTimer;
     
-
-
 public:
     TextEntry();
     void render(SDL_Renderer* r, bool d);
@@ -59,6 +62,12 @@ public:
     void setBackspaceSound(const std::function<void()> &func);
     std::string getHelpMessage();
     void setWidth(int width, int underlineWidth, int maxCharLength);
+    ley::Font* getErrorFontPtr() { return &mErrorFont; };
+    ley::Font* getFocusHelpFontPtr() { return &mFocusHelpFont; };
+    ley::Font* getNonFocusHelpFontPtr() { return &mNonFocusHelpFont; };
+    std::string getRegEx() { return mRegEx; };
+    void setRegEx(std::string regEx) { mRegEx = regEx; };
+    ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
 };
 
 }

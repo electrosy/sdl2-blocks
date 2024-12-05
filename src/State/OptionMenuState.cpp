@@ -14,13 +14,14 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
-    mTextErrorTimer(2500, {0,0,0,0}),
+
     mTextEntryHelpMessage({50,50,100,100}) {
 
     mLocalTextEntry.setVisible(false);
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mLocalTextEntry.setWidth(200,200,30);
+    mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
 
     optionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
@@ -56,8 +57,8 @@ void OptionMenuState::update(ley::Command command) {
     }
 
     optionUI.runCommand(command);
-    mTextErrorTimer.runFrame(false, 0.0);
-    if(mTextErrorTimer.hasExpired()) {
+    mLocalTextEntry.getErrorTimerPtr()->runFrame(false, 0.0);
+    if(mLocalTextEntry.getErrorTimerPtr()->hasExpired()) {
         mTextErrorMessage.updateMessage("");
     }
 }
@@ -65,9 +66,8 @@ void OptionMenuState::update(ley::Command command) {
 void OptionMenuState::onCommandEnter() {
 
     SDL_Log("OptionMenuState::onCommandEnter()");
-
-    // TODO the regex should probably be a part of the TextEntry object
-    if ( std::regex_match(mLocalTextEntry.getTextBoxValue().c_str(), std::regex("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b") )) {
+    //TODO maybe this regex check should be contained within the TextEntry
+    if ( std::regex_match(mLocalTextEntry.getTextBoxValue().c_str(), std::regex(mLocalTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
 
         //save the config only if we have a new value that is valid.
@@ -78,8 +78,8 @@ void OptionMenuState::onCommandEnter() {
     }
     else {
         SDL_Log("Regex did not match: %s ", mLocalTextEntry.getTextBoxValue().c_str());
-        mTextErrorMessage.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
-        mTextErrorTimer.reset();
+        mTextErrorMessage.updateMessage(mLocalTextEntry.getErrorFontPtr()->getMessage());
+        mLocalTextEntry.getErrorTimerPtr()->reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mLocalTextEntry.setTextBoxValue(previousOptionsValue);
         mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
@@ -124,7 +124,7 @@ void OptionMenuState::loadRenderables() {
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
-    mLocalTextEntry.setPos({10,10});
+    mLocalTextEntry.setPos({31,100});
     mLocalTextEntry.setVisible(true);
 
     loadRenderables();

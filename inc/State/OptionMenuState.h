@@ -25,7 +25,6 @@ private:
     ley::UIMenu optionUI;
     ley::Font mTextErrorMessage;
     ley::Font mTextEntryHelpMessage;
-    ley::Timer mTextErrorTimer;
     std::string previousOptionsValue;
 
 public:
