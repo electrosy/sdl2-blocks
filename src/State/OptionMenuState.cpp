@@ -13,15 +13,16 @@ const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}}))
 
-    mTextEntryHelpMessage({50,50,100,100}) {
+    {
 
     mLocalTextEntry.setVisible(false);
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mLocalTextEntry.setWidth(200,200,30);
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+    mLocalTextEntry.setHelpMessages("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.", "Scroll here to modify field.");
 
     optionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
@@ -29,7 +30,6 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this](){onCommandEnter();});
 
     mTextErrorMessage.updateMessage("");
-    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 
     optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Input Options", v->getRenderer());
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
@@ -82,7 +82,6 @@ void OptionMenuState::onCommandEnter() {
         mLocalTextEntry.getErrorTimerPtr()->reset();
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mLocalTextEntry.setTextBoxValue(previousOptionsValue);
-        mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
     }
 
     if(mLocalTextEntry.hasFocus()) {
@@ -101,7 +100,6 @@ void OptionMenuState::UI_ToggleFocus() {
     }
 
     mLocalTextEntry.toggleFocus();
-    mTextEntryHelpMessage.updateMessage(mLocalTextEntry.getHelpMessage());
 }
 
 void OptionMenuState::render() {
@@ -118,7 +116,6 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mLocalTextEntry);
     mRenderables.push_back(&mTextErrorMessage);
-    mRenderables.push_back(&mTextEntryHelpMessage);
 }
 
 bool OptionMenuState::onEnter() {

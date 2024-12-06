@@ -24,7 +24,6 @@ private:
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;
     ley::Font mTextErrorMessage;
-    ley::Font mTextEntryHelpMessage;
     std::string previousOptionsValue;
 
 public:

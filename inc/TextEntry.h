@@ -40,8 +40,9 @@ private:
     std::function<void()> mEnterCharSound;
     std::function<void()> mBackspaceSound;
     ley::Font mErrorFont;
-    ley::Font mFocusHelpFont;
-    ley::Font mNonFocusHelpFont;
+    ley::Font mHelpFont;
+    std::string mFocusHelp;
+    std::string mNonFocusHelp;
     std::string mRegEx;
     ley::Timer mErrorTimer;
     
@@ -63,11 +64,11 @@ public:
     std::string getHelpMessage();
     void setWidth(int width, int underlineWidth, int maxCharLength);
     ley::Font* getErrorFontPtr() { return &mErrorFont; };
-    ley::Font* getFocusHelpFontPtr() { return &mFocusHelpFont; };
-    ley::Font* getNonFocusHelpFontPtr() { return &mNonFocusHelpFont; };
+    ley::Font* getHelpFontPtr() { return &mHelpFont; };
     std::string getRegEx() { return mRegEx; };
     void setRegEx(std::string regEx) { mRegEx = regEx; };
     ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
+    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
 };
 
 }

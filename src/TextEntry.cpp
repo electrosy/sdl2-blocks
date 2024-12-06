@@ -7,14 +7,13 @@ pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
 cursor{pos.x, pos.y, 2, 25},
 mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1},
-mErrorTimer{2500, {0,0,0,0}}
+mErrorTimer{2500, {0,0,0,0}},
+mHelpFont{50,50,100,100}
 {
     background.x = pos.x;
     background.y = pos.y;
     background.w = TEXTENTRY_WIDTH;
     background.h = TTF_FontHeight(value.getTTFFont());
-    mFocusHelpFont.updateMessage("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.");
-    mNonFocusHelpFont.updateMessage("Scroll here to modify field.");
     mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
 }
 
@@ -44,6 +43,7 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
         value.render(r, d);
     }
 
+    mHelpFont.render(r, d);
     mCursorFader.runFrame();
 }
 
@@ -73,8 +73,12 @@ void ley::TextEntry::toggleFocus() {
     if(mHasFocus) {
         SDL_StartTextInput();
         adjustCursor();
+        // help message is based on focus
+        mHelpFont.updateMessage(getHelpMessage());
     }
     else {
+        // help message is based on focus
+        mHelpFont.updateMessage(getHelpMessage());
         SDL_StopTextInput();
     }
 }
@@ -147,9 +151,16 @@ void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
 
 std::string ley::TextEntry::getHelpMessage() {
     if (hasFocus()) {
-        return mFocusHelpFont.getMessage();
+        return mFocusHelp;
     }
     else {
-        return mNonFocusHelpFont.getMessage();
+        return mNonFocusHelp;
     }
+}
+
+void ley::TextEntry::setHelpMessages(std::string focusHelp, std::string nonFocusHelp)  { 
+    
+    mFocusHelp = focusHelp;
+    mNonFocusHelp = nonFocusHelp;
+    mHelpFont.updateMessage(getHelpMessage());
 }
