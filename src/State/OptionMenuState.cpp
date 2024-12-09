@@ -24,12 +24,11 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
     mLocalTextEntry.setHelpMessages("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.", "Scroll here to modify field.");
 
+
     optionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
         [this]()->bool{return mLocalTextEntry.hasFocus();},
         [this](){onCommandEnter();});
-
-    mTextErrorMessage.updateMessage("");
 
     optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Input Options", v->getRenderer());
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
@@ -57,10 +56,8 @@ void OptionMenuState::update(ley::Command command) {
     }
 
     optionUI.runCommand(command);
-    mLocalTextEntry.getErrorTimerPtr()->runFrame(false, 0.0);
-    if(mLocalTextEntry.getErrorTimerPtr()->hasExpired()) {
-        mTextErrorMessage.updateMessage("");
-    }
+
+    mLocalTextEntry.update();
 }
 
 void OptionMenuState::onCommandEnter() {
@@ -78,8 +75,8 @@ void OptionMenuState::onCommandEnter() {
     }
     else {
         SDL_Log("Regex did not match: %s ", mLocalTextEntry.getTextBoxValue().c_str());
-        mTextErrorMessage.updateMessage(mLocalTextEntry.getErrorFontPtr()->getMessage());
         mLocalTextEntry.getErrorTimerPtr()->reset();
+        mLocalTextEntry.getErrorFontPtr()->setVisible(true);
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mLocalTextEntry.setTextBoxValue(previousOptionsValue);
     }
@@ -115,7 +112,6 @@ void OptionMenuState::render() {
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mLocalTextEntry);
-    mRenderables.push_back(&mTextErrorMessage);
 }
 
 bool OptionMenuState::onEnter() {

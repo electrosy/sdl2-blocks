@@ -49,6 +49,7 @@ private:
 public:
     TextEntry();
     void render(SDL_Renderer* r, bool d);
+    void update(); //handles update part of the lifecycle.
     void processInput(std::string s);
     std::string getTextBoxValue();
     void setTextBoxValue(std::string s);

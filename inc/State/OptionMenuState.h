@@ -23,7 +23,6 @@ private:
     Renderables mDebugRenderables;
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;
-    ley::Font mTextErrorMessage;
     std::string previousOptionsValue;
 
 public:

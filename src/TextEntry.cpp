@@ -15,6 +15,7 @@ mHelpFont{50,50,100,100}
     background.w = TEXTENTRY_WIDTH;
     background.h = TTF_FontHeight(value.getTTFFont());
     mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
+    mErrorFont.setVisible(false);
 }
 
 void ley::TextEntry::render(SDL_Renderer * r, bool d) {
@@ -44,7 +45,19 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
     }
 
     mHelpFont.render(r, d);
+
+    if(mErrorFont.isVisible()) {
+        mErrorFont.render(r, d);
+    }
+} 
+
+void ley::TextEntry::update() {
+    mErrorTimer.runFrame(false, 0.0);
     mCursorFader.runFrame();
+    
+    if(mErrorTimer.hasExpired()) {
+        mErrorFont.setVisible(false);
+    }
 }
 
 void ley::TextEntry::processInput(std::string s) {
