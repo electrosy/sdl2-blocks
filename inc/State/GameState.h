@@ -25,7 +25,7 @@ public:
     virtual bool onPause() = 0; //When another state is pushed on after this one.
     ley::TextEntry* activeUIelement();
     virtual void UI_ToggleFocus(/*ley::TextEntry* activeUIelement*/);
-    virtual void onCommandEnter();
+    virtual void commitUI();
     bool isDone(); // Returns true when everything in this state is finished.
     
     virtual std::string getStateID() const = 0;

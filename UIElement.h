@@ -28,7 +28,7 @@ private:
     bool hot; //indicates that this menu item is currently selected.
     std::function<void()> mUIToggleFunc = {};
     std::function<bool()> mUIInFocus = {};
-    std::function<void()> mOnCommandEnter = {};
+    std::function<void()> mCommitUI = {};
 
 protected:
    
@@ -45,7 +45,7 @@ public:
     SDL_Texture* getBase();
     std::function<void()> getFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};
-    std::function<void()> getEnterFunction() {return mOnCommandEnter;};
+    std::function<void()> getEnterFunction() {return mCommitUI;};
     ~UIElement();
 };
 

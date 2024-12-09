@@ -15,7 +15,7 @@ bool GameState::isDone() {
     return done;
 }
 
-void GameState::onCommandEnter() {
+void GameState::commitUI() {
     ;
 }
 

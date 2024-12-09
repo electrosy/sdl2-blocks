@@ -31,7 +31,7 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
 }
-void HighScoresMenuState::onCommandEnter() {
+void HighScoresMenuState::commitUI() {
 
     if(mGameModel->newHighScore()) {
         SDL_Log("You entered it with high score!!!");
@@ -61,7 +61,7 @@ void HighScoresMenuState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
         case ley::Command::enter :
-            onCommandEnter();
+            commitUI();
         break;
     }
 

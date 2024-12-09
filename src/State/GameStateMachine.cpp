@@ -88,7 +88,7 @@ void ley::GameStateMachine::UI_ToggleFocus() {
 
 void ley::GameStateMachine::commitUI() {
     if(!mGameStates.empty()) {
-        return mGameStates.back()->onCommandEnter();
+        return mGameStates.back()->commitUI();
     }
 }
 

@@ -35,7 +35,7 @@ public:
     virtual bool onExit();
     virtual bool onReEnter();
     virtual bool onPause();
-    virtual void onCommandEnter();
+    virtual void commitUI();
     virtual void UI_ToggleFocus();
     virtual std::string getStateID() const { return sOptionMenuID; }
 

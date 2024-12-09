@@ -24,11 +24,10 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
     mLocalTextEntry.setHelpMessages("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.", "Scroll here to modify field.");
 
-
     optionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
         [this]()->bool{return mLocalTextEntry.hasFocus();},
-        [this](){onCommandEnter();});
+        [this](){commitUI();});
 
     optionUI.pushFont("keyboardOptions", {29,200,218,63}, "Input Options", v->getRenderer());
     optionUI.push("options",{0,0,218,63},{29,270,218,63},"btnOptions","options-white","options-hot-red");
@@ -60,9 +59,9 @@ void OptionMenuState::update(ley::Command command) {
     mLocalTextEntry.update();
 }
 
-void OptionMenuState::onCommandEnter() {
+void OptionMenuState::commitUI() {
 
-    SDL_Log("OptionMenuState::onCommandEnter()");
+    SDL_Log("OptionMenuState::commitUI()");
     //TODO maybe this regex check should be contained within the TextEntry
     if ( std::regex_match(mLocalTextEntry.getTextBoxValue().c_str(), std::regex(mLocalTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
@@ -147,7 +146,7 @@ bool OptionMenuState::onExit() {
     SDL_Log("Exiting OptionMenustate");
 
     //Commit the current value into the textentry
-    onCommandEnter();
+    commitUI();
 
     return true;
 }

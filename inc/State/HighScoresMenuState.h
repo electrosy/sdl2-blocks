@@ -48,7 +48,7 @@ private:
     std::vector<ley::Font*> fonts_test;
     ley::Font font_objects[HIGHSCORES_NUM_DISPLAY];
 
-    void onCommandEnter();
+    void commitUI();
     void UI_ToggleFocus();
 };
 
