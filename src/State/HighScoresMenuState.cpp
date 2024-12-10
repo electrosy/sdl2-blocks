@@ -39,6 +39,10 @@ void HighScoresMenuState::commitUI() {
         mGameModel->newHighScore(false);
         mGameModel->audio()->playSfx(ley::sfx::piecesfalling);
     }
+
+    if(mLocalTextEntry.hasFocus()) {
+        UI_ToggleFocus();
+    }
 }
 
 void HighScoresMenuState::UI_ToggleFocus() {
@@ -89,7 +93,7 @@ bool HighScoresMenuState::onEnter() {
     int newHighRow = (mGameModel->highScores()->isNewHigh(mGameModel->getScore()));
     if(mGameModel->newHighScore()) {
         mLocalTextEntry.setVisible(true);
-        mGameModel->UIInputFocus(ley::UIFocusChange::goto_textBox);
+        UI_ToggleFocus();
         mLocalTextEntry.setPos(
             {ROW_START_X, ROW_START_Y + (ROW_SPACING * (newHighRow + 1))});
     }

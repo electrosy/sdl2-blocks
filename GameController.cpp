@@ -33,8 +33,6 @@ void ley::GameController::runGameLoop() {
 
     mGameStateMachine.pushState(new ley::IntroState(mVideoSystem, mGm));
 
-    mGm->UIInputFocus(ley::UIFocusChange::game);
-
     bool fs = mVideoSystem->fullScreen();
     SDL_Log("Starting Game loop!");
 
@@ -59,17 +57,6 @@ void ley::GameController::runGameLoop() {
         mVideoSystem->present(); // output to the video system.
         
         /**** GET INPUT ****/
-        if(mGm->UIInputFocus() == ley::UIFocusChange::goto_textBox) {
-           // SDL_StartTextInput();
-            mGameStateMachine.UI_ToggleFocus();
-            mGm->UIInputFocus(ley::UIFocusChange::textBox);
-        }
-        else if(mGm->UIInputFocus() == ley::UIFocusChange::goto_game){
-          //  SDL_StopTextInput();
-            mGameStateMachine.UI_ToggleFocus();
-            mGm->UIInputFocus(ley::UIFocusChange::game);
-        }
-
         //pollEvents updates running and full screen flags
         mInputSystem.pollEvents(fs, mGm->getButtonBindingsPtr(), mGm->getKeyBindingsPtr(), &mCommandQueue, mGameStateMachine.activeUIElement(),
             [this](ley::Command c) {mGameStateMachine.activeUIElement()->onKeyDown(c == ley::Command::backspace ? ley::Character::backspace : ley::Character::none);});
@@ -85,22 +72,10 @@ void ley::GameController::runGameLoop() {
             mVideoSystem->setFullScreen(fs);
         }
 
-        if(mGm->UIInputFocus() == ley::UIFocusChange::game) {
-            processCommands(command);
-            mGameStateMachine.update(command);
-            processStates(command);
-        }
-        else if(mGm->UIInputFocus() == ley::UIFocusChange::textBox) {
-            //throw away the command but continue to run the game state machine
-            
-            if(command == ley::Command::enter) {
-                mGm->UIInputFocus(ley::UIFocusChange::goto_game);
-                mGameStateMachine.commitUI();
-            }
-            
-            mGameStateMachine.update(ley::Command::none);
-        }
-
+        processCommands(command);
+        mGameStateMachine.update(command);
+        processStates(command);
+        
         /**** CLEAR ****/
         mVideoSystem->clear(); //clear the backbuffer
         

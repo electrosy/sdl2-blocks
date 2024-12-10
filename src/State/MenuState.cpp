@@ -20,7 +20,6 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mAblockalypseLogo.setPos(260,-75);
 
     //Gather elements for the menus
-    
     mainUI.push("start",{0,0,382,44},{29,199,0,0},"menufonts-base","menufonts-white","menufonts-hot");
     mainUI.push("highscore",{0,45,382,58},{29,282,0,0},"menufonts-base","menufonts-white","menufonts-hot");
     mainUI.push("options",{0,104,382,57},{29,365,0,0},"menufonts-base","menufonts-white","menufonts-hot");

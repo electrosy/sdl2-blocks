@@ -31,13 +31,6 @@ enum class StateChange { //TODO this can probably be called State
     keyboardoptions,
     none}; //particular states that the game can be in
 
-enum class UIFocusChange {
-    goto_textBox,
-    textBox,
-    goto_game,
-    game
-};
-
 // TODO what is this PTS_LINE used for?
 //const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
 
@@ -78,7 +71,6 @@ private:
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
     int mPts_Line;
-    ley::UIFocusChange mUIFocusChange;
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
@@ -123,8 +115,6 @@ public:
     void debugPrevLevel() { if(numLevel > 0){ numLevel--; } newLevelToReport=true; };
     void newHighScore(bool flag);
     bool newHighScore();
-    UIFocusChange UIInputFocus();
-    void UIInputFocus(ley::UIFocusChange fc);
     void quickDrop();
     int comboCount() { return mComboCount;};
     Board* getNewBoard() { return &mBoard;};
