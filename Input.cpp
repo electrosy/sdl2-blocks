@@ -59,21 +59,21 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
 
     auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
      
-        for(auto &key : mKeysPressed) {
+        for(auto &[key, value] : mKeysPressed) {
             
-            std::get<0>(key.second).runFrame(false);
-            std::get<1>(key.second).runFrame(false);
+            value.first.runFrame(false);
+            value.second.runFrame(false);
 
             //if the delay timer has expired and the repeat timer has expired
-            if(std::get<0>(key.second).hasExpired() && std::get<1>(key.second).hasExpired()) {
+            if(value.first.hasExpired() && value.second.hasExpired()) {
                 
-                ley::Command command = lookupCommand(key.first, bindings2);
+                ley::Command command = lookupCommand(key, bindings2);
                 //don't repeat the enter button.
                 if(command != ley::Command::enter) {
                     commandQueuePtr->push(command);
                 }
                 //reset the repeat timer
-                std::get<1>(key.second).reset();
+                value.second.reset();
             }
         }
 
@@ -122,10 +122,9 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                         //skip modifiers
                         if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
                         {
-                            mKeysPressed.insert({pressedKey, std::make_tuple(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
-
-                            std::get<0>(mKeysPressed[pressedKey]).reset();
-                            std::get<1>(mKeysPressed[pressedKey]).reset();
+                            mKeysPressed.insert({pressedKey, std::make_pair(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+                            mKeysPressed[pressedKey].first.reset();
+                            mKeysPressed[pressedKey].second.reset();
                         }
                     }
                     
