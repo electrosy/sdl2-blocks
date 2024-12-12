@@ -60,23 +60,21 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
     auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
      
         for(auto &key : mKeysPressed) {
-            // TODO we don't need to use true/false here as we assume its true if the key exists in the map.
-            //if(/* std::get<0>(key.second) == true */) {
-                std::get<1>(key.second).runFrame(false);
-                std::get<2>(key.second).runFrame(false);
+            
+            std::get<0>(key.second).runFrame(false);
+            std::get<1>(key.second).runFrame(false);
 
-                //if the delay timer has expired and the repeat timer has expired
-                if(std::get<1>(key.second).hasExpired() && std::get<2>(key.second).hasExpired()) {
-                    
-                    ley::Command command = lookupCommand(key.first, bindings2);
-                    //don't repeat the enter button.
-                    if(command != ley::Command::enter) {
-                        commandQueuePtr->push(command);
-                    }
-                    //reset the repeat timer
-                    std::get<2>(key.second).reset();
+            //if the delay timer has expired and the repeat timer has expired
+            if(std::get<0>(key.second).hasExpired() && std::get<1>(key.second).hasExpired()) {
+                
+                ley::Command command = lookupCommand(key.first, bindings2);
+                //don't repeat the enter button.
+                if(command != ley::Command::enter) {
+                    commandQueuePtr->push(command);
                 }
-            //}
+                //reset the repeat timer
+                std::get<1>(key.second).reset();
+            }
         }
 
         for(auto &button : mButtonsPressed) {
@@ -117,17 +115,17 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 if(!event.key.repeat) {
                                         
                     Uint8 pressedKey = event.key.keysym.scancode;
-                    //reset the timers if this key was previously not pressed
+                    //reset the timers if this key was previously not pressed 
 
                     if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
 
                         //skip modifiers
                         if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
                         {
-                            mKeysPressed.insert({pressedKey, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+                            mKeysPressed.insert({pressedKey, std::make_tuple(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
 
+                            std::get<0>(mKeysPressed[pressedKey]).reset();
                             std::get<1>(mKeysPressed[pressedKey]).reset();
-                            std::get<2>(mKeysPressed[pressedKey]).reset();
                         }
                     }
                     

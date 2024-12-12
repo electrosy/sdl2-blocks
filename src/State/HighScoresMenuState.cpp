@@ -122,6 +122,12 @@ bool HighScoresMenuState::onExit() {
     mLocalTextEntry.setVisible(false);
 
     SDL_Log("Exiting HighScoresMenustate");
+
+    //Commit the UI if the player doesn't hit enter before exiting the state.
+    if(mLocalTextEntry.hasFocus()) {
+        commitUI();
+    }
+
     return true;
 }
 

@@ -11,9 +11,7 @@ Date: Aug/16/2021
 #include <vector>
 #include <map>
 #include <algorithm>
-
 #include <SDL2/SDL.h>
-
 #include "HighScores.h"
 #include "Font.h"
 
@@ -124,7 +122,8 @@ void ley::HighScores::write() {
 }
 
 int ley::HighScores::read() {
-
+    //High scores are stored backwards in the csv file so that when there are two scores with 
+    //the same value the new one will appear on top. This is how the map works inherently.
     highscoresdata.clear();
     SDL_Log("Read Function called!");
 
