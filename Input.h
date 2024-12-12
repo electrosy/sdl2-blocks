@@ -27,7 +27,7 @@ private:
     SDL_GameController *mControllerPtr = nullptr;
     // TODO the bool can probably be repurposed to indicate if this key should repeat
     std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mKeysPressed; //keyboard
-    std::map<Uint8, std::tuple<bool, ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
+    std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
     
 public:
     Input();

@@ -77,15 +77,15 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
             }
         }
 
-        for(auto &button : mButtonsPressed) {
+        for(auto &[key, value] : mButtonsPressed) {
             
-            std::get<1>(button.second).runFrame(false); //run delay timer.
-            std::get<2>(button.second).runFrame(false); //the repeat timer.
+            value.first.runFrame(false); //run delay timer.
+            value.second.runFrame(false); //the repeat timer.
 
-            if(std::get<1>(button.second).hasExpired() && std::get<2>(button.second).hasExpired()) {
-                commandQueuePtr->push(lookupCommand(button.first, buttonBindings2));
+            if(value.first.hasExpired() && value.second.hasExpired()) {
+                commandQueuePtr->push(lookupCommand(key, buttonBindings2));
                 //reset the repeat timer
-                std::get<2>(button.second).reset();
+                value.second.reset();
             }
         }
     };
@@ -160,14 +160,13 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     Uint8 buttonPressed = event.cbutton.button;
 
                     if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {
-                        mButtonsPressed.insert({buttonPressed, std::make_tuple(true, ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
 
-                        std::get<1>(mButtonsPressed[buttonPressed]).reset();
-                        std::get<2>(mButtonsPressed[buttonPressed]).reset();
+                        mButtonsPressed[buttonPressed].first.reset();
+                        mButtonsPressed[buttonPressed].second.reset();
                     }
 
                     commandQueuePtr->push(lookupCommand(buttonPressed, buttonBindings2));
-
                 }
                 break;
 
