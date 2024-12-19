@@ -19,23 +19,12 @@ void GameState::commitUI() {
     ;
 }
 
-// TODO this mTextEntry can no go into the individual states and this method will return a pointer to the active element.
 ley::TextEntry* GameState::activeUIelement() {
-    return /*&mTextEntry;*/ mActiveUIElement;
+    return mActiveUIElement;
 }
 
-void GameState::UI_ToggleFocus(/*ley::TextEntry* activeUIElement*/) {
+void GameState::UI_ToggleFocus() {
     
-    // TODO it would be best if we didn't have to repeat this code for each state.
-    /*
-    if(activeUIElement->hasFocus()) {
-        mActiveUIElement = {};    
-    } 
-    else {
-        mActiveUIElement = activeUIElement;
-    }
-    activeUIElement->toggleFocus();
-    */
 }
 
 }

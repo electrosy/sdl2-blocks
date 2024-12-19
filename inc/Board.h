@@ -83,12 +83,6 @@ public:
     int nextBoxPosXPx() { return mNextBoxPosXPx; };
     int scorePosXPx() { return mScorePosXPx; };
 
-/*
-    struct layout
-    {
-        int v;
-    };
-    */
 };
 }
 

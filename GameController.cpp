@@ -115,7 +115,6 @@ void ley::GameController::processCommands(ley::Command command) {
         if(command == ley::Command::debugclear) {
             //new board
             mGm->getNewBoard()->clear();
-
             mGm->debugResetActiveBlock();
         }
 
@@ -138,8 +137,6 @@ void ley::GameController::processCommands(ley::Command command) {
     }
 }
 void ley::GameController::processStates(ley::Command inCommand) {
-    //NOTE game state machine update was here.
-
     //Quit the introstate and goto the menu state.
     if((inCommand == ley::Command::enter || mGameStateMachine.isStateDone())
         && mGameStateMachine.getStateId() == "INTRO") {

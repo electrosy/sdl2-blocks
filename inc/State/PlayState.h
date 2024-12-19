@@ -29,8 +29,6 @@ public:
 
 private:
 
-//    int blockFallSpeed = 1000; //how many milisecond to make the block fall // not used
-
     Renderables mRenderables;
     Renderables mDebugRenderables;
 

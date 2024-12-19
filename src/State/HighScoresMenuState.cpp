@@ -46,8 +46,6 @@ void HighScoresMenuState::commitUI() {
 }
 
 void HighScoresMenuState::UI_ToggleFocus() {
-    
-    //GameState::UI_ToggleFocus(&mTextEntry);
 
     if(!mLocalTextEntry.hasFocus()) {
         mActiveUIElement = &mLocalTextEntry;

@@ -602,63 +602,7 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.insert({SDL_SCANCODE_U, ley::Command::debugprevlevel});
 }
 
-/*
-void ley::GameModel::loadKeyBindings() {
 
-    mKeyBindings.debugkeystoggle.first = ley::Command::debugkeystoggle;
-    mKeyBindings.debugkeystoggle.second.push_back(SDL_SCANCODE_F12);
-
-    mKeyBindings.left.first = ley::Command::left;
-    mKeyBindings.left.second.push_back(SDL_SCANCODE_LEFT);
-
-    mKeyBindings.right.first = ley::Command::right;
-    mKeyBindings.right.second.push_back(SDL_SCANCODE_RIGHT);
-
-    mKeyBindings.down.first = ley::Command::down;
-    mKeyBindings.down.second.push_back(SDL_SCANCODE_DOWN);
-
-    mKeyBindings.cclockwise.first = ley::Command::cclockwise;
-    mKeyBindings.cclockwise.second.push_back(SDL_SCANCODE_UP);
-    mKeyBindings.cclockwise.second.push_back(SDL_SCANCODE_E);
-
-    mKeyBindings.clockwise.first = ley::Command::clockwise;
-    mKeyBindings.clockwise.second.push_back(SDL_SCANCODE_R);
-
-    mKeyBindings.quit.first = ley::Command::quit;
-    mKeyBindings.quit.second.push_back(SDL_SCANCODE_Q);
-    mKeyBindings.quit.second.push_back(SDL_SCANCODE_ESCAPE);
-
-    mKeyBindings.nextSong.first = ley::Command::nextSong;
-    mKeyBindings.nextSong.second.push_back(SDL_SCANCODE_N);
-
-    mKeyBindings.previousSong.first = ley::Command::previousSong;
-    mKeyBindings.previousSong.second.push_back(SDL_SCANCODE_B);
-
-    mKeyBindings.space.first = ley::Command::space;
-    mKeyBindings.space.second.push_back(SDL_SCANCODE_SPACE);
-
-    mKeyBindings.pause.first = ley::Command::pause;
-    mKeyBindings.pause.second.push_back(SDL_SCANCODE_P);
-    mKeyBindings.pause.second.push_back(SDL_SCANCODE_SLASH);
-
-    mKeyBindings.decreaseVolume.first = ley::Command::decreaseVolume;
-    mKeyBindings.decreaseVolume.second.push_back(SDL_SCANCODE_MINUS);
-    mKeyBindings.decreaseVolume.second.push_back(SDL_SCANCODE_KP_MINUS);
-
-    mKeyBindings.increaseVolume.first = ley::Command::increaseVolume;
-    mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_EQUALS);
-    mKeyBindings.increaseVolume.second.push_back(SDL_SCANCODE_KP_PLUS);
-
-    mKeyBindings.backspace.first = ley::Command::backspace;
-    mKeyBindings.backspace.second.push_back(SDL_SCANCODE_BACKSPACE);
-
-    mKeyBindings.tab.first = ley::Command::tab;
-    mKeyBindings.tab.second.push_back(SDL_SCANCODE_TAB);
-
-    mKeyBindings.enter.first = ley::Command::enter;
-    mKeyBindings.enter.second.push_back(SDL_SCANCODE_RETURN);
-}
-*/
 void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
 
@@ -679,39 +623,6 @@ void ley::GameModel::loadButtonBindings() {
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 }
-
-/*
-void ley::GameModel::loadButtonBindings() {
-
-    mButtonBindings.down.first = ley::Command::down;
-    mButtonBindings.down.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
-
-    mButtonBindings.right.first = ley::Command::right;
-    mButtonBindings.right.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
-
-    mButtonBindings.left.first = ley::Command::left;
-    mButtonBindings.left.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
-
-    mButtonBindings.pause.first = ley::Command::pause;
-    mButtonBindings.pause.second.push_back(SDL_CONTROLLER_BUTTON_START);
-
-    mButtonBindings.space.first = ley::Command::space;
-    mButtonBindings.space.second.push_back(SDL_CONTROLLER_BUTTON_B);
-
-    mButtonBindings.cclockwise.first = ley::Command::cclockwise;
-    mButtonBindings.cclockwise.second.push_back(SDL_CONTROLLER_BUTTON_Y);
-    mButtonBindings.cclockwise.second.push_back(SDL_CONTROLLER_BUTTON_DPAD_UP);
-
-    mButtonBindings.clockwise.first = ley::Command::clockwise;
-    mButtonBindings.clockwise.second.push_back(SDL_CONTROLLER_BUTTON_X);
-
-    mButtonBindings.enter.first = ley::Command::enter;
-    mButtonBindings.enter.second.push_back(SDL_CONTROLLER_BUTTON_A);
-
-    mButtonBindings.quit.first = ley::Command::quit;
-    mButtonBindings.quit.second.push_back(SDL_CONTROLLER_BUTTON_BACK);
-}
-*/
 
 std::map<Uint8, ley::Command>* ley::GameModel::getKeyBindingsPtr() {
     return &mKeyBindings;
