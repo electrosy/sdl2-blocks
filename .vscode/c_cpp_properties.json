@@ -20,14 +20,14 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}\\**",
-                "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\include\\**"
+                "C:\\Program Files\\mingw-w64\\x86_64-14.2.0-release-posix-seh-ucrt-rt_v12-rev0\\mingw64\\include\\**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\Program Files\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe",
+            "compilerPath": "C:\\Program Files\\mingw-w64\\x86_64-14.2.0-release-posix-seh-ucrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "gcc-x64"
