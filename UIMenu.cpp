@@ -167,6 +167,10 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
 
     SDL_Rect src_rect = currentSrc();
     SDL_Rect dest_rect = currentDest();
+
+    if(SDL_RectEmpty(&src_rect)) {
+        return; //Assume we have one of the function pointer type elements.
+    }
     
     setHot(false);
     SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);

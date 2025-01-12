@@ -11,6 +11,11 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     mUIToggleFunc = toggle;
     mUIInFocus = focus;
     mCommitUI = enter;
+    textureBase = {};
+    texture = {};
+    textureHot = {};
+    source = {-1,-1,-1,-1};
+    destination = {-1,-1,-1,-1};
 }
 
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, SDL_Texture* b, SDL_Texture* t, SDL_Texture* th)
