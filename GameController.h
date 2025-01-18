@@ -26,6 +26,7 @@ Date: Feb/15/2020
 #include "inc/State/IntroState.h"
 #include "inc/State/GameOverState.h"
 #include "inc/State/KeyboardOptionsState.h"
+#include "inc/State/LanguageOptionsState.h"
 
 namespace ley {
 
@@ -70,5 +71,6 @@ public:
 
 }
 #endif
+
 
 

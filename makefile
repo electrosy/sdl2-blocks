@@ -9,7 +9,7 @@ OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/Spr
        $(OBJDIR)/HighScores.o $(OBJDIR)/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
        $(OBJDIR)/src/State/MenuState.o $(OBJDIR)/src/State/OptionMenuState.o $(OBJDIR)/src/State/HighScoresMenuState.o $(OBJDIR)/src/State/PlayState.o \
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \
-       $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o \
+       $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o $(OBJDIR)/src/State/LanguageOptionsState.o \
        $(OBJDIR)/src/TextEntry.o $(OBJDIR)/src/Fader.o $(OBJDIR)/src/Config.o $(OBJDIR)/src/Board.o
 
 # OBJ_NAME name of executable

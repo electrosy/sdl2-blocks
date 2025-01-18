@@ -178,6 +178,13 @@ void ley::GameController::processStates(ley::Command inCommand) {
         mGm->stateChange(ley::StateChange::none);
     }
 
+    if(mGm->currentStateChange() == ley::StateChange::languageoptions) {
+        //Goto the language menu state
+        mGameStateMachine.pushState(new ley::LanguageOptionsState(mVideoSystem, mGm));
+        //clear the statechange flag
+        mGm->stateChange(ley::StateChange::none);
+    }
+
     if(mGm->currentStateChange() == ley::StateChange::keyboardoptions) {
         //Goto the keyboardoptions menu state
         mGameStateMachine.pushState(new ley::KeyboardOptionsState(mVideoSystem, mGm));

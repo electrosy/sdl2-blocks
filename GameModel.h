@@ -29,6 +29,7 @@ enum class StateChange { //TODO this can probably be called State
     gameover,
     credits,
     keyboardoptions,
+    languageoptions,
     none}; //particular states that the game can be in
 
 // TODO what is this PTS_LINE used for?
@@ -76,6 +77,7 @@ private:
     void onDrop();
     void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
+    std::string mCurrentLanguage;
 
 public:
     GameModel();
@@ -122,6 +124,8 @@ public:
     std::map<Uint8, ley::Command>* getKeyBindingsPtr(); //keyboard
     std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
     static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
+    void setLanguage(std::string language) { mCurrentLanguage = language; };
+    std::string getLanguage() { return mCurrentLanguage; };
 };
 
 }

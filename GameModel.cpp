@@ -24,7 +24,8 @@ active(true),
 overlayOn(false),
 score(0),
 running(true),
-mDebugOnlyLine(false)
+mDebugOnlyLine(false),
+mCurrentLanguage("en")
 {
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
