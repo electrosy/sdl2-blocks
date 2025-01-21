@@ -10,6 +10,7 @@ Date: Feb/15/2020
 #include "GameModel.h"
 #include "Rand_int.h"
 
+
 /* RAII */
 ley::GameModel::GameModel()
 : 
@@ -24,8 +25,7 @@ active(true),
 overlayOn(false),
 score(0),
 running(true),
-mDebugOnlyLine(false),
-mCurrentLanguage("en")
+mDebugOnlyLine(false)
 {
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);

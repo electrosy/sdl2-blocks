@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/lib/gcc/x86_64-redhat-linux/12/include"
+                "/usr/include"
             ],
             "defines": [
                 "_DEBUG",

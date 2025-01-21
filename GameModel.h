@@ -18,6 +18,7 @@ Date: Feb/15/2020
 #include "HighScores.h"
 #include "inc/Config.h"
 #include "inc/Board.h"
+#include "inc/LanguageModel.h"
 
 namespace ley {
 
@@ -77,7 +78,7 @@ private:
     void onDrop();
     void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
-    std::string mCurrentLanguage;
+    ley::LanguageModel mLanguageModel;
 
 public:
     GameModel();
@@ -124,8 +125,7 @@ public:
     std::map<Uint8, ley::Command>* getKeyBindingsPtr(); //keyboard
     std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
     static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
-    void setLanguage(std::string language) { mCurrentLanguage = language; };
-    std::string getLanguage() { return mCurrentLanguage; };
+    ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };
 };
 
 }
