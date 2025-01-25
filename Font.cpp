@@ -58,7 +58,7 @@ ley::Font ley::Font::operator()(ley::Font& other) {
     Message = nullptr;
 
     SDL_Log("Open font");
-    Classic = TTF_OpenFont("assets/fonts/MartianMono-Regular.ttf", 24);
+    Classic = TTF_OpenFont("assets/fonts/Montserrat-Regular.ttf", 24);
     if(!Classic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
@@ -106,7 +106,7 @@ void ley::Font::preRender(SDL_Renderer* r)
 {
     if(!Message) {
         SDL_Surface* surfaceMessage;
-        surfaceMessage = TTF_RenderText_Solid(Classic, textMessage.c_str(), color);
+        surfaceMessage = TTF_RenderUTF8_Solid(Classic, textMessage.c_str(), color);
         Message = SDL_CreateTextureFromSurface(r, surfaceMessage);
         SDL_FreeSurface(surfaceMessage);
         surfaceMessage = nullptr;

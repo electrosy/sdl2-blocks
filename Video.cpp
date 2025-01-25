@@ -155,7 +155,7 @@ void ley::Video::videoResizeBoard() {
                                                     BLOCKSIZE_PX * (gm->getBoard()->height() - BOARDSIZE_BUFFER) + 2
                                                     };
 
-    mFontCombo = { gm->getBoard()->nextBoxPosXPx(), COMBO_POS_Y_PX, 100, 35 };
+    mFontCombo = { gm->getBoard()->nextBoxPosXPx() - 100, COMBO_POS_Y_PX, 100, 35 };
     fontLines = { gm->getBoard()->scorePosXPx(), LINES_POS_Y_PX, 100, 35 };
     fontLvl = { gm->getBoard()->scorePosXPx(), LVL_POS_Y_PX, 100, 35 };
     fontScore = { gm->getBoard()->scorePosXPx(), SCORE_POS_Y_PX, 100, 35 };
@@ -330,10 +330,10 @@ void ley::Video::loadSprites() {
 }
 
 void ley::Video::updateScores() {
-    fontLines.updateMessage("Lines  " + std::to_string(int(gm->getLines())));
-    fontLvl.updateMessage("Level  " + std::to_string(int(gm->getLevel())));
-    fontScore.updateMessage("Score  " + std::to_string(int(gm->getScore())));
-    mFontCombo.updateMessage("Combo: " + std::to_string(int(gm->comboCount())));
+    fontLines.updateMessage(gm->getLanguageModel()->getWord("lines", 8, true) + std::to_string(int(gm->getLines())));
+    fontLvl.updateMessage(gm->getLanguageModel()->getWord("level", 8, true) + std::to_string(int(gm->getLevel())));
+    fontScore.updateMessage(gm->getLanguageModel()->getWord("score", 8, true) + std::to_string(int(gm->getScore())));
+    mFontCombo.updateMessage(gm->getLanguageModel()->getWord("combo", 13, true) + std::to_string(int(gm->comboCount())));
 }
 
 void ley::Video::resetClock() {
