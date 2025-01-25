@@ -44,12 +44,13 @@ void ley::LanguageModel::loadLanguageData(std::string language) {
 
 std::string ley::LanguageModel::getWord(std::string field, int pad, bool left) {
 
-    std::string string = padTo(mLanguageFields[field], ' ', pad);
+    std::string string = mLanguageFields[field];
     string[0] = toupper(string[0]);
-    return string;
+    
+    return padTo(string, ' ', pad, left);
 }
 
-std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size) {
+std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size, bool left) {
     
     //return early if the pad become a negative number.
     int width = size - input.length();
@@ -58,5 +59,14 @@ std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned 
         return input;
     }
 
-    return input.append(size - input.length(), padChar);
+    if(left) {
+        input.append(size - input.length(), padChar);
+    } else {
+        
+        input.insert(input.begin(), width, padChar);
+        // when right aligned also add an additional space after the word
+        input.append(1, ' ');
+    }
+    
+    return  input;
 }

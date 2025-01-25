@@ -80,7 +80,7 @@ void ley::Font::setColor(SDL_Color c) {
 void ley::Font::updateMessage(std::string s) {
     //Only update the texture if the message has changed.
     if(s != textMessage) {
-        textMessage = (s);
+        textMessage = s;
 
         //then invalidate the texture
         if(Message) {

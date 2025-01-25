@@ -22,7 +22,7 @@ public:
     void loadLanguageData(std::string language);
     void loadLanguage();
     std::string getWord(std::string field, int pad, bool left);
-    std::string padTo(std::string input, char padChar, unsigned long size);
+    std::string padTo(std::string input, char padChar, unsigned long size, bool left);
 
 
 };
