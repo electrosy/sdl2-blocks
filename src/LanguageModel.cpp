@@ -70,3 +70,20 @@ std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned 
     
     return  input;
 }
+
+std::string ley::LanguageModel::getLanguageString() {   
+    std::string language;
+
+    if(mCurrentLanguage == "es") {
+        language = getWord("spanish", 0, true);
+    }
+    else if (mCurrentLanguage == "en") {
+        language = getWord("english", 0, true);
+    }
+    else {
+        //default to english
+        language = getWord("english", 0, true);
+    }
+    
+    return language;
+}

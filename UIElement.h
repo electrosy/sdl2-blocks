@@ -22,6 +22,7 @@ private:
     std::string label;
     SDL_Rect source;
     SDL_Rect destination;
+    // TODO storing only textures for the elements seem to be messey when updating, maybe we should store font objects instead.
     SDL_Texture* textureBase;
     SDL_Texture* texture;
     SDL_Texture* textureHot;

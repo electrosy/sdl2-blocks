@@ -32,7 +32,7 @@ private:
 
     ley::Font mTitleFont;
     ley::Font mCurrentLanguageFont;
-    ley::UIMenu languageUI;
+    ley::UIMenu mLanguageUI;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;

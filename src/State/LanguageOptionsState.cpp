@@ -17,8 +17,8 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     updateLanguageFont();
 
-    languageUI.pushFont("englishLanguage", {29,200,218,63}, "English", v->getRenderer());
-    languageUI.pushFont("spanishLanguage", {29,250,218,63}, "Spanish", v->getRenderer());
+    mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, "English", v->getRenderer());
+    mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, "Spanish", v->getRenderer());
 }
 
 void LanguageOptionsState::update(ley::Command command) {
@@ -28,19 +28,19 @@ void LanguageOptionsState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && languageUI.getIndex() == 0) {
+    if(command == ley::Command::enter && mLanguageUI.getIndex() == 0) {
         mGameModel->getLanguageModel()->setLanguage("en");
-        updateLanguageFont();
         mGameModel->getLanguageModel()->loadLanguage();
+        updateLanguageFont();
     }
 
-    if(command == ley::Command::enter && languageUI.getIndex() == 1) {
+    if(command == ley::Command::enter && mLanguageUI.getIndex() == 1) {
         mGameModel->getLanguageModel()->setLanguage("es");
-        updateLanguageFont();
         mGameModel->getLanguageModel()->loadLanguage();
+        updateLanguageFont();
     }
 
-    languageUI.runCommand(command);
+    mLanguageUI.runCommand(command);
 }
 
 void LanguageOptionsState::render() {
@@ -50,7 +50,7 @@ void LanguageOptionsState::render() {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
-    languageUI.render(mVideoSystem);
+    mLanguageUI.render(mVideoSystem);
 }
 
 void LanguageOptionsState::loadRenderables() {
@@ -83,6 +83,8 @@ bool LanguageOptionsState::onPause() {
 
 void LanguageOptionsState::updateLanguageFont() {
     mCurrentLanguageFont.updateMessage("Current Language: " + mGameModel->getLanguageModel()->getLanguageString());
+    
+    //mLanguageUI.getElementPtr("englishLanguage")
 }
 
 }

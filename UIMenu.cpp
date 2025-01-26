@@ -307,3 +307,14 @@ void ley::UIMenu::clear() {
     elements.clear();
     currentIndex = 0;
 }
+
+ley::UIElement* ley::UIMenu::getElementPtr(std::string label) {
+
+    return &elements.at(getElementId(label));
+}
+
+void ley::UIMenu::setMessage(std::string s) {
+   // baseFont->updateMessage(s);
+   // texFont->updateMessage(s);
+   // texHotFont->updateMessage(s);
+}
