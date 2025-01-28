@@ -29,11 +29,10 @@ protected:
 public:
     Font();
     Font(int, int, int, int);
-    Font(const Font& other);
+    Font(const Font& other); //copy constructor
     ~Font();
     void cleanUp();
     Font& operator=(const Font& other); //copy assignment
-    //Font operator()(Font& other); //copy constructor
     void init();
     void updateMessage(std::string s);
     std::string getMessage();

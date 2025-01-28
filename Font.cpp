@@ -20,7 +20,6 @@ ley::Font::Font(int x, int y, int w, int h) {
 
 ley::Font::Font(const Font& other) {
     
-    cleanUp();
     init();
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
