@@ -13,6 +13,8 @@ Date: Jul/17/2021
 
 #include <SDL2/SDL.h>
 
+#include "Font.h"
+
 namespace ley {
 
 class UIElement {
@@ -26,6 +28,7 @@ private:
     SDL_Texture* textureBase;
     SDL_Texture* texture;
     SDL_Texture* textureHot;
+//    ley::Font mBaseFont;
     bool hot; //indicates that this menu item is currently selected.
     std::function<void()> mUIToggleFunc = {};
     std::function<bool()> mUIInFocus = {};

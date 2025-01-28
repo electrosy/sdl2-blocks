@@ -13,22 +13,28 @@ Date: Jul/14/2020
 
 namespace ley {
 
+const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
+
 class Font : public Renderable {
 
 private:
-    std::string textMessage;
-    SDL_Texture* Message;
-    SDL_Rect Message_rect;
-    TTF_Font* Classic;
-    SDL_Color color = {255, 255, 255};
+    std::string mMessageString;
+    SDL_Texture* mMessageTexture;
+    SDL_Rect mMessageRect;
+    TTF_Font* mClassic;
+    SDL_Color mColor;
 
 protected:
 
 public:
-    Font(int = 0, int = 0, int = 0, int = 0);
+    Font();
+    Font(int, int, int, int);
+    Font(const Font& other);
     ~Font();
-    Font& operator=(Font other); //copy assignment
-    Font operator()(Font& other); //copy constructor
+    void cleanUp();
+    Font& operator=(const Font& other); //copy assignment
+    //Font operator()(Font& other); //copy constructor
+    void init();
     void updateMessage(std::string s);
     std::string getMessage();
     std::string* getMessagePtr();
