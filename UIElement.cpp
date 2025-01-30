@@ -18,11 +18,6 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     destination = {-1,-1,-1,-1};
 }
 
-ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, SDL_Texture* b, SDL_Texture* t, SDL_Texture* th)
-: label(l), source(sr), destination(dr), mBaseTexture(b), mMainTexture(t), mHotTexture(th), hot(false) {
-
-}
-
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message)
 : label(l), source(sr), destination(dr), hot(false), mMessage(message) {
 

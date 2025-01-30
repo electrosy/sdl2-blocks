@@ -41,7 +41,6 @@ private:
 protected:
    
 public:
-    UIElement(std::string, SDL_Rect, SDL_Rect, SDL_Texture*, SDL_Texture*, SDL_Texture*);
     UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     void setActiveSelector(bool);

@@ -43,7 +43,6 @@ public:
 
     void next();
     void previous();
-    void toggle();
     SDL_Texture* currentTex();
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
@@ -55,13 +54,10 @@ public:
     void clear(); //clear out all the elements.
     int count();
     void addRenderables(ley::Renderables);
-    void addSelector(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     int getElementId(std::string);
     ley::UIElement* getElementPtr(std::string label); //Get elementPtr from label
-    
     void renderBaseMenuItems(ley::Video* v);
     void renderHotItem(ley::Video* v);
-    void renderSelectors(ley::Video* v);
     void render(ley::Video* v);
     void runCommand(ley::Command command);
 };

@@ -76,31 +76,6 @@ void ley::UIMenu::addRenderables(ley::Renderables r) {
     renderables = r;
 }
 
-void ley::UIMenu::addSelector(std::string label, const SDL_Rect src, const SDL_Rect dest, const std::string b, const std::string w, const std::string h) {
-
-    SDL_Log("ADD Selector Test: %d", getElementId(label));
-
-    SDL_Texture* base = TextureManager::Instance()->getTexture(b);
-    SDL_Texture* tex = TextureManager::Instance()->getTexture(w);
-    SDL_Texture* texhot = TextureManager::Instance()->getTexture(h);
-
-    UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
-
-    //count activeselectors for this label.
-    for (std::multimap<std::string,UIElement>::iterator it=selectors.begin(); it!=selectors.end(); ++it) {
-        if(it->second.getLabel() == label) {
-            it->second.setActiveSelector(true);
-            break;
-        }
-    }
-
-    if(selectors.size() == 0) {
-        temp.setActiveSelector(true);
-    }
-
-    selectors.emplace(label,temp);
-
-}
 void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
     
     //Display all the base menu elements
@@ -159,24 +134,9 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     mFader.runFrame(); // NOTE This actually goes in update, but this works for now.
 }
 
-void ley::UIMenu::renderSelectors(ley::Video* v) {
-    //Display all the available selectors
-    for (std::multimap<std::string,UIElement>::iterator it = selectors.begin(); it!=selectors.end(); ++it) {
-        
-        if(it->second.isActiveSelector()) {
-            SDL_Rect source = it->second.getSource();
-            SDL_Rect destination = it->second.getDestination();
-            SDL_Texture* baseTexture = it->second.getTexture();
-
-            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
-        }
-    }
-}
-
 void ley::UIMenu::render(ley::Video* v) {
     renderBaseMenuItems(v);
     renderHotItem(v);
-    renderSelectors(v);
 
     renderables.renderAll(v->getRenderer(), false);
 }
@@ -191,10 +151,6 @@ void ley::UIMenu::runCommand(ley::Command command) {
         if(command == ley::Command::cclockwise || command == ley::Command::up || command == ley::Command::left) {
             previous();
         }
-
-        if(command == ley::Command::space) {
-            toggle(); //this will toggle the selector
-        }
     }
 }
 
@@ -207,32 +163,6 @@ void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SD
                                     elements.at(i).getSource(), elements.at(i).getDestination(), elements.at(i).getBase()
                                     ));
     }
-}
-
-void ley::UIMenu::toggle() {
-
-    const std::string testLabel = elements[currentIndex].getLabel();
-
-    //find a hot selector with this testLabel and then set the next one to hot.
-    typedef std::multimap<std::string,UIElement>::iterator ElementIterator;
-    std::pair<ElementIterator,ElementIterator> result = selectors.equal_range(testLabel.c_str());
-
-    for (ElementIterator it = result.first; it!=result.second; ++it) {
-        if(it->second.isActiveSelector()) {
-            it->second.setActiveSelector(false);
-            ++it;
-            if(it !=result.second) {
-                it->second.setActiveSelector(true);
-            } else {
-                result.first->second.setActiveSelector(true);
-                
-                break;
-            }
-        }
-        
-    }
-
-    SDL_Log("selector has been toggled at index: %d and label: %s", currentIndex, testLabel.c_str());
 }
 
 void ley::UIMenu::previous() {
