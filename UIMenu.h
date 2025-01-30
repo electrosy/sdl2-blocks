@@ -12,7 +12,6 @@ Date: Jul/17/2021
 #include <tuple>
 #include <list>
 #include <SDL2/SDL.h>
-#include "UIElement.h"
 #include "Textures.h"
 #include "Renderables.h"
 #include "Timer.h"
@@ -26,7 +25,6 @@ private:
 
     std::vector<ley::UIElement> elements; // TODO elements should probably be in a map with label for key and UIElement for value.
     std::vector<ley::Font*> fontsUsed;
-    std::multimap<std::string,ley::UIElement> selectors; //element id, and selectors
     int currentIndex;
     bool hot; //indicates that this menu item is currently selected.
     ley::Renderables renderables;

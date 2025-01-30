@@ -44,7 +44,6 @@ void LanguageOptionsState::update(ley::Command command) {
     if(command == ley::Command::enter && mLanguageUI.getIndex() == 2) {
         SDL_Log("This is language option 3");
         mLanguageUI.getElementPtr("testNewElement")->setMessage("New Message");
-        //mLanguageUI.getElementPtr("testNewElement")->preRender(mVideoSystem->getRenderer());
     }
 
     mLanguageUI.runCommand(command);

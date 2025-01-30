@@ -82,6 +82,7 @@ void ley::UIElement::setMessage(std::string message) {
     mMainFont.updateMessage(message);
     mBaseFont.updateMessage(message);
     mHotFont.updateMessage(message);
+    
 }
 
 void ley::UIElement::setDimensions() {
