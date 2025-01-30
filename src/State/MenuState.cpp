@@ -19,11 +19,11 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo"), 0, {}, {1000,{0,0,0,0}});
     mAblockalypseLogo.setPos(260,-75);
 
-    mainUI.pushFont("start", {29,199,0,0}, "Start", mVideoSystem->getRenderer());
-    mainUI.pushFont("highscore", {29,282,0,0}, "High Scores", mVideoSystem->getRenderer());
-    mainUI.pushFont("options", {29,365,0,0}, "Options", mVideoSystem->getRenderer());
-    mainUI.pushFont("exit", {29,451,0,0}, "Exit", mVideoSystem->getRenderer());
-    mainUI.pushFont("credits", {29,533,0,0}, "Credits", mVideoSystem->getRenderer());
+    mainUI.pushFont("start", {29,199,0,0}, "Start", mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("highscore", {29,282,0,0}, "High Scores", mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("options", {29,365,0,0}, "Options", mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("exit", {29,451,0,0}, "Exit", mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("credits", {29,533,0,0}, "Credits", mVideoSystem->getRenderer(), 50);
 }
 
 void MenuState::update(ley::Command command) {

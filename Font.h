@@ -18,6 +18,7 @@ const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
 const SDL_Color CWHITE = {255, 255, 255};
 const SDL_Color CBRIGHTRED = {238, 51, 84};
 const SDL_Color CDARKTEAL = {32, 85, 83};
+const auto DEFAULT_FONT_SIZE = 24;
 
 class Font : public Renderable {
 
@@ -27,6 +28,7 @@ private:
     SDL_Rect mMessageRect;
     TTF_Font* mClassic;
     SDL_Color mColor;
+    int mSize;
 
 protected:
 
@@ -37,7 +39,7 @@ public:
     ~Font();
     void cleanUp();
     Font& operator=(const Font& other); //copy assignment
-    void init();
+    void init(int size);
     void updateMessage(std::string s);
     std::string getMessage();
     std::string* getMessagePtr();
@@ -48,6 +50,7 @@ public:
     void setPos(SDL_Point p);
     std::pair<int, int> size();
     void setColor(SDL_Color c);
+    void setFontSize(int size);
 };
 
 }

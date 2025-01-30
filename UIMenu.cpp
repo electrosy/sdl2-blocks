@@ -31,9 +31,9 @@ ley::UIMenu::~UIMenu() {
     }
 }
 
-void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
+void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size) {
 
-    UIElement temp(label, {0,0, dest.w, dest.h}, dest, s); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
+    UIElement temp(label, {0,0, dest.w, dest.h}, dest, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     temp.preRender(r);
     elements.push_back(temp);
 }

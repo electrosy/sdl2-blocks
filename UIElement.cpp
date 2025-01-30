@@ -15,7 +15,7 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     destination = {-1,-1,-1,-1};
 }
 
-ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message)
+ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size)
 : label(l), source(sr), destination(dr), hot(false), mMessage(message) {
 
     mBaseFont = mHotFont = mMainFont = {destination.x, destination.y, destination.w, destination.h};
@@ -26,6 +26,10 @@ ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string m
     mBaseFont.setColor(CDARKTEAL);
     mHotFont.setColor(CBRIGHTRED);
     mMainFont.setColor(CWHITE);
+
+    mBaseFont.setFontSize(size);
+    mHotFont.setFontSize(size);
+    mMainFont.setFontSize(size);
 }
 
 ley::UIElement::~UIElement() {
@@ -101,5 +105,12 @@ void ley::UIElement::setDimensions() {
 
     destination.w = w;
     destination.h = h;
+}
+
+void ley::UIElement::setFontSize(int size) {
+
+    mBaseFont.setFontSize(size);
+    mHotFont.setFontSize(size);
+    mMainFont.setFontSize(size);
 }
 

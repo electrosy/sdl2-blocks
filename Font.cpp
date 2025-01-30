@@ -7,26 +7,30 @@ Date: Jul/14/2020
 */
 #include "Font.h"
 
-ley::Font::Font() {
+ley::Font::Font():
+mSize(DEFAULT_FONT_SIZE) {
     mMessageRect = {0, 0, 0, 0};
-    init();
+    init(mSize);
 }
 
-ley::Font::Font(int x, int y, int w, int h) {
+ley::Font::Font(int x, int y, int w, int h)
+:
+mSize(DEFAULT_FONT_SIZE) {
 
     mMessageRect = {x, y, w, h};
-    init();
+    init(mSize);
 }
 
 ley::Font::Font(const Font& other) {
     
-    init();
+    mSize = other.mSize;
+    init(mSize);
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
     mColor = other.mColor;
 }
 
-void ley::Font::init() {
+void ley::Font::init(int size) {
 
     mMessageTexture = nullptr;
     mClassic = nullptr;
@@ -37,7 +41,7 @@ void ley::Font::init() {
     }
 
     SDL_Log("Open font");
-    mClassic = TTF_OpenFont(FONTFILE, 24);
+    mClassic = TTF_OpenFont(FONTFILE, size);
     if(!mClassic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
@@ -71,7 +75,7 @@ void ley::Font::cleanUp() {
 ley::Font& ley::Font::operator=(const ley::Font& other) {
     
     cleanUp();
-    init();
+    init(24);
     mMessageRect = other.mMessageRect;
     mMessageString = other.mMessageString;
 
@@ -150,4 +154,10 @@ std::pair<int, int> ley::Font::size() {
     TTF_SizeText(mClassic, mMessageString.c_str(), &width, &height);
 
     return std::make_pair(width, height);
+}
+
+void ley::Font::setFontSize(int size) {
+
+    mSize = size;
+    TTF_SetFontSize(mClassic, mSize);
 }

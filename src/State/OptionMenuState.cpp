@@ -31,8 +31,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this](){commitUI();});
 
 
-    optionUI.pushFont("languageOptions", {29,200,218,63}, "Language Options", v->getRenderer());
-    optionUI.pushFont("keyboardOptions", {29,250,218,63}, "Input Options", v->getRenderer());
+    optionUI.pushFont("languageOptions", {29,200,218,63}, "Language Options", v->getRenderer(), 24);
+    optionUI.pushFont("keyboardOptions", {29,250,218,63}, "Input Options", v->getRenderer(), 24);
 }
 
 void OptionMenuState::update(ley::Command command) {

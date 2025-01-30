@@ -9,7 +9,7 @@ Date: Jul/17/2021
 #define UIELEMENT_H
 
 #include <functional>
-#include <string>
+//#include <string>
 
 #include <SDL2/SDL.h>
 
@@ -37,8 +37,10 @@ private:
 protected:
    
 public:
-    UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
+    UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size);
     UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
+    ~UIElement();
+
     void setActiveSelector(bool);
     bool isActiveSelector();
     std::string getLabel();
@@ -51,11 +53,12 @@ public:
     ley::Font* getMainFontPtr() { return &mMainFont; };
     ley::Font* getHotFontPtr() { return &mHotFont; };
     void setMessage(std::string message);
+    void setFontSize(int size);
     void preRender(SDL_Renderer* r);
     std::function<void()> getFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};
     std::function<void()> getEnterFunction() {return mCommitUI;};
-    ~UIElement();
+    
 };
 
 }
