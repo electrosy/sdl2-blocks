@@ -50,6 +50,7 @@ public:
     void setHot(bool);
     void push(std::string, const SDL_Rect, const SDL_Rect, const std::string, const std::string, const std::string);
     void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r);
+    void pushFont2(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r);
     void pushTextEntry(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     int getIndex();
     void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
@@ -65,8 +66,6 @@ public:
     void renderSelectors(ley::Video* v);
     void render(ley::Video* v);
     void runCommand(ley::Command command);
-    void setMessage(std::string s);
-
 };
 
 }

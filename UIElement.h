@@ -22,22 +22,27 @@ class UIElement {
 private:
 
     std::string label;
+    std::string mMessage;
     SDL_Rect source;
     SDL_Rect destination;
     // TODO storing only textures for the elements seem to be messey when updating, maybe we should store font objects instead.
-    SDL_Texture* textureBase;
-    SDL_Texture* texture;
-    SDL_Texture* textureHot;
-//    ley::Font mBaseFont;
+    SDL_Texture* mBaseTexture;
+    SDL_Texture* mMainTexture;
+    SDL_Texture* mHotTexture;
+    ley::Font mBaseFont;
+    ley::Font mHotFont;
+    ley::Font mMainFont;
     bool hot; //indicates that this menu item is currently selected.
     std::function<void()> mUIToggleFunc = {};
     std::function<bool()> mUIInFocus = {};
     std::function<void()> mCommitUI = {};
+    void setDimensions();
 
 protected:
    
 public:
     UIElement(std::string, SDL_Rect, SDL_Rect, SDL_Texture*, SDL_Texture*, SDL_Texture*);
+    UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     void setActiveSelector(bool);
     bool isActiveSelector();
@@ -47,6 +52,11 @@ public:
     SDL_Texture* getTexture();
     SDL_Texture* getTextureHot();
     SDL_Texture* getBase();
+    ley::Font* getBaseFontPtr() { return &mBaseFont; };
+    ley::Font* getMainFontPtr() { return &mMainFont; };
+    ley::Font* getHotFontPtr() { return &mHotFont; };
+    void setMessage(std::string message);
+    void preRender(SDL_Renderer* r);
     std::function<void()> getFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};
     std::function<void()> getEnterFunction() {return mCommitUI;};

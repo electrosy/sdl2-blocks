@@ -23,6 +23,7 @@ ley::Font::Font(const Font& other) {
     init();
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
+    mColor = other.mColor;
 }
 
 void ley::Font::init() {

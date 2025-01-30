@@ -38,22 +38,27 @@ void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect des
     SDL_Texture* texhot = TextureManager::Instance()->getTexture(th);
 
     UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
+    
     elements.push_back(temp);
 }
-void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
+void ley::UIMenu::pushFont2(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
 
-    SDL_Color White = {255, 255, 255};
-    SDL_Color BrightRed = {238, 51, 84};
-    SDL_Color DarkTeal = {32, 85, 83};
+    UIElement temp(label, {0,0, dest.w, dest.h}, dest, s); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
+    temp.preRender(r);
+    elements.push_back(temp);
+}
+
+void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
+    
     // TODO this should use only one font and on render the font change color.
 
     // TODO - Do we really need to use new?
     ley::Font* baseFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    baseFont->setColor(DarkTeal);
+    baseFont->setColor(CDARKTEAL);
     ley::Font* texFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    texFont->setColor(White);
+    texFont->setColor(CWHITE);
     ley::Font* texHotFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    texHotFont->setColor(BrightRed);
+    texHotFont->setColor(CBRIGHTRED);
 
     //These will get deleted in the destructor.
     fontsUsed.push_back(baseFont);
@@ -149,8 +154,15 @@ void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
         SDL_Rect source = elements[i].getSource();
         SDL_Rect destination = elements[i].getDestination();
         SDL_Texture* baseTexture = elements[i].getBase();
+
+        if(baseTexture) {
+            SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
+        }
+        else if(elements[i].getBaseFontPtr()->getTexturePtr() == nullptr) {
+            // assume this is the font type and pre render the font if its empty.
+            elements[i].preRender(v->getRenderer());
+        }
         
-        SDL_RenderCopy(v->getRenderer(), baseTexture, &source, &destination);
     }
 }
 
@@ -173,12 +185,22 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     }
     
     setHot(false);
-    SDL_RenderCopy(v->getRenderer(), currentTex(), &src_rect, &dest_rect);
+    SDL_Texture* mainTexture = currentTex();
+    if(!mainTexture) {
+        //assume the font type element and pre render the font
+        elements[currentIndex].getMainFontPtr()->preRender(v->getRenderer());
+    }
+
+    SDL_RenderCopy(v->getRenderer(), mainTexture, &src_rect, &dest_rect);
 
     setHot(true);
-    SDL_Texture* texture = currentTex();
-    SDL_SetTextureAlphaMod(texture, mFader.alpha());
-    SDL_RenderCopy(v->getRenderer(), texture, &src_rect, &dest_rect);
+    SDL_Texture* hotTexture = currentTex();
+    if(!hotTexture) {
+        //assume the font type element and pre render the font
+        elements[currentIndex].getHotFontPtr()->preRender(v->getRenderer());
+    }
+    SDL_SetTextureAlphaMod(hotTexture, mFader.alpha());
+    SDL_RenderCopy(v->getRenderer(), hotTexture, &src_rect, &dest_rect);
 
     mFader.runFrame(); // NOTE This actually goes in update, but this works for now.
 }
@@ -311,10 +333,4 @@ void ley::UIMenu::clear() {
 ley::UIElement* ley::UIMenu::getElementPtr(std::string label) {
 
     return &elements.at(getElementId(label));
-}
-
-void ley::UIMenu::setMessage(std::string s) {
-   // baseFont->updateMessage(s);
-   // texFont->updateMessage(s);
-   // texHotFont->updateMessage(s);
 }
