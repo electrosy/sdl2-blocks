@@ -33,17 +33,6 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     optionUI.pushFont("languageOptions", {29,200,218,63}, "Language Options", v->getRenderer());
     optionUI.pushFont("keyboardOptions", {29,250,218,63}, "Input Options", v->getRenderer());
-    optionUI.push("options",{0,0,218,63},{29,320,218,63},"btnOptions","options-white","options-hot-red");
-    optionUI.push("options1",{0,0,218,63},{29,405,218,63},"btnOptions","options-white","options-hot-red");
-    optionUI.push("back",{0,0,100,49},{30,501,100,49},"opt-back","opt-white","opt-hot");
-    
-    optionUI.addSelector("options1", {0,0,100,49}, {300,405,100,49}, "yes", "yes-white", "yes-hot");
-    optionUI.addSelector("options1", {0,0,100,49}, {300,405,100,49}, "no", "no-white", "no-hot");
-    optionUI.addSelector("options1", {0,0,100,49}, {300,405,100,49}, "no", "no-hot", "no-white");
-    optionUI.addSelector("options1", {0,0,100,49}, {300,405,100,49}, "btnExit","exit-white","exit-hot-red");
-
-    optionUI.addSelector("back", {0,0,100,49}, {300,501,100,49}, "yes", "yes-white", "yes-hot");
-    optionUI.addSelector("back", {0,0,100,49}, {300,501,100,49}, "no", "no-white", "no-hot");
 }
 
 void OptionMenuState::update(ley::Command command) {

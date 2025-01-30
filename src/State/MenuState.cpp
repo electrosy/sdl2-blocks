@@ -19,12 +19,11 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo"), 0, {}, {1000,{0,0,0,0}});
     mAblockalypseLogo.setPos(260,-75);
 
-    //Gather elements for the menus
-    mainUI.push("start",{0,0,382,44},{29,199,0,0},"menufonts-base","menufonts-white","menufonts-hot");
-    mainUI.push("highscore",{0,45,382,58},{29,282,0,0},"menufonts-base","menufonts-white","menufonts-hot");
-    mainUI.push("options",{0,104,382,57},{29,365,0,0},"menufonts-base","menufonts-white","menufonts-hot");
-    mainUI.push("exit",{0,163,382,46},{29,451,0,0},"menufonts-base","menufonts-white","menufonts-hot");
-    mainUI.push("credits",{0,210,382,46},{29,533,0,0},"menufonts-base","menufonts-white","menufonts-hot");
+    mainUI.pushFont("start", {29,199,0,0}, "Start", mVideoSystem->getRenderer());
+    mainUI.pushFont("highscore", {29,282,0,0}, "High Scores", mVideoSystem->getRenderer());
+    mainUI.pushFont("options", {29,365,0,0}, "Options", mVideoSystem->getRenderer());
+    mainUI.pushFont("exit", {29,451,0,0}, "Exit", mVideoSystem->getRenderer());
+    mainUI.pushFont("credits", {29,533,0,0}, "Credits", mVideoSystem->getRenderer());
 }
 
 void MenuState::update(ley::Command command) {

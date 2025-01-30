@@ -30,17 +30,7 @@ ley::UIMenu::~UIMenu() {
         fontPtr = nullptr;
     }
 }
-void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect dest, const std::string b, const std::string t, const std::string th) {
-    //push a UI Element into the UI Menu
 
-    SDL_Texture* base = TextureManager::Instance()->getTexture(b);
-    SDL_Texture* tex = TextureManager::Instance()->getTexture(t);
-    SDL_Texture* texhot = TextureManager::Instance()->getTexture(th);
-
-    UIElement temp(label, src, {dest.x, dest.y, src.w, src.h}, base, tex, texhot);
-    
-    elements.push_back(temp);
-}
 void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
 
     UIElement temp(label, {0,0, dest.w, dest.h}, dest, s); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
