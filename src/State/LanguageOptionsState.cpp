@@ -19,7 +19,7 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, "English", v->getRenderer());
     mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, "Spanish", v->getRenderer());
-    mLanguageUI.pushFont2("testNewElement", {29,300,218,63}, "Testing", v->getRenderer());
+    mLanguageUI.pushFont("testNewElement", {29,300,218,63}, "Testing", v->getRenderer());
 }
 
 void LanguageOptionsState::update(ley::Command command) {

@@ -41,46 +41,10 @@ void ley::UIMenu::push(std::string label, const SDL_Rect src, const SDL_Rect des
     
     elements.push_back(temp);
 }
-void ley::UIMenu::pushFont2(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
+void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
 
     UIElement temp(label, {0,0, dest.w, dest.h}, dest, s); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     temp.preRender(r);
-    elements.push_back(temp);
-}
-
-void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r) {
-    
-    // TODO this should use only one font and on render the font change color.
-
-    // TODO - Do we really need to use new?
-    ley::Font* baseFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    baseFont->setColor(CDARKTEAL);
-    ley::Font* texFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    texFont->setColor(CWHITE);
-    ley::Font* texHotFont = new ley::Font(dest.x, dest.y, dest.w, dest.h);
-    texHotFont->setColor(CBRIGHTRED);
-
-    //These will get deleted in the destructor.
-    fontsUsed.push_back(baseFont);
-    fontsUsed.push_back(texFont);
-    fontsUsed.push_back(texHotFont);
-
-    baseFont->updateMessage(s);
-    texFont->updateMessage(s);
-    texHotFont->updateMessage(s);
-
-    baseFont->preRender(r);
-    texFont->preRender(r);
-    texHotFont->preRender(r);
-
-    //Assume that all 3 fonts are the same size.
-    int w;
-    int h;
-    SDL_QueryTexture(baseFont->getTexturePtr(),
-                     NULL, NULL,
-                     &w, &h);
-
-    UIElement temp(label, {0,0,w,h}, {dest.x, dest.y, w, h}, baseFont->getTexturePtr(), texFont->getTexturePtr(), texHotFont->getTexturePtr());
     elements.push_back(temp);
 }
 
