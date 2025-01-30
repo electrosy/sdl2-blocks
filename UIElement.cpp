@@ -11,19 +11,12 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     mUIToggleFunc = toggle;
     mUIInFocus = focus;
     mCommitUI = enter;
-    mBaseTexture = {};
-    mMainTexture = {};
-    mHotTexture = {};
     source = {-1,-1,-1,-1};
     destination = {-1,-1,-1,-1};
 }
 
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message)
 : label(l), source(sr), destination(dr), hot(false), mMessage(message) {
-
-    mBaseTexture = {};
-    mMainTexture = {};
-    mHotTexture = {};
 
     mBaseFont = mHotFont = mMainFont = {destination.x, destination.y, destination.w, destination.h};
     mBaseFont.updateMessage(mMessage);
@@ -61,32 +54,17 @@ SDL_Rect ley::UIElement::getDestination() {
 
 SDL_Texture* ley::UIElement::getBase() {
     
-    if(mBaseTexture) {
-        return mBaseTexture;
-    }
-    else {
-        return mBaseFont.getTexturePtr();
-    }
+    return mBaseFont.getTexturePtr();
 }
 
 SDL_Texture* ley::UIElement::getTexture() {
     
-    if(mMainTexture) {
-        return mMainTexture;
-    }
-    else {
-        return mMainFont.getTexturePtr();
-    }
+    return mMainFont.getTexturePtr();
 }
 
 SDL_Texture* ley::UIElement::getTextureHot() {
     
-    if(mHotTexture) {
-        return mHotTexture;
-    }
-    else {
-        return mHotFont.getTexturePtr();
-    }
+    return mHotFont.getTexturePtr();
 }
 
 void ley::UIElement::preRender(SDL_Renderer* r) {

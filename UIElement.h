@@ -25,10 +25,6 @@ private:
     std::string mMessage;
     SDL_Rect source;
     SDL_Rect destination;
-    // TODO storing only textures for the elements seem to be messey when updating, maybe we should store font objects instead.
-    SDL_Texture* mBaseTexture;
-    SDL_Texture* mMainTexture;
-    SDL_Texture* mHotTexture;
     ley::Font mBaseFont;
     ley::Font mHotFont;
     ley::Font mMainFont;
