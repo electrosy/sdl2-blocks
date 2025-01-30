@@ -8,14 +8,14 @@ Date: Jul/17/2021
 #ifndef UIMENU_H
 #define UIMENU_H
 
-#include <vector>
-#include <tuple>
-#include <list>
-#include <SDL2/SDL.h>
-#include "Textures.h"
-#include "Renderables.h"
-#include "Timer.h"
-#include "./inc/Fader.h"
+//#include <vector>
+//#include <tuple>
+//#include <list>
+//#include <SDL2/SDL.h>
+//#include "Textures.h"
+//#include "Renderables.h"
+//#include "Timer.h"
+//#include "./inc/Fader.h"
 
 namespace ley {
 
