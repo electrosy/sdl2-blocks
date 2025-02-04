@@ -28,7 +28,7 @@ private:
     SDL_Rect mMessageRect;
     TTF_Font* mClassic;
     SDL_Color mColor;
-    int mSize;
+    int mPointSize;
 
 protected:
 

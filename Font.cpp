@@ -8,23 +8,23 @@ Date: Jul/14/2020
 #include "Font.h"
 
 ley::Font::Font():
-mSize(DEFAULT_FONT_SIZE) {
+mPointSize(DEFAULT_FONT_SIZE) {
     mMessageRect = {0, 0, 0, 0};
-    init(mSize);
+    init(mPointSize);
 }
 
 ley::Font::Font(int x, int y, int w, int h)
 :
-mSize(DEFAULT_FONT_SIZE) {
+mPointSize(DEFAULT_FONT_SIZE) {
 
     mMessageRect = {x, y, w, h};
-    init(mSize);
+    init(mPointSize);
 }
 
 ley::Font::Font(const Font& other) {
     
-    mSize = other.mSize;
-    init(mSize);
+    mPointSize = other.mPointSize;
+    init(mPointSize);
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
     mColor = other.mColor;
@@ -158,6 +158,6 @@ std::pair<int, int> ley::Font::size() {
 
 void ley::Font::setFontSize(int size) {
 
-    mSize = size;
-    TTF_SetFontSize(mClassic, mSize);
+    mPointSize = size;
+    TTF_SetFontSize(mClassic, mPointSize);
 }
