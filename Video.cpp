@@ -330,10 +330,10 @@ void ley::Video::loadSprites() {
 }
 
 void ley::Video::updateScores() {
-    fontLines.updateMessage(gm->getLanguageModel()->getWord("lines", 8, true) + std::to_string(int(gm->getLines())));
-    fontLvl.updateMessage(gm->getLanguageModel()->getWord("level", 8, true) + std::to_string(int(gm->getLevel())));
-    fontScore.updateMessage(gm->getLanguageModel()->getWord("score", 8, true) + std::to_string(int(gm->getScore())));
-    mFontCombo.updateMessage(gm->getLanguageModel()->getWord("combo", 13, false) + std::to_string(int(gm->comboCount())));
+    fontLines.updateMessage(gm->getLanguageModel()->getWord("lines", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getLines())));
+    fontLvl.updateMessage(gm->getLanguageModel()->getWord("level", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getLevel())));
+    fontScore.updateMessage(gm->getLanguageModel()->getWord("score", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getScore())));
+    mFontCombo.updateMessage(gm->getLanguageModel()->getWord("combo", 13, false, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->comboCount())));
 }
 
 void ley::Video::resetClock() {

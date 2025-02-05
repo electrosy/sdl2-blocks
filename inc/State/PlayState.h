@@ -6,8 +6,8 @@
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
 
-auto constexpr VOLUME_POS_X_PX = 500;
-auto constexpr VOLUME_POS_Y_PX = 10;
+auto constexpr STATUSMESSAGE_POS_X_PX = 150;
+auto constexpr STATUSMESSAGE_POS_Y_PX = 10;
 
 namespace ley {
 
@@ -33,7 +33,7 @@ private:
     Renderables mDebugRenderables;
 
     //Font
-    ley::Font statusFont;
+    ley::Font mStatusFont;
 
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown

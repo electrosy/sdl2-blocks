@@ -41,12 +41,42 @@ void ley::LanguageModel::loadLanguageData(std::string language) {
         }
     }
 }
+std::string ley::LanguageModel::capitalizeFirstLetter(std::string input) {
 
-std::string ley::LanguageModel::getWord(std::string field, int pad, bool left) {
+    //capitalize the first letter
+    if(input.size() > 0) {
+        input[0] = toupper(input[0]);
+    }
+    
+    return input;
+}
+
+std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string input) {
+    
+    input = capitalizeFirstLetter(input);
+    
+    //capitalize every letter after a space
+    for (int i = 0; i < input.size(); i++) {
+        if(input[i] == ' ' && i + 1 <= input.size()) {
+            
+            input[i + 1] = toupper(input[i + 1]);
+        }
+    }
+
+    return input;
+}
+
+std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, capitalizationtype capType) {
 
     std::string string = mLanguageFields[field];
-    string[0] = toupper(string[0]);
-    
+
+    if(capType == ley::capitalizationtype::capitalizeWords) {
+        string = capitalizeFirstLeterOfEveryWord(string);
+    }
+    else if (capType == ley::capitalizationtype::capitalizeFirst) {
+        string = capitalizeFirstLetter(string);
+    }
+
     return padTo(string, ' ', pad, left);
 }
 
@@ -75,14 +105,14 @@ std::string ley::LanguageModel::getLanguageString() {
     std::string language;
 
     if(mCurrentLanguage == "es") {
-        language = getWord("spanish", 0, true);
+        language = getWord("spanish", 0, true, capitalizationtype::capitalizeFirst);
     }
     else if (mCurrentLanguage == "en") {
-        language = getWord("english", 0, true);
+        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
     }
     else {
         //default to english
-        language = getWord("english", 0, true);
+        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
     }
     
     return language;

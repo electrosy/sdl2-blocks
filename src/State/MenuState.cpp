@@ -19,11 +19,12 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo"), 0, {}, {1000,{0,0,0,0}});
     mAblockalypseLogo.setPos(260,-75);
 
-    mainUI.pushFont("start", {29,199,0,0}, "Start", mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("highscore", {29,282,0,0}, "High Scores", mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("options", {29,365,0,0}, "Options", mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("exit", {29,451,0,0}, "Exit", mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("credits", {29,533,0,0}, "Credits", mVideoSystem->getRenderer(), 50);
+
+    mainUI.pushFont("start", {29,199,0,0}, mGameModel->getLanguageModel()->getWord("start",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("highscore", {29,282,0,0}, mGameModel->getLanguageModel()->getWord("high scores",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("options", {29,365,0,0}, mGameModel->getLanguageModel()->getWord("options",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("exit", {29,451,0,0}, mGameModel->getLanguageModel()->getWord("exit",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("credits", {29,533,0,0}, mGameModel->getLanguageModel()->getWord("credits",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
 }
 
 void MenuState::update(ley::Command command) {
@@ -86,6 +87,13 @@ bool MenuState::onReEnter() {
     SDL_Log("ReEntering MenuState");
     mBackground.resetFader(); //Reset the fader for this sprite so it will fade in again.
     mAblockalypseLogo.resetFader();
+
+    mainUI.getElementPtr("start")->setMessage(mGameModel->getLanguageModel()->getWord("start", 0, false, capitalizationtype::capitalizeFirst));
+    mainUI.getElementPtr("highscore")->setMessage(mGameModel->getLanguageModel()->getWord("high scores", 0, false, capitalizationtype::capitalizeFirst));
+    mainUI.getElementPtr("options")->setMessage(mGameModel->getLanguageModel()->getWord("options", 0, false, capitalizationtype::capitalizeFirst));
+    mainUI.getElementPtr("exit")->setMessage(mGameModel->getLanguageModel()->getWord("exit", 0, false, capitalizationtype::capitalizeFirst));
+    mainUI.getElementPtr("credits")->setMessage(mGameModel->getLanguageModel()->getWord("credits", 0, false, capitalizationtype::capitalizeFirst));
+
     return true;
 }
 

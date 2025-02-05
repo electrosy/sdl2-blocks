@@ -13,13 +13,13 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
     mTitleFont{20,20,100,50},
     mCurrentLanguageFont{20,70,100,50} {
 
-    mTitleFont.updateMessage("Language Options");
+    mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
+
+    mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, mGameModel->getLanguageModel()->getWord("english", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mLanguageUI.pushFont("testNewElement", {29,300,218,63}, "Testing", v->getRenderer(), 24);
 
     updateLanguageFont();
-
-    mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, "English", v->getRenderer(), 24);
-    mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, "Spanish", v->getRenderer(), 24);
-    mLanguageUI.pushFont("testNewElement", {29,300,218,63}, "Testing", v->getRenderer(), 24);
 }
 
 void LanguageOptionsState::update(ley::Command command) {
@@ -89,9 +89,13 @@ bool LanguageOptionsState::onPause() {
 }
 
 void LanguageOptionsState::updateLanguageFont() {
-    mCurrentLanguageFont.updateMessage("Current Language: " + mGameModel->getLanguageModel()->getLanguageString());
     
-    //mLanguageUI.getElementPtr("englishLanguage")
+    mCurrentLanguageFont.updateMessage(mGameModel->getLanguageModel()->getWord("current language",0,false, capitalizationtype::capitalizeWords) + ": " + mGameModel->getLanguageModel()->getLanguageString());
+    
+    mLanguageUI.getElementPtr("englishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("english",0,false, capitalizationtype::capitalizeFirst));
+    mLanguageUI.getElementPtr("spanishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("spanish",0,false, capitalizationtype::capitalizeFirst));
+
+    mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 }
 
 }

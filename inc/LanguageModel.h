@@ -6,6 +6,12 @@
 
 namespace ley {
 
+enum class capitalizationtype {
+    capitalizeFirst,
+    capitalizeWords,
+    capitalizeNone
+};
+
 class LanguageModel {
 
 private:
@@ -21,9 +27,10 @@ public:
     void setLanguage(std::string language) { mCurrentLanguage = language; };
     void loadLanguageData(std::string language);
     void loadLanguage();
-    std::string getWord(std::string field, int pad, bool left);
+    std::string getWord(std::string field, int pad, bool left, capitalizationtype capType);
     std::string padTo(std::string input, char padChar, unsigned long size, bool left);
-
+    std::string capitalizeFirstLeterOfEveryWord(std::string input);
+    std::string capitalizeFirstLetter(std::string input);
 
 };
     

@@ -14,9 +14,11 @@ thirdTimer(1000,{10,425,100,30}),
 fourthTimer(333,{10,455,100,5}),
 statusTimer(2000,{10,500,100,5}),
 fallTimer(1000,{}),
-statusFont(VOLUME_POS_X_PX, VOLUME_POS_Y_PX, 100, 20) {
+mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20) {
 
-    statusFont.updateMessage("Start Game - Press '?' for help.");
+    std::string statusString = mGameModel->getLanguageModel()->getWord("start game", 0, false, capitalizationtype::capitalizeWords);
+    statusString += " - " + mGameModel->getLanguageModel()->getWord("press '?' for help", 0, false, capitalizationtype::capitalizeFirst);
+    mStatusFont.updateMessage(statusString);
 
 }
 
@@ -67,15 +69,15 @@ void PlayState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
         case ley::Command::decreaseVolume :
-            statusFont.updateMessage("Volume down");
+            mStatusFont.updateMessage("Volume down");
             statusTimer.reset();
         break;
         case ley::Command::increaseVolume :
-            statusFont.updateMessage("Volume up");
+            mStatusFont.updateMessage("Volume up");
             statusTimer.reset();
         break;
         case ley::Command::nextSong :
-            statusFont.updateMessage("Next song");
+            mStatusFont.updateMessage("Next song");
             statusTimer.reset();
         break;
         case ley::Command::space :
@@ -95,7 +97,7 @@ void PlayState::update(ley::Command command) {
     fourthTimer.runFrame();
     statusTimer.runFrame(false, 0.0);
     if(statusTimer.hasExpired()) {
-        statusFont.updateMessage("");
+        mStatusFont.updateMessage("");
     }
 
     //Check to see if we need to move the block down.
@@ -118,7 +120,7 @@ void PlayState::render() {
 
 void PlayState::loadRenderables() {
     
-    mRenderables.push_back(&statusFont);
+    mRenderables.push_back(&mStatusFont);
     mRenderables.push_back(&fallTimer);
 
     mDebugRenderables.push_back(&firstTimer);
