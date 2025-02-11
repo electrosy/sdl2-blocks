@@ -135,6 +135,17 @@ void ley::Font::render(SDL_Renderer * r, bool d) {
     mMessageRect.h = h;
     mMessageRect.w = w;
 
+    if(d) {
+        //Draw a white rect on the boundry of the font.
+        SDL_Color previousColor;
+        SDL_GetRenderDrawColor(r, &previousColor.r, &previousColor.b, &previousColor.g, &previousColor.a);
+        //Set the draw color to white.
+        SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
+        SDL_RenderDrawRect(r, &mMessageRect);
+        //Set the color back to what it was previously.
+        SDL_SetRenderDrawColor(r, previousColor.r, previousColor.b, previousColor.g, previousColor.a);
+    }
+
     SDL_RenderCopy(r, mMessageTexture, NULL, &mMessageRect);
 }
 

@@ -65,7 +65,7 @@ private:
     void updateSpeed(); //check to see if the speed of the falldown block needs to change based on lines/score
     bool running; //if true then the program is still runing and has not been asked to exit yet.
     int calcLevel(); //Calculate current level based on number of lines completed
-    bool debugCommandsFlag = false; //allow debug commands
+    bool mDebugMode = false; //allow debug commands
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
     std::map<Uint8, ley::Command> mKeyBindings; // keyboard bindings
@@ -110,7 +110,7 @@ public:
     ley::StateChange currentStateChange() { return mStateChange; }; //TODO this can probably be called gotoState
     void stateChange(ley::StateChange state) { mStateChange = state; };
     ley::HighScores* highScores() { return &mHighScores; };
-    bool debugCommands(); //get current debugCommands flag
+    bool debugMode(); //get current debugCommands flag
     void debugCommandsToggle();
     bool debugOnlyLine();
     void debugOnlyLineToggle();

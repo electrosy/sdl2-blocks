@@ -46,23 +46,24 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
 
     Uint16 col2Y = 100;
-    font_objects[7] = {500, col2Y, 400, 40};
+    Uint16 col2X = 575;
+    font_objects[7] = {col2X, col2Y, 400, 40};
     font_objects[7].updateMessage(mGameModel->getLanguageModel()->getWord("next song", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::nextSong, gm->getKeyBindingsPtr(), false));
     fonts.push_back(&font_objects[7]);
 
-    font_objects[8] = {500, col2Y += 40, 400, 40};
+    font_objects[8] = {col2X, col2Y += 40, 400, 40};
     font_objects[8].updateMessage(mGameModel->getLanguageModel()->getWord("pause game", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::pause, gm->getKeyBindingsPtr(), false));
     fonts.push_back(&font_objects[8]);
 
-    font_objects[9] = {500, col2Y += 40, 400, 40};
+    font_objects[9] = {col2X, col2Y += 40, 400, 40};
     font_objects[9].updateMessage(mGameModel->getLanguageModel()->getWord("decrease volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::decreaseVolume, gm->getKeyBindingsPtr(), false));
     fonts.push_back(&font_objects[9]);
 
-    font_objects[10] = {500, col2Y += 40, 400, 40};
+    font_objects[10] = {col2X, col2Y += 40, 400, 40};
     font_objects[10].updateMessage(mGameModel->getLanguageModel()->getWord("increase volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::increaseVolume, gm->getKeyBindingsPtr(), false));
     fonts.push_back(&font_objects[10]);
 
-    font_objects[11] = {500, col2Y += 40, 400, 40};
+    font_objects[11] = {col2X, col2Y += 40, 400, 40};
     font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::enter, gm->getKeyBindingsPtr(), false));
     fonts.push_back(&font_objects[11]);
 
@@ -115,7 +116,7 @@ void KeyboardOptionsState::update(ley::Command command) {
 }
 
 void KeyboardOptionsState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
+    mRenderables.renderAll(mVideoSystem->getRenderer(), mGameModel->isOverlayOn());
 
     if(mGameModel->isOverlayOn()) {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);

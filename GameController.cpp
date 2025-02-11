@@ -107,7 +107,7 @@ void ley::GameController::processCommands(ley::Command command) {
     }
 
     //allow debug commands to be used
-    if(mGm->debugCommands()) {
+    if(mGm->debugMode()) {
         if(command == ley::Command::console) {
             mGm->overlayToggle();
         }

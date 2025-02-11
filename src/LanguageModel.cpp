@@ -83,7 +83,14 @@ std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, c
 std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size, bool left) {
     
     //return early if the pad become a negative number.
-    int width = size - input.length();
+
+    // from https://stackoverflow.com/a/4063229 / //
+    int len = 0;
+    const char* s = input.c_str();
+    while (*s) len += (*s++ & 0xc0) != 0x80;
+    // // // // // // // // // // // // // // // //
+    int width = size - len;
+
 
     if( width < 0) {
         return input;
