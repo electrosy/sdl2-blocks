@@ -22,7 +22,9 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mLocalTextEntry.setWidth(200,200,30);
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-    mLocalTextEntry.setHelpMessages("Enter a number between 8x8 - 25x22, e.g. \"10x20\" and press down.", "Scroll here to modify field.");
+    mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+        + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
+        , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
     mLocalTextEntry.setPos({31,100});
 
     optionUI.pushTextEntry(
@@ -31,8 +33,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this](){commitUI();});
 
 
-    optionUI.pushFont("languageOptions", {29,200,218,63}, "Language Options", v->getRenderer(), 24);
-    optionUI.pushFont("keyboardOptions", {29,250,218,63}, "Input Options", v->getRenderer(), 24);
+    optionUI.pushFont("languageOptions", {29,200,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    optionUI.pushFont("keyboardOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -134,6 +136,14 @@ bool OptionMenuState::onEnter() {
 
 bool OptionMenuState::onReEnter() {
     SDL_Log("ReEntering OptionMenuState");
+
+    optionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
+    optionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
+
+    mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+        + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
+        , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
+
     return true;
 }
 

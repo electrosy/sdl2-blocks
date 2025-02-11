@@ -94,8 +94,6 @@ std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned 
     } else {
         
         input.insert(input.begin(), width, padChar);
-        // when right aligned also add an additional space after the word
-        input.append(1, ' ');
     }
     
     return  input;

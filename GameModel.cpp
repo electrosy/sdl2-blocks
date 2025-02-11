@@ -69,21 +69,11 @@ int ley::GameModel::getLevel() {
     return numLevel;
 }
 
-//old block
-/*
-std::array<std::array<std::pair<ley::BlockTexCode,bool>, ley::BOARDSIZE_WIDTH>, ley::BOARDSIZE_HEIGHT >*
-ley::GameModel::getBoard() {
-    return &board;
-}
-*/
-
-//new block
 ley::Board* ley::GameModel::getBoard() {
     return &mBoard;
 }
 
 /* Functions */
-
 void ley::GameModel::addToScore(long p) {
     score += p;
 }
@@ -96,22 +86,6 @@ void ley::GameModel::debugResetActiveBlock() {
     activeBlock.debugResetPos();
     oldBlock.debugResetPos();
 }
-
-//old block
-/*
-void ley::GameModel::debugFill() {
-    
-    board[22].fill(std::make_pair(BlockTexCode::d, true));
-    board[22][0] = std::make_pair(BlockTexCode::O, false);
-
-    board[21].fill(std::make_pair(BlockTexCode::e, true));
-    board[21][0] = std::make_pair(BlockTexCode::O, false);
-    board[21][1] = std::make_pair(BlockTexCode::O, false);
-
-    board[20].fill(std::make_pair(BlockTexCode::d, true));
-    board[20][0] = std::make_pair(BlockTexCode::O, false);
-}
-*/
 
 void ley::GameModel::clearOldBlock() {
     //new board
@@ -183,21 +157,6 @@ bool ley::GameModel::newBlock() {
     return false;
 }
 
-//Iterate through the height and width of the block and set
-//the board action layer elements to isset.
-//old block
-/*
-void ley::GameModel::setBlock() {
-    SDL_Rect blockRect = activeBlock.getRect();
-    for(auto i=0; i<blockRect.w; ++i) {
-        for(auto j=0; j<blockRect.h; ++j) {
-            if(activeBlock.renderPart(i,j) != BlockTexCode::O) {
-                board[blockRect.y + j][blockRect.x + i].second = true;
-            }
-        }
-    }
-}
-*/
 bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
     
     bool rotated = false;
@@ -220,9 +179,6 @@ bool ley::GameModel::canRotate(bool r) {
     bool canput = false;
 
     if(!isPaused() && activeBlock.rotate(r)) {
-        //old block
-        //canput = canPut(activeBlock, ley::Command::up); //up is a rotation
-        //new block
         canput = mBoard.canPut(activeBlock, ley::Command::up);
         activeBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
@@ -243,7 +199,7 @@ void ley::GameModel::shiftBoard(char start, char num) {
     //shift the board down start from the bottom right (backwards).
     char stopLine = start - num;
     for(char i = start; i >= 0; --i) {
-        for(char j = /*board[i].size()*/ mBoard.width() - 1; j >= 0; --j) {
+        for(char j = mBoard.width() - 1; j >= 0; --j) {
             //new board
             if(i-num > -1) {
                 mBoard.at(j,i)->first = mBoard.at(j,i-num)->first;

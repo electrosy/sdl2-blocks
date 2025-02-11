@@ -69,11 +69,11 @@ void PlayState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
         case ley::Command::decreaseVolume :
-            mStatusFont.updateMessage("Volume down");
+            mStatusFont.updateMessage(mGameModel->getLanguageModel()->getWord("volume down", 0, false, capitalizationtype::capitalizeFirst));
             statusTimer.reset();
         break;
         case ley::Command::increaseVolume :
-            mStatusFont.updateMessage("Volume up");
+            mStatusFont.updateMessage(mGameModel->getLanguageModel()->getWord("volume up", 0, false, capitalizationtype::capitalizeFirst));
             statusTimer.reset();
         break;
         case ley::Command::nextSong :

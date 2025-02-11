@@ -24,7 +24,7 @@ private:
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;
     std::string previousOptionsValue;
-
+    
 public:
 
     OptionMenuState(ley::Video * v, ley::GameModel * gm);

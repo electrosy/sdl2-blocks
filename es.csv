@@ -14,3 +14,24 @@ options,opciones
 exit,salida
 credits,créditos
 language options,opciones de idioma
+input options,opciones de entrada
+keyboard inputs,entradas de teclado
+gamepad inputs,entradas del gamepad
+enter a number between 8x8 and 25x22,introduzca un número entre 8x8 y 25x22
+e.g. 10x20 and press down,p. ej. 10x20 y presione hacia abajo
+must be two numbers seperated by an 'x' between 8x8 and 25x22,deben ser dos números separados por una 'x' entre 8x8 y 25x22
+scroll here to modify field,desplácese aquí para modificar el campo
+volume up,subir volumen
+volume down,bajar volumen
+left,izquierda
+right,derecha
+down,abajo
+counter clockwise,en sentido antihorario
+clockwise,dextrorso
+quick drop,caída rápida
+quit,abandonar
+next song,próxima canción
+pause game,pausar el juego
+decrease volume,disminuir el volumen
+increase volume,aumentar el volumen
+enter,entrar

@@ -14,3 +14,24 @@ options,options
 exit,exit
 credits,credits
 language options,language options
+input options,input options
+keyboard inputs,keyboard inputs
+gamepad inputs,gamepad inputs
+enter a number between 8x8 and 25x22,enter a number between 8x8 and 25x22
+e.g. 10x20 and press down,e.g. 10x20 and press down
+must be two numbers seperated by an 'x' between 8x8 and 25x22,must be two numbers seperated by an 'x' between 8x8 and 25x22
+scroll here to modify field,scroll here to modify field
+volume up,volume up
+volume down,volume down
+left,left
+right,right
+down,down
+counter clockwise,counter clockwise
+clockwise,clockwise
+quick drop,quick drop
+quit,quit
+next song,next song
+pause game,pause game
+decrease volume,decrease volume
+increase volume,increase volume
+enter,enter

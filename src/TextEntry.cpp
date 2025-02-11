@@ -8,7 +8,7 @@ value{pos.x, pos.y, 0, 30},
 cursor{pos.x, pos.y, 2, 25},
 mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1},
 mErrorTimer{2500, {0,0,0,0}},
-mHelpFont{50,50,100,100}
+mHelpFont{20,50,100,100}
 {
     background.x = pos.x;
     background.y = pos.y;
