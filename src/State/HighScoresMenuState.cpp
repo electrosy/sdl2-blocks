@@ -24,7 +24,7 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
         font_objects[i] = {ROW_START_X, yValue+=ROW_SPACING, 400, 40};
         font_objects[i].updateMessage(std::to_string(i));
-        fonts_test.push_back(&font_objects[i]);
+        mFontsHighScores.push_back(&font_objects[i]);
     }
 
     mLocalTextEntry.setVisible(false);
@@ -98,10 +98,10 @@ bool HighScoresMenuState::onEnter() {
 
     mGameModel->highScores()->read();
     if(mGameModel->newHighScore()) {
-        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test, {mGameModel->getScore(),{"",mGameModel->getLevel(),mGameModel->getLines()}}, newHighRow);
+        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, mFontsHighScores, {mGameModel->getScore(),{"",mGameModel->getLevel(),mGameModel->getLines()}}, newHighRow);
     }
     else {
-        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, fonts_test, {0,{"",0,0}}, -1);
+        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, mFontsHighScores, {0,{"",0,0}}, -1);
     }
     highscoresmenu.addRenderables(highScoreRenderables);
     mGameModel->highScores()->setClean(true);

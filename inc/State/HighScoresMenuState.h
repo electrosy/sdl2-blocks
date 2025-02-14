@@ -43,9 +43,7 @@ private:
     ley::Renderables highScoreRenderables;
 
     SDL_Rect pos_col1; // name
-    std::vector<ley::Font*> fonts;
-    //TODO what is fonts_test?
-    std::vector<ley::Font*> fonts_test;
+    std::vector<ley::Font*> mFontsHighScores;
     ley::Font font_objects[HIGHSCORES_NUM_DISPLAY];
 
     void commitUI();
