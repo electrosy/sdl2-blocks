@@ -25,6 +25,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
         , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
+    mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
     mLocalTextEntry.setPos({31,100});
 
     optionUI.pushTextEntry(
@@ -143,6 +144,8 @@ bool OptionMenuState::onReEnter() {
     mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
         , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
+
+    mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
 
     return true;
 }

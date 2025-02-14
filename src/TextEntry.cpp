@@ -177,3 +177,9 @@ void ley::TextEntry::setHelpMessages(std::string focusHelp, std::string nonFocus
     mNonFocusHelp = nonFocusHelp;
     mHelpFont.updateMessage(getHelpMessage());
 }
+
+void ley::TextEntry::setErrorMessage(std::string errorMessage) {
+
+    mErrorFont.updateMessage(errorMessage);
+
+}

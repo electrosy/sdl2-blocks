@@ -70,6 +70,7 @@ public:
     void setRegEx(std::string regEx) { mRegEx = regEx; };
     ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
+    void setErrorMessage(std::string errorMessage);
 };
 
 }
