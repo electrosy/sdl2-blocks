@@ -18,7 +18,11 @@ const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}})) {
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}})),
+    mNameFont{ROW_START_X,ROW_START_Y+30,100,50},
+    mLevelFont{ROW_START_X+330,ROW_START_Y+30,100,50},
+    mLinesFont{ROW_START_X+500,ROW_START_Y+30,100,50},
+    mScoreFont{ROW_START_X+650,ROW_START_Y+30,100,50} {
 
     int yValue = ROW_START_Y;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
@@ -30,6 +34,11 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setVisible(false);
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+
+    mNameFont.updateMessage(mGameModel->getLanguageModel()->getWord("name", 0, false, capitalizationtype::capitalizeFirst));
+    mLevelFont.updateMessage(mGameModel->getLanguageModel()->getWord("level", 0, false, capitalizationtype::capitalizeFirst));
+    mLinesFont.updateMessage(mGameModel->getLanguageModel()->getWord("lines", 0, false, capitalizationtype::capitalizeFirst));
+    mScoreFont.updateMessage(mGameModel->getLanguageModel()->getWord("score", 0, false, capitalizationtype::capitalizeFirst));
 }
 void HighScoresMenuState::commitUI() {
 
@@ -83,6 +92,10 @@ void HighScoresMenuState::render() {
 void HighScoresMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mLocalTextEntry);
+    mRenderables.push_back(&mNameFont);
+    mRenderables.push_back(&mScoreFont);
+    mRenderables.push_back(&mLevelFont);
+    mRenderables.push_back(&mLinesFont);
 }
 
 bool HighScoresMenuState::onEnter() {

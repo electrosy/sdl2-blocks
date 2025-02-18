@@ -33,9 +33,6 @@ bool ley::HighScores::isClean() {
 
 void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts, HighScoresRow placeholder, int placeholderrow) {
 
-    (*fonts.begin())->updateMessage("Name              Level      Lines    Score");
-    re->push_back(*fonts.begin());
-
     HighScoresType::reverse_iterator it;
     int counter = 1;
     bool placeholderadded = false;

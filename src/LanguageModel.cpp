@@ -70,6 +70,12 @@ std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, c
 
     std::string string = mLanguageFields[field];
 
+    if(string.empty()) {
+        //We didn't find a match so just use the passed in field
+        string = field;
+        SDL_Log("ley::LanguageModel::getWord field not found: %s", field.c_str());
+    }
+
     if(capType == ley::capitalizationtype::capitalizeWords) {
         string = capitalizeFirstLeterOfEveryWord(string);
     }

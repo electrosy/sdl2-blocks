@@ -31,8 +31,11 @@ private:
     ley::GameModel * mGameModel;
     static const std::string sHighScoresMenuID;
     ley::TextEntry mLocalTextEntry;
-    
     ley::Sprite mBackground;
+    ley::Font mNameFont;
+    ley::Font mLevelFont;
+    ley::Font mLinesFont;
+    ley::Font mScoreFont;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;
