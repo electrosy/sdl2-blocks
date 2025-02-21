@@ -83,6 +83,7 @@ void ley::Sprite::center() {
 
     setPos(tempRect.x,tempRect.y);
 }
+
 void ley::Sprite::bottomLeft() {
     setPos(0, SCREEN_HEIGHT - mHeight*mScale);
 }

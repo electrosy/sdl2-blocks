@@ -105,6 +105,7 @@ void ley::Audio::playNext() {
 void ley::Audio::playPlaylist() {
 
     // TODO can !Mix_PlayingMusic be refactored up here with !Mix_FadingMusic() it likely doesn't need to be repeated.
+    // we, can likely use a map here for this.
     if (!Mix_FadingMusic() == MIX_FADING_OUT) {
 
         if(playlistNumber == 0) {

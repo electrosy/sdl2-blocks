@@ -14,6 +14,8 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "./inc/Screen.h"
+
 namespace ley {
 
 enum class Color {red,blue,green,orange,yellow,violet,indigo,white};

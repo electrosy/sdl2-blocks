@@ -36,6 +36,7 @@ private:
     ley::Font mLevelFont;
     ley::Font mLinesFont;
     ley::Font mScoreFont;
+    ley::Font mHighScoresTitleFont;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;

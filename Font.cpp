@@ -172,3 +172,19 @@ void ley::Font::setFontSize(int size) {
     mPointSize = size;
     TTF_SetFontSize(mClassic, mPointSize);
 }
+
+void ley::Font::center() {
+    SDL_Rect tempRect;
+    //Query for width and heigh of texture.
+
+    SDL_Rect fontSize;
+    TTF_SizeUTF8(mClassic, mMessageString.c_str(), &fontSize.w, &fontSize.h);
+
+    tempRect.x = SCREEN_WCENTER - (fontSize.w / 2);
+    
+    //Don't center the y axis, only the x. Use the existing y value.
+    //tempRect.y = SCREEN_HCENTER - (fontSize.h / 2);
+    tempRect.y = mMessageRect.y;
+
+    setPos({tempRect.x,tempRect.y});
+}

@@ -51,6 +51,7 @@ public:
     std::pair<int, int> size();
     void setColor(SDL_Color c);
     void setFontSize(int size);
+    void center();
 };
 
 }

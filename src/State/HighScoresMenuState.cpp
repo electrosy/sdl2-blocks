@@ -22,7 +22,8 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mNameFont{ROW_START_X,ROW_START_Y+30,100,50},
     mLevelFont{ROW_START_X+330,ROW_START_Y+30,100,50},
     mLinesFont{ROW_START_X+500,ROW_START_Y+30,100,50},
-    mScoreFont{ROW_START_X+650,ROW_START_Y+30,100,50} {
+    mScoreFont{ROW_START_X+650,ROW_START_Y+30,100,50},
+    mHighScoresTitleFont{100,100,100,50} {
 
     int yValue = ROW_START_Y;
     for(int i = 0; i < HIGHSCORES_NUM_DISPLAY; ++i) {
@@ -39,6 +40,9 @@ HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     mLevelFont.updateMessage(mGameModel->getLanguageModel()->getWord("level", 0, false, capitalizationtype::capitalizeFirst));
     mLinesFont.updateMessage(mGameModel->getLanguageModel()->getWord("lines", 0, false, capitalizationtype::capitalizeFirst));
     mScoreFont.updateMessage(mGameModel->getLanguageModel()->getWord("score", 0, false, capitalizationtype::capitalizeFirst));
+    mHighScoresTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("high scores", 0, false, capitalizationtype::capitalizeWords));
+    mHighScoresTitleFont.setFontSize(48);
+    mHighScoresTitleFont.center();
 }
 void HighScoresMenuState::commitUI() {
 
@@ -96,6 +100,7 @@ void HighScoresMenuState::loadRenderables() {
     mRenderables.push_back(&mScoreFont);
     mRenderables.push_back(&mLevelFont);
     mRenderables.push_back(&mLinesFont);
+    mRenderables.push_back(&mHighScoresTitleFont);
 }
 
 bool HighScoresMenuState::onEnter() {

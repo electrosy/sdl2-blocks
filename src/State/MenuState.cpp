@@ -21,7 +21,7 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
 
 
     mainUI.pushFont("start", {29,199,0,0}, mGameModel->getLanguageModel()->getWord("start",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("highscore", {29,282,0,0}, mGameModel->getLanguageModel()->getWord("high scores",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("highscore", {29,282,0,0}, mGameModel->getLanguageModel()->getWord("high scores",0,false, capitalizationtype::capitalizeWords), mVideoSystem->getRenderer(), 50);
     mainUI.pushFont("options", {29,365,0,0}, mGameModel->getLanguageModel()->getWord("options",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
     mainUI.pushFont("exit", {29,451,0,0}, mGameModel->getLanguageModel()->getWord("exit",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
     mainUI.pushFont("credits", {29,533,0,0}, mGameModel->getLanguageModel()->getWord("credits",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
@@ -89,7 +89,7 @@ bool MenuState::onReEnter() {
     mAblockalypseLogo.resetFader();
 
     mainUI.getElementPtr("start")->setMessage(mGameModel->getLanguageModel()->getWord("start", 0, false, capitalizationtype::capitalizeFirst));
-    mainUI.getElementPtr("highscore")->setMessage(mGameModel->getLanguageModel()->getWord("high scores", 0, false, capitalizationtype::capitalizeFirst));
+    mainUI.getElementPtr("highscore")->setMessage(mGameModel->getLanguageModel()->getWord("high scores", 0, false, capitalizationtype::capitalizeWords));
     mainUI.getElementPtr("options")->setMessage(mGameModel->getLanguageModel()->getWord("options", 0, false, capitalizationtype::capitalizeFirst));
     mainUI.getElementPtr("exit")->setMessage(mGameModel->getLanguageModel()->getWord("exit", 0, false, capitalizationtype::capitalizeFirst));
     mainUI.getElementPtr("credits")->setMessage(mGameModel->getLanguageModel()->getWord("credits", 0, false, capitalizationtype::capitalizeFirst));
