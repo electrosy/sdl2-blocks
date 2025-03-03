@@ -115,7 +115,7 @@ void ley::Font::preRender(SDL_Renderer* r)
 {
     if(!mMessageTexture) {
         SDL_Surface* surfaceMessage;
-        surfaceMessage = TTF_RenderUTF8_Solid(mClassic, mMessageString.c_str(), mColor);
+        surfaceMessage = TTF_RenderUTF8_Blended_Wrapped(mClassic, mMessageString.c_str(), mColor, 0);
         mMessageTexture = SDL_CreateTextureFromSurface(r, surfaceMessage);
         SDL_FreeSurface(surfaceMessage);
         surfaceMessage = nullptr;

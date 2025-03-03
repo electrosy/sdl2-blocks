@@ -32,13 +32,24 @@ private:
     static const std::string sCreditsID;
 
     ley::Sprite mBackground;
-    ley::Sprite mCreditsPanel;
+//    ley::Sprite mCreditsPanel;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;
 
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;
+
+    ley::Font mNameFont;
+    ley::Font mMainRolesFont;
+    ley::Font mMusicByFont;
+    ley::Font mMusicByNamesFont;
+    ley::Font mSpecialThanksFont;
+    ley::Font mSpecialThanksNamesFont;
+    ley::Font mSoundEffectsFont;
+    ley::Font mSoundEffectsNamesFont;
+    ley::Font mAblockalypseUsesFont;
+    ley::Font mAblockalypseUsesNamesFont;
 
 };
 
