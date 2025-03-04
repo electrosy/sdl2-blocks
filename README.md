@@ -1,5 +1,12 @@
 # Ablockalypse
 
+## About Ablockalypse
+
+Ablockalypse is a game developed by Steven Philley. The source code is available for viewing, learning, and non-commercial use under the Ablockalypse Source Code License. Contributions are welcome via pull requests (see CONTRIBUTING.md).
+
+### Commercial Use
+This project is not licensed for commercial use or derivative works by default. If you’d like to use this code for commercial purposes or create derivative works for commercial distribution, please contact steven@coloritcompany.com to negotiate a commercial license, which may involve compensation.
+
 ## Run Game
 
 ### Linux
