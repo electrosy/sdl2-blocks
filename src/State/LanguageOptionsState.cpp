@@ -17,7 +17,6 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, mGameModel->getLanguageModel()->getWord("english", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mLanguageUI.pushFont("testNewElement", {29,300,218,63}, "Testing", v->getRenderer(), 24);
 
     updateLanguageFont();
 }
@@ -39,12 +38,6 @@ void LanguageOptionsState::update(ley::Command command) {
         mGameModel->getLanguageModel()->setLanguage("es");
         mGameModel->getLanguageModel()->loadLanguage();
         updateLanguageFont();
-    }
-
-    if(command == ley::Command::enter && mLanguageUI.getIndex() == 2) {
-        SDL_Log("This is language option 3");
-        mLanguageUI.getElementPtr("testNewElement")->setMessage("New Message");
-        mLanguageUI.getElementPtr("testNewElement")->setFontSize(50);
     }
 
     mLanguageUI.runCommand(command);
