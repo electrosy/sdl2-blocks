@@ -48,8 +48,9 @@ jobs:
           SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
         run: |
           Write-Host "Number of processors: $env:NUMBER_OF_PROCESSORS"
-          if (-not $env:NUMBER_OF_PROCESSORS) { $jobs = 4 } else { $jobs = $env:NUMBER_OF_PROCESSORS }
-          mingw32-make -j$jobs CXXFLAGS="-I$env:SDL2_INCLUDE_DIR $env:CXXFLAGS" LDFLAGS="-L$env:SDL2_LIB_DIR $env:LDFLAGS"
+          $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
+          Write-Host "Jobs set to: $jobs"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR $env:CXXFLAGS" LDFLAGS="-L$env:SDL2_LIB_DIR $env:LDFLAGS"
 
       - name: Package game
         run: |
