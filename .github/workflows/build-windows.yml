@@ -40,7 +40,6 @@ jobs:
         run: |
           dir vcpkg\installed\x64-mingw-static\include\SDL2
           dir vcpkg\installed\x64-mingw-static\lib
-          dir vcpkg\installed\x64-mingw-static\bin
 
       - name: Build game
         env:
@@ -54,8 +53,9 @@ jobs:
           Write-Host "Number of processors: $env:NUMBER_OF_PROCESSORS"
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
           Write-Host "Jobs set to: $jobs"
-          Write-Host "CXXFLAGS: -I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP"
-          Write-Host "LDFLAGS: -L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie"
+          Write-Host "SDL2_LIB_DIR contents:"
+          dir $env:SDL2_LIB_DIR
+          Write-Host "Running make with CXXFLAGS and LDFLAGS:"
           mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie"
 
       - name: Package game
@@ -63,7 +63,6 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          copy vcpkg\installed\x64-mingw-static\bin\*.dll dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
