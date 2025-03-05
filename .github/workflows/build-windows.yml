@@ -47,10 +47,16 @@ jobs:
           SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
           SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
         run: |
+          # Create build directories first
+          mkdir build
+          mkdir build\src
+          mkdir build\src\State
           Write-Host "Number of processors: $env:NUMBER_OF_PROCESSORS"
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
           Write-Host "Jobs set to: $jobs"
-          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR $env:CXXFLAGS" LDFLAGS="-L$env:SDL2_LIB_DIR $env:LDFLAGS"
+          Write-Host "CXXFLAGS: -I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP"
+          Write-Host "LDFLAGS: -L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie"
 
       - name: Package game
         run: |
