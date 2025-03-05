@@ -29,11 +29,12 @@ jobs:
 
       - name: Configure build
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
+          #cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build game
         run: |
-          cmake --build build --config Release
+          #cmake --build build --config Release
+          make
 
       - name: Package game
         run: |
