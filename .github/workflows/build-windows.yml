@@ -1,0 +1,52 @@
+name: Build Game for Windows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Set up vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg integrate install
+          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-windows
+
+      - name: Configure build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
+
+      - name: Build game
+        run: |
+          cmake --build build --config Release
+
+      - name: Package game
+        run: |
+          mkdir dist
+          copy build\Release\sdl2-blocks.exe dist\  # Replace 'your_game_executable' with actual name
+          xcopy assets dist\assets\ /E /H /C /I  # Adjust 'assets' if needed
+          # Copy required DLLs from vcpkg
+          copy vcpkg\installed\x64-windows\bin\*.dll dist\
+          cd dist
+          7z a ..\game-package-windows.zip .
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-package-windows
+          path: game-package-windows.zip
