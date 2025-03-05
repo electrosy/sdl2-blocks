@@ -47,7 +47,7 @@ jobs:
           SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
           SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
         run: |
-          mingw32-make -j%NUMBER_OF_PROCESSORS% CXXFLAGS="-I%SDL2_INCLUDE_DIR% %CXXFLAGS%" LDFLAGS="-L%SDL2_LIB_DIR% %LDFLAGS%"
+          mingw32-make -j$env:NUMBER_OF_PROCESSORS CXXFLAGS="-I$env:SDL2_INCLUDE_DIR $env:CXXFLAGS" LDFLAGS="-L$env:SDL2_LIB_DIR $env:LDFLAGS"
 
       - name: Package game
         run: |
