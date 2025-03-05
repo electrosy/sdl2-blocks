@@ -34,18 +34,18 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
-          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-windows
+          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-mingw-static
 
       - name: Debug vcpkg installation
         run: |
-          dir vcpkg\installed\x64-windows\include\SDL2
-          dir vcpkg\installed\x64-windows\lib
-          dir vcpkg\installed\x64-windows\bin
+          dir vcpkg\installed\x64-mingw-static\include\SDL2
+          dir vcpkg\installed\x64-mingw-static\lib
+          dir vcpkg\installed\x64-mingw-static\bin
 
       - name: Build game
         env:
-          SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
-          SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
+          SDL2_INCLUDE_DIR: vcpkg\installed\x64-mingw-static\include
+          SDL2_LIB_DIR: vcpkg\installed\x64-mingw-static\lib
         run: |
           # Create build directories first
           mkdir build
@@ -63,7 +63,7 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          copy vcpkg\installed\x64-windows\bin\*.dll dist\
+          copy vcpkg\installed\x64-mingw-static\bin\*.dll dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
