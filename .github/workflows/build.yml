@@ -1,0 +1,40 @@
+name: Build Game with Steam Runtime Sniper
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests targeting main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub-hosted runner with Ubuntu
+    container:
+      image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk:latest  # Official Sniper SDK container
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Checks out your repository code
+
+      - name: Install dependencies
+        run: |
+          #apt-get update
+          #apt-get install -y build-essential  # Add any additional dependencies your game needs
+
+      - name: Configure build
+        run: |
+          # Example for CMake; adjust based on your build system
+          #cmake -S . -B build
+
+      - name: Build game
+        run: |
+          # Example for CMake; adjust based on your build system
+          # cmake --build build --config Release
+          make
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-build
+          path: build/  # Adjust to where your build outputs are
