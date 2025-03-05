@@ -56,7 +56,7 @@ jobs:
           Write-Host "SDL2_LIB_DIR contents:"
           dir $env:SDL2_LIB_DIR
           Write-Host "Running make with CXXFLAGS and LDFLAGS:"
-          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpng -lfreetype -lvorbis -lvorbisenc -lvorbisfile -logg -lwavpack -lbz2 -lzlib -lsetupapi -lole32 -lgdi32 -limm32 -lversion -lwinmm -pie"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpng -lfreetype -lbrotlidec -lvorbis -lvorbisenc -lvorbisfile -logg -lwavpack -lbz2 -lzlib -lsetupapi -lole32 -loleaut32 -lgdi32 -limm32 -lversion -lwinmm -pie -mconsole"
 
       - name: Package game
         run: |

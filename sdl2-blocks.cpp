@@ -32,11 +32,11 @@ Notes: Intended to be built around the MVC philosophy.
 enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model
 enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model
 
-int main(int argv, char** args) {
+int main(int argc, char *argv[]) {
     ley::GameModel mainGameModel;
     ley::Video mainVideo(&mainGameModel);
-    ley::GameController mainGameController(&mainVideo,&mainGameModel);
+    ley::GameController mainGameController(&mainVideo, &mainGameModel);
     mainGameController.runGameLoop();
 
-    return 1;
+    return 0; // Return 0 for success
 }
