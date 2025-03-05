@@ -16,8 +16,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up CMake
-        uses: lukka/get-cmake@latest
+      - name: Install MinGW
+        run: |
+          choco install mingw -y
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
+
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        with:
+          path: vcpkg
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+          restore-keys: ${{ runner.os }}-vcpkg-
 
       - name: Set up vcpkg
         run: |
@@ -27,27 +36,30 @@ jobs:
           .\vcpkg integrate install
           .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-windows
 
-      - name: Configure build
+      - name: Debug vcpkg installation
         run: |
-          #cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
+          dir vcpkg\installed\x64-windows\include\SDL2
+          dir vcpkg\installed\x64-windows\lib
+          dir vcpkg\installed\x64-windows\bin
 
       - name: Build game
+        env:
+          SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
+          SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
         run: |
-          #cmake --build build --config Release
-          make
+          mingw32-make -j%NUMBER_OF_PROCESSORS% CXXFLAGS="-I%SDL2_INCLUDE_DIR% %CXXFLAGS%" LDFLAGS="-L%SDL2_LIB_DIR% %LDFLAGS%"
 
       - name: Package game
         run: |
           mkdir dist
-          copy build\Release\sdl2-blocks.exe dist\  # Replace 'your_game_executable' with actual name
-          xcopy assets dist\assets\ /E /H /C /I  # Adjust 'assets' if needed
-          # Copy required DLLs from vcpkg
+          copy sdl2-blocks.exe dist\
+          xcopy assets dist\assets\ /E /H /C /I
           copy vcpkg\installed\x64-windows\bin\*.dll dist\
           cd dist
-          7z a ..\game-package-windows.zip .
+          7z a ..\sdl2-blocks-windows.zip .
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: game-package-windows
-          path: game-package-windows.zip
+          name: sdl2-blocks-windows
+          path: sdl2-blocks-windows.zip
