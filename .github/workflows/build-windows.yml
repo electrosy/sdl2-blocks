@@ -45,14 +45,13 @@ jobs:
           mkdir build\src
           mkdir build\src\State
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
-          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -l:SDL2main.lib -l:SDL2.lib -l:SDL2_image.lib -l:SDL2_ttf.lib -l:SDL2_mixer.lib -l:libmpg123-0.lib -lshlwapi"
 
       - name: Package game
         run: |
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          # Copy runtime DLLs from vcpkg
           copy "vcpkg\installed\x64-windows\bin\SDL2.dll" dist\
           copy "vcpkg\installed\x64-windows\bin\SDL2_image.dll" dist\
           copy "vcpkg\installed\x64-windows\bin\SDL2_ttf.dll" dist\
