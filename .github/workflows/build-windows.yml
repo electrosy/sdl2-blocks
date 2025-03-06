@@ -36,6 +36,11 @@ jobs:
           .\vcpkg integrate install
           .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer[mpg123] --triplet x64-windows
 
+      - name: Debug vcpkg libs
+        run: |
+          dir vcpkg\installed\x64-windows\lib
+          dir vcpkg\installed\x64-windows\bin
+
       - name: Build game
         env:
           SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
@@ -45,7 +50,7 @@ jobs:
           mkdir build\src
           mkdir build\src\State
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
-          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -l:SDL2main.lib -l:SDL2.lib -l:SDL2_image.lib -l:SDL2_ttf.lib -l:SDL2_mixer.lib -l:libmpg123-0.lib -lshlwapi"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi -lzlib -llibpng16"
 
       - name: Package game
         run: |
@@ -57,6 +62,8 @@ jobs:
           copy "vcpkg\installed\x64-windows\bin\SDL2_ttf.dll" dist\
           copy "vcpkg\installed\x64-windows\bin\SDL2_mixer.dll" dist\
           copy "vcpkg\installed\x64-windows\bin\libmpg123-0.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\zlib1.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\libpng16-16.dll" dist\
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
