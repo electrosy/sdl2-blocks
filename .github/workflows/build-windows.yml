@@ -63,6 +63,10 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
+          # Copy required MinGW DLLs
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libgcc_s_seh-1.dll" dist\
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libstdc++-6.dll" dist\
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libwinpthread-1.dll" dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
