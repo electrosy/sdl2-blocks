@@ -42,13 +42,20 @@ jobs:
           dir vcpkg\installed\x64-mingw-static\include\SDL2
           dir vcpkg\installed\x64-mingw-static\lib
 
-      - name: Debug MinGW DLL location
+      - name: Debug MinGW location
         run: |
-          Write-Host "Checking MinGW bin directory contents:"
-          dir "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
-          # Search for DLLs in the entire MinGW directory if not in bin
-          Write-Host "Searching for DLLs in MinGW install:"
-          dir "C:\ProgramData\chocolatey\lib\mingw" -Recurse -Include libgcc_s_seh-1.dll,libstdc++-6.dll,libwinpthread-1.dll
+          Write-Host "Current PATH:"
+          echo $env:PATH
+          Write-Host "Locating g++:"
+          where g++
+          Write-Host "Checking expected MinGW bin directory:"
+          if (Test-Path "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin") {
+            dir "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
+          } else {
+            Write-Host "Expected MinGW bin directory not found."
+          }
+          Write-Host "Searching for DLLs across C:\ (this may take a moment):"
+          dir "C:\" -Recurse -Include libgcc_s_seh-1.dll,libstdc++-6.dll,libwinpthread-1.dll -ErrorAction SilentlyContinue
 
       - name: Build game
         env:
@@ -71,10 +78,16 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          # Copy DLLs from MinGW bin directory (adjust path if debug step shows a different location)
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libgcc_s_seh-1.dll" dist\
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libstdc++-6.dll" dist\
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libwinpthread-1.dll" dist\
+          # Temporarily use a fallback path; update based on debug output
+          $mingwBin = "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
+          if (-not (Test-Path "$mingwBin\libgcc_s_seh-1.dll")) {
+            Write-Host "Falling back to search result path; adjust based on debug output."
+            # Example fallback; replace with actual path from debug step
+            $mingwBin = "C:\tools\mingw64\bin"
+          }
+          copy "$mingwBin\libgcc_s_seh-1.dll" dist\
+          copy "$mingwBin\libstdc++-6.dll" dist\
+          copy "$mingwBin\libwinpthread-1.dll" dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
