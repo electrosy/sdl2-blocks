@@ -34,45 +34,33 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
-          .\vcpkg remove sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-mingw-static
-          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer[mpg123] --triplet x64-mingw-static
-
-      - name: Debug vcpkg installation
-        run: |
-          dir vcpkg\installed\x64-mingw-static\include\SDL2
-          dir vcpkg\installed\x64-mingw-static\lib
+          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer[mpg123] --triplet x64-windows
 
       - name: Build game
         env:
-          SDL2_INCLUDE_DIR: vcpkg\installed\x64-mingw-static\include
-          SDL2_LIB_DIR: vcpkg\installed\x64-mingw-static\lib
+          SDL2_INCLUDE_DIR: vcpkg\installed\x64-windows\include
+          SDL2_LIB_DIR: vcpkg\installed\x64-windows\lib
         run: |
           mkdir build
           mkdir build\src
           mkdir build\src\State
-          Write-Host "Number of processors: $env:NUMBER_OF_PROCESSORS"
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
-          Write-Host "Jobs set to: $jobs"
-          Write-Host "SDL2_LIB_DIR contents:"
-          dir $env:SDL2_LIB_DIR
-          Write-Host "Running make with CXXFLAGS and LDFLAGS:"
-          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi -lpng -Wl,--whole-archive -lbrotlicommon -lbrotlidec -lbrotlienc -Wl,--no-whole-archive -lfreetype -lvorbisfile -lvorbis -lvorbis -lvorbisenc -logg -lwavpack -lbz2 -lzlib -lsetupapi -lole32 -loleaut32 -lgdi32 -limm32 -lversion -lwinmm -mconsole"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi"
 
       - name: Package game
         run: |
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
+          # Copy runtime DLLs from vcpkg
+          copy "vcpkg\installed\x64-windows\bin\SDL2.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\SDL2_image.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\SDL2_ttf.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\SDL2_mixer.dll" dist\
+          copy "vcpkg\installed\x64-windows\bin\libmpg123-0.dll" dist\
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
-          # Debug package contents
-          Write-Host "Listing dist contents:"
-          dir dist
-          Write-Host "Listing dist\assets contents:"
-          dir dist\assets
-          Write-Host "Listing dist\assets\audio contents:"
-          dir dist\assets\audio
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
