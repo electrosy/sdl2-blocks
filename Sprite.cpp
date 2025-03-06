@@ -37,6 +37,8 @@ fader{f.first,f.second} {
             &mWidth,
             &mHeight);
 
+    SDL_Log("Finished Querying Texture");
+
     bool multiframe = false;
     
     fader.pause(true); //start paused and resume on the first render
