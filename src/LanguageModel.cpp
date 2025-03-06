@@ -21,7 +21,7 @@ void ley::LanguageModel::loadLanguage() {
 
 void ley::LanguageModel::loadLanguageData(std::string language) {
     //load config
-    std::string fileName = language + ".csv";
+    std::string fileName = "./assets/lang/" + language + ".csv";
     std::ifstream inFile(fileName);
     
     mLanguageFields.clear();
