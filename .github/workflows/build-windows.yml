@@ -65,6 +65,10 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libzlib1.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libpng16.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libfreetype.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libwavpack-1.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libvorbisfile.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libbrotlidec.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libbz2.dll" dist\
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
