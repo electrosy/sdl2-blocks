@@ -66,6 +66,8 @@ fader{f.first,f.second} {
         dest_rect.h = mHeight;
         dest_rect.x = source_rect.x = 0;
     }
+
+    SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) finished");
 }
 
 ley::Sprite::~Sprite() {

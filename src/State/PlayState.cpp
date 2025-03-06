@@ -134,12 +134,20 @@ bool PlayState::onEnter() {
     resetGame();
     SDL_Log("Entering PlayState and loading renderables");
     mVideoSystem->resetBackgroundFader();
+
+    SDL_Log("Loading PlayState renderables");
     loadRenderables();
 
     //make sure the board reflects the current config
+
+    SDL_Log("Resizing Board in PlayState");
     mGameModel->resizeBoard();
+
+    SDL_Log("Resizing videosystem board in PlayState");
     mVideoSystem->videoResizeBoard();
+
     //make sure the falltimer width reflects the correct boardsize.
+    SDL_Log("Resizing the falltimer.");
     fallTimer(1000,{mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
 
     return true;
