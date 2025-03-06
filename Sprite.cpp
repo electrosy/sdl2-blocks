@@ -25,9 +25,11 @@ fader{f.first,f.second} {
     SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) called");
 
     if (!texture) {
+        SDL_Log("No valid texture. returning early");
         return;//EARLY EXIT
     }
     
+    SDL_Log("Querying Texture");
     SDL_QueryTexture(
             texture,
             nullptr,
