@@ -30,6 +30,7 @@ fader{f.first,f.second} {
     }
     
     SDL_Log("Querying Texture");
+    
     SDL_QueryTexture(
             texture,
             nullptr,

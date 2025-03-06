@@ -139,6 +139,9 @@ void ley::Video::init() {
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
 
+    SDL_Log("Compiled using SDL version: %d.%d.%d", compiled.major, compiled.minor, compiled.patch);
+    SDL_Log("Linked using SDL version: %d.%d.%d", linked.major, linked.minor, linked.patch);
+
     SDLCompiled.updateMessage("SDLCompiled!" + std::to_string(compiled.major) + "!" + std::to_string(compiled.minor) + "!" + std::to_string(compiled.patch));
     SDLLinked.updateMessage("SDLLinked!" + std::to_string(linked.major) + "!" + std::to_string(linked.minor) + "!" + std::to_string(linked.patch));
     mDebugRenderables.push_back(&SDLCompiled);
