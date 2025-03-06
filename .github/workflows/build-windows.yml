@@ -54,8 +54,10 @@ jobs:
           } else {
             Write-Host "Expected MinGW bin directory not found."
           }
+          Write-Host "Checking C:\mingw64\bin:"
+          dir "C:\mingw64\bin"
           Write-Host "Searching for DLLs across C:\ (this may take a moment):"
-          dir "C:\" -Recurse -Include libgcc_s_seh-1.dll,libstdc++-6.dll,libwinpthread-1.dll -ErrorAction SilentlyContinue
+          dir "C:\mingw64\bin" -Include libgcc_s_seh-1.dll,libstdc++-6.dll,libwinpthread-1.dll
 
       - name: Build game
         env:
@@ -78,16 +80,10 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          # Temporarily use a fallback path; update based on debug output
-          $mingwBin = "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
-          if (-not (Test-Path "$mingwBin\libgcc_s_seh-1.dll")) {
-            Write-Host "Falling back to search result path; adjust based on debug output."
-            # Example fallback; replace with actual path from debug step
-            $mingwBin = "C:\tools\mingw64\bin"
-          }
-          copy "$mingwBin\libgcc_s_seh-1.dll" dist\
-          copy "$mingwBin\libstdc++-6.dll" dist\
-          copy "$mingwBin\libwinpthread-1.dll" dist\
+          # Copy DLLs from the actual MinGW bin directory
+          copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
+          copy "C:\mingw64\bin\libstdc++-6.dll" dist\
+          copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
