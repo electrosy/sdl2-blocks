@@ -35,29 +35,12 @@ jobs:
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
           .\vcpkg remove sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-mingw-static
-          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer --triplet x64-mingw-static
+          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer[mpg123] --triplet x64-mingw-static
 
       - name: Debug vcpkg installation
         run: |
           dir vcpkg\installed\x64-mingw-static\include\SDL2
           dir vcpkg\installed\x64-mingw-static\lib
-
-      - name: Debug MinGW location
-        run: |
-          Write-Host "Current PATH:"
-          echo $env:PATH
-          Write-Host "Locating g++:"
-          where g++
-          Write-Host "Checking expected MinGW bin directory:"
-          if (Test-Path "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin") {
-            dir "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
-          } else {
-            Write-Host "Expected MinGW bin directory not found."
-          }
-          Write-Host "Checking C:\mingw64\bin:"
-          dir "C:\mingw64\bin"
-          Write-Host "Searching for DLLs across C:\ (this may take a moment):"
-          dir "C:\mingw64\bin" -Include libgcc_s_seh-1.dll,libstdc++-6.dll,libwinpthread-1.dll
 
       - name: Build game
         env:
@@ -80,10 +63,16 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
-          # Copy DLLs from the actual MinGW bin directory
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
+          # Debug package contents
+          Write-Host "Listing dist contents:"
+          dir dist
+          Write-Host "Listing dist\assets contents:"
+          dir dist\assets
+          Write-Host "Listing dist\assets\audio contents:"
+          dir dist\assets\audio
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 

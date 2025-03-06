@@ -16,9 +16,13 @@ playlistNumber(0), playlistMax(3) {
     int flags=MIX_INIT_MP3 || MIX_INIT_OGG;
     int initted=Mix_Init(flags);
     
-    if(initted & flags != flags) {
+    if(initted & (flags != flags)) {
         printf("Mix_Init: Failed to init required mp3 support!\n");
         printf("Mix_Init: %s\n", Mix_GetError());
+    }
+
+    if (!(initted & MIX_INIT_MP3)) {
+        printf("SDL_mixer failed to initialize MP3 support: %s\n", Mix_GetError());
     }
 
     //Configure Audio system
