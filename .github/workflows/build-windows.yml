@@ -34,7 +34,7 @@ jobs:
           cd vcpkg
           .\bootstrap-vcpkg.bat
           .\vcpkg integrate install
-          .\vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer[mpg123] --triplet x64-mingw-dynamic
+          .\vcpkg install sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] --triplet x64-mingw-dynamic
 
       - name: Debug vcpkg libs
         run: |
@@ -72,6 +72,7 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libvorbis.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libogg.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libbrotlicommon.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libjpeg.dll" dist\  # Add if present
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
