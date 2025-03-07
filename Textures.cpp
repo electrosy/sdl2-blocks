@@ -34,8 +34,7 @@ void ley::Textures::setRenderer(SDL_Renderer* r) {
 }
 
 SDL_Texture* ley::Textures::getTexture(std::string s) {
-    SDL_Log("ley::Textures::getTexture() key: %s", s.c_str());
-
+    
     if(textures.find(s) == textures.end()) {
         SDL_Log("Can not find texture! Aborting!");
         return nullptr;
@@ -44,12 +43,12 @@ SDL_Texture* ley::Textures::getTexture(std::string s) {
         SDL_Log("Texture Found, key: %s", s.c_str());
     }
 
-
     return textures.find(s)->second;
 }
 
 void ley::Textures::loadTexture(const char* p, std::string texturename) {
     
+    SDL_Log("Loading texture, key: %s", texturename.c_str());
     SDL_Surface* temp_surface = IMG_Load(p);
     SDL_Texture* t = SDL_CreateTextureFromSurface(renderer, temp_surface);
     if(t == NULL) {
