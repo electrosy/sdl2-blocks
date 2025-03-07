@@ -21,6 +21,11 @@ jobs:
           choco install mingw -y
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
 
+      - name: Debug MinGW Installation
+        run: |
+          dir "C:\mingw64\bin" || echo "MinGW bin directory not found"
+          dir "C:\mingw64\bin\*.dll" || echo "No DLLs found in MinGW bin"
+
       - name: Cache vcpkg
         uses: actions/cache@v3
         with:
@@ -40,7 +45,6 @@ jobs:
         run: |
           dir vcpkg\installed\x64-mingw-dynamic\lib
           dir vcpkg\installed\x64-mingw-dynamic\bin
-          # Use objdump from PATH instead of hardcoded path
           objdump -p vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll | findstr "DLL Name" > sdl2_image_deps.txt
           type sdl2_image_deps.txt
 
@@ -80,10 +84,10 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libvorbis.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libogg.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libbrotlicommon.dll" dist\
-          # MinGW runtime DLLs
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libgcc_s_seh-1.dll" dist\
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libstdc++-6.dll" dist\
-          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libwinpthread-1.dll" dist\
+          # MinGW runtime DLLs (required, fail if missing)
+          copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
+          copy "C:\mingw64\bin\libstdc++-6.dll" dist\
+          copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
