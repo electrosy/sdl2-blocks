@@ -310,16 +310,16 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
     //Backgrounds.
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.JPG", "BG_WEST_00");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.JPG", "BG_WEST_01");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.JPG", "BG_WEST_02");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1.JPG", "BG_WEST_03");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1.JPG", "BG_WEST_04");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1.JPG", "BG_WEST_05");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1.JPG", "BG_WEST_06");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1.JPG", "BG_WEST_07");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.JPG", "BG_WEST_08");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.JPG", "BG_WEST_09");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1.jpg", "BG_WEST_00");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1.jpg", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1.jpg", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1.jpg", "BG_WEST_03");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1.jpg", "BG_WEST_04");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1.jpg", "BG_WEST_05");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1.jpg", "BG_WEST_06");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1.jpg", "BG_WEST_07");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1.jpg", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1.jpg", "BG_WEST_09");
 }
 
 void ley::Video::loadSprites() {
