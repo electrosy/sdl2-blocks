@@ -48,7 +48,7 @@ SDL_Texture* ley::Textures::getTexture(std::string s) {
 
 void ley::Textures::loadTexture(const char* p, std::string texturename) {
     
-    SDL_Log("Loading texture, key: %s", texturename.c_str());
+    SDL_Log("Loading texture, path: %s key: %s", p, texturename.c_str());
     SDL_Surface* temp_surface = IMG_Load(p);
     SDL_Texture* t = SDL_CreateTextureFromSurface(renderer, temp_surface);
     if(t == NULL) {
