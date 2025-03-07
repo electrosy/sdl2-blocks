@@ -36,11 +36,12 @@ jobs:
           .\vcpkg integrate install
           .\vcpkg install sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] --triplet x64-mingw-dynamic
 
-      - name: Debug vcpkg libs
+      - name: Debug vcpkg libs and dependencies
         run: |
           dir vcpkg\installed\x64-mingw-dynamic\lib
           dir vcpkg\installed\x64-mingw-dynamic\bin
-          C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\objdump.exe -p vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll | findstr "DLL Name" > sdl2_image_deps.txt
+          # Use objdump from PATH instead of hardcoded path
+          objdump -p vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll | findstr "DLL Name" > sdl2_image_deps.txt
           type sdl2_image_deps.txt
 
       - name: Build game
@@ -59,10 +60,15 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           xcopy assets dist\assets\ /E /H /C /I
+          # Core SDL2 and related DLLs
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2_ttf.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2_mixer.dll" dist\
+          # JPEG support DLLs
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libjpeg-62.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libturbojpeg.dll" dist\
+          # Other dependencies
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libmpg123.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libzlib1.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libpng16.dll" dist\
@@ -74,11 +80,10 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libvorbis.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libogg.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libbrotlicommon.dll" dist\
-          copy "vcpkg\installed\x64-mingw-dynamic\bin\libjpeg-62.dll" dist\
-          copy "vcpkg\installed\x64-mingw-dynamic\bin\libturbojpeg.dll" dist\
-          copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
-          copy "C:\mingw64\bin\libstdc++-6.dll" dist\
-          copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
+          # MinGW runtime DLLs
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libgcc_s_seh-1.dll" dist\
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libstdc++-6.dll" dist\
+          copy "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\libwinpthread-1.dll" dist\
           cd dist
           7z a ..\sdl2-blocks-windows.zip .
 
