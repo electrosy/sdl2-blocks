@@ -39,9 +39,6 @@ SDL_Texture* ley::Textures::getTexture(std::string s) {
         SDL_Log("Can not find texture! Aborting!");
         return nullptr;
     }
-    else {
-        SDL_Log("Texture Found, key: %s", s.c_str());
-    }
 
     return textures.find(s)->second;
 }
