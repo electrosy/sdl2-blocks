@@ -40,7 +40,7 @@ jobs:
         run: |
           dir vcpkg\installed\x64-mingw-dynamic\lib
           dir vcpkg\installed\x64-mingw-dynamic\bin
-          C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\ldd.exe vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll > sdl2_image_deps.txt 2>&1
+          C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin\objdump.exe -p vcpkg\installed\x64-mingw-dynamic\bin\SDL2_image.dll | findstr "DLL Name" > sdl2_image_deps.txt
           type sdl2_image_deps.txt
 
       - name: Build game
@@ -74,7 +74,8 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libvorbis.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libogg.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libbrotlicommon.dll" dist\
-          copy "vcpkg\installed\x64-mingw-dynamic\bin\turbojpeg.dll" dist\  # Optional, if present
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libjpeg-62.dll" dist\
+          copy "vcpkg\installed\x64-mingw-dynamic\bin\libturbojpeg.dll" dist\
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
