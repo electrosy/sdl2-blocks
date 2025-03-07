@@ -34,6 +34,7 @@ void ley::Textures::setRenderer(SDL_Renderer* r) {
 }
 
 SDL_Texture* ley::Textures::getTexture(std::string s) {
+    SDL_Log("ley::Textures::getTexture() key: %s", s.c_str());
     return textures.find(s)->second;
 }
 
