@@ -71,7 +71,6 @@ jobs:
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2_mixer.dll" dist\
           # JPEG support DLLs
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libjpeg-62.dll" dist\
-          copy "vcpkg\installed\x64-mingw-dynamic\bin\libturbojpeg.dll" dist\
           # Other dependencies
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libmpg123.dll" dist\
           copy "vcpkg\installed\x64-mingw-dynamic\bin\libzlib1.dll" dist\
