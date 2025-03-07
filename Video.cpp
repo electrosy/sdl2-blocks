@@ -204,6 +204,7 @@ void ley::Video::setBackgroundTexture() {
         spriteBackgroundfadeout.reverseFader();
         spriteBackgroundfadeout.fadeTime(1200);
         spriteBackgroundfadeout.resetFader();
+        SDL_Log("Getting Sprite Background");
         spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {500,{0,0,0,0}});
     }
 }

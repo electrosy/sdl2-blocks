@@ -5,6 +5,8 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/14/2020
 */
+#include <memory>
+
 #include "Sprite.h"
 
 ley::Sprite::Sprite()
@@ -29,7 +31,7 @@ fader{f.first,f.second} {
         return;//EARLY EXIT
     }
     
-    SDL_Log("Querying Texture");
+    SDL_Log("Querying Texture, address: %p", std::addressof(texture));
     
     SDL_QueryTexture(
             texture,
