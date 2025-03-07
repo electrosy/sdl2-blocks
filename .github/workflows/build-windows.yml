@@ -88,11 +88,9 @@ jobs:
           copy "C:\mingw64\bin\libgcc_s_seh-1.dll" dist\
           copy "C:\mingw64\bin\libstdc++-6.dll" dist\
           copy "C:\mingw64\bin\libwinpthread-1.dll" dist\
-          cd dist
-          7z a ..\sdl2-blocks-windows.zip .
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sdl2-blocks-windows
-          path: sdl2-blocks-windows.zip
+          path: dist/
