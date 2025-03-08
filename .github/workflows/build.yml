@@ -1,4 +1,4 @@
-name: Build Game with Steam Runtime Sniper
+name: Linux Build Sniper
 
 on:
   push:
@@ -37,13 +37,11 @@ jobs:
       - name: Package game
         run: |
           mkdir -p dist  # Create a distribution directory
-          cp sdl2-blocks dist/  # Copy the executable (replace 'your_game_executable' with actual name)
+          cp sdl2-blocks dist/  # Copy the executable
           cp -r assets dist/  # Copy the assets directory
-          cd dist
-          zip -r ../game-package.zip .  # Create a zip file containing executable and assets
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: game-package
-          path: game-package.zip  # Upload the zip file as an artifact
+          path: dist/  # Upload the dist directory directly
