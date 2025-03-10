@@ -1,2 +1,6 @@
+Fix bug where the combo score wasn't cleared on a new game.
+
+0.6.3.0
+
 Added Spanish language selection.
 Use blend mode for font which renders a higher quality font.

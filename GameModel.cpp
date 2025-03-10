@@ -439,6 +439,7 @@ void ley::GameModel::resetGame() {
     numLines = 0;
     numLevel = 1;
     score = 0;
+    mComboCount = 0;
 
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.

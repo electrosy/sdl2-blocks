@@ -81,6 +81,10 @@ void HighScoresMenuState::update(ley::Command command) {
     }
 
     highscoresmenu.runCommand(command);
+
+    if(mLocalTextEntry.hasFocus()) {
+        mLocalTextEntry.update();
+    }
 }
 
 void HighScoresMenuState::render() {
