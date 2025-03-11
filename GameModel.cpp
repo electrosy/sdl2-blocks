@@ -6,6 +6,10 @@ Purpose: see header.
 Date: Feb/15/2020
 */
 #include <array>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 #include <SDL2/SDL.h>
 #include "GameModel.h"
 #include "Rand_int.h"
@@ -34,10 +38,15 @@ mDebugOnlyLine(false)
 
     loadKeyBindings();
     loadButtonBindings();
+
+    readConfig();
+
+    mLanguageModel.loadLanguage();
 }
 
 ley::GameModel::~GameModel() {
-
+    
+    writeConfig();
 }
 
 /* Accessors */
@@ -610,4 +619,36 @@ std::string ley::GameModel::getInputsString(std::string seperator, ley::Command 
     }
 
     return output;
+}
+
+void ley::GameModel::writeConfig() {
+  std::ofstream myfile;
+  myfile.open("mainconfig.csv");
+
+  myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
+  
+  myfile.close();
+}
+
+void ley::GameModel::readConfig() {
+    
+    std::string key;
+    std::string value;
+
+    std::ifstream inFile("mainconfig.csv");
+    if (inFile.is_open())
+    {
+        std::string line;
+        while( std::getline(inFile,line) )
+        {
+            std::stringstream ss(line);
+            
+            std::getline(ss,key,',');
+            std::getline(ss,value,',');
+        }
+    }
+
+    if(!value.empty()) {
+        getLanguageModel()->setLanguage(value);
+    }
 }

@@ -10,9 +10,7 @@ mCurrentLanguage{"en"} {
     //ISO 639 language code
     mLanguages.emplace("en", "English");
     mLanguages.emplace("es", "Spanish");
-
-    loadLanguageData(mCurrentLanguage);
-
+    
 }
 
 void ley::LanguageModel::loadLanguage() {
