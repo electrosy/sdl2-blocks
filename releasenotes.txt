@@ -1,4 +1,7 @@
 Fix bug where the combo score wasn't cleared on a new game.
+Fix bug where the language preference wasn't saved and loaded on the next run.
+Fix bug where the curser wasn't pulsing when entering a high score.
+Fix bug where background may not show after an update on Linux.
 
 0.6.3.0
 
