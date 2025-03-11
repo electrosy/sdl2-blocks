@@ -10,7 +10,7 @@ mVideoSystem(v),
 mGameModel(gm),
 fontGameOver{255, 190, 100, 35} {
 
-    fontGameOver.updateMessage("Game Over!!!");
+    fontGameOver.updateMessage(gm->getLanguageModel()->getWord("game over", 0, false, capitalizationtype::capitalizeWords) + "!!!");
 }
 
 void GameOverState::update(ley::Command command) {
