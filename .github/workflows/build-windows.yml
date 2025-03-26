@@ -21,6 +21,15 @@ jobs:
           choco install mingw -y
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
 
+      - name: Install Megatools
+        run: |
+          choco install megatools -y
+  
+      - name: Download File from Mega.nz
+        run: |
+          megadl "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" --path downloaded_file
+          dir downloaded_file
+
       - name: Debug MinGW Installation
         run: |
           dir "C:\mingw64\bin" || echo "MinGW bin directory not found"
