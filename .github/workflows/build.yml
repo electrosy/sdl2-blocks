@@ -21,7 +21,29 @@ jobs:
       - name: Install dependencies
         run: |
           #apt-get update
-          #apt-get install -y build-essential  # Add any additional dependencies your game needs
+          #apt-get install -y build-essential unzip  # Add unzip for extraction
+
+      - name: Download assets zip
+        run: |
+          curl -L -o assets.zip "https://drive.google.com/file/d/1ZMw1kZ0oyWRvAhfVcV_068y9k-H3IFbQ/view?usp=drive_link"
+
+      - name: Extract assets
+        run: |
+          unzip -o assets.zip -d temp_assets/  # Extract to a temporary directory
+          rm assets.zip  # Clean up the zip file
+
+      - name: Copy assets to assets folder
+        run: |
+          mkdir -p assets  # Ensure assets folder exists
+          cp -r temp_assets/assets/* assets/  # Copy extracted contents to assets/
+          rm -r temp_assets/  # Clean up temporary directory
+
+      - name: List assets folder contents
+        run: |
+          echo "Contents of assets/:"
+          ls -la assets/ || echo "assets/ directory is empty or does not exist"
+          echo "Contents of assets/audio/music/:"
+          ls -la assets/audio/music/ || echo "assets/audio/music/ directory is empty or does not exist"
 
       - name: Configure build
         run: |
