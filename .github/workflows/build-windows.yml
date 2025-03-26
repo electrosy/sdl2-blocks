@@ -30,12 +30,17 @@ jobs:
         run: |
           dir "C:\ProgramData\chocolatey\lib\megacmd"
           dir "C:\ProgramData\chocolatey\lib\megacmd\tools"
+          # Check common install paths again
+          dir "C:\Program Files (x86)\MEGAcmd" -ErrorAction SilentlyContinue || echo "Not in Program Files (x86)"
+          dir "C:\Program Files\MEGAcmd" -ErrorAction SilentlyContinue || echo "Not in Program Files"
+          # Search for mega-get.exe
+          Get-ChildItem -Path "C:\" -Recurse -File -Filter "mega-get.exe" -ErrorAction SilentlyContinue | ForEach-Object { "Found mega-get.exe at: " + $_.FullName; dir $_.DirectoryName }
           where mega-get || echo "mega-get not found in PATH yet"
-          mega-get --version || echo "mega-get version check failed"
   
       - name: Download File from Mega.nz
         run: |
-          mega-get "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" downloaded_file
+          # Use full path as a fallback if PATH isn’t working; adjust based on debug output
+          "C:\Program Files (x86)\MEGAcmd\mega-get.exe" "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" downloaded_file
           dir downloaded_file
 
       - name: Debug MinGW Installation
