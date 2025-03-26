@@ -20,6 +20,14 @@ CXX = g++
 CXXFLAGS = -std=gnu++1z -g -fPIE -w -MMD -MP
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie
 
+# Detect the operating system and append to CXXFLAGS for Windows
+ifeq ($(OS),Windows_NT)
+    # Append Windows-specific flags
+    CXXFLAGS += -DSDL_MAIN_HANDLED
+else
+    # Optionally, you can add logic for non-Windows (e.g., Linux)
+endif
+
 # Define build type (default to minimal if not specified)
 BUILD_TYPE ?= minimal
 
