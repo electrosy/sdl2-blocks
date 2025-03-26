@@ -21,11 +21,12 @@ jobs:
       - name: Install dependencies
         run: |
           #apt-get update
-          #apt-get install -y build-essential unzip  # Add unzip for extraction
+          #apt-get install -y build-essential unzip megacmd # Add unzip for extraction
 
       - name: Download assets zip
         run: |
-          curl -L -o assets.zip "https://drive.google.com/file/d/1ZMw1kZ0oyWRvAhfVcV_068y9k-H3IFbQ/view?usp=drive_link"
+          megadl 'https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA'
+          mv Ablockalypse-Background-Music.zip assets.zip
 
       - name: Extract assets
         run: |
