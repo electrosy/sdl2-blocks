@@ -29,11 +29,12 @@ jobs:
       - name: Debug Megatools Installation
         run: |
           dir "C:\ProgramData\chocolatey\lib\megatools\tools"
+          dir "C:\ProgramData\chocolatey\lib\megatools\tools\megatools-1.11.1.20230212-win64"
           where megadl || echo "megadl not found in PATH"
   
       - name: Download File from Mega.nz
         run: |
-          megadl "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" --path downloaded_file
+          "C:\ProgramData\chocolatey\lib\megatools\tools\megatools-1.11.1.20230212-win64\megadl.exe" "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" --path downloaded_file
           dir downloaded_file
 
       - name: Debug MinGW Installation
