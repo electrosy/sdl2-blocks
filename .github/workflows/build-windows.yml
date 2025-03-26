@@ -28,18 +28,14 @@ jobs:
   
       - name: Debug MegaCMD Installation
         run: |
-          # Check common installation paths
-          dir "C:\Program Files (x86)\MEGAcmd" -ErrorAction SilentlyContinue || echo "Not in Program Files (x86)"
-          dir "C:\Program Files\MEGAcmd" -ErrorAction SilentlyContinue || echo "Not in Program Files"
-          dir "C:\ProgramData\chocolatey\lib\megacmd" -ErrorAction SilentlyContinue || echo "Not in chocolatey\lib"
-          # Search for mega-get.exe to pinpoint location
-          Get-ChildItem -Path "C:\" -Recurse -Directory -Filter "MEGAcmd" -ErrorAction SilentlyContinue | ForEach-Object { dir $_.FullName }
+          dir "C:\ProgramData\chocolatey\lib\megacmd"
+          dir "C:\ProgramData\chocolatey\lib\megacmd\tools"
           where mega-get || echo "mega-get not found in PATH yet"
+          mega-get --version || echo "mega-get version check failed"
   
       - name: Download File from Mega.nz
         run: |
-          # Temporarily use full path if found, adjust based on debug output
-          "C:\Program Files\MEGAcmd\mega-get.exe" "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" downloaded_file
+          mega-get "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" downloaded_file
           dir downloaded_file
 
       - name: Debug MinGW Installation
