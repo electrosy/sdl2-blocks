@@ -21,20 +21,19 @@ jobs:
           choco install mingw -y
           echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $GITHUB_PATH
 
-      - name: Install Megatools
+      - name: Install MegaCMD
         run: |
-          choco install megatools -y
-          echo "C:\ProgramData\chocolatey\lib\megatools\tools" >> $GITHUB_PATH
+          choco install megacmd -y
+          echo "C:\Program Files (x86)\MEGAcmd" >> $GITHUB_PATH
   
-      - name: Debug Megatools Installation
+      - name: Debug MegaCMD Installation
         run: |
-          dir "C:\ProgramData\chocolatey\lib\megatools\tools"
-          dir "C:\ProgramData\chocolatey\lib\megatools\tools\megatools-1.11.1.20230212-win64"
-          where megadl || echo "megadl not found in PATH"
+          dir "C:\Program Files (x86)\MEGAcmd"
+          mega-whoami || echo "MegaCMD not working"
   
       - name: Download File from Mega.nz
         run: |
-          "C:\ProgramData\chocolatey\lib\megatools\tools\megatools-1.11.1.20230212-win64\megadl.exe" "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" --path downloaded_file
+          mega-get "https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA" downloaded_file
           dir downloaded_file
 
       - name: Debug MinGW Installation
