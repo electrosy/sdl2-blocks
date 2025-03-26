@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           #apt-get update
-          #apt-get install -y build-essential unzip megacmd # Add unzip for extraction
+          #apt-get install -y build-essential unzip megatools # Add unzip for extraction
 
       - name: Download assets zip
         run: |
