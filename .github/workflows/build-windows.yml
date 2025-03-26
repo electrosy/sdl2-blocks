@@ -24,6 +24,12 @@ jobs:
       - name: Install Megatools
         run: |
           choco install megatools -y
+          echo "C:\ProgramData\chocolatey\lib\megatools\tools" >> $GITHUB_PATH
+  
+      - name: Debug Megatools Installation
+        run: |
+          dir "C:\ProgramData\chocolatey\lib\megatools\tools"
+          where megadl || echo "megadl not found in PATH"
   
       - name: Download File from Mega.nz
         run: |
