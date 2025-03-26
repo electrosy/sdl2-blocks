@@ -20,38 +20,56 @@ CXX = g++
 CXXFLAGS = -std=gnu++1z -g -fPIE -w -MMD -MP
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pie
 
+# Define build type (default to minimal if not specified)
+BUILD_TYPE ?= minimal
+
+# Marker file to track build type
+BUILD_CONFIG = $(OBJDIR)/build_config
+
+# Conditional flags based on BUILD_TYPE
+ifneq ($(BUILD_TYPE),minimal)
+    CXXFLAGS += -DFULL_ASSETS
+else
+    CXXFLAGS += -DMINIMAL_ASSETS
+endif
+
 # Directories to create
 DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State
 
 # Default target
-all: $(DIRS) $(OBJ_NAME)
+all: $(DIRS) $(BUILD_CONFIG) $(OBJ_NAME)
 
 # Create necessary directories only once
 $(DIRS):
 	mkdir -p $(DIRS)
 
+# Create or update build_config with the current BUILD_TYPE
+$(BUILD_CONFIG): $(OBJDIR) FORCE
+	@echo "Checking build type: $(BUILD_TYPE)"
+	@if [ ! -f $(BUILD_CONFIG) ] || [ "$$(cat $(BUILD_CONFIG))" != "$(BUILD_TYPE)" ]; then \
+		echo "$(BUILD_TYPE)" > $(BUILD_CONFIG); \
+		echo "Updated $(BUILD_CONFIG) to $(BUILD_TYPE)"; \
+	fi
+
 # Linking step
 $(OBJ_NAME): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-# Compilation step for each source file, generates object and dependency files
-$(OBJDIR)/%.o: %.cpp
+# Compilation step for each source file, depends on build_config
+$(OBJDIR)/%.o: %.cpp $(BUILD_CONFIG) | $(DIRS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJDIR)/src/%.o: src/%.cpp
+$(OBJDIR)/src/%.o: src/%.cpp $(BUILD_CONFIG) | $(DIRS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# This pattern will generate the `.d` files alongside `.o` files
-$(OBJDIR)/%.d: %.cpp
-	$(CXX) $(CXXFLAGS) -MM -MP -MT '$(@:.d=.o)' -MF $@ $<
-
-$(OBJDIR)/src/%.d: src/%.cpp
-	$(CXX) $(CXXFLAGS) -MM -MP -MT '$(@:.d=.o)' -MF $@ $<
 
 # Include all generated dependency files
 DEPS = $(OBJS:.o=.d)
 -include $(DEPS)
 
-# Clean target to remove compiled files, executable, and dependency files
+# Clean target to remove compiled files, executable, dependency files, and build_config
 clean:
 	rm -rf $(OBJDIR) $(OBJ_NAME)
+
+# Phony targets
+.PHONY: all clean FORCE
+FORCE:
