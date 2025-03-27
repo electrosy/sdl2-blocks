@@ -10,6 +10,7 @@ Date: Dec/2/2021
 #define AUDIO_H
 
 #include <stdio.h>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -27,6 +28,8 @@ class Audio {
         Mix_Music *musMelJazz1;
         Mix_Music *musMelJazz2;
         Mix_Music *musMelJazz3;
+
+        std::vector<Mix_Music*> mMusicList;
 
         Mix_Chunk* sfxSwoosh;
         Mix_Chunk* sfxPause;

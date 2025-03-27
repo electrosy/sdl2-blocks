@@ -150,6 +150,13 @@ bool PlayState::onEnter() {
     SDL_Log("Resizing the falltimer.");
     fallTimer(1000,{mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
 
+    #ifdef FULL_ASSETS
+        SDL_Log("Full Assets loaded!");
+    #elif !FULL_ASSETS
+        SDL_Log("Minimal Assets loaded!");
+    #endif
+
+
     return true;
 }
 

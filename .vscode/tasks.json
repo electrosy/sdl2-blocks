@@ -124,7 +124,8 @@
             "command": "make",
             "args": [
                 "v=1",
-                "-j$(nproc)"  // or specify the number of jobs, e.g., "-j4"
+                "-j$(nproc)",  // or specify the number of jobs, e.g., "-j4"f
+                "BUILD_TYPE=minimal"
             ],
             "group": {
                 "kind": "build",

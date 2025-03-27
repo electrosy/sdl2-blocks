@@ -38,7 +38,7 @@ BUILD_CONFIG = $(OBJDIR)/build_config
 ifneq ($(BUILD_TYPE),minimal)
     CXXFLAGS += -DFULL_ASSETS
 else
-    CXXFLAGS += -DMINIMAL_ASSETS
+    #CXXFLAGS += -DMINIMAL_ASSETS
 endif
 
 # Directories to create

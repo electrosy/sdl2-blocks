@@ -9,7 +9,7 @@ Date: Dec/2/2021
 #include "Audio.h"
 
 ley::Audio::Audio() :
-playlistNumber(0), playlistMax(3) {
+playlistNumber(0), playlistMax(9) {
 
     SDL_InitSubSystem(SDL_INIT_AUDIO);
 
@@ -42,20 +42,71 @@ playlistNumber(0), playlistMax(3) {
         printf("Mix_LoadMUS(musMainMenu): %s\n", Mix_GetError());
     }
 
-    musMelJazz1 = Mix_LoadMUS("./assets/audio/wild_jazz.mp3"); // SOURCE https://opengameart.org/content/wild-jazz
-    if(!musMelJazz1) {                                         // AUTHOR Alex McCulloch
-        printf("Mix_LoadMUS(musMelJazz1): %s\n", Mix_GetError());
-    }
 
-    musMelJazz2 = Mix_LoadMUS("./assets/audio/jazz.ogg"); // SOURCE https://opengameart.org/content/jazz-1
-    if(!musMelJazz2) {                                    // AUTHOR Spring Spring
-        printf("Mix_LoadMUS(musMelJazz2): %s\n", Mix_GetError()); 
-    }
 
-    musMelJazz3 = Mix_LoadMUS("./assets/audio/Shake and Bake.mp3"); // SOURCE https://opengameart.org/content/shake-and-bake 
-    if(!musMelJazz3) {                                              // AUTHOR Matthew Pablo
-        printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
-    }
+    #ifndef FULL_ASSETS
+        playlistMax = 3;
+        musMelJazz1 = Mix_LoadMUS("./assets/audio/wild_jazz.mp3"); // SOURCE https://opengameart.org/content/wild-jazz
+        if(!musMelJazz1) {                                         // AUTHOR Alex McCulloch
+            printf("Mix_LoadMUS(musMelJazz1): %s\n", Mix_GetError());
+        }
+
+        musMelJazz2 = Mix_LoadMUS("./assets/audio/jazz.ogg"); // SOURCE https://opengameart.org/content/jazz-1
+        if(!musMelJazz2) {                                    // AUTHOR Spring Spring
+            printf("Mix_LoadMUS(musMelJazz2): %s\n", Mix_GetError()); 
+        }
+
+        musMelJazz3 = Mix_LoadMUS("./assets/audio/Shake and Bake.mp3"); // SOURCE https://opengameart.org/content/shake-and-bake 
+        if(!musMelJazz3) {                                              // AUTHOR Matthew Pablo
+            printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
+        }
+    #elif FULL_ASSETS
+        playlistMax = 9;
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/come-with-me-tonight-239958.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-come-with-me-tonight-239958/ 
+        if(!mMusicList[0]) {                                                                       // AUTHOR Music by u_0tyyfec3hz from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/come-with-me-tonight-239958.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/moonlit-groove-248491.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-moonlit-groove-248491/
+        if(!mMusicList[1]) {                                                                       // AUTHOR Music by John Schofield from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/moonlit-groove-248491.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-elevator-musik-278566.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-elevator-musik-278566/
+        if(!mMusicList[2]) {                                                                       // AUTHOR Music by Tommsel from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/jazz-elevator-musik-278566.mp3): %s\n", Mix_GetError());
+        }
+        
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-only-good-vibes-275341.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-only-good-vibes-275341/
+        if(!mMusicList[3]) {                                                                        // AUTHOR Music by NiKneT_Art from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/jazz-only-good-vibes-275341.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/guitar-jazz-song-300816.mp3"));      // SOURCE https://pixabay.com/music/smooth-jazz-guitar-jazz-song-300816/
+        if(!mMusicList[4]) {                                                                        // AUTHOR Music by Mircea Iancu from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/guitar-jazz-song-300816.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/sebuah-kenangan-226035.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-sebuah-kenangan-226035/
+        if(!mMusicList[5]) {                                                                        // AUTHOR Music by Wahyu Music from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/sebuah-kenangan-226035.mp3): %s\n", Mix_GetError());
+        }
+        
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/good-morning-cafe-jazz-227888.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-good-morning-cafe-jazz-227888/
+        if(!mMusicList[6]) {                                                                         // AUTHOR Music by Sleep Volume from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/good-morning-cafe-jazz-227888.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/rhythmic-jazz-289915.mp3"));          // SOURCE https://pixabay.com/music/funk-rhythmic-jazz-289915/
+        if(!mMusicList[7]) {                                                                         // AUTHOR Music by Silviu on the street from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/rhythmic-jazz-289915.mp3): %s\n", Mix_GetError());
+        }
+
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/to-my-precious-person-291357.mp3"));  // SOURCE https://pixabay.com/music/beats-to-my-precious-person-291357/
+        if(!mMusicList[8]) {                                                                         // AUTHOR Music by EDDIE LEE from Pixabay
+            printf("Mix_LoadMUS(./assets/audio/music/to-my-precious-person-291357.mp3): %s\n", Mix_GetError());
+        }
+    #endif
 
     //Set Music Volume
     Mix_VolumeMusic(20);
@@ -112,36 +163,132 @@ void ley::Audio::playPlaylist() {
     // we, can likely use a map here for this.
     if (!Mix_FadingMusic() == MIX_FADING_OUT) {
 
-        if(playlistNumber == 0) {
 
-            if(!Mix_PlayingMusic()) {
-                if(Mix_PlayMusic(musMelJazz1, 1) == -1) {
-                    printf("Mix_PlayMusic(musMelJazz1): %s\n", Mix_GetError());
-                } else {
-                    playlistNumber++;
+        #ifndef FULL_ASSETS
+        
+            if(playlistNumber == 0) {
+
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(musMelJazz1, 1) == -1) {
+                        printf("Mix_PlayMusic(musMelJazz1): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
                 }
             }
-        }
 
-        if(playlistNumber == 1) {
-            if(!Mix_PlayingMusic()) {
-                if(Mix_PlayMusic(musMelJazz2, 1) == -1) {
-                    printf("Mix_PlayMusic(musMelJazz2): %s\n", Mix_GetError());
-                } else {
-                    playlistNumber++;
+            if(playlistNumber == 1) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(musMelJazz2, 1) == -1) {
+                        printf("Mix_PlayMusic(musMelJazz2): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
                 }
             }
-        }
 
-        if(playlistNumber == 2) {
-            if(!Mix_PlayingMusic()) {
-                if(Mix_PlayMusic(musMelJazz3, 1) == -1) {
-                    printf("Mix_PlayMusic(musMelJazz3): %s\n", Mix_GetError());
-                } else {
-                    playlistNumber++;
+            if(playlistNumber == 2) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(musMelJazz3, 1) == -1) {
+                        printf("Mix_PlayMusic(musMelJazz3): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
                 }
             }
-        }
+
+        #elif FULL_ASSETS
+
+            if(playlistNumber == 0) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[0], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[0]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 1) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[1], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[1]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 2) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[2], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[2]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 3) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[3], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[3]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 4) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[4], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[4]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 5) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[5], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[5]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 6) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[6], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[6]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 7) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[7], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[7]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+
+            if(playlistNumber == 8) {
+                if(!Mix_PlayingMusic()) {
+                    if(Mix_PlayMusic(mMusicList[8], 1) == -1) {
+                        printf("Mix_PlayMusic(mMusicList[8]): %s\n", Mix_GetError());
+                    } else {
+                        playlistNumber++;
+                    }
+                }
+            }
+        #endif
     }
 
     //restart from the top of the playlist
