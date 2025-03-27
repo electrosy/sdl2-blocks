@@ -73,7 +73,7 @@ jobs:
           mkdir build\src
           mkdir build\src\State
           $jobs = if (-not $env:NUMBER_OF_PROCESSORS) { 4 } else { $env:NUMBER_OF_PROCESSORS }
-          mingw32-make BUILD_TYPE="full" "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED -DFULL_ASSETS" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi -lz -lpng16"
+          mingw32-make "-j$jobs" CXXFLAGS="-I$env:SDL2_INCLUDE_DIR -std=gnu++1z -g -fPIE -w -MMD -MP -DSDL_MAIN_HANDLED -DFULL_ASSETS" LDFLAGS="-L$env:SDL2_LIB_DIR -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lmpg123 -lshlwapi -lz -lpng16"
 
       - name: Package game
         run: |
