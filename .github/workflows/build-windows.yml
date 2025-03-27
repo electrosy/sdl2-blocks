@@ -25,6 +25,18 @@ jobs:
         run: |
           curl -L -o Ablockalypse-Background-Music.zip "https://ablockalypse-assets.s3.us-west-2.amazonaws.com/Ablockalypse-Background-Music.zip"
           ren Ablockalypse-Background-Music.zip assets.zip
+
+      - name: Extract assets
+        run: |
+          Expand-Archive -Path assets.zip -DestinationPath temp_assets/ -Force
+          Remove-Item -Path assets.zip
+
+      - name: Copy assets to assets folder
+        run: |
+          New-Item -Path assets -ItemType Directory -Force
+          Copy-Item -Path temp_assets\assets\* -Destination assets\ -Recurse -Force
+          Remove-Item -Path temp_assets\ -Recurse -Force
+      
       - name: Debug MinGW Installation
         run: |
           dir "C:\mingw64\bin" || echo "MinGW bin directory not found"
