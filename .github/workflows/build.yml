@@ -55,7 +55,7 @@ jobs:
         run: |
           # Example for CMake; adjust based on your build system
           # cmake --build build --config Release
-          make
+          make BUILD_TYPE="full"
 
       - name: Package game
         run: |
