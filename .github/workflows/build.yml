@@ -25,7 +25,7 @@ jobs:
 
       - name: Download assets zip
         run: |
-          megadl 'https://mega.nz/file/NiJjBb7Q#3PbjhsfxYmMyaNnPb4HxQ4SsEoO6Qwk64fIjLx2UxIA'
+          curl -L -o Ablockalypse-Background-Music.zip "https://ablockalypse-assets.s3.us-west-2.amazonaws.com/Ablockalypse-Background-Music.zip"
           mv Ablockalypse-Background-Music.zip assets.zip
 
       - name: Extract assets
