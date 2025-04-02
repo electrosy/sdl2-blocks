@@ -13,20 +13,30 @@ const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}}))
+    mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
+    mBoardSizeLabelFont{31,100,10,20},
+    mDelayLabelFont{31,150,10,20},
+    mRepeatLabelFont{31,200,10,20}
 
     {
 
     mLocalTextEntry.setVisible(false);
     mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mLocalTextEntry.setWidth(200,200,30);
+    mLocalTextEntry.setWidth(85,85,5);
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
     mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
-        + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
-        , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
+        + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
+        , "");
     mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-    mLocalTextEntry.setPos({31,100});
+    mLocalTextEntry.setPos({204,100});
+
+    mDelayTextEntry.setVisible(false);
+    mDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mDelayTextEntry.setWidth(85,85,3);
+    mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+
 
     optionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
@@ -34,8 +44,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this](){commitUI();});
 
 
-    optionUI.pushFont("languageOptions", {29,200,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    optionUI.pushFont("keyboardOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    optionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    optionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+
+    mBoardSizeLabelFont.updateMessage("Board Size");
+    mDelayLabelFont.updateMessage("Input Delay");
+    mRepeatLabelFont.updateMessage("Input Repeat Rate");
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -110,6 +124,9 @@ void OptionMenuState::render() {
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mLocalTextEntry);
+    mRenderables.push_back(&mBoardSizeLabelFont);
+    //mRenderables.push_back(&mDelayLabelFont);
+    //mRenderables.push_back(&mRepeatLabelFont);
 }
 
 bool OptionMenuState::onEnter() {
@@ -142,8 +159,8 @@ bool OptionMenuState::onReEnter() {
     optionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
 
     mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
-        + mGameModel->getLanguageModel()->getWord("e.g. 10x20 and press down", 0, false, capitalizationtype::capitalizeNone)
-        , mGameModel->getLanguageModel()->getWord("scroll here to modify field", 0, false, capitalizationtype::capitalizeFirst));
+        + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
+        , "");
 
     mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
 

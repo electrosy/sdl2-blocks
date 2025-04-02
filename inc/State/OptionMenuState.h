@@ -17,7 +17,12 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sOptionMenuID;
+    ley::Font mBoardSizeLabelFont;
+    ley::Font mDelayLabelFont;
+    ley::Font mRepeatLabelFont;
     ley::TextEntry mLocalTextEntry;
+    ley::TextEntry mDelayTextEntry;
+    ley::TextEntry mRepeatTextEntry;
     ley::Sprite mBackground;
     Renderables mRenderables;
     Renderables mDebugRenderables;

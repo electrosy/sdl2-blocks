@@ -8,7 +8,7 @@ value{pos.x, pos.y, 0, 30},
 cursor{pos.x, pos.y, 2, 25},
 mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1},
 mErrorTimer{2500, {0,0,0,0}},
-mHelpFont{20,50,100,100}
+mHelpFont{20,600,100,100}
 {
     background.x = pos.x;
     background.y = pos.y;
@@ -112,6 +112,9 @@ void ley::TextEntry::setWidth(int width, int underlineWidth, int maxCharLength) 
     mUnderlineWidth = underlineWidth;
     mMaxCharLength = maxCharLength;
 
+    background.w = mWidth;
+    mUnderLine.w = mUnderlineWidth;
+
 }
 
 void ley::TextEntry::onKeyDown(ley::Character c) {
@@ -138,7 +141,7 @@ void ley::TextEntry::onKeyDown(ley::Character c) {
 
 void ley::TextEntry::onTextInput(const char* cstr) {
 
-    if(value.getMessage().size() <= MAX_CHAR_LENGTH) {
+    if(value.getMessage().size() <= mMaxCharLength - 1) {
         value.updateMessage(value.getMessage() + cstr);
     }
 

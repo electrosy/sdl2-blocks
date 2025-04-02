@@ -80,10 +80,7 @@ void ley::Timer::runFrame(bool autoRestart, double newTime) {
         return; //timer is paused.
     }
 
-    if(newTime == 1) {
-        SDL_Log("newTime == 1, should not happen"); // TODO this should never happen but for some reason it does 
-    }
-    else if(mili != newTime && newTime != 0) { //How does newTime ever become 1? Is it a float rounding issue?
+    if(mili != newTime && newTime != 0) {
         mili = newTime;
     }
 
