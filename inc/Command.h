@@ -26,6 +26,8 @@ enum class Command {
     quit,
     increaseVolume,
     decreaseVolume,
+    increaseTransparency,
+    decreaseTransparency,
     nextSong,
     previousSong,
     tab,

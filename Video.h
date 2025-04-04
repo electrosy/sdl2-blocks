@@ -101,6 +101,8 @@ public:
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
     void resetClock();
     void videoResizeBoard();
+    void increaseTransparency();
+    void decreaseTransparency();
 };
 
 }

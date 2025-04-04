@@ -1,4 +1,6 @@
-latest
+Add a transparent layer between the blocks and background so that the blocks are easier to see against the background.
+
+0.6.5.0
 
 Added competly new beautiful set of backgrounds.
 

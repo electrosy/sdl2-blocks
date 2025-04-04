@@ -13,7 +13,7 @@ const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.6.5.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.6.5.1"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -109,6 +109,8 @@ void ley::Video::init() {
     createRenderer();
     loadTextures();
     loadSprites();
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     SDL_ShowCursor(false);
  
@@ -264,15 +266,7 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
-    //Buttons for main menu
-    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-base.png", "menufonts-base");
-    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-hot.png", "menufonts-hot");
-    TextureManager::Instance()->loadTexture("assets/graphic/menufonts-white.png", "menufonts-white");
-    //Start
-    TextureManager::Instance()->loadTexture("assets/btnStart.png", "btnStart");
-    TextureManager::Instance()->loadTexture("assets/start-white.png", "start-white");
-    TextureManager::Instance()->loadTexture("assets/start-hot-red.png", "start-hot-red");
-    //High Scores
+    //BumVideoSystemgh Scores
     TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
@@ -341,5 +335,15 @@ void ley::Video::updateScores() {
 
 void ley::Video::resetClock() {
     mainClock.reset();
+}
+
+void ley::Video::increaseTransparency() {
+
+    firstRectContainer.increaseTransparency();
+}
+
+void ley::Video::decreaseTransparency() {
+
+    firstRectContainer.decreaseTransparency();
 }
 

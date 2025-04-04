@@ -57,6 +57,13 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
         return keysPressed[SDL_SCANCODE_LALT] || keysPressed[SDL_SCANCODE_RALT];
     };
 
+    auto shift_mod = [this]() -> bool {
+
+        const Uint8* keysPressed = SDL_GetKeyboardState( NULL );
+
+        return keysPressed[SDL_SCANCODE_LSHIFT] || keysPressed[SDL_SCANCODE_RSHIFT];
+    };
+
     auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
      
         for(auto &[key, value] : mKeysPressed) {
@@ -131,12 +138,19 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     command = lookupCommand(pressedKey, bindings2);
 
                     if(command == ley::Command::enter && alt_mod()) {
-                         fullscreen = !fullscreen;
+                        fullscreen = !fullscreen;
+                    }
+                    else if(command == ley::Command::increaseVolume && shift_mod()) {
+                        commandQueuePtr->push(ley::Command::increaseTransparency);
+                    }
+                    else if(command == ley::Command::decreaseVolume && shift_mod()) {
+                        commandQueuePtr->push(ley::Command::decreaseTransparency);
                     }
                     else {
                         // push on repeatable commands
                         commandQueuePtr->push(command);
                     }
+                    
                 }
 
                 // TODO how to add repeat key for delete for text edit?
