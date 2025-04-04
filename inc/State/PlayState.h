@@ -37,10 +37,7 @@ private:
 
     //Timers
     ley::Timer fallTimer; //Time to force the blockdown
-    ley::Timer firstTimer;
-    ley::Timer secondTimer; 
-    ley::Timer thirdTimer; 
-    ley::Timer fourthTimer;
+
     ley::Timer statusTimer;
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;

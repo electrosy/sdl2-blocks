@@ -38,14 +38,14 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
 
 
-    optionUI.pushTextEntry(
+    mOptionUI.pushTextEntry(
         [this](){UI_ToggleFocus();},
         [this]()->bool{return mLocalTextEntry.hasFocus();},
         [this](){commitUI();});
 
 
-    optionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    optionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
     mBoardSizeLabelFont.updateMessage("Board Size");
     mDelayLabelFont.updateMessage("Input Delay");
@@ -59,15 +59,15 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && optionUI.getIndex() == 1) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 1) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && optionUI.getIndex() == 2) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 2) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    optionUI.runCommand(command);
+    mOptionUI.runCommand(command);
 
     mLocalTextEntry.update();
 }
@@ -90,7 +90,7 @@ void OptionMenuState::commitUI() {
         mLocalTextEntry.getErrorTimerPtr()->reset();
         mLocalTextEntry.getErrorFontPtr()->setVisible(true);
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mLocalTextEntry.setTextBoxValue(previousOptionsValue);
+        mLocalTextEntry.setTextBoxValue(mPreviousOptionsValue);
     }
 
     if(mLocalTextEntry.hasFocus()) {
@@ -102,7 +102,7 @@ void OptionMenuState::UI_ToggleFocus() {
     
     if(!mLocalTextEntry.hasFocus()){
         mActiveUIElement = &mLocalTextEntry;
-        previousOptionsValue = mLocalTextEntry.getTextBoxValue();
+        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
     }
     else {
         mActiveUIElement = {};
@@ -118,7 +118,7 @@ void OptionMenuState::render() {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
-    optionUI.render(mVideoSystem);
+    mOptionUI.render(mVideoSystem);
 }
 
 void OptionMenuState::loadRenderables() {
@@ -155,8 +155,8 @@ bool OptionMenuState::onEnter() {
 bool OptionMenuState::onReEnter() {
     SDL_Log("ReEntering OptionMenuState");
 
-    optionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
-    optionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
+    mOptionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
+    mOptionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
 
     mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)

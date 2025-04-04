@@ -8,10 +8,6 @@ PlayState::PlayState(ley::Video * v, ley::GameModel * gm)
 :
 mVideoSystem(v),
 mGameModel(gm),
-firstTimer(3000,{10,300,100,50}),
-secondTimer(2500,{10,400,100,25}),
-thirdTimer(1000,{10,425,100,30}),
-fourthTimer(333,{10,455,100,5}),
 statusTimer(2000,{10,500,100,5}),
 fallTimer(1000,{}),
 mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20) {
@@ -91,10 +87,6 @@ void PlayState::update(ley::Command command) {
 
     /**** UPDATE ****/
     fallTimer.runFrame(false, mGameModel->speed());
-    firstTimer.runFrame();
-    secondTimer.runFrame();
-    thirdTimer.runFrame();
-    fourthTimer.runFrame();
     statusTimer.runFrame(false, 0.0);
     if(statusTimer.hasExpired()) {
         mStatusFont.updateMessage("");
@@ -123,10 +115,6 @@ void PlayState::loadRenderables() {
     mRenderables.push_back(&mStatusFont);
     mRenderables.push_back(&fallTimer);
 
-    mDebugRenderables.push_back(&firstTimer);
-    mDebugRenderables.push_back(&secondTimer);
-    mDebugRenderables.push_back(&thirdTimer);
-    mDebugRenderables.push_back(&fourthTimer);
     mDebugRenderables.push_back(&statusTimer);
 }
 

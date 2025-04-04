@@ -159,13 +159,13 @@ void ley::Board::putBlock(Block& b) {
 
 void ley::Board::setBlock(Block& b) {
     SDL_Rect blockRect = b.getRect();
-        for(auto i=0; i<blockRect.w; ++i) {
-            for(auto j=0; j<blockRect.h; ++j) {
-                if(b.renderPart(i,j) != BlockTexCode::O) {
-                    at(blockRect.x + i, blockRect.y + j)->second = true;
-                }
+    for(auto i=0; i<blockRect.w; ++i) {
+        for(auto j=0; j<blockRect.h; ++j) {
+            if(b.renderPart(i,j) != BlockTexCode::O) {
+                at(blockRect.x + i, blockRect.y + j)->second = true;
             }
         }
+    }
 }
 
 void ley::Board::fillLine(int l, std::pair<ley::BlockTexCode, bool> p) {

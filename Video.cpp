@@ -13,7 +13,7 @@ const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.6.4.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.6.5.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Alpha";
 const std::string APPLICATION_ENV = "Development";
@@ -310,16 +310,16 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
     //Backgrounds.
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST01_0440_V1a.jpg", "BG_WEST_00");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST09_0489_V1a.jpg", "BG_WEST_01");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST10_0528_V1a.jpg", "BG_WEST_02");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST04_0495_V1a.jpg", "BG_WEST_03");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST05_0447_V1a.jpg", "BG_WEST_04");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST06_0465_V1a.jpg", "BG_WEST_05");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST07_0570_V1a.jpg", "BG_WEST_06");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST08_0442_V1a.jpg", "BG_WEST_07");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST02_0520_V1a.jpg", "BG_WEST_08");
-    TextureManager::Instance()->loadTexture("assets/background/1280x720/Wested/WEST03_0457_V1a.jpg", "BG_WEST_09");
+// TODO not used remove  --  TextureManager::Instance()->loadTexture("assets/background/jazz/heaven-5114501_1280", "BG_WEST_00");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/bridge-7504605_1280x720.jpg", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/sea-7707983_1280x720.jpg", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/heaven-5114501_1280x720.jpg", "BG_WEST_03");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/building-5002861_1280x720.jpg", "BG_WEST_04");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/alley-89197_1280x720.jpg", "BG_WEST_05");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/sunset-7898136_1280x720.jpg", "BG_WEST_06");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/night-7593233_1280x720.jpg", "BG_WEST_07");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/starry-sky-2051448_1280x720.jpg", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/jazz/clouds-2517653_1280x720.jpg", "BG_WEST_09");
 }
 
 void ley::Video::loadSprites() {
