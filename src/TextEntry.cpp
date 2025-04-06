@@ -23,7 +23,7 @@ void ley::TextEntry::render(SDL_Renderer * r, bool d) {
     if(isVisible()) {
 
         SDL_SetRenderDrawColor(r, 125,125,125,50);
-        SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+        //SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND); // TODO we don't need this because blendmode is set in video.
         SDL_RenderFillRect(r, &background);
         
         if(mHasFocus) {

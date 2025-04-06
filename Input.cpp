@@ -5,12 +5,19 @@ Copyright (C) 2020 Steven Philley. All rights reserved.
 Purpose: see header.
 Date: Feb/14/2020
 */
+
 #include "Input.h"
 #include "Video.h"
 
 const auto KEY_DELAY_TIME = 250;
 const auto KEY_REPEAT_TIME = 35;
- 
+
+ley::InputPressed::InputPressed(Uint16 sdlKeymod) 
+:
+mDelayTimer{KEY_DELAY_TIME, {0, 0, 0, 0}},
+mRepeatTimer{KEY_REPEAT_TIME, {0, 0, 0, 0}} {
+
+}
 /* RAII */
 ley::Input::Input() {
     SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
@@ -41,7 +48,13 @@ ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley
 }
 
 /* Functions */
-ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function) {
+ley::Command ley::Input::pollEvents(
+    bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, 
+    std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, 
+    ley::TextEntry* te, 
+    const std::function<void(ley::Command c)>& function) {
+    
+    
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
 
@@ -67,12 +80,12 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
     auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
      
         for(auto &[key, value] : mKeysPressed) {
-            
-            value.first.runFrame(false);
-            value.second.runFrame(false);
+
+            value->getDelayTimerPtr()->runFrame(false);
+            value->getRepeatTimerPtr()->runFrame(false);
 
             //if the delay timer has expired and the repeat timer has expired
-            if(value.first.hasExpired() && value.second.hasExpired()) {
+            if(value->getDelayTimerPtr()->hasExpired() && value->getRepeatTimerPtr()->hasExpired()) {
                 
                 ley::Command command = lookupCommand(key, bindings2);
                 //don't repeat the enter button.
@@ -80,7 +93,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                     commandQueuePtr->push(command);
                 }
                 //reset the repeat timer
-                value.second.reset();
+                value->getRepeatTimerPtr()->reset();
             }
         }
 
@@ -122,16 +135,17 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
                 if(!event.key.repeat) {
                                         
                     Uint8 pressedKey = event.key.keysym.scancode;
-                    //reset the timers if this key was previously not pressed 
+                    Uint16 pressedModifiers = event.key.keysym.mod;
 
+                    //reset the timers if this key was previously not pressed 
                     if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
 
                         //skip modifiers
                         if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
-                        {
-                            mKeysPressed.insert({pressedKey, std::make_pair(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
-                            mKeysPressed[pressedKey].first.reset();
-                            mKeysPressed[pressedKey].second.reset();
+                        { 
+                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers)});
+                            mKeysPressed[pressedKey]->getDelayTimerPtr()->reset();
+                            mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
                         }
                     }
                     
@@ -164,7 +178,7 @@ ley::Command ley::Input::pollEvents(bool& fullscreen, std::map<Uint8, ley::Comma
 
             case SDL_KEYUP :
                 {
-                    Uint8 releasedKey = event.key.keysym.scancode;                    
+                    Uint8 releasedKey = event.key.keysym.scancode;         
                     mKeysPressed.erase(releasedKey);
                 }
                 break;

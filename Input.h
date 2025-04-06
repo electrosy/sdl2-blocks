@@ -20,12 +20,29 @@ Date: Feb/14/2020
 
 namespace ley {
 
+typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
+
+class InputPressed {
+
+private:
+    Uint16 mModifiers;
+    ley::Timer mDelayTimer;
+    ley::Timer mRepeatTimer;
+
+public:
+    Uint16 getModifiers() {return mModifiers;};
+    ley::Timer* getDelayTimerPtr() { return &mDelayTimer;};
+    ley::Timer* getRepeatTimerPtr() { return &mRepeatTimer;};
+    InputPressed(Uint16 sdlKeymod);
+};
+
+
 class Input {
 
 private:
     ley::Command lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings);
     SDL_GameController *mControllerPtr = nullptr;
-    std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mKeysPressed; //keyboard
+    std::map<Uint8, std::unique_ptr<InputPressed>> mKeysPressed; //keyboard
     std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
     
 public:

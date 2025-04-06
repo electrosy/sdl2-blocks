@@ -22,6 +22,8 @@ Date: Feb/15/2020
 
 namespace ley {
 
+typedef std::map<std::pair<Uint8, int>, ley::Command> BindingsType;
+
 enum class StateChange { //TODO this can probably be called State
     play,
     options,
