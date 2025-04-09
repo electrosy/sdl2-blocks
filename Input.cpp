@@ -47,10 +47,35 @@ ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley
     return ley::Command::none;
 }
 
+ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, BindingsType* bindings) {
+    
+    // Get range of entries for this scancode
+    auto range = bindings->equal_range(scancode);
+    
+    // Iterate through all bindings for this key
+    for (auto it = range.first; it != range.second; ++it) {
+        
+        //Check for commands that have no modifiers
+        Uint16 unwantedMods = KMOD_SHIFT | KMOD_ALT | KMOD_CTRL;
+        if(it->second.first == 0 && !(modifiers & unwantedMods)) {
+            return it->second.second;
+        }
+        //Then check for commands with modifiers.
+        else if(modifiers & it->second.first) {
+            return it->second.second;
+        }
+    }
+
+    return ley::Command::none;
+}
+
 /* Functions */
-ley::Command ley::Input::pollEvents(
-    bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, 
-    std::map<Uint8, ley::Command>* bindings2, std::queue<ley::Command>* commandQueuePtr, 
+void ley::Input::pollEvents(
+    bool& fullscreen, 
+    std::map<Uint8, ley::Command>* buttonBindings2, 
+    std::map<Uint8, ley::Command>* bindings2, 
+    BindingsType* bindingsNewType,
+    std::queue<ley::Command>* commandQueuePtr, 
     ley::TextEntry* te, 
     const std::function<void(ley::Command c)>& function) {
     
@@ -62,6 +87,16 @@ ley::Command ley::Input::pollEvents(
     // storing parens or and && so that we can do this key or that key or these 
     // two keys or those two keys e.g. shitching full screen. for now multiple 
     // or keys will have to suffice.
+
+
+
+    // TODO clean this up as SDL_GetKeyboardState probably doesn't need to be called multiple times to get all the modifiers.
+    auto ctrl_mod = [this]() -> bool  {
+
+        const Uint8* keysPressed = SDL_GetKeyboardState( NULL );
+
+        return keysPressed[SDL_SCANCODE_LCTRL] || keysPressed[SDL_SCANCODE_RCTRL];
+    };
 
     auto alt_mod = [this]() -> bool  {
 
@@ -77,35 +112,55 @@ ley::Command ley::Input::pollEvents(
         return keysPressed[SDL_SCANCODE_LSHIFT] || keysPressed[SDL_SCANCODE_RSHIFT];
     };
 
-    auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2]() {
-     
-        for(auto &[key, value] : mKeysPressed) {
+    auto get_mod_bitmask = [this, alt_mod, shift_mod, ctrl_mod]() -> Uint16 {
 
-            value->getDelayTimerPtr()->runFrame(false);
-            value->getRepeatTimerPtr()->runFrame(false);
+        Uint16 modifiers = KMOD_NONE;
+
+        if(alt_mod()) {
+            modifiers |= KMOD_ALT;
+        }
+
+        if(ctrl_mod()) {
+            modifiers |= KMOD_CTRL;
+        }
+
+        if(shift_mod()) {
+            modifiers |= KMOD_SHIFT;
+        }
+
+        return modifiers;
+
+    };
+
+    auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2, get_mod_bitmask, bindingsNewType]() {
+     
+        for(auto &[key, keyPress] : mKeysPressed) {
+
+            keyPress->getDelayTimerPtr()->runFrame(false);
+            keyPress->getRepeatTimerPtr()->runFrame(false);
 
             //if the delay timer has expired and the repeat timer has expired
-            if(value->getDelayTimerPtr()->hasExpired() && value->getRepeatTimerPtr()->hasExpired()) {
+            if(keyPress->getDelayTimerPtr()->hasExpired() && keyPress->getRepeatTimerPtr()->hasExpired()) {
                 
-                ley::Command command = lookupCommand(key, bindings2);
-                //don't repeat the enter button.
+                ley::Command command = lookupCommand2( (SDL_Scancode)key, get_mod_bitmask(), bindingsNewType);
+                //don't repeat the enter command.
                 if(command != ley::Command::enter) {
                     commandQueuePtr->push(command);
                 }
                 //reset the repeat timer
-                value->getRepeatTimerPtr()->reset();
+                keyPress->getRepeatTimerPtr()->reset();
             }
         }
 
-        for(auto &[key, value] : mButtonsPressed) {
+        for(auto &[key, keyPress] : mButtonsPressed) {
             
-            value.first.runFrame(false); //run delay timer.
-            value.second.runFrame(false); //the repeat timer.
+            keyPress.first.runFrame(false); //run delay timer.
+            keyPress.second.runFrame(false); //the repeat timer.
 
-            if(value.first.hasExpired() && value.second.hasExpired()) {
+            if(keyPress.first.hasExpired() && keyPress.second.hasExpired()) {
                 commandQueuePtr->push(lookupCommand(key, buttonBindings2));
                 //reset the repeat timer
-                value.second.reset();
+                keyPress.second.reset();
             }
         }
     };
@@ -134,7 +189,7 @@ ley::Command ley::Input::pollEvents(
                 
                 if(!event.key.repeat) {
                                         
-                    Uint8 pressedKey = event.key.keysym.scancode;
+                    SDL_Scancode pressedKey = event.key.keysym.scancode;
                     Uint16 pressedModifiers = event.key.keysym.mod;
 
                     //reset the timers if this key was previously not pressed 
@@ -149,22 +204,16 @@ ley::Command ley::Input::pollEvents(
                         }
                     }
                     
-                    command = lookupCommand(pressedKey, bindings2);
+                    //command = lookupCommand(pressedKey, bindings2);                    
+                    command = lookupCommand2(pressedKey, pressedModifiers, bindingsNewType);
 
-                    if(command == ley::Command::enter && alt_mod()) {
+                    if(command == ley::Command::fullscreen) {
                         fullscreen = !fullscreen;
-                    }
-                    else if(command == ley::Command::increaseVolume && shift_mod()) {
-                        commandQueuePtr->push(ley::Command::increaseTransparency);
-                    }
-                    else if(command == ley::Command::decreaseVolume && shift_mod()) {
-                        commandQueuePtr->push(ley::Command::decreaseTransparency);
                     }
                     else {
                         // push on repeatable commands
                         commandQueuePtr->push(command);
                     }
-                    
                 }
 
                 // TODO how to add repeat key for delete for text edit?
@@ -173,7 +222,6 @@ ley::Command ley::Input::pollEvents(
                     function(command);
                 }
                 
-
                 break;
 
             case SDL_KEYUP :
@@ -211,6 +259,4 @@ ley::Command ley::Input::pollEvents(
     }
 
     check_timers();
-
-    return command;
 }

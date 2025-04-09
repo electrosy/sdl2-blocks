@@ -9,18 +9,24 @@ Date: Feb/14/2020
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <SDL2/SDL.h>
+
+#include <map>
 #include <vector>
 #include <string>
+#include <queue>
+
+#include <SDL2/SDL.h>
+
 #include <functional>
 #include "./inc/TextEntry.h"
 #include "./inc/Command.h"
-#include "queue"
-#include "map"
+
+
 
 namespace ley {
 
 typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
+typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> BindingsType;
 
 class InputPressed {
 
@@ -41,6 +47,7 @@ class Input {
 
 private:
     ley::Command lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings);
+    ley::Command lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, BindingsType* bindings);
     SDL_GameController *mControllerPtr = nullptr;
     std::map<Uint8, std::unique_ptr<InputPressed>> mKeysPressed; //keyboard
     std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
@@ -48,8 +55,9 @@ private:
 public:
     Input();
     ~Input();
-    ley::Command pollEvents(bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2,  std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    void pollEvents(bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, BindingsType* bindingsNewType, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
 };
 
 }
 #endif
+

@@ -22,8 +22,6 @@ Date: Feb/15/2020
 
 namespace ley {
 
-typedef std::map<std::pair<Uint8, int>, ley::Command> BindingsType;
-
 enum class StateChange { //TODO this can probably be called State
     play,
     options,
@@ -71,6 +69,7 @@ private:
     ley::Audio audSystem; //audio subsystem.
     ley::StateChange mStateChange = ley::StateChange::none;
     std::map<Uint8, ley::Command> mKeyBindings; // keyboard bindings
+    BindingsType mKeyBindings2;
     std::map<Uint8, ley::Command> mButtonBindings; // gamepad bindings
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
@@ -78,7 +77,8 @@ private:
     ley::Config mConfig;
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
-    void loadKeyBindings(); //keyboard
+//    void loadKeyBindings(); //keyboard
+    void loadKeyBindings2(); //keyboard
     void loadButtonBindings(); //gamepad
     ley::LanguageModel mLanguageModel;
 
@@ -125,6 +125,7 @@ public:
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard();
     std::map<Uint8, ley::Command>* getKeyBindingsPtr(); //keyboard
+    BindingsType* getKeyBindingsPtr2(); //keyboard
     std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
     static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
     ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };

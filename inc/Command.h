@@ -31,7 +31,8 @@ enum class Command {
     nextSong,
     previousSong,
     tab,
-    backspace}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+    backspace,
+    fullscreen}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;
