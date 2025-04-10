@@ -1,3 +1,7 @@
+Update the rotations slightly to be more intuitive.
+
+0.6.5.1
+
 Add a transparent layer between the blocks and background so that the blocks are easier to see against the background.
 
 0.6.5.0
