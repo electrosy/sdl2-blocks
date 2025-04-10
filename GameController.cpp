@@ -250,7 +250,7 @@ void ley::GameController::runCleanUp() {
     mGm->resetGame();
     fadeMusic();
 }
-std::pair<int, int> ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect inner) {
+SDL_Point ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect inner) {
     
     int x = 0;
     int y = 0;
@@ -258,7 +258,7 @@ std::pair<int, int> ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect
     x = (outer.w/2) - (inner.w/2);
     y = (outer.h/2) - (inner.h/2);
     
-    return std::make_pair(x,y);
+    return {x,y};
 }
 void ley::GameController::renderNextBlock() {
 
@@ -272,12 +272,12 @@ void ley::GameController::renderNextBlock() {
 
     ley::Block nextBlock = mGm->getNextBlock();
 
-    std::pair<int, int> pos = centerRectInPx({mGm->getBoard()->nextBoxPosXPx(), NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
+    SDL_Point pos = centerRectInPx({mGm->getBoard()->nextBoxPosXPx(), NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
                                             {nextBlock.getRect().x, nextBlock.getRect().y, nextBlock.width()*BLOCKSIZE_PX, nextBlock.height()*BLOCKSIZE_PX});
 
     SDL_Rect next_dest_rect;
-    next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first  - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
-    next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.second;
+    next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.x  - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
+    next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.y - (nextBlock.getTopGap() * BLOCKSIZE_PX);
     next_dest_rect.h = h;
     next_dest_rect.w = w;
     
@@ -293,8 +293,8 @@ void ley::GameController::renderNextBlock() {
             }
             next_dest_rect.x = next_dest_rect.x + w;
         }
+        next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.x - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
         next_dest_rect.y = next_dest_rect.y + h;
-        next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
     }
 }
 

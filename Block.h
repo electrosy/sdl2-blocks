@@ -85,7 +85,7 @@ public:
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
     Uint8 getLeftGap();
-
+    Uint8 getTopGap();
 };
 
 

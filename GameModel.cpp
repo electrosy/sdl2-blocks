@@ -168,6 +168,9 @@ bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add cont
     
     if(canRotate(r)) {
         activeBlock.rotate(r);
+        
+        SDL_Log("ActiveBlock top gap: %d", activeBlock.getTopGap());
+        
         clearOldBlock();
         oldBlock.rotate(r);
         // new board

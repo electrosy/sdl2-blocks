@@ -400,12 +400,12 @@ void ley::Block::setBlock(BlockType t, int o) {
             switch (o) {
                 case 0 :
                 case 2 :
-                    block[0] = { BlockTexCode::j, BlockTexCode::j, BlockTexCode::j, BlockTexCode::j, BlockTexCode::O };
-                    block[1] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[0] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::j, BlockTexCode::j, BlockTexCode::j, BlockTexCode::j, BlockTexCode::O };
                     block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     block[4] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    rect.h = 1;
+                    rect.h = 2;
                     rect.w = 4;
                 break;
 
@@ -654,7 +654,6 @@ void ley::Block::setBlockOddBalls(BlockType t, int o) {
 */
 
 Uint8 ley::Block::getLeftGap() {
-
     //Iterate through the entire block to discover the left gap.
     Uint8 smallestGap = block[0].size(); //Assume that the block is square and we will start with the width of the block based on the first row
     for(int i = 0; i < block.size(); ++i) {
@@ -678,4 +677,17 @@ Uint8 ley::Block::getLeftGap() {
     }
 
     return smallestGap;
+}
+
+// This will let us know how many gap rows are on top of the block.
+Uint8 ley::Block::getTopGap() {
+    //How many full rows on top do not have a texture.
+    for(int i = 0; i < block.size(); ++i) {
+        for(int j = 0; j < block[i].size(); ++j) {
+            if(block[i][j] != ley::BlockTexCode::O) {
+                return i;
+            }
+        }
+    }
+    return block.size();
 }

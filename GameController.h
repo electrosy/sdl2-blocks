@@ -59,7 +59,7 @@ public:
     void runGameLoop();
     void setHighScores(ley::HighScores* hs);
     void runCleanUp(); //run clean up after the game is completly over
-    std::pair<int, int> centerRectInPx(SDL_Rect outer, SDL_Rect inner); // returns the x y for the inner rect to be in center of the outer rect
+    SDL_Point centerRectInPx(SDL_Rect outer, SDL_Rect inner); // returns the x y for the inner rect to be in center of the outer rect
     void renderNextBlock();
 
     /* AUDIO */
