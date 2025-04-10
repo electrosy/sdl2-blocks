@@ -151,15 +151,10 @@ bool ley::GameModel::newBlock() {
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    //old block
-    //new block
-    if(/*!canPut(activeBlock, ley::Command::up)*/ !mBoard.canPut(activeBlock, ley::Command::up)) {
+    if(!mBoard.canPut(activeBlock, ley::Command::up)) {
         return false;
     }
     else {
-        //old block
-        //putBlock(activeBlock);
-        //new block
         mBoard.putBlock(activeBlock);
         return true;
     }

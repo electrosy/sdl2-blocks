@@ -26,8 +26,16 @@ void ley::Board::setSize(int inX, int inY) {
 }
 
 std::pair<ley::BlockTexCode, bool>* ley::Board::at(int inX, int inY) {
+    
+    int value = inY * mWidth + inX;
+
+    if(value >= 0) {
+        return &mBoard.at(inY * mWidth + inX);
+    }
+    else
+        return {};
+
    
-   return &mBoard.at(inY * mWidth + inX);
 }
 
 void ley::Board::debugOutput(bool inLayer) {
@@ -149,8 +157,8 @@ void ley::Board::putBlock(Block& b) {
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
         for(int j = 0; j < rect.h; ++j) {
-            BlockTexCode renderPart = b.renderPart(i,j);
-            if(at(rect.x+i, rect.y+j)->second == false) {
+            BlockTexCode renderPart = b.renderPart(i, j);
+            if(at(rect.x+i, rect.y+j) && at(rect.x+i, rect.y+j)->second == false) {
                 at(rect.x+i, rect.y+j)->first = renderPart;
             }
         }

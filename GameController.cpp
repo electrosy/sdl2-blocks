@@ -276,7 +276,7 @@ void ley::GameController::renderNextBlock() {
                                             {nextBlock.getRect().x, nextBlock.getRect().y, nextBlock.width()*BLOCKSIZE_PX, nextBlock.height()*BLOCKSIZE_PX});
 
     SDL_Rect next_dest_rect;
-    next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first;
+    next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first  - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
     next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.second;
     next_dest_rect.h = h;
     next_dest_rect.w = w;
@@ -294,7 +294,7 @@ void ley::GameController::renderNextBlock() {
             next_dest_rect.x = next_dest_rect.x + w;
         }
         next_dest_rect.y = next_dest_rect.y + h;
-        next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first;
+        next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.first - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
     }
 }
 

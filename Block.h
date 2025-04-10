@@ -50,7 +50,8 @@ private:
     std::array<std::array<BlockTexCode, 4>,4> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockType,int = 0);
-    void setBlockOddBalls(BlockType,int = 0);
+
+//    void setBlockOddBalls(BlockType,int = 0);
 
 public:
 
@@ -83,7 +84,7 @@ public:
     int heightAtWidth(int); //return the number of blocks high at a particular x location
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
-
+    Uint8 getLeftGap();
 
 };
 

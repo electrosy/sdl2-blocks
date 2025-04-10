@@ -23,7 +23,7 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockType ty, bool c)
         break;
         case BlockType::tee :
             rect.h = 3;
-            rect.w = 2;
+            rect.w = 3;
         break;
         case BlockType::rLee :
             rect.h = 3;
@@ -229,19 +229,19 @@ void ley::Block::setBlock(BlockType t, int o) {
         case BlockType::tee :
             switch(o) {
                 case 0 :
-                    block[0] = { BlockTexCode::e, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    block[1] = { BlockTexCode::e, BlockTexCode::e, BlockTexCode::O, BlockTexCode::O };
-                    block[2] = { BlockTexCode::e, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[0] = { BlockTexCode::O, BlockTexCode::e, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::O, BlockTexCode::e, BlockTexCode::e, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::e, BlockTexCode::O, BlockTexCode::O };
                     block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
                     rect.h=3;
-                    rect.w=2;
+                    rect.w=3;
                 break;
                 case 1 :
-                    block[0] = { BlockTexCode::e, BlockTexCode::e, BlockTexCode::e, BlockTexCode::O };
-                    block[1] = { BlockTexCode::O, BlockTexCode::e, BlockTexCode::O, BlockTexCode::O };
-                    block[2] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[0] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
+                    block[1] = { BlockTexCode::e, BlockTexCode::e, BlockTexCode::e, BlockTexCode::O };
+                    block[2] = { BlockTexCode::O, BlockTexCode::e, BlockTexCode::O, BlockTexCode::O };
                     block[3] = { BlockTexCode::O, BlockTexCode::O, BlockTexCode::O, BlockTexCode::O };
-                    rect.h = 2;
+                    rect.h = 3;
                     rect.w = 3;
                 break;
                 case 2 :
@@ -412,6 +412,7 @@ void ley::Block::setBlock(BlockType t, int o) {
     }
 }
 
+/*
 void ley::Block::setBlockOddBalls(BlockType t, int o) {
     orientation = o;
 
@@ -628,4 +629,32 @@ void ley::Block::setBlockOddBalls(BlockType t, int o) {
         block[2].fill(BlockTexCode::O);
         block[3].fill(BlockTexCode::O);
     }
+}
+*/
+
+Uint8 ley::Block::getLeftGap() {
+
+    //Iterate through the entire block to discover the left gap.
+    Uint8 smallestGap = block[0].size(); //Assume that the block is square and we will start with the width of the block based on the first row
+    for(int i = 0; i < block.size(); ++i) {
+
+        Uint8 rowGap = 0;
+        for(int j = 0; j < block[i].size(); ++j) {
+
+            if(block[i][j] != ley::BlockTexCode::O) {
+                break;
+            }
+            else {
+                rowGap++;
+            }
+        }
+
+        //We want the largest gap that has a texture in it, if there is a row that has all gaps then we don't count that one.
+        if(rowGap < smallestGap && rowGap < block[i].size()) {
+            
+            smallestGap = rowGap;
+        }
+    }
+
+    return smallestGap;
 }
