@@ -47,7 +47,7 @@ private:
     BlockType type; //type empty == null block
     unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and max dimension
-    std::array<std::array<BlockTexCode, 4>,4> block;
+    std::array<std::array<BlockTexCode, 5>,5> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockType,int = 0);
 
@@ -70,7 +70,7 @@ public:
     void setW(unsigned int w) {rect.w = w;};
     void debugResetPos();
     bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
-    std::array<std::array<ley::BlockTexCode, 4>,4> getBlockParts();
+    std::array<std::array<ley::BlockTexCode, 5>,5> getBlockParts();
 
     void operator= (const Block &b);
     

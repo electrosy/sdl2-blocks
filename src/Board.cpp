@@ -29,7 +29,7 @@ std::pair<ley::BlockTexCode, bool>* ley::Board::at(int inX, int inY) {
     
     int value = inY * mWidth + inX;
 
-    if(value >= 0) {
+    if(value >= 0 && value <= mBoard.size()) {
         return &mBoard.at(inY * mWidth + inX);
     }
     else
