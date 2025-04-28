@@ -26,7 +26,7 @@ Date: Feb/14/2020
 namespace ley {
 
 typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
-typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> BindingsType;
+typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> BindingsType; //SDL_Scancode, <Modifers, Command>
 
 class InputPressed {
 

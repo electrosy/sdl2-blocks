@@ -692,6 +692,29 @@ std::string ley::GameModel::getInputsString(std::string seperator, ley::Command 
     return output;
 }
 
+std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, BindingsType* bindings, bool gamepad) {
+
+    std::string output = "";
+    for(const auto& kv : *bindings) {
+        if (kv.second.second == command) {
+            
+            if(output != "") {
+                //assume we already have a command and postpend the seperator
+                output += seperator + " ";
+            }
+            if(gamepad) {
+                output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
+                
+            }
+            else {
+                output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
+            }
+        }
+    }
+
+    return output;
+}
+
 void ley::GameModel::writeConfig() {
   std::ofstream myfile;
   myfile.open("mainconfig.csv");

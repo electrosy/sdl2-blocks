@@ -128,6 +128,7 @@ public:
     BindingsType* getKeyBindingsPtr2(); //keyboard
     std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
     static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
+    static std::string getInputsString2(std::string seperator, ley::Command command, BindingsType* bindings, bool gamepad);
     ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };
     void writeConfig();
     void readConfig();

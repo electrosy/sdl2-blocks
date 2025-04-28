@@ -17,54 +17,54 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
     Uint16 startY = 100;
     font_objects[0] = {20, startY, 400, 40};
-    font_objects[0].updateMessage(mGameModel->getLanguageModel()->getWord("left", 17, false, capitalizationtype::capitalizeFirst)  + ": " + gm->getInputsString(",", ley::Command::left, gm->getKeyBindingsPtr(), false));
+    font_objects[0].updateMessage(mGameModel->getLanguageModel()->getWord("left", 17, false, capitalizationtype::capitalizeFirst)  + ": " + gm->getInputsString2(",", ley::Command::left, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[0]);
 
     font_objects[1] = {20, startY+=40, 400, 40};
-    font_objects[1].updateMessage(mGameModel->getLanguageModel()->getWord("right", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getInputsString(",", ley::Command::right, gm->getKeyBindingsPtr(), false));
+    font_objects[1].updateMessage(mGameModel->getLanguageModel()->getWord("right", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getInputsString2(",", ley::Command::right, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[1]);
 
     font_objects[2] = {20, startY+=40, 400, 40};
-    font_objects[2].updateMessage(mGameModel->getLanguageModel()->getWord("down", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getInputsString(",", ley::Command::down, gm->getKeyBindingsPtr(), false));
+    font_objects[2].updateMessage(mGameModel->getLanguageModel()->getWord("down", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getInputsString2(",", ley::Command::down, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[2]);
 
     font_objects[3] = {20, startY+=40, 400, 40};
-    font_objects[3].updateMessage(mGameModel->getLanguageModel()->getWord("counter clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::cclockwise, gm->getKeyBindingsPtr(), false));
+    font_objects[3].updateMessage(mGameModel->getLanguageModel()->getWord("counter clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::cclockwise, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[3]);
 
     font_objects[4] = {20, startY+=40, 400, 40};
-    font_objects[4].updateMessage(mGameModel->getLanguageModel()->getWord("clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::clockwise, gm->getKeyBindingsPtr(), false));
+    font_objects[4].updateMessage(mGameModel->getLanguageModel()->getWord("clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::clockwise, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[4]);
 
     font_objects[5] = {20, startY+=40, 400, 40};
-    font_objects[5].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::space, gm->getKeyBindingsPtr(), false));
+    font_objects[5].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::space, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[5]);
 
     font_objects[6] = {20, startY+=40, 400, 40};
-    font_objects[6].updateMessage(mGameModel->getLanguageModel()->getWord("quit", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::quit, gm->getKeyBindingsPtr(), false));
+    font_objects[6].updateMessage(mGameModel->getLanguageModel()->getWord("quit", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::quit, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[6]);
 
 
     Uint16 col2Y = 100;
     Uint16 col2X = 575;
     font_objects[7] = {col2X, col2Y, 400, 40};
-    font_objects[7].updateMessage(mGameModel->getLanguageModel()->getWord("next song", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::nextSong, gm->getKeyBindingsPtr(), false));
+    font_objects[7].updateMessage(mGameModel->getLanguageModel()->getWord("next song", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::nextSong, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[7]);
 
     font_objects[8] = {col2X, col2Y += 40, 400, 40};
-    font_objects[8].updateMessage(mGameModel->getLanguageModel()->getWord("pause game", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::pause, gm->getKeyBindingsPtr(), false));
+    font_objects[8].updateMessage(mGameModel->getLanguageModel()->getWord("pause game", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::pause, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[8]);
 
     font_objects[9] = {col2X, col2Y += 40, 400, 40};
-    font_objects[9].updateMessage(mGameModel->getLanguageModel()->getWord("decrease volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::decreaseVolume, gm->getKeyBindingsPtr(), false));
+    font_objects[9].updateMessage(mGameModel->getLanguageModel()->getWord("decrease volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::decreaseVolume, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[9]);
 
     font_objects[10] = {col2X, col2Y += 40, 400, 40};
-    font_objects[10].updateMessage(mGameModel->getLanguageModel()->getWord("increase volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::increaseVolume, gm->getKeyBindingsPtr(), false));
+    font_objects[10].updateMessage(mGameModel->getLanguageModel()->getWord("increase volume", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::increaseVolume, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[10]);
 
     font_objects[11] = {col2X, col2Y += 40, 400, 40};
-    font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString(",", ley::Command::enter, gm->getKeyBindingsPtr(), false));
+    font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getInputsString2(",", ley::Command::enter, gm->getKeyBindingsPtr2(), false));
     fonts.push_back(&font_objects[11]);
 
     Uint16 colButtonY = 460;
