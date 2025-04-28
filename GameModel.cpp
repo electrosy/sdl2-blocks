@@ -692,6 +692,9 @@ std::string ley::GameModel::getInputsString(std::string seperator, ley::Command 
     return output;
 }
 
+// TODO getInputsString needs to be removed once the game pad logic has been adjusted 
+//      for the new BindingsType then rename getInputsString2 to getInputsString
+
 std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, BindingsType* bindings, bool gamepad) {
 
     std::string output = "";
