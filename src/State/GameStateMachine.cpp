@@ -72,12 +72,14 @@ bool ley::GameStateMachine::isStateDone() {
 }
 
 ley::TextEntry* ley::GameStateMachine::activeUIElement() {
+    
     if(!mGameStates.empty()) {
         return mGameStates.back()->activeUIelement();
     }
     else {
         return nullptr;
     }
+
 }
 
 void ley::GameStateMachine::UI_ToggleFocus() {

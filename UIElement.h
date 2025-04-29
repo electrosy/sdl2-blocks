@@ -55,7 +55,7 @@ public:
     void setMessage(std::string message);
     void setFontSize(int size);
     void preRender(SDL_Renderer* r);
-    std::function<void()> getFunction() {return mUIToggleFunc;};
+    std::function<void()> getToggleFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};
     std::function<void()> getEnterFunction() {return mCommitUI;};
     

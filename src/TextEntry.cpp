@@ -186,3 +186,29 @@ void ley::TextEntry::setErrorMessage(std::string errorMessage) {
     mErrorFont.updateMessage(errorMessage);
 
 }
+
+void ley::TextEntry::handleFocusChange(TextEntry* activeUIElement, std::string* previousValue) {
+
+    if(!hasFocus()){
+        activeUIElement = this;
+        (*previousValue) = getTextBoxValue();
+    }
+    else {
+        activeUIElement = {};
+    }
+
+    toggleFocus();
+
+
+    /*
+    if(!mLocalTextEntry.hasFocus()){
+        mActiveUIElement = &mLocalTextEntry;
+        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
+    }
+    else {
+        mActiveUIElement = {};
+    }
+
+    mLocalTextEntry.toggleFocus();
+    */
+}

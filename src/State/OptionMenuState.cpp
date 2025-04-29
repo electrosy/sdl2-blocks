@@ -35,14 +35,24 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mDelayTextEntry.setWidth(85,85,3);
-    mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+    mDelayTextEntry.setPos({204,150});
+    mDelayTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+    mDelayTextEntry.setHelpMessages("This is the help message 1 for other text entry", "");
+    
 
 
     mOptionUI.pushTextEntry(
-        [this](){UI_ToggleFocus();},
+        [this](){mLocalTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mLocalTextEntry.hasFocus();},
-        [this](){commitUI();});
+        [this](){commitBoardSize();});
 
+    //Initialize the active ui element as the first text entry.
+    mActiveUIElement = &mLocalTextEntry;
+        
+    mOptionUI.pushTextEntry(
+        [this](){mDelayTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);},
+        [this]()->bool{return mDelayTextEntry.hasFocus();},
+        [this](){});
 
     mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
@@ -59,20 +69,21 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 1) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 2) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 2) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 3) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
     mOptionUI.runCommand(command);
 
     mLocalTextEntry.update();
+    mDelayTextEntry.update();
 }
 
-void OptionMenuState::commitUI() {
+void OptionMenuState::commitBoardSize() {
 
     SDL_Log("OptionMenuState::commitUI()");
     //TODO maybe this regex check should be contained within the TextEntry
@@ -94,22 +105,28 @@ void OptionMenuState::commitUI() {
     }
 
     if(mLocalTextEntry.hasFocus()) {
-        UI_ToggleFocus();
+        mLocalTextEntry.toggleFocus();
     }
 }
 
+/* 
 void OptionMenuState::UI_ToggleFocus() {
     
-    if(!mLocalTextEntry.hasFocus()){
-        mActiveUIElement = &mLocalTextEntry;
-        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
-    }
-    else {
-        mActiveUIElement = {};
-    }
+    
+//    if(!mLocalTextEntry.hasFocus()){
+//        mActiveUIElement = &mLocalTextEntry;
+//        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
+//    }
+//    else {
+//        mActiveUIElement = {};
+//   }
+//
+//    mLocalTextEntry.toggleFocus();
+    
 
-    mLocalTextEntry.toggleFocus();
-}
+    mLocalTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);
+    
+} */
 
 void OptionMenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
@@ -125,7 +142,8 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
     mRenderables.push_back(&mLocalTextEntry);
     mRenderables.push_back(&mBoardSizeLabelFont);
-    //mRenderables.push_back(&mDelayLabelFont);
+    mRenderables.push_back(&mDelayLabelFont);
+    mRenderables.push_back(&mDelayTextEntry);
     //mRenderables.push_back(&mRepeatLabelFont);
 }
 
@@ -133,6 +151,7 @@ bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
     mLocalTextEntry.setVisible(true);
+    mDelayTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -171,7 +190,11 @@ bool OptionMenuState::onExit() {
     SDL_Log("Exiting OptionMenustate");
 
     //Commit the current value into the textentry
-    commitUI();
+    commitBoardSize();
+
+    if(mDelayTextEntry.hasFocus()) {
+        mDelayTextEntry.toggleFocus();
+    }
 
     return true;
 }

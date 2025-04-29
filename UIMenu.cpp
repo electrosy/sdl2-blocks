@@ -99,10 +99,10 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     
     if(elements.size() <= 0) {return; /*EARLY EXIT*/}
 
-    if(elements[currentIndex].getFunction()) {
+    if(elements[currentIndex].getToggleFunction()) {
 
         if(!elements[currentIndex].getInFocus()) {
-            elements[currentIndex].getFunction()();
+            elements[currentIndex].getToggleFunction()();
         }
     }
 
@@ -169,9 +169,9 @@ void ley::UIMenu::previous() {
     if(currentIndex > 0) {
 
         //if we have an active ui element untoggle it before moving to the previous
-        if(elements[currentIndex].getFunction()) {
+        if(elements[currentIndex].getToggleFunction()) {
             if(elements[currentIndex].getInFocus()) {
-                elements[currentIndex].getFunction()();
+                elements[currentIndex].getToggleFunction()();
             }
             //also run the enter function
             elements[currentIndex].getEnterFunction()();
@@ -185,9 +185,9 @@ void ley::UIMenu::next() {
     if(currentIndex < elements.size()-1) {
 
         //if we have an active ui element untoggle it before moving to the next
-        if(elements[currentIndex].getFunction()) {
+        if(elements[currentIndex].getToggleFunction()) {
             if(elements[currentIndex].getInFocus()) {
-                elements[currentIndex].getFunction()();
+                elements[currentIndex].getToggleFunction()();
             }
             //also run the enter function
             elements[currentIndex].getEnterFunction()();

@@ -173,7 +173,9 @@ void ley::Input::pollEvents(
 
             case SDL_TEXTINPUT:
                 /* Add new text onto the end of our text */
-                te->onTextInput(event.text.text);
+                if(te) {
+                    te->onTextInput(event.text.text);
+                }
                 break;
             case SDL_TEXTEDITING:
                 /*

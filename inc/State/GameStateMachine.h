@@ -22,6 +22,8 @@ public:
     void commitUI();
     void UI_ToggleFocus();
 
+protected:
+
 private:
 
     std::vector<GameState*> mGameStates;
