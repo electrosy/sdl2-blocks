@@ -187,10 +187,10 @@ void ley::TextEntry::setErrorMessage(std::string errorMessage) {
 
 }
 
-void ley::TextEntry::handleFocusChange(TextEntry* activeUIElement, std::string* previousValue) {
+void ley::TextEntry::handleFocusChange(TextEntry** activeUIElement, std::string* previousValue) {
 
     if(!hasFocus()){
-        activeUIElement = this;
+        (*activeUIElement) = this;
         (*previousValue) = getTextBoxValue();
     }
     else {

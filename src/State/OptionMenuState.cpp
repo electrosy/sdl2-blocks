@@ -29,20 +29,21 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
         , "");
     mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-    mLocalTextEntry.setPos({204,100});
+    mLocalTextEntry.setPos({224,100});
 
     mDelayTextEntry.setVisible(false);
     mDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mDelayTextEntry.setWidth(85,85,3);
-    mDelayTextEntry.setPos({204,150});
-    mDelayTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-    mDelayTextEntry.setHelpMessages("This is the help message 1 for other text entry", "");
+    mDelayTextEntry.setWidth(85,85,5);
+    mDelayTextEntry.setPos({224,150});
+    mDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
+    mDelayTextEntry.setErrorMessage("Must be a number between 50 and 300");
+    mDelayTextEntry.setHelpMessages("Enter a number between 50 and 300", "");
     
 
 
     mOptionUI.pushTextEntry(
-        [this](){mLocalTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);},
+        [this](){mLocalTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mLocalTextEntry.hasFocus();},
         [this](){commitBoardSize();});
 
@@ -50,9 +51,9 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mActiveUIElement = &mLocalTextEntry;
         
     mOptionUI.pushTextEntry(
-        [this](){mDelayTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);},
+        [this](){mDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
         [this]()->bool{return mDelayTextEntry.hasFocus();},
-        [this](){});
+        [this](){commitKeyDelay();});
 
     mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
@@ -106,6 +107,23 @@ void OptionMenuState::commitBoardSize() {
 
     if(mLocalTextEntry.hasFocus()) {
         mLocalTextEntry.toggleFocus();
+    }
+}
+
+void OptionMenuState::commitKeyDelay() {
+
+    if ( std::regex_match(mDelayTextEntry.getTextBoxValue().c_str(), std::regex(mDelayTextEntry.getRegEx()) )) {
+        SDL_Log("Regex matched.");
+
+        mGameModel->setKeyDelay(atoi(mDelayTextEntry.getTextBoxValue().c_str()));
+
+    }
+    else {
+        SDL_Log("Regex did not match: %s ", mDelayTextEntry.getTextBoxValue().c_str());
+        mDelayTextEntry.getErrorTimerPtr()->reset();
+        mDelayTextEntry.getErrorFontPtr()->setVisible(true);
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
     }
 }
 
@@ -167,6 +185,9 @@ bool OptionMenuState::onEnter() {
 
         *mLocalTextEntry.getTextBoxField() = line;
     }
+
+    //Load the Delay value
+    mDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
 
     return true;
 }

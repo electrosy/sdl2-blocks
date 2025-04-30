@@ -54,6 +54,8 @@ private:
     bool active; //not paused // TODO this should be called paused and the checks should be reversed
     int mComboCount = 0;
     void clearOldBlock();
+    int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
+    int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
     std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     bool processLines(int &numLines); //returns true if any number of lines are removed.
@@ -132,6 +134,11 @@ public:
     ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };
     void writeConfig();
     void readConfig();
+    int getKeyDelay() {return mKeyDelay;};
+    void setKeyDelay(int inKeyDelay) {mKeyDelay = inKeyDelay;};
+
+    int getKeyRepeat() {return mKeyRepeat;};
+    void setKeyRepeat(int inKeyRepeat) {mKeyRepeat = inKeyRepeat;};
 
 };
 

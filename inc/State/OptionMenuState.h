@@ -29,6 +29,7 @@ private:
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu mOptionUI;
     std::string mPreviousOptionsValue;
+    std::string mPreviousKeyDelayValue;
     
 public:
 
@@ -41,6 +42,7 @@ public:
     virtual bool onReEnter();
     virtual bool onPause();
     virtual void commitBoardSize();
+    virtual void commitKeyDelay();
 //    virtual void UI_ToggleFocus();
     virtual std::string getStateID() const { return sOptionMenuID; }
 

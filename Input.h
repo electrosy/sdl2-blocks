@@ -25,6 +25,9 @@ Date: Feb/14/2020
 
 namespace ley {
 
+const auto KEY_DELAY_TIME_DEFAULT = 250;
+const auto KEY_REPEAT_TIME_DEFAULT = 35;
+
 typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
 typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> BindingsType; //SDL_Scancode, <Modifers, Command>
 
@@ -39,23 +42,33 @@ public:
     Uint16 getModifiers() {return mModifiers;};
     ley::Timer* getDelayTimerPtr() { return &mDelayTimer;};
     ley::Timer* getRepeatTimerPtr() { return &mRepeatTimer;};
-    InputPressed(Uint16 sdlKeymod);
+    InputPressed(Uint16 sdlKeymod, auto delayTime, auto repeatTime);
 };
 
 
 class Input {
 
 private:
+
+    // TODO lookupCommand should be replaced with lookupCommand2 and renamed to lookupCommand.
     ley::Command lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings);
     ley::Command lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, BindingsType* bindings);
-    SDL_GameController *mControllerPtr = nullptr;
+    SDL_GameController *mControllerPtr = nullptr; //For the gamepad.
     std::map<Uint8, std::unique_ptr<InputPressed>> mKeysPressed; //keyboard
     std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
     
 public:
     Input();
     ~Input();
-    void pollEvents(bool& fullscreen, std::map<Uint8, ley::Command>* buttonBindings2, std::map<Uint8, ley::Command>* bindings2, BindingsType* bindingsNewType, std::queue<ley::Command>* commandQueuePtr, ley::TextEntry* te, const std::function<void(ley::Command c)>& function); 
+    void pollEvents(bool& fullscreen, 
+        std::map<Uint8, ley::Command>* buttonBindings2, 
+        std::map<Uint8, ley::Command>* bindings2, 
+        BindingsType* bindingsNewType, 
+        std::queue<ley::Command>* commandQueuePtr, 
+        ley::TextEntry* te, 
+        const std::function<void(ley::Command c)>& function, 
+        int keyDelay,
+        int keyRepeat);
 };
 
 }

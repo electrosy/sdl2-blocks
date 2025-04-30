@@ -9,13 +9,11 @@ Date: Feb/14/2020
 #include "Input.h"
 #include "Video.h"
 
-const auto KEY_DELAY_TIME = 250;
-const auto KEY_REPEAT_TIME = 35;
-
-ley::InputPressed::InputPressed(Uint16 sdlKeymod) 
+ley::InputPressed::InputPressed(Uint16 sdlKeymod, auto delayTime, auto repeatTime) 
 :
-mDelayTimer{KEY_DELAY_TIME, {0, 0, 0, 0}},
-mRepeatTimer{KEY_REPEAT_TIME, {0, 0, 0, 0}} {
+mDelayTimer{delayTime, {0, 0, 0, 0}},
+mRepeatTimer{repeatTime, {0, 0, 0, 0}} {
+
 
 }
 /* RAII */
@@ -77,7 +75,9 @@ void ley::Input::pollEvents(
     BindingsType* bindingsNewType,
     std::queue<ley::Command>* commandQueuePtr, 
     ley::TextEntry* te, 
-    const std::function<void(ley::Command c)>& function) {
+    const std::function<void(ley::Command c)>& function,
+    int keyDelay,
+    int keyRepeat) {
     
     
     SDL_Event event;
@@ -200,7 +200,7 @@ void ley::Input::pollEvents(
                         //skip modifiers
                         if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
                         { 
-                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers)});
+                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, keyDelay, keyRepeat)});
                             mKeysPressed[pressedKey]->getDelayTimerPtr()->reset();
                             mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
                         }
@@ -238,7 +238,7 @@ void ley::Input::pollEvents(
                     Uint8 buttonPressed = event.cbutton.button;
 
                     if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {
-                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(KEY_DELAY_TIME, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME, {0, 0, 0, 0}))});
+                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(KEY_DELAY_TIME_DEFAULT, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME_DEFAULT, {0, 0, 0, 0}))});
 
                         mButtonsPressed[buttonPressed].first.reset();
                         mButtonsPressed[buttonPressed].second.reset();
