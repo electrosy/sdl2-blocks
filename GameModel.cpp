@@ -723,6 +723,7 @@ void ley::GameModel::writeConfig() {
   myfile.open("mainconfig.csv");
 
   myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
+  myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
   
   myfile.close();
 }
@@ -742,10 +743,19 @@ void ley::GameModel::readConfig() {
             
             std::getline(ss,key,',');
             std::getline(ss,value,',');
+
+            if(!value.empty() && !key.empty()) {
+
+                if(key == "language") {
+                    getLanguageModel()->setLanguage(value);
+                }
+
+                if(key == "keydelay") {
+                    setKeyDelay(stoi(value));
+                }
+            }
         }
     }
 
-    if(!value.empty()) {
-        getLanguageModel()->setLanguage(value);
-    }
+    
 }

@@ -125,6 +125,10 @@ void OptionMenuState::commitKeyDelay() {
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
     }
+
+    if(mDelayTextEntry.hasFocus()) {
+        mDelayTextEntry.toggleFocus();
+    }
 }
 
 /* 
@@ -210,12 +214,9 @@ bool OptionMenuState::onReEnter() {
 bool OptionMenuState::onExit() {
     SDL_Log("Exiting OptionMenustate");
 
-    //Commit the current value into the textentry
+    //Commit the current value in the textentry. This handles cases where the value changes and the player exits the state before moving the cursor up or down.
     commitBoardSize();
-
-    if(mDelayTextEntry.hasFocus()) {
-        mDelayTextEntry.toggleFocus();
-    }
+    commitKeyDelay();
 
     return true;
 }
