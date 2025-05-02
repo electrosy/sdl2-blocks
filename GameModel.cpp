@@ -724,6 +724,7 @@ void ley::GameModel::writeConfig() {
 
   myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
   myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
+  myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
   
   myfile.close();
 }
@@ -752,6 +753,10 @@ void ley::GameModel::readConfig() {
 
                 if(key == "keydelay") {
                     setKeyDelay(stoi(value));
+                }
+
+                if(key == "keyrepeat") {
+                    setKeyRepeat(stoi(value));
                 }
             }
         }

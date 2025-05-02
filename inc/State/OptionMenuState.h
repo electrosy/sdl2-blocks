@@ -21,8 +21,8 @@ private:
     ley::Font mDelayLabelFont;
     ley::Font mRepeatLabelFont;
     ley::TextEntry mLocalTextEntry;
-    ley::TextEntry mDelayTextEntry;
-    ley::TextEntry mRepeatTextEntry;
+    ley::TextEntry mKeyDelayTextEntry;
+    ley::TextEntry mKeyRepeatTextEntry;
     ley::Sprite mBackground;
     Renderables mRenderables;
     Renderables mDebugRenderables;
@@ -30,6 +30,7 @@ private:
     ley::UIMenu mOptionUI;
     std::string mPreviousOptionsValue;
     std::string mPreviousKeyDelayValue;
+    std::string mPreviousKeyRepeatValue;
     
 public:
 
@@ -43,6 +44,7 @@ public:
     virtual bool onPause();
     virtual void commitBoardSize();
     virtual void commitKeyDelay();
+    virtual void commitKeyRepeat();
 //    virtual void UI_ToggleFocus();
     virtual std::string getStateID() const { return sOptionMenuID; }
 

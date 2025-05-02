@@ -31,16 +31,24 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
     mLocalTextEntry.setPos({224,100});
 
-    mDelayTextEntry.setVisible(false);
-    mDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mDelayTextEntry.setWidth(85,85,5);
-    mDelayTextEntry.setPos({224,150});
-    mDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
-    mDelayTextEntry.setErrorMessage("Must be a number between 50 and 300");
-    mDelayTextEntry.setHelpMessages("Enter a number between 50 and 300", "");
-    
+    mKeyDelayTextEntry.setVisible(false);
+    mKeyDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mKeyDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mKeyDelayTextEntry.setWidth(85,85,5);
+    mKeyDelayTextEntry.setPos({224,150});
+    mKeyDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
+    mKeyDelayTextEntry.setErrorMessage("Must be a number between 50 and 300");  // TODO LOCALIZATION
+    mKeyDelayTextEntry.setHelpMessages("Enter a number between 50 and 300", ""); // TODO LOCALIZATION
 
+    mKeyRepeatTextEntry.setVisible(false);
+    mKeyRepeatTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mKeyRepeatTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mKeyRepeatTextEntry.setWidth(85,85,5);
+    mKeyRepeatTextEntry.setPos({325,200});
+    mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
+    mKeyRepeatTextEntry.setErrorMessage("Must be a number between 15 and 80"); // TODO LOCALIZATION
+    mKeyRepeatTextEntry.setHelpMessages("Enter a number between 15 and 80", ""); // TODO LOCALIZATION
+    
 
     mOptionUI.pushTextEntry(
         [this](){mLocalTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
@@ -51,9 +59,14 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mActiveUIElement = &mLocalTextEntry;
         
     mOptionUI.pushTextEntry(
-        [this](){mDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
-        [this]()->bool{return mDelayTextEntry.hasFocus();},
+        [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
+        [this]()->bool{return mKeyDelayTextEntry.hasFocus();},
         [this](){commitKeyDelay();});
+
+    mOptionUI.pushTextEntry(
+        [this](){mKeyRepeatTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyRepeatValue);},
+        [this]()->bool{return mKeyRepeatTextEntry.hasFocus();},
+        [this](){commitKeyRepeat();});
 
     mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
@@ -70,18 +83,19 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 2) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 3) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 3) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 4) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
     mOptionUI.runCommand(command);
 
     mLocalTextEntry.update();
-    mDelayTextEntry.update();
+    mKeyDelayTextEntry.update();
+    mKeyRepeatTextEntry.update();
 }
 
 void OptionMenuState::commitBoardSize() {
@@ -112,22 +126,43 @@ void OptionMenuState::commitBoardSize() {
 
 void OptionMenuState::commitKeyDelay() {
 
-    if ( std::regex_match(mDelayTextEntry.getTextBoxValue().c_str(), std::regex(mDelayTextEntry.getRegEx()) )) {
+    if ( std::regex_match(mKeyDelayTextEntry.getTextBoxValue().c_str(), std::regex(mKeyDelayTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
 
-        mGameModel->setKeyDelay(atoi(mDelayTextEntry.getTextBoxValue().c_str()));
+        mGameModel->setKeyDelay(atoi(mKeyDelayTextEntry.getTextBoxValue().c_str()));
 
     }
     else {
-        SDL_Log("Regex did not match: %s ", mDelayTextEntry.getTextBoxValue().c_str());
-        mDelayTextEntry.getErrorTimerPtr()->reset();
-        mDelayTextEntry.getErrorFontPtr()->setVisible(true);
+        SDL_Log("Regex did not match: %s ", mKeyDelayTextEntry.getTextBoxValue().c_str());
+        mKeyDelayTextEntry.getErrorTimerPtr()->reset();
+        mKeyDelayTextEntry.getErrorFontPtr()->setVisible(true);
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
+        mKeyDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
     }
 
-    if(mDelayTextEntry.hasFocus()) {
-        mDelayTextEntry.toggleFocus();
+    if(mKeyDelayTextEntry.hasFocus()) {
+        mKeyDelayTextEntry.toggleFocus();
+    }
+}
+
+void OptionMenuState::commitKeyRepeat() {
+
+    if ( std::regex_match(mKeyRepeatTextEntry.getTextBoxValue().c_str(), std::regex(mKeyRepeatTextEntry.getRegEx()) )) {
+        SDL_Log("Regex matched.");
+
+        mGameModel->setKeyRepeat(atoi(mKeyRepeatTextEntry.getTextBoxValue().c_str()));
+
+    }
+    else {
+        SDL_Log("Regex did not match: %s ", mKeyRepeatTextEntry.getTextBoxValue().c_str());
+        mKeyRepeatTextEntry.getErrorTimerPtr()->reset();
+        mKeyRepeatTextEntry.getErrorFontPtr()->setVisible(true);
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mKeyRepeatTextEntry.setTextBoxValue(mPreviousKeyRepeatValue);
+    }
+
+    if(mKeyRepeatTextEntry.hasFocus()) {
+        mKeyRepeatTextEntry.toggleFocus();
     }
 }
 
@@ -136,7 +171,7 @@ void OptionMenuState::UI_ToggleFocus() {
     
     
 //    if(!mLocalTextEntry.hasFocus()){
-//        mActiveUIElement = &mLocalTextEntry;
+//== command        mActiveUIElement = &mLocalTextEntry;
 //        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
 //    }
 //    else {
@@ -165,15 +200,18 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mLocalTextEntry);
     mRenderables.push_back(&mBoardSizeLabelFont);
     mRenderables.push_back(&mDelayLabelFont);
-    mRenderables.push_back(&mDelayTextEntry);
-    //mRenderables.push_back(&mRepeatLabelFont);
+    
+    mRenderables.push_back(&mKeyDelayTextEntry);
+    mRenderables.push_back(&mKeyRepeatTextEntry);
+    mRenderables.push_back(&mRepeatLabelFont);
 }
 
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
     mLocalTextEntry.setVisible(true);
-    mDelayTextEntry.setVisible(true);
+    mKeyDelayTextEntry.setVisible(true);
+    mKeyRepeatTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -191,7 +229,8 @@ bool OptionMenuState::onEnter() {
     }
 
     //Load the Delay value
-    mDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
+    mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
+    mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
 
     return true;
 }
@@ -217,6 +256,7 @@ bool OptionMenuState::onExit() {
     //Commit the current value in the textentry. This handles cases where the value changes and the player exits the state before moving the cursor up or down.
     commitBoardSize();
     commitKeyDelay();
+    commitKeyRepeat();
 
     return true;
 }
