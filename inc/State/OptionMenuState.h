@@ -45,7 +45,6 @@ public:
     virtual void commitBoardSize();
     virtual void commitKeyDelay();
     virtual void commitKeyRepeat();
-//    virtual void UI_ToggleFocus();
     virtual std::string getStateID() const { return sOptionMenuID; }
 
 };

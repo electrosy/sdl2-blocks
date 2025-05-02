@@ -125,7 +125,6 @@ void OptionMenuState::commitBoardSize() {
 }
 
 void OptionMenuState::commitKeyDelay() {
-
     if ( std::regex_match(mKeyDelayTextEntry.getTextBoxValue().c_str(), std::regex(mKeyDelayTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
 
@@ -166,25 +165,6 @@ void OptionMenuState::commitKeyRepeat() {
     }
 }
 
-/* 
-void OptionMenuState::UI_ToggleFocus() {
-    
-    
-//    if(!mLocalTextEntry.hasFocus()){
-//== command        mActiveUIElement = &mLocalTextEntry;
-//        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
-//    }
-//    else {
-//        mActiveUIElement = {};
-//   }
-//
-//    mLocalTextEntry.toggleFocus();
-    
-
-    mLocalTextEntry.handleFocusChange(mActiveUIElement, &mPreviousOptionsValue);
-    
-} */
-
 void OptionMenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
@@ -214,6 +194,8 @@ bool OptionMenuState::onEnter() {
     mKeyRepeatTextEntry.setVisible(true);
 
     loadRenderables();
+
+    // TODO add the board size to the mainconfig
 
     //load config
     std::ifstream inFile("config.csv");

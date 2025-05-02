@@ -61,13 +61,13 @@ private:
     int mBlockStartY = 0;
     int mNextBoxPosXPx = 0;
     int mScorePosXPx = 0;
-    BoardType mBoard;
+    BoardType mBoard; // 0 based
 public:
     Board();
     void debugOutput(bool inLayer);
     void debugFill();
     void setSize(int inX, int inY);
-    std::pair<ley::BlockTexCode, bool>* at(int inX, int inY);
+    std::pair<ley::BlockTexCode, bool>* at(int inX, int inY); //The X and Y are 0 based.
     void render(SDL_Renderer * r, bool d);
     void clear();
     bool canPut(Block& b, Command d);
