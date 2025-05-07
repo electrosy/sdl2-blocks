@@ -42,10 +42,12 @@ public:
     virtual bool onExit();
     virtual bool onReEnter();
     virtual bool onPause();
-    virtual void commitBoardSize();
-    virtual void commitKeyDelay();
-    virtual void commitKeyRepeat();
     virtual std::string getStateID() const { return sOptionMenuID; }
+    
+    void initTextEntryMessages();
+    void commitBoardSize();
+    void commitKeyDelay();
+    void commitKeyRepeat();
 
 };
 
