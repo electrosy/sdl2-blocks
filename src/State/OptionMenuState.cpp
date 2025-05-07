@@ -37,8 +37,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyDelayTextEntry.setWidth(85,85,5);
     mKeyDelayTextEntry.setPos({224,150});
     mKeyDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
-    mKeyDelayTextEntry.setErrorMessage("Must be a number between 50 and 300");  // TODO LOCALIZATION
-    mKeyDelayTextEntry.setHelpMessages("Enter a number between 50 and 300", ""); // TODO LOCALIZATION
+    mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
+    mKeyDelayTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst), "");
 
     mKeyRepeatTextEntry.setVisible(false);
     mKeyRepeatTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
@@ -46,8 +46,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyRepeatTextEntry.setWidth(85,85,5);
     mKeyRepeatTextEntry.setPos({325,200});
     mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
-    mKeyRepeatTextEntry.setErrorMessage("Must be a number between 15 and 80"); // TODO LOCALIZATION
-    mKeyRepeatTextEntry.setHelpMessages("Enter a number between 15 and 80", ""); // TODO LOCALIZATION
+    mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
+    mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
     
 
     mOptionUI.pushTextEntry(
@@ -71,9 +71,10 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
-    mBoardSizeLabelFont.updateMessage("Board Size");
-    mDelayLabelFont.updateMessage("Input Delay");
-    mRepeatLabelFont.updateMessage("Input Repeat Rate");
+    mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
+    mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
+    
+    mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -135,6 +136,7 @@ void OptionMenuState::commitKeyDelay() {
         SDL_Log("Regex did not match: %s ", mKeyDelayTextEntry.getTextBoxValue().c_str());
         mKeyDelayTextEntry.getErrorTimerPtr()->reset();
         mKeyDelayTextEntry.getErrorFontPtr()->setVisible(true);
+        
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mKeyDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
     }
@@ -227,7 +229,21 @@ bool OptionMenuState::onReEnter() {
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
         , "");
 
+    // TODO create an init helper so that this code is not duplicated in the constructor.
+
     mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+
+    mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
+    mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
+    
+    mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
+
+    mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
+    mKeyDelayTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst), "");
+
+    mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
+
+    mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
 
     return true;
 }

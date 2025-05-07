@@ -34,11 +34,11 @@ void ley::Config::read() {
         mBoardHeight = BOARDHEIGHT_DEFAULT;
     }
 
-    if(mBoardWidth > BOARDWIDTH_MAX || mBoardWidth < 8){
+    if(mBoardWidth > BOARDWIDTH_MAX || mBoardWidth < BOARDWIDTH_MIN){
         mBoardWidth = BOARDWIDTH_DEFAULT;
     }
 
-    if(mBoardHeight > BOARDHEIGHT_MAX || mBoardHeight < 8) {
+    if(mBoardHeight > BOARDHEIGHT_MAX || mBoardHeight < BOARDHEIGHT_MIN) {
         mBoardHeight = BOARDHEIGHT_DEFAULT;
     }
 

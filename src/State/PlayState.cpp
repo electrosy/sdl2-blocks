@@ -127,9 +127,8 @@ bool PlayState::onEnter() {
     loadRenderables();
 
     //make sure the board reflects the current config
-
     SDL_Log("Resizing Board in PlayState");
-    mGameModel->resizeBoard();
+    mGameModel->resizeBoard(); // TODO maybe this should move to where the value changes, so we call it only if needed.
 
     SDL_Log("Resizing videosystem board in PlayState");
     mVideoSystem->videoResizeBoard();
