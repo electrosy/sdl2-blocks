@@ -120,6 +120,8 @@ void OptionMenuState::commitBoardSize() {
         mLocalTextEntry.setTextBoxValue(mPreviousOptionsValue);
     }
 
+    mGameModel->readConfigOther();
+
     if(mLocalTextEntry.hasFocus()) {
         mLocalTextEntry.toggleFocus();
     }
@@ -197,8 +199,9 @@ bool OptionMenuState::onEnter() {
 
     loadRenderables();
 
-    // TODO add the board size to the mainconfig
+    
     //load config
+    /*
     std::ifstream inFile("config.csv");
     if (inFile.is_open())
     {
@@ -210,8 +213,10 @@ bool OptionMenuState::onEnter() {
 
         *mLocalTextEntry.getTextBoxField() = line;
     }
+    */
 
-    //Load the Delay value
+    int boardHeightTotal = mGameModel->getBoard()->height() - BOARDSIZE_BUFFER;
+    mLocalTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
     mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
 

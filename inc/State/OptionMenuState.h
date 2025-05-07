@@ -38,10 +38,10 @@ public:
     virtual void update(ley::Command command);
     virtual void render();
     virtual void loadRenderables();
-    virtual bool onEnter();
-    virtual bool onExit();
-    virtual bool onReEnter();
-    virtual bool onPause();
+    virtual bool onEnter() override;
+    virtual bool onExit() override;
+    virtual bool onReEnter() override;
+    virtual bool onPause() override;
     virtual std::string getStateID() const { return sOptionMenuID; }
     
     void initTextEntryMessages();

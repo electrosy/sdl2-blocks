@@ -82,7 +82,7 @@ private:
 //    void loadKeyBindings(); //keyboard
     void loadKeyBindings2(); //keyboard
     void loadButtonBindings(); //gamepad
-    ley::LanguageModel mLanguageModel;
+    ley::LanguageModel mLanguageModel;    
 
 public:
     GameModel();
@@ -125,7 +125,7 @@ public:
     void quickDrop();
     int comboCount() { return mComboCount;};
     Board* getNewBoard() { return &mBoard;};
-    void resizeBoard();
+    void resizeBoard(int width, int height);
     std::map<Uint8, ley::Command>* getKeyBindingsPtr(); //keyboard
     BindingsType* getKeyBindingsPtr2(); //keyboard
     std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
@@ -139,7 +139,7 @@ public:
 
     int getKeyRepeat() {return mKeyRepeat;};
     void setKeyRepeat(int inKeyRepeat) {mKeyRepeat = inKeyRepeat;};
-
+    void readConfigOther();
 };
 
 }

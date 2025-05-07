@@ -41,6 +41,9 @@ mDebugOnlyLine(false)
     loadButtonBindings();
 
     readConfig();
+    // TODO add the board size to the mainconfig
+    readConfigOther();
+    
 
     mLanguageModel.loadLanguage();
 }
@@ -495,15 +498,18 @@ void ley::GameModel::quickDrop() {
     }
 
 }
-
-void ley::GameModel::resizeBoard() {
-
+void ley::GameModel::readConfigOther() {
     mConfig.read();
 
-    if(mConfig.height() > 7 and mConfig.width() > 7) {
-        mBoard.setSize(mConfig.width(), mConfig.height() + BOARDSIZE_BUFFER);
+    if(mConfig.height() >= BOARDHEIGHT_MIN and mConfig.width() >= BOARDWIDTH_MIN) {
+        resizeBoard(mConfig.width(), mConfig.height());
     }
+}
 
+void ley::GameModel::resizeBoard(int width, int height) {
+
+    mBoard.setSize(width, height + BOARDSIZE_BUFFER);
+    
     mPts_Line = mBoard.width() * (PTS_DROP * 2);
 
     mBoard.putBlock(activeBlock);
