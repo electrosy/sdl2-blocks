@@ -48,6 +48,7 @@ public:
     void render(SDL_Renderer * r, bool d);
     TTF_Font* getTTFFont();
     void setPos(SDL_Point p);
+    SDL_Point getPos() { return {mMessageRect.x, mMessageRect.y}; };
     std::pair<int, int> size();
     void setColor(SDL_Color c);
     void setFontSize(int size);

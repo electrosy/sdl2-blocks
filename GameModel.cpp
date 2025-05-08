@@ -44,7 +44,6 @@ mDebugOnlyLine(false)
     // TODO add the board size to the mainconfig
     readConfigOther();
     
-
     mLanguageModel.loadLanguage();
 }
 

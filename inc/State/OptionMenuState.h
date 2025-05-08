@@ -20,7 +20,7 @@ private:
     ley::Font mBoardSizeLabelFont;
     ley::Font mDelayLabelFont;
     ley::Font mRepeatLabelFont;
-    ley::TextEntry mLocalTextEntry;
+    ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
     ley::TextEntry mKeyRepeatTextEntry;
     ley::Sprite mBackground;
@@ -31,6 +31,7 @@ private:
     std::string mPreviousOptionsValue;
     std::string mPreviousKeyDelayValue;
     std::string mPreviousKeyRepeatValue;
+    void positionOptionsLabels();
     
 public:
 

@@ -20,16 +20,16 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     {
 
-    mLocalTextEntry.setVisible(false);
-    mLocalTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mLocalTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mLocalTextEntry.setWidth(85,85,5);
-    mLocalTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-    mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+    mBoardSizeTextEntry.setVisible(false);
+    mBoardSizeTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mBoardSizeTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mBoardSizeTextEntry.setWidth(85,85,5);
+    mBoardSizeTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+    mBoardSizeTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
         , "");
-    mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-    mLocalTextEntry.setPos({224,100});
+    mBoardSizeTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+    mBoardSizeTextEntry.setPos({224,100});
 
     mKeyDelayTextEntry.setVisible(false);
     mKeyDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
@@ -51,12 +51,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     
 
     mOptionUI.pushTextEntry(
-        [this](){mLocalTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
-        [this]()->bool{return mLocalTextEntry.hasFocus();},
+        [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
+        [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
         [this](){commitBoardSize();});
 
     //Initialize the active ui element as the first text entry.
-    mActiveUIElement = &mLocalTextEntry;
+    mActiveUIElement = &mBoardSizeTextEntry;
         
     mOptionUI.pushTextEntry(
         [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
@@ -94,7 +94,7 @@ void OptionMenuState::update(ley::Command command) {
 
     mOptionUI.runCommand(command);
 
-    mLocalTextEntry.update();
+    mBoardSizeTextEntry.update();
     mKeyDelayTextEntry.update();
     mKeyRepeatTextEntry.update();
 }
@@ -103,27 +103,27 @@ void OptionMenuState::commitBoardSize() {
 
     SDL_Log("OptionMenuState::commitUI()");
     //TODO maybe this regex check should be contained within the TextEntry
-    if ( std::regex_match(mLocalTextEntry.getTextBoxValue().c_str(), std::regex(mLocalTextEntry.getRegEx()) )) {
+    if ( std::regex_match(mBoardSizeTextEntry.getTextBoxValue().c_str(), std::regex(mBoardSizeTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
 
         //save the config only if we have a new value that is valid.
         std::ofstream myfile;
         myfile.open ("config.csv");
-        myfile << mLocalTextEntry.getTextBoxValue() << std::endl;
+        myfile << mBoardSizeTextEntry.getTextBoxValue() << std::endl;
         myfile.close();
     }
     else {
-        SDL_Log("Regex did not match: %s ", mLocalTextEntry.getTextBoxValue().c_str());
-        mLocalTextEntry.getErrorTimerPtr()->reset();
-        mLocalTextEntry.getErrorFontPtr()->setVisible(true);
+        SDL_Log("Regex did not match: %s ", mBoardSizeTextEntry.getTextBoxValue().c_str());
+        mBoardSizeTextEntry.getErrorTimerPtr()->reset();
+        mBoardSizeTextEntry.getErrorFontPtr()->setVisible(true);
         // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mLocalTextEntry.setTextBoxValue(mPreviousOptionsValue);
+        mBoardSizeTextEntry.setTextBoxValue(mPreviousOptionsValue);
     }
 
     mGameModel->readConfigOther();
 
-    if(mLocalTextEntry.hasFocus()) {
-        mLocalTextEntry.toggleFocus();
+    if(mBoardSizeTextEntry.hasFocus()) {
+        mBoardSizeTextEntry.toggleFocus();
     }
 }
 
@@ -181,7 +181,7 @@ void OptionMenuState::render() {
 
 void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
-    mRenderables.push_back(&mLocalTextEntry);
+    mRenderables.push_back(&mBoardSizeTextEntry);
     mRenderables.push_back(&mBoardSizeLabelFont);
     mRenderables.push_back(&mDelayLabelFont);
     
@@ -193,11 +193,12 @@ void OptionMenuState::loadRenderables() {
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
-    mLocalTextEntry.setVisible(true);
+    mBoardSizeTextEntry.setVisible(true);
     mKeyDelayTextEntry.setVisible(true);
     mKeyRepeatTextEntry.setVisible(true);
 
     loadRenderables();
+    
 
     
     //load config
@@ -216,9 +217,11 @@ bool OptionMenuState::onEnter() {
     */
 
     int boardHeightTotal = mGameModel->getBoard()->height() - BOARDSIZE_BUFFER;
-    mLocalTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
+    mBoardSizeTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
     mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
+
+    positionOptionsLabels();
 
     return true;
 }
@@ -227,6 +230,7 @@ bool OptionMenuState::onReEnter() {
     SDL_Log("ReEntering OptionMenuState");
 
     initTextEntryMessages();
+    positionOptionsLabels();
 
     return true;
 }
@@ -253,11 +257,11 @@ void OptionMenuState::initTextEntryMessages() {
     mOptionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
     mOptionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
 
-    mLocalTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+    mBoardSizeTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
         , "");
 
-    mLocalTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+    mBoardSizeTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
 
     mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
     mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
@@ -270,6 +274,32 @@ void OptionMenuState::initTextEntryMessages() {
     mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
 
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
+}
+
+void OptionMenuState::positionOptionsLabels() {
+    //mBoardSizeLabelFont.setPos( { , mBoardSizeLabelFont }) mBoardSizeLabelFont.
+
+    int w = 0; 
+    int h = 0;
+    SDL_Point labelPos{0,0};
+    // TTF_SizeUTF8
+
+    TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), mBoardSizeLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mBoardSizeLabelFont.getPos();
+    mBoardSizeTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+
+
+    TTF_SizeUTF8( mDelayLabelFont.getTTFFont(), mDelayLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mDelayLabelFont.getPos();
+    mKeyDelayTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+
+
+    TTF_SizeUTF8( mRepeatLabelFont.getTTFFont(), mRepeatLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mRepeatLabelFont.getPos();
+    mKeyRepeatTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+
+
+
 }
 
 }
