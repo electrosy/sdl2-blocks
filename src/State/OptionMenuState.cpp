@@ -282,21 +282,24 @@ void OptionMenuState::positionOptionsLabels() {
     int w = 0; 
     int h = 0;
     SDL_Point labelPos{0,0};
-    // TTF_SizeUTF8
+    
+    // get the spacing of a " " character space.
+    TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), " ", &w, &h );
+    int labelDataSpacing = w;
 
     TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), mBoardSizeLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mBoardSizeLabelFont.getPos();
-    mBoardSizeTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+    mBoardSizeTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
 
     TTF_SizeUTF8( mDelayLabelFont.getTTFFont(), mDelayLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mDelayLabelFont.getPos();
-    mKeyDelayTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+    mKeyDelayTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
 
     TTF_SizeUTF8( mRepeatLabelFont.getTTFFont(), mRepeatLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mRepeatLabelFont.getPos();
-    mKeyRepeatTextEntry.setPos({labelPos.x + w + 4,labelPos.y});
+    mKeyRepeatTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
 
 
