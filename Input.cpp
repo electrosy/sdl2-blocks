@@ -45,7 +45,7 @@ ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley
     return ley::Command::none;
 }
 
-ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, BindingsType* bindings) {
+ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings) {
     
     // Get range of entries for this scancode
     auto range = bindings->equal_range(scancode);
@@ -70,9 +70,8 @@ ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modi
 /* Functions */
 void ley::Input::pollEvents(
     bool& fullscreen, 
-    std::map<Uint8, ley::Command>* buttonBindings2, 
-    std::map<Uint8, ley::Command>* bindings2, 
-    BindingsType* bindingsNewType,
+    std::map<Uint8, ley::Command>* buttonBindings2,
+    KeyBindingsType* inKeyboardBindings,
     std::queue<ley::Command>* commandQueuePtr, 
     ley::TextEntry* te, 
     const std::function<void(ley::Command c)>& function,
@@ -132,7 +131,7 @@ void ley::Input::pollEvents(
 
     };
 
-    auto check_timers = [this, commandQueuePtr, alt_mod, bindings2, buttonBindings2, get_mod_bitmask, bindingsNewType]() {
+    auto check_timers = [this, commandQueuePtr, alt_mod, buttonBindings2, get_mod_bitmask, inKeyboardBindings]() {
      
         for(auto &[key, keyPress] : mKeysPressed) {
 
@@ -142,7 +141,7 @@ void ley::Input::pollEvents(
             //if the delay timer has expired and the repeat timer has expired
             if(keyPress->getDelayTimerPtr()->hasExpired() && keyPress->getRepeatTimerPtr()->hasExpired()) {
                 
-                ley::Command command = lookupCommand2( (SDL_Scancode)key, get_mod_bitmask(), bindingsNewType);
+                ley::Command command = lookupCommand2( (SDL_Scancode)key, get_mod_bitmask(), inKeyboardBindings);
                 //don't repeat the enter command.
                 if(command != ley::Command::enter) {
                     commandQueuePtr->push(command);
@@ -205,9 +204,8 @@ void ley::Input::pollEvents(
                             mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
                         }
                     }
-                    
-                    //command = lookupCommand(pressedKey, bindings2);                    
-                    command = lookupCommand2(pressedKey, pressedModifiers, bindingsNewType);
+                           
+                    command = lookupCommand2(pressedKey, pressedModifiers, inKeyboardBindings);
 
                     if(command == ley::Command::fullscreen) {
                         fullscreen = !fullscreen;
