@@ -1,3 +1,4 @@
+The gamepad now uses the user option for input delay and repeat to match how the keyboard works.
 Add localization to the Board Size, Input Delay and Input Repeat labels in the options.
 
 0.6.5.3
