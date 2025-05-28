@@ -198,23 +198,6 @@ bool OptionMenuState::onEnter() {
     mKeyRepeatTextEntry.setVisible(true);
 
     loadRenderables();
-    
-
-    
-    //load config
-    /*
-    std::ifstream inFile("config.csv");
-    if (inFile.is_open())
-    {
-        std::string line;
-        std::getline(inFile,line);
-        std::stringstream ss(line);
-        
-        SDL_Log("Config read in: %s", line.c_str());
-
-        *mLocalTextEntry.getTextBoxField() = line;
-    }
-    */
 
     int boardHeightTotal = mGameModel->getBoard()->height() - BOARDSIZE_BUFFER;
     mBoardSizeTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
@@ -277,8 +260,7 @@ void OptionMenuState::initTextEntryMessages() {
 }
 
 void OptionMenuState::positionOptionsLabels() {
-    //mBoardSizeLabelFont.setPos( { , mBoardSizeLabelFont }) mBoardSizeLabelFont.
-
+    
     int w = 0; 
     int h = 0;
     SDL_Point labelPos{0,0};
@@ -300,8 +282,6 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mRepeatLabelFont.getTTFFont(), mRepeatLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mRepeatLabelFont.getPos();
     mKeyRepeatTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
-
-
 
 }
 

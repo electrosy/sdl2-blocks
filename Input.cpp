@@ -76,8 +76,8 @@ void ley::Input::pollEvents(
     std::queue<ley::Command>* commandQueuePtr, 
     ley::TextEntry* te, 
     const std::function<void(ley::Command c)>& function,
-    int keyDelay,
-    int keyRepeat) {
+    int inKeyDelay,
+    int inKeyRepeat) {
     
     
     SDL_Event event;
@@ -200,7 +200,7 @@ void ley::Input::pollEvents(
                         //skip modifiers
                         if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
                         { 
-                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, keyDelay, keyRepeat)});
+                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
                             mKeysPressed[pressedKey]->getDelayTimerPtr()->reset();
                             mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
                         }
@@ -238,7 +238,7 @@ void ley::Input::pollEvents(
                     Uint8 buttonPressed = event.cbutton.button;
 
                     if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {
-                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(KEY_DELAY_TIME_DEFAULT, {0, 0, 0, 0}), ley::Timer(KEY_REPEAT_TIME_DEFAULT, {0, 0, 0, 0}))});
+                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(inKeyDelay, {0, 0, 0, 0}), ley::Timer(inKeyRepeat, {0, 0, 0, 0}))});
 
                         mButtonsPressed[buttonPressed].first.reset();
                         mButtonsPressed[buttonPressed].second.reset();
