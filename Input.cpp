@@ -36,16 +36,16 @@ ley::Input::~Input() {
     SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
 
-ley::Command ley::Input::lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings) {
+ley::Command ley::Input::lookupPadCommand(const SDL_GameControllerButton scancode, PadBindingsType* bindings) {
 
-    if(bindings->find(scancode) != bindings->end()) {
+    if(bindings->find(scancode) != bindings->end() ) {
         return bindings->at(scancode);
     }
 
     return ley::Command::none;
 }
 
-ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings) {
+ley::Command ley::Input::lookupKeyCommand(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings) {
     
     // Get range of entries for this scancode
     auto range = bindings->equal_range(scancode);
@@ -70,7 +70,7 @@ ley::Command ley::Input::lookupCommand2(const SDL_Scancode scancode, Uint16 modi
 /* Functions */
 void ley::Input::pollEvents(
     bool& fullscreen, 
-    std::map<Uint8, ley::Command>* buttonBindings2,
+    PadBindingsType* buttonBindings2,
     KeyBindingsType* inKeyboardBindings,
     std::queue<ley::Command>* commandQueuePtr, 
     ley::TextEntry* te, 
@@ -141,7 +141,7 @@ void ley::Input::pollEvents(
             //if the delay timer has expired and the repeat timer has expired
             if(keyPress->getDelayTimerPtr()->hasExpired() && keyPress->getRepeatTimerPtr()->hasExpired()) {
                 
-                ley::Command command = lookupCommand2( (SDL_Scancode)key, get_mod_bitmask(), inKeyboardBindings);
+                ley::Command command = lookupKeyCommand( (SDL_Scancode)key, get_mod_bitmask(), inKeyboardBindings);
                 //don't repeat the enter command.
                 if(command != ley::Command::enter) {
                     commandQueuePtr->push(command);
@@ -157,7 +157,7 @@ void ley::Input::pollEvents(
             keyPress.second.runFrame(false); //the repeat timer.
 
             if(keyPress.first.hasExpired() && keyPress.second.hasExpired()) {
-                commandQueuePtr->push(lookupCommand(key, buttonBindings2));
+                commandQueuePtr->push(lookupPadCommand((SDL_GameControllerButton)key, buttonBindings2));
                 //reset the repeat timer
                 keyPress.second.reset();
             }
@@ -205,7 +205,7 @@ void ley::Input::pollEvents(
                         }
                     }
                            
-                    command = lookupCommand2(pressedKey, pressedModifiers, inKeyboardBindings);
+                    command = lookupKeyCommand(pressedKey, pressedModifiers, inKeyboardBindings);
 
                     if(command == ley::Command::fullscreen) {
                         fullscreen = !fullscreen;
@@ -242,7 +242,7 @@ void ley::Input::pollEvents(
                         mButtonsPressed[buttonPressed].second.reset();
                     }
 
-                    commandQueuePtr->push(lookupCommand(buttonPressed, buttonBindings2));
+                    commandQueuePtr->push(lookupPadCommand((SDL_GameControllerButton)buttonPressed, buttonBindings2));
                 }
                 break;
 

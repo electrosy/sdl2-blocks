@@ -52,8 +52,8 @@ class Input {
 private:
 
     // TODO lookupCommand should be replaced with lookupCommand2 and renamed to lookupCommand.
-    ley::Command lookupCommand(const Uint8 scancode, std::map<Uint8, ley::Command>* bindings);
-    ley::Command lookupCommand2(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings);
+    ley::Command lookupPadCommand(const SDL_GameControllerButton scancode, PadBindingsType* bindings);
+    ley::Command lookupKeyCommand(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings);
     SDL_GameController *mControllerPtr = nullptr; //For the gamepad.
     std::map<Uint8, std::unique_ptr<InputPressed>> mKeysPressed; //keyboard
     std::map<Uint8, std::pair<ley::Timer, ley::Timer>> mButtonsPressed; //gamepad
@@ -62,7 +62,7 @@ public:
     Input();
     ~Input();
     void pollEvents(bool& fullscreen, 
-        std::map<Uint8, ley::Command>* buttonBindings2,
+        PadBindingsType* buttonBindings2,
         KeyBindingsType* bindingsNewType, 
         std::queue<ley::Command>* commandQueuePtr, 
         ley::TextEntry* te, 

@@ -72,7 +72,7 @@ private:
     ley::StateChange mStateChange = ley::StateChange::none;
     std::map<Uint8, ley::Command> mKeyBindings; // keyboard bindings
     KeyBindingsType mKeyBindings2;
-    std::map<Uint8, ley::Command> mButtonBindings; // gamepad bindings
+//    std::map<Uint8, ley::Command> mButtonBindings; // gamepad bindings
     PadBindingsType mButtonBindings2; // gamepad bindings
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
@@ -81,7 +81,7 @@ private:
     void onLine(int numLines, int level); //Handler when a line is completed.
     void onDrop();
     void loadKeyBindings2(); //keyboard
-    void loadButtonBindings(); //gamepad
+//    void loadButtonBindings(); //gamepad
     void loadButtonBindings2(); //gamepad
     ley::LanguageModel mLanguageModel;    
 
@@ -128,7 +128,7 @@ public:
     Board* getNewBoard() { return &mBoard;};
     void resizeBoard(int width, int height);
     KeyBindingsType* getKeyBindingsPtr2(); //keyboard
-    std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
+//    std::map<Uint8, ley::Command>* getButtonBindingsPtr(); //gamepad
     PadBindingsType* getButtonBindingsPtr2(); //gamepad
     static std::string getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad);
     static std::string getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings);

@@ -37,7 +37,8 @@ mDebugOnlyLine(false)
     mHighScores.read();
     
     loadKeyBindings2();
-    loadButtonBindings();
+//    loadButtonBindings();
+    loadButtonBindings2();
 
     readConfig();
     // TODO add the board size to the mainconfig
@@ -600,7 +601,7 @@ void ley::GameModel::loadButtonBindings2() {
 
 }
 
-
+/*
 void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
 
@@ -621,14 +622,17 @@ void ley::GameModel::loadButtonBindings() {
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 }
+*/
 
 ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr2() {
     return &mKeyBindings2;
 }
 
+/*
 std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
 }
+*/
 
 ley::PadBindingsType* ley::GameModel::getButtonBindingsPtr2() {
     return &mButtonBindings2;
@@ -689,7 +693,7 @@ std::string ley::GameModel::getPadInputString(std::string seperator, ley::Comman
             }
             
             output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
-            
+
         }
     }
 
