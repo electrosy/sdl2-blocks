@@ -578,27 +578,26 @@ void ley::GameModel::loadKeyBindings2() {
 }
 
 void ley::GameModel::loadButtonBindings2() {
+    
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
 
-    /*
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_DPAD_DOWN, std::make_pair(KMOD_NONE, ley::Command::down));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_DPAD_RIGHT, std::make_pair(KMOD_NONE, ley::Command::right));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_LEFT, ley::Command::left});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_DPAD_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_START, std::make_pair(KMOD_NONE, ley::Command::pause));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_B, std::make_pair(KMOD_NONE, ley::Command::space));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::cclockwise});
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::cclockwise});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_Y, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_DPAD_UP, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::clockwise});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_X, std::make_pair(KMOD_NONE, ley::Command::clockwise));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_A, std::make_pair(KMOD_NONE, ley::Command::enter));
+    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 
-    mButtonBindings2.emplace(SDL_CONTROLLER_BUTTON_BACK, std::make_pair(KMOD_NONE, ley::Command::quit));
-    */
 }
 
 
@@ -623,16 +622,16 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 }
 
-std::map<Uint8, ley::Command>* ley::GameModel::getKeyBindingsPtr() {
-    return &mKeyBindings;
-}
-
 ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr2() {
     return &mKeyBindings2;
 }
 
 std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
+}
+
+ley::PadBindingsType* ley::GameModel::getButtonBindingsPtr2() {
+    return &mButtonBindings2;
 }
 
 std::string ley::GameModel::getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad) {
@@ -660,7 +659,7 @@ std::string ley::GameModel::getInputsString(std::string seperator, ley::Command 
 // TODO getInputsString needs to be removed once the game pad logic has been adjusted 
 //      for the new BindingsType then rename getInputsString2 to getInputsString
 
-std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command command, KeyBindingsType* bindings, bool gamepad) {
+std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings) {
 
     std::string output = "";
     for(const auto& kv : *bindings) {
@@ -670,13 +669,27 @@ std::string ley::GameModel::getInputsString2(std::string seperator, ley::Command
                 //assume we already have a command and postpend the seperator
                 output += seperator + " ";
             }
-            if(gamepad) {
-                output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
-                
+
+            output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
+        }
+    }
+
+    return output;
+}
+
+std::string ley::GameModel::getPadInputString(std::string seperator, ley::Command command, PadBindingsType* bindings) {
+
+    std::string output = "";
+    for(const auto& kv : *bindings) {
+        if (kv.second == command) {
+            
+            if(output != "") {
+                //assume we already have a command and postpend the seperator
+                output += seperator + " ";
             }
-            else {
-                output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
-            }
+            
+            output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
+            
         }
     }
 

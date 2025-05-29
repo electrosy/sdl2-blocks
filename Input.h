@@ -30,6 +30,7 @@ const auto KEY_REPEAT_TIME_DEFAULT = 35;
 
 typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
 typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> KeyBindingsType; //SDL_Scancode, <Modifers, Command>
+typedef std::map<SDL_GameControllerButton, ley::Command> PadBindingsType; //SDL_GameControllerButton, <Modifers, Command>
 
 class InputPressed {
 
@@ -42,7 +43,7 @@ public:
     Uint16 getModifiers() {return mModifiers;};
     ley::Timer* getDelayTimerPtr() { return &mDelayTimer;};
     ley::Timer* getRepeatTimerPtr() { return &mRepeatTimer;};
-    InputPressed(Uint16 sdlKeymod, auto delayTime, auto repeatTime);
+    InputPressed(Uint16 sdlKeymod, auto delayTime, auto repeatTime); 
 };
 
 
