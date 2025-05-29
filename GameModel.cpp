@@ -36,9 +36,9 @@ mDebugOnlyLine(false)
       
     mHighScores.read();
     
-    loadKeyBindings2();
+    loadKeyBindings();
 //    loadButtonBindings();
-    loadButtonBindings2();
+    loadButtonBindings();
 
     readConfig();
     // TODO add the board size to the mainconfig
@@ -515,94 +515,71 @@ void ley::GameModel::resizeBoard(int width, int height) {
     mBoard.putBlock(activeBlock);
 }
 
-void ley::GameModel::loadKeyBindings2() {
+void ley::GameModel::loadKeyBindings() {
 
-    mKeyBindings2.emplace(SDL_SCANCODE_F12, std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
+    mKeyBindings.emplace(SDL_SCANCODE_F12, std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
+    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_NONE, ley::Command::right));
+    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_NONE, ley::Command::right));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_NONE, ley::Command::down));
+    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_NONE, ley::Command::down));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
-    mKeyBindings2.emplace(SDL_SCANCODE_E, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
+    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
+    mKeyBindings.emplace(SDL_SCANCODE_E, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
     
-    mKeyBindings2.emplace(SDL_SCANCODE_R, std::make_pair(KMOD_NONE, ley::Command::clockwise));
+    mKeyBindings.emplace(SDL_SCANCODE_R, std::make_pair(KMOD_NONE, ley::Command::clockwise));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_Q, std::make_pair(KMOD_NONE, ley::Command::quit));
-    mKeyBindings2.emplace(SDL_SCANCODE_ESCAPE, std::make_pair(KMOD_NONE, ley::Command::quit));
+    mKeyBindings.emplace(SDL_SCANCODE_Q, std::make_pair(KMOD_NONE, ley::Command::quit));
+    mKeyBindings.emplace(SDL_SCANCODE_ESCAPE, std::make_pair(KMOD_NONE, ley::Command::quit));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::enter));
+    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::enter));
     
-    mKeyBindings2.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
+    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
+    mKeyBindings.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_B, std::make_pair(KMOD_NONE, ley::Command::previousSong));
+    mKeyBindings.emplace(SDL_SCANCODE_B, std::make_pair(KMOD_NONE, ley::Command::previousSong));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_SPACE, std::make_pair(KMOD_NONE, ley::Command::space));
+    mKeyBindings.emplace(SDL_SCANCODE_SPACE, std::make_pair(KMOD_NONE, ley::Command::space));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_P, std::make_pair(KMOD_NONE, ley::Command::pause));
-    mKeyBindings2.emplace(SDL_SCANCODE_SLASH, std::make_pair(KMOD_NONE, ley::Command::pause));
+    mKeyBindings.emplace(SDL_SCANCODE_P, std::make_pair(KMOD_NONE, ley::Command::pause));
+    mKeyBindings.emplace(SDL_SCANCODE_SLASH, std::make_pair(KMOD_NONE, ley::Command::pause));
 
     
-    mKeyBindings2.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
-    mKeyBindings2.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_RSHIFT, ley::Command::decreaseTransparency));
+    mKeyBindings.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
+    mKeyBindings.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_RSHIFT, ley::Command::decreaseTransparency));
     
-    mKeyBindings2.emplace(SDL_SCANCODE_KP_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
+    mKeyBindings.emplace(SDL_SCANCODE_KP_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
-    mKeyBindings2.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_RSHIFT, ley::Command::increaseTransparency));
+    mKeyBindings.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
+    mKeyBindings.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_RSHIFT, ley::Command::increaseTransparency));
     
-    mKeyBindings2.emplace(SDL_SCANCODE_KP_PLUS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
+    mKeyBindings.emplace(SDL_SCANCODE_KP_PLUS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_BACKSPACE, std::make_pair(KMOD_NONE, ley::Command::backspace));
+    mKeyBindings.emplace(SDL_SCANCODE_BACKSPACE, std::make_pair(KMOD_NONE, ley::Command::backspace));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_TAB, std::make_pair(KMOD_NONE, ley::Command::tab));
+    mKeyBindings.emplace(SDL_SCANCODE_TAB, std::make_pair(KMOD_NONE, ley::Command::tab));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_C, std::make_pair(KMOD_NONE, ley::Command::debugclear));
+    mKeyBindings.emplace(SDL_SCANCODE_C, std::make_pair(KMOD_NONE, ley::Command::debugclear));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_F, std::make_pair(KMOD_NONE, ley::Command::debugfill));
+    mKeyBindings.emplace(SDL_SCANCODE_F, std::make_pair(KMOD_NONE, ley::Command::debugfill));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_L, std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
+    mKeyBindings.emplace(SDL_SCANCODE_L, std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_NONE, ley::Command::debugtexture));
+    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_NONE, ley::Command::debugtexture));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_S, std::make_pair(KMOD_NONE, ley::Command::debugcolide));
+    mKeyBindings.emplace(SDL_SCANCODE_S, std::make_pair(KMOD_NONE, ley::Command::debugcolide));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_GRAVE, std::make_pair(KMOD_NONE, ley::Command::console));
+    mKeyBindings.emplace(SDL_SCANCODE_GRAVE, std::make_pair(KMOD_NONE, ley::Command::console));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_I, std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
+    mKeyBindings.emplace(SDL_SCANCODE_I, std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
 
-    mKeyBindings2.emplace(SDL_SCANCODE_U, std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
+    mKeyBindings.emplace(SDL_SCANCODE_U, std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
 }
 
-void ley::GameModel::loadButtonBindings2() {
-    
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_LEFT, ley::Command::left});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::cclockwise});
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::cclockwise});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::clockwise});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
-
-    mButtonBindings2.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
-
-}
-
-/*
 void ley::GameModel::loadButtonBindings() {
+    
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
@@ -621,47 +598,16 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
-}
-*/
 
-ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr2() {
-    return &mKeyBindings2;
 }
 
-/*
-std::map<Uint8, ley::Command>* ley::GameModel::getButtonBindingsPtr() {
+ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr() {
+    return &mKeyBindings;
+}
+
+ley::PadBindingsType* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
 }
-*/
-
-ley::PadBindingsType* ley::GameModel::getButtonBindingsPtr2() {
-    return &mButtonBindings2;
-}
-
-std::string ley::GameModel::getInputsString(std::string seperator, ley::Command command, std::map<Uint8, ley::Command>* bindings, bool gamepad) {
-
-    std::string output = "";
-    for(const auto& kv : *bindings) {
-        if (kv.second == command) {
-            if(output != "") {
-                //assume we already have a command and postpend the seperator
-                output += seperator + " ";
-            }
-            if(gamepad) {
-                output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
-                
-            }
-            else {
-                output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
-            }
-        }
-    }
-
-    return output;
-}
-
-// TODO getInputsString needs to be removed once the game pad logic has been adjusted 
-//      for the new BindingsType then rename getInputsString2 to getInputsString
 
 std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings) {
 
@@ -674,6 +620,7 @@ std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Comman
                 output += seperator + " ";
             }
 
+            // TODO can we do this without casting?
             output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
         }
     }
@@ -692,6 +639,7 @@ std::string ley::GameModel::getPadInputString(std::string seperator, ley::Comman
                 output += seperator + " ";
             }
             
+            // TODO can we do this without casting?
             output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
 
         }
