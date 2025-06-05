@@ -227,7 +227,9 @@ void ley::Video::render() {
         spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
     }
 
-//    renderGridLines();
+    if(gm->getGuideGridOn() == "cyan") {
+        renderGridLines();
+    }
 
     //Then render sprites
     renderSprites();

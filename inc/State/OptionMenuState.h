@@ -17,12 +17,18 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sOptionMenuID;
+    
+    //labels
     ley::Font mBoardSizeLabelFont;
     ley::Font mDelayLabelFont;
     ley::Font mRepeatLabelFont;
+    ley::Font mGuideGridOnLabelFont;
+    //text entries
     ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
     ley::TextEntry mKeyRepeatTextEntry;
+    ley::TextEntry mGuideGridOnTextEntry;
+
     ley::Sprite mBackground;
     Renderables mRenderables;
     Renderables mDebugRenderables;
@@ -31,6 +37,7 @@ private:
     std::string mPreviousOptionsValue;
     std::string mPreviousKeyDelayValue;
     std::string mPreviousKeyRepeatValue;
+    std::string mPreviousGuideGridOnValue;
     void positionOptionsLabels();
     
 public:
@@ -49,6 +56,7 @@ public:
     void commitBoardSize();
     void commitKeyDelay();
     void commitKeyRepeat();
+    void commitGuideGridOn();
 
 };
 

@@ -56,6 +56,7 @@ private:
     void clearOldBlock();
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
+    std::string mGuideGridOn = "off";
     std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     bool processLines(int &numLines); //returns true if any number of lines are removed.
@@ -137,6 +138,8 @@ public:
     int getKeyRepeat() {return mKeyRepeat;};
     void setKeyRepeat(int inKeyRepeat) {mKeyRepeat = inKeyRepeat;};
     void readConfigOther();
+    std::string getGuideGridOn() { return mGuideGridOn;};
+    void setGuideGridOn(std::string inOn);
 };
 
 }

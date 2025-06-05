@@ -72,8 +72,8 @@ void ley::Input::pollEvents(
     bool& fullscreen, 
     PadBindingsType* buttonBindings2,
     KeyBindingsType* inKeyboardBindings,
-    std::queue<ley::Command>* commandQueuePtr, 
-    ley::TextEntry* te, 
+    std::queue<ley::Command>* commandQueuePtr,
+    ley::TextEntry* te,
     const std::function<void(ley::Command c)>& function,
     int inKeyDelay,
     int inKeyRepeat) {

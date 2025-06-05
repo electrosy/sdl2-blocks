@@ -16,10 +16,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
     mBoardSizeLabelFont{31,100,10,20},
     mDelayLabelFont{31,150,10,20},
-    mRepeatLabelFont{31,200,10,20}
+    mRepeatLabelFont{31,200,10,20},
+    mGuideGridOnLabelFont{31,250,10,20}
 
     {
 
+    // TODO Clean up setHelpMessage and setErrorMessage methods as they should all be in the init function.
     mBoardSizeTextEntry.setVisible(false);
     mBoardSizeTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mBoardSizeTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
@@ -48,6 +50,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
     mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
     mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
+
+    mGuideGridOnTextEntry.setVisible(false);
+    mGuideGridOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mGuideGridOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mGuideGridOnTextEntry.setWidth(85,85,5);
+    mGuideGridOnTextEntry.setPos({325,250});
+    mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan)$");
+    mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan", 0, false, capitalizationtype::capitalizeFirst));
+    mGuideGridOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan", 0, false, capitalizationtype::capitalizeFirst), "");
     
 
     mOptionUI.pushTextEntry(
@@ -68,11 +79,18 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mKeyRepeatTextEntry.hasFocus();},
         [this](){commitKeyRepeat();});
 
-    mOptionUI.pushFont("languageOptions", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mOptionUI.pushFont("keyboardOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushTextEntry(
+        [this](){mGuideGridOnTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousGuideGridOnValue);},
+        [this]()->bool{return mGuideGridOnTextEntry.hasFocus();},
+        [this](){ commitGuideGridOn(); });
+
+    mOptionUI.pushFont("languageOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,350,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
     mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
+    // TODO localization
+    mGuideGridOnLabelFont.updateMessage("Guide Grid On");
     
     mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
 }
@@ -84,11 +102,11 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 3) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 4) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 4) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 5) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
@@ -97,6 +115,7 @@ void OptionMenuState::update(ley::Command command) {
     mBoardSizeTextEntry.update();
     mKeyDelayTextEntry.update();
     mKeyRepeatTextEntry.update();
+    mGuideGridOnTextEntry.update();
 }
 
 void OptionMenuState::commitBoardSize() {
@@ -169,6 +188,25 @@ void OptionMenuState::commitKeyRepeat() {
     }
 }
 
+void OptionMenuState::commitGuideGridOn() {
+    if ( std::regex_match(mGuideGridOnTextEntry.getTextBoxValue().c_str(), std::regex(mGuideGridOnTextEntry.getRegEx()) )) {
+        SDL_Log("Regex matched.");
+
+        mGameModel->setGuideGridOn(mGuideGridOnTextEntry.getTextBoxValue());
+    }
+    else {
+        SDL_Log("Regex did not match: %s ", mGuideGridOnTextEntry.getTextBoxValue().c_str());
+        mGuideGridOnTextEntry.getErrorTimerPtr()->reset();
+        mGuideGridOnTextEntry.getErrorFontPtr()->setVisible(true);
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mGuideGridOnTextEntry.setTextBoxValue(mPreviousGuideGridOnValue);
+    }
+
+    if(mGuideGridOnTextEntry.hasFocus()) {
+        mGuideGridOnTextEntry.toggleFocus();
+    }
+}
+
 void OptionMenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
@@ -180,14 +218,21 @@ void OptionMenuState::render() {
 }
 
 void OptionMenuState::loadRenderables() {
+    
+    //background
     mRenderables.push_back(&mBackground);
-    mRenderables.push_back(&mBoardSizeTextEntry);
+    
+    //labels
     mRenderables.push_back(&mBoardSizeLabelFont);
     mRenderables.push_back(&mDelayLabelFont);
+    mRenderables.push_back(&mRepeatLabelFont);
+    mRenderables.push_back(&mGuideGridOnLabelFont);
     
+    //text entries
+    mRenderables.push_back(&mBoardSizeTextEntry);
     mRenderables.push_back(&mKeyDelayTextEntry);
     mRenderables.push_back(&mKeyRepeatTextEntry);
-    mRenderables.push_back(&mRepeatLabelFont);
+    mRenderables.push_back(&mGuideGridOnTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
@@ -196,6 +241,7 @@ bool OptionMenuState::onEnter() {
     mBoardSizeTextEntry.setVisible(true);
     mKeyDelayTextEntry.setVisible(true);
     mKeyRepeatTextEntry.setVisible(true);
+    mGuideGridOnTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -203,6 +249,7 @@ bool OptionMenuState::onEnter() {
     mBoardSizeTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
     mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
+    mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOn());
 
     positionOptionsLabels();
 
@@ -225,6 +272,7 @@ bool OptionMenuState::onExit() {
     commitBoardSize();
     commitKeyDelay();
     commitKeyRepeat();
+    commitGuideGridOn();
 
     return true;
 }
@@ -266,13 +314,13 @@ void OptionMenuState::positionOptionsLabels() {
     SDL_Point labelPos{0,0};
     
     // get the spacing of a " " character space.
-    TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), " ", &w, &h );
+    TTF_SizeUTF8(mBoardSizeLabelFont.getTTFFont(), " ", &w, &h );
     int labelDataSpacing = w;
 
+    // TODO we need to generalize this code so that it can be more auto matic. Maybe put in a container of objects needing
     TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), mBoardSizeLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mBoardSizeLabelFont.getPos();
     mBoardSizeTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
-
 
     TTF_SizeUTF8( mDelayLabelFont.getTTFFont(), mDelayLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mDelayLabelFont.getPos();
@@ -282,6 +330,10 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mRepeatLabelFont.getTTFFont(), mRepeatLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mRepeatLabelFont.getPos();
     mKeyRepeatTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+
+    TTF_SizeUTF8( mGuideGridOnLabelFont.getTTFFont(), mGuideGridOnLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mGuideGridOnLabelFont.getPos();
+    mGuideGridOnTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
 }
 

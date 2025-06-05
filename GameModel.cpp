@@ -655,6 +655,7 @@ void ley::GameModel::writeConfig() {
   myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
   myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
   myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
+  myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
   
   myfile.close();
 }
@@ -688,9 +689,29 @@ void ley::GameModel::readConfig() {
                 if(key == "keyrepeat") {
                     setKeyRepeat(stoi(value));
                 }
+
+                if(key == "guidegridon") {
+                    if(value == "cyan") {
+                        setGuideGridOn("cyan");
+                    }
+                    if(value == "off") {
+                        setGuideGridOn("off");
+                    }
+                    if(value == "red") {
+                        setGuideGridOn("red");
+                    }
+                    if(value == "green") {
+                        setGuideGridOn("green");
+                    }
+                    if(value == "yellow") {
+                        setGuideGridOn("yellow");
+                    }
+                }                
             }
         }
     }
+}
 
-    
+void ley::GameModel::setGuideGridOn(std::string inOn) {
+    mGuideGridOn = inOn;
 }
