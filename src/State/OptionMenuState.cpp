@@ -56,9 +56,9 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mGuideGridOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mGuideGridOnTextEntry.setWidthByChar(6);
     mGuideGridOnTextEntry.setPos({325,250});
-    mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan)$");
-    mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan", 0, false, capitalizationtype::capitalizeFirst));
-    mGuideGridOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan", 0, false, capitalizationtype::capitalizeFirst), "");
+    mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan|purple)$");
+    mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst));
+    mGuideGridOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst), "");
     
 
     mOptionUI.pushTextEntry(

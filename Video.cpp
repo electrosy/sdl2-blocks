@@ -227,7 +227,7 @@ void ley::Video::render() {
         spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
     }
 
-    if(gm->getGuideGridOn() == "cyan") {
+    if(gm->getGuideGridOn() != "off") {
         renderGridLines();
     }
 
@@ -356,8 +356,41 @@ void ley::Video::decreaseTransparency() {
 void ley::Video::renderGridLines() {
 
     //Render grid lines
+
     SDL_Color red {245, 96, 66, 100};
-    SDL_SetRenderDrawColor(renderer, red.r, red.b, red.g, red.a);
+
+    SDL_Color cyan {64, 230, 205, 100};
+
+    SDL_Color green {37, 50, 232, 100};
+
+    SDL_Color purple {229, 232, 30, 100};
+
+    SDL_Color yellow {222, 30, 232, 100};
+
+    SDL_Color currentColor;
+
+    if(gm->getGuideGridOn() == "red") {
+        currentColor = red;
+    }
+
+    if(gm->getGuideGridOn() == "green") {
+        currentColor = green;
+    }
+
+    if(gm->getGuideGridOn() == "yellow") {
+        currentColor = yellow;
+    }
+
+    if(gm->getGuideGridOn() == "cyan") {
+        currentColor = cyan;
+    }
+
+    if(gm->getGuideGridOn() == "purple") {
+        currentColor = purple;
+    }
+
+    SDL_SetRenderDrawColor(renderer, currentColor.r, currentColor.b, currentColor.g, currentColor.a);
+
     SDL_RenderDrawLine(renderer, 10, 10, 20, 20);
 
     
@@ -390,4 +423,5 @@ void ley::Video::renderGridLines() {
         SDL_RenderDrawLine(renderer, start2.x, start2.y, end2.x, end2.y);
     }
 }
+
 
