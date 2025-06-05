@@ -72,6 +72,7 @@ public:
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
     void setErrorMessage(std::string errorMessage);
     void handleFocusChange(TextEntry** activeUIElement, std::string* previousValue);
+    void setWidthByChar(int maxCharLength);
 };
 
 }

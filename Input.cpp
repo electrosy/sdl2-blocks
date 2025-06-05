@@ -165,7 +165,10 @@ void ley::Input::pollEvents(
     };
 
     while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
+        SDL_Scancode pressedKey = event.key.keysym.scancode;
+
         switch (event.type)     {       
+            
             case SDL_QUIT:         
                 command = ley::Command::quit;
                 break;
@@ -187,10 +190,15 @@ void ley::Input::pollEvents(
                 //selection_len = event.edit.length;
                 break;
             case SDL_KEYDOWN:
-                
+
+                //If letter and UI element is active use only UI element code and not keydown code.
+                if(te && (pressedKey >= SDL_SCANCODE_A && pressedKey <= SDL_SCANCODE_Z)) {
+                    break;
+                }
+
                 if(!event.key.repeat) {
                                         
-                    SDL_Scancode pressedKey = event.key.keysym.scancode;
+                    
                     Uint16 pressedModifiers = event.key.keysym.mod;
 
                     //reset the timers if this key was previously not pressed 
@@ -216,6 +224,7 @@ void ley::Input::pollEvents(
                     }
                 }
 
+                // backspace handler (backspace key only so far with function pointer passed in)
                 // TODO how to add repeat key for delete for text edit?
                 // If there is an active UI element then handle input.
                 if(te && te->hasFocus()) {

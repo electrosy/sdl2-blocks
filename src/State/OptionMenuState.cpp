@@ -25,7 +25,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mBoardSizeTextEntry.setVisible(false);
     mBoardSizeTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mBoardSizeTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mBoardSizeTextEntry.setWidth(85,85,5);
+    mBoardSizeTextEntry.setWidthByChar(5);
     mBoardSizeTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
     mBoardSizeTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
@@ -36,7 +36,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyDelayTextEntry.setVisible(false);
     mKeyDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mKeyDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyDelayTextEntry.setWidth(85,85,5);
+    mKeyDelayTextEntry.setWidthByChar(5);
     mKeyDelayTextEntry.setPos({224,150});
     mKeyDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
     mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
@@ -45,7 +45,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyRepeatTextEntry.setVisible(false);
     mKeyRepeatTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mKeyRepeatTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyRepeatTextEntry.setWidth(85,85,5);
+    mKeyRepeatTextEntry.setWidthByChar(5);
     mKeyRepeatTextEntry.setPos({325,200});
     mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
     mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
@@ -54,7 +54,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mGuideGridOnTextEntry.setVisible(false);
     mGuideGridOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mGuideGridOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mGuideGridOnTextEntry.setWidth(85,85,5);
+    mGuideGridOnTextEntry.setWidthByChar(6);
     mGuideGridOnTextEntry.setPos({325,250});
     mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan)$");
     mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan", 0, false, capitalizationtype::capitalizeFirst));

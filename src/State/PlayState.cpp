@@ -15,7 +15,7 @@ mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20) {
     std::string statusString = mGameModel->getLanguageModel()->getWord("start game", 0, false, capitalizationtype::capitalizeWords);
     statusString += " - " + mGameModel->getLanguageModel()->getWord("press '?' for help", 0, false, capitalizationtype::capitalizeFirst);
     mStatusFont.updateMessage(statusString);
-
+    mActiveUIElement = {};
 }
 
 void PlayState::update(ley::Command command) {

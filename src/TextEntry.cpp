@@ -107,6 +107,20 @@ void ley::TextEntry::setPos(SDL_Point p) {
     adjustCursor();
 }
 
+void ley::TextEntry::setWidthByChar(int maxCharLength) {
+
+    int w;
+    int h;
+    TTF_SizeUTF8(value.getTTFFont(), "a", &w, &h);
+
+    mWidth = w * maxCharLength;
+    mUnderlineWidth = mWidth;
+    mMaxCharLength = maxCharLength;
+
+    background.w = mWidth;
+    mUnderLine.w = mUnderlineWidth;
+}
+
 void ley::TextEntry::setWidth(int width, int underlineWidth, int maxCharLength) { 
     mWidth = width;
     mUnderlineWidth = underlineWidth;
