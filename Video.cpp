@@ -152,12 +152,14 @@ void ley::Video::init() {
 void ley::Video::videoResizeBoard() {
 
     *firstRectContainer.getRect("nextboundry") = {gm->getBoard()->nextBoxPosXPx() - 1, NEXTBOX_POS_Y_PX - 1, NEXTBOX_SIZE_PX + 2, NEXTBOX_SIZE_PX + 2};
+    
     *firstRectContainer.getRect("boardboundry") = {
                                                     gm->getBoard()->boardPosXPx() - 1,
                                                     BOARD_POS_Y_PX - 1,
                                                     gm->getBoard()->widthpx() + 2 ,
                                                     BLOCKSIZE_PX * (gm->getBoard()->height() - BOARDSIZE_BUFFER) + 2
                                                     };
+    
 
     mFontCombo = { gm->getBoard()->nextBoxPosXPx() - 120, COMBO_POS_Y_PX, 100, 35 };
     fontLines = { gm->getBoard()->scorePosXPx(), LINES_POS_Y_PX, 100, 35 };
@@ -223,7 +225,9 @@ void ley::Video::render() {
         setBackgroundTexture();
         spriteBackground.render(renderer, gm->isOverlayOn());
         spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
-    }   
+    }
+
+//    renderGridLines();
 
     //Then render sprites
     renderSprites();
@@ -345,5 +349,43 @@ void ley::Video::increaseTransparency() {
 void ley::Video::decreaseTransparency() {
 
     firstRectContainer.decreaseTransparency();
+}
+
+void ley::Video::renderGridLines() {
+
+    //Render grid lines
+    SDL_Color red {245, 96, 66, 100};
+    SDL_SetRenderDrawColor(renderer, red.r, red.b, red.g, red.a);
+    SDL_RenderDrawLine(renderer, 10, 10, 20, 20);
+
+    
+    //vertical lines
+    int boardWidth = gm->getBoard()->width();
+    for (int i = 1; i < boardWidth; ++i){
+
+        SDL_Point start1 {gm->getBoard()->boardPosXPx() + (BLOCKSIZE_PX * i) - 1, BOARD_POS_Y_PX};
+        SDL_Point end1 {gm->getBoard()->boardPosXPx() + (BLOCKSIZE_PX * i) - 1, BLOCK_START_POS_Y_PX + gm->getBoard()->heightpx()};
+
+        SDL_Point start2 {gm->getBoard()->boardPosXPx() + (BLOCKSIZE_PX * i), BOARD_POS_Y_PX};
+        SDL_Point end2 {gm->getBoard()->boardPosXPx() + (BLOCKSIZE_PX * i), BLOCK_START_POS_Y_PX + gm->getBoard()->heightpx()};
+
+        SDL_RenderDrawLine(renderer, start1.x, start1.y, end1.x, end1.y);
+        SDL_RenderDrawLine(renderer, start2.x, start2.y, end2.x, end2.y);
+    }
+
+    //horizontal lines
+    int boardHeight = gm->getBoard()->height() - BOARDSIZE_BUFFER;
+    for (int i = 1; i < boardHeight; ++i)
+    {
+        int yValue = BOARD_POS_Y_PX + (BLOCKSIZE_PX * i);
+        SDL_Point start1 {gm->getBoard()->boardPosXPx(), yValue - 1};
+        SDL_Point end1 {gm->getBoard()->boardPosXPx() + gm->getBoard()->widthpx(), yValue - 1};
+
+        SDL_Point start2 {gm->getBoard()->boardPosXPx(), yValue};
+        SDL_Point end2 {gm->getBoard()->boardPosXPx() + gm->getBoard()->widthpx(), yValue};
+
+        SDL_RenderDrawLine(renderer, start1.x, start1.y, end1.x, end1.y);
+        SDL_RenderDrawLine(renderer, start2.x, start2.y, end2.x, end2.y);
+    }
 }
 

@@ -77,6 +77,8 @@ private:
     ley::Font SDLLinked;
     ley::Font mFontCombo;
 
+    void renderGridLines();
+
 public:
     Video(ley::GameModel*);
     ~Video();
