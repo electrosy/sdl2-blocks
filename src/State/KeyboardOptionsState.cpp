@@ -105,6 +105,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
     // NOTE: don't forget to update the array index in the .h file other you will get a crash.
 
+    mActiveUIElement = {};
 }
 
 void KeyboardOptionsState::update(ley::Command command) {

@@ -56,6 +56,8 @@ CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
 
     mAblockalypseUsesNamesFont.setFontSize(14);
     mAblockalypseUsesNamesFont.updateMessage("SDL (libsdl.org)");
+
+    mActiveUIElement = {};
 }
 
 void CreditsState::update(ley::Command command) {

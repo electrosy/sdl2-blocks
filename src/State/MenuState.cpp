@@ -25,6 +25,8 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mainUI.pushFont("options", {29,365,0,0}, mGameModel->getLanguageModel()->getWord("options",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
     mainUI.pushFont("exit", {29,451,0,0}, mGameModel->getLanguageModel()->getWord("exit",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
     mainUI.pushFont("credits", {29,533,0,0}, mGameModel->getLanguageModel()->getWord("credits",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+
+    mActiveUIElement = {};
 }
 
 void MenuState::update(ley::Command command) {

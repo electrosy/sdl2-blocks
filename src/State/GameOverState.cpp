@@ -11,6 +11,8 @@ mGameModel(gm),
 fontGameOver{255, 190, 100, 35} {
 
     fontGameOver.updateMessage(gm->getLanguageModel()->getWord("game over", 0, false, capitalizationtype::capitalizeWords) + "!!!");
+
+    mActiveUIElement = {};
 }
 
 void GameOverState::update(ley::Command command) {

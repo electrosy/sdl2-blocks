@@ -19,6 +19,8 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
     mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
     updateLanguageFont();
+
+    mActiveUIElement = {};
 }
 
 void LanguageOptionsState::update(ley::Command command) {

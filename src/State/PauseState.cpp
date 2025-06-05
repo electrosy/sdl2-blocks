@@ -13,6 +13,7 @@ mGameModel(gm),
 controlsSprite{TextureManager::Instance()->getTexture("game-controls"), 0, {}, {0,{0,0,0,0}}} {
 
    controlsSprite.center();
+   mActiveUIElement = {};
 }
 
 void PauseState::update(ley::Command command) {

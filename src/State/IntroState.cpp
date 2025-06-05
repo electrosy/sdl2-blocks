@@ -12,6 +12,7 @@ IntroState::IntroState(ley::Video * v, ley::GameModel * gm) {
 
    mLogo = ley::Sprite(TextureManager::Instance()->getTexture("sdl"), 0, {}, {1533,{0,0,0,0}});
    mLogo.center();
+   mActiveUIElement = {};
 
 }
 
