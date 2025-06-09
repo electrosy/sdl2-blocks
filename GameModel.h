@@ -81,7 +81,8 @@ private:
     void onDrop();
     void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
-    ley::LanguageModel mLanguageModel;    
+    ley::LanguageModel mLanguageModel;
+    int mKick = 0; //amount of wall kick to the right or left.
 
 public:
     GameModel();
@@ -140,6 +141,9 @@ public:
     void readConfigOther();
     std::string getGuideGridOn() { return mGuideGridOn;};
     void setGuideGridOn(std::string inOn);
+    bool rotateWithKick(bool r);
+
+    ley::Block getActiveBlock() { return activeBlock; };
 };
 
 }

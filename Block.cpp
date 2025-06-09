@@ -116,6 +116,8 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     bool rotated = false;
 
     //early return if there is no other orientations for block, e.g. cube.
+    // TODO we need to remove this hard coding for cube here so that the it will work with the block editor.
+    // we need to calculate if the block can be rotated.
     if(type == ley::BlockType::cube) { 
         return false;
     }

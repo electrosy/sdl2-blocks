@@ -164,6 +164,60 @@ bool ley::GameModel::newBlock() {
     return false;
 }
 
+bool ley::GameModel::rotateWithKick(bool r) {
+
+    int boardWidth = mBoard.width();
+    const int MAX_KICK = boardWidth/2 > BLOCK_SIZE ? BLOCK_SIZE : boardWidth/2;
+    bool rotated = false;
+
+    // TODO I would really prefer not to have a hard stop, it would be better to be more perscise here.
+    //int loops = 10; //Auto stop after 10 loops.
+    rotated = rotateBlock(r);
+    while(!rotated && (mKick > -MAX_KICK || mKick < MAX_KICK) /* && loops-- > 0 */) {
+        // TODO if we can't rotate then see which side of the board we are on.
+        // then try moving in either direction to then see if its possible to rotate.
+
+        //If not rotateable do a wall kick to the left or right
+        
+        //Assume left or right side if the block position is on the left or right of center of the board.
+        //assume left side
+        //if mKick is positive stay positive don't go back and forth between pos and neg.
+        if(activeBlock.getPositionRect()->x < boardWidth/2 && mKick >= 0) {
+            mKick += 1;
+            moveBlock(ley::Command::right);
+            SDL_Log("Kick right");
+            
+        }
+        //assume right side
+        else if(activeBlock.getPositionRect()->x >= boardWidth/2 && mKick <= 0) {
+            mKick =- 1;
+            moveBlock(ley::Command::left);
+            SDL_Log("Kick left");
+        }
+
+        rotated = rotateBlock(r);
+    }
+    
+    //If we try to kick 5 spaces and it still no rotatable then revert.
+    if(rotated == false) {
+        //Move the pieces back
+        if(mKick > 0) {
+            while(mKick -= 1) {
+                moveBlock(ley::Command::left);
+                SDL_Log("Kick revert left");
+            }
+        }
+        if(mKick < 0) {
+            while(mKick += 1) {
+                moveBlock(ley::Command::right);
+                SDL_Log("Kick revert right");
+            }
+        }
+    }
+
+    return rotated;
+}
+
 bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
     
     bool rotated = false;

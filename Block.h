@@ -18,6 +18,7 @@ Date: Feb/15/2020
 
 const auto BLOCK_START_X = 4;
 const auto BLOCK_START_Y = 0;
+const auto BLOCK_SIZE = 5; //Maximum size of the block width and height.
 
 namespace ley {
 
@@ -47,7 +48,7 @@ private:
     BlockType type; //type empty == null block
     unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and max dimension
-    std::array<std::array<BlockTexCode, 5>,5> block;
+    std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockType,int = 0);
 
@@ -70,7 +71,7 @@ public:
     void setW(unsigned int w) {rect.w = w;};
     void debugResetPos();
     bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
-    std::array<std::array<ley::BlockTexCode, 5>,5> getBlockParts();
+    std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
 
     void operator= (const Block &b);
     
@@ -86,6 +87,7 @@ public:
     void reset(); //return block to original position for restarting the game.
     Uint8 getLeftGap();
     Uint8 getTopGap();
+    SDL_Rect* getPositionRect() { return &rect;};
 };
 
 
