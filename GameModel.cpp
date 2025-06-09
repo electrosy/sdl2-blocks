@@ -153,7 +153,7 @@ bool ley::GameModel::newBlock() {
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    if(!mBoard.canPut(activeBlock, ley::Command::up)) {
+    if(!mBoard.canPut(activeBlock, ley::Command::up).first) {
         return false;
     }
     else {
@@ -166,14 +166,23 @@ bool ley::GameModel::newBlock() {
 
 bool ley::GameModel::rotateWithKick(bool r) {
 
+    int kick = 0; //amount of wall kick to the right or left.
+    // TODO think about the case where one kick doesn't work, but possibly two kicks or more would.
+
     int boardWidth = mBoard.width();
     const int MAX_KICK = boardWidth/2 > BLOCK_SIZE ? BLOCK_SIZE : boardWidth/2;
-    bool rotated = false;
 
+    std::pair<bool, std::string> result = {false, ""};
     // TODO I would really prefer not to have a hard stop, it would be better to be more perscise here.
     //int loops = 10; //Auto stop after 10 loops.
-    rotated = rotateBlock(r);
-    while(!rotated && (mKick > -MAX_KICK || mKick < MAX_KICK) /* && loops-- > 0 */) {
+    result = rotateBlock(r);
+
+    // TODO we need to make this check more generic
+    if(activeBlock.getType() == ley::BlockType::cube) {
+        return result.first;
+    }
+
+    while(!result.first && (kick > -MAX_KICK && kick < MAX_KICK) /* && loops-- > 0 */) {
         // TODO if we can't rotate then see which side of the board we are on.
         // then try moving in either direction to then see if its possible to rotate.
 
@@ -181,70 +190,84 @@ bool ley::GameModel::rotateWithKick(bool r) {
         
         //Assume left or right side if the block position is on the left or right of center of the board.
         //assume left side
-        //if mKick is positive stay positive don't go back and forth between pos and neg.
-        if(activeBlock.getPositionRect()->x < boardWidth/2 && mKick >= 0) {
-            mKick += 1;
-            moveBlock(ley::Command::right);
-            SDL_Log("Kick right");
-            
+        //if kick is positive stay positive don't go back and forth between pos and neg.
+
+ 
+        //if the last rotate was blocked on a block or the bottom of the board.
+        if(result.second == "block" || result.second == "board_bottom") {
+            return false;
         }
-        //assume right side
-        else if(activeBlock.getPositionRect()->x >= boardWidth/2 && mKick <= 0) {
-            mKick =- 1;
-            moveBlock(ley::Command::left);
-            SDL_Log("Kick left");
+        else {
+            if(activeBlock.getPositionRect()->x < boardWidth/2 && kick >= 0) {
+                kick += 1;
+                moveBlock(ley::Command::right);
+                SDL_Log("Kick right");
+          
+            
+            }
+            //assume right side
+            else if(activeBlock.getPositionRect()->x >= boardWidth/2 && kick <= 0) {
+                kick -= 1;
+                moveBlock(ley::Command::left);
+                SDL_Log("Kick left");
+        
+            }
+        
         }
 
-        rotated = rotateBlock(r);
+        result = rotateBlock(r);
     }
     
+    // TODO do we really need this if everything is working correctly?
+
     //If we try to kick 5 spaces and it still no rotatable then revert.
-    if(rotated == false) {
+    if(!result.first) {
         //Move the pieces back
-        if(mKick > 0) {
-            while(mKick -= 1) {
+        if(kick > 0) {
+            while(kick -= 1) {
                 moveBlock(ley::Command::left);
                 SDL_Log("Kick revert left");
             }
         }
-        if(mKick < 0) {
-            while(mKick += 1) {
+        if(kick < 0) {
+            while(kick += 1) {
                 moveBlock(ley::Command::right);
                 SDL_Log("Kick revert right");
             }
         }
     }
 
-    return rotated;
+    return result.first;
 }
 
-bool ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
+std::pair<bool, std::string> ley::GameModel::rotateBlock(bool r) { // TODO, maybe ADD FEATURE - add control to Flip horz or vert.
     
-    bool rotated = false;
+    std::pair<bool, std::string> result = {false, ""};
     
-    if(canRotate(r)) {
-        activeBlock.rotate(r);        
+    result = canRotate(r);
+    if(result.first) {
+        activeBlock.rotate(r);
         clearOldBlock();
         oldBlock.rotate(r);
         // new board
         mBoard.putBlock(activeBlock);
-        rotated = true;
+        result.first = true;
     }
 
-    return rotated;
+    return result;
 }
 
-bool ley::GameModel::canRotate(bool r) {
+std::pair<bool, std::string> ley::GameModel::canRotate(bool r) {
     //rotate the block if the game is not paused
-    bool canput = false;
-
+    
+    std::pair<bool, std::string> result = {false, ""};
     if(!isPaused() && activeBlock.rotate(r)) {
-        canput = mBoard.canPut(activeBlock, ley::Command::up);
+        result = mBoard.canPut(activeBlock, ley::Command::up);
         activeBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
     }
     
-    return canput;
+    return result;
 }
 void ley::GameModel::clearAndRecordLine(int lineNum) {
 
@@ -400,7 +423,7 @@ bool ley::GameModel::moveBlock(Command d) {
     switch (d) {
         case Command::down :
             //new block
-            if (mBoard.canPut(activeBlock, Command::down)) {
+            if (mBoard.canPut(activeBlock, Command::down).first) {
                 activeBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
@@ -427,7 +450,7 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::left :            
             //new board
-            if (mBoard.canPut(activeBlock, Command::left)) {
+            if (mBoard.canPut(activeBlock, Command::left).first) {
                 activeBlock.moveLeft();
                 clearOldBlock();
                 oldBlock.moveLeft();
@@ -437,7 +460,7 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::right :
             //new board
-            if (mBoard.canPut(activeBlock, Command::right)) {
+            if (mBoard.canPut(activeBlock, Command::right).first) {
                 activeBlock.moveRight();
                 clearOldBlock();
                 oldBlock.moveRight();

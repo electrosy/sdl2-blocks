@@ -82,7 +82,7 @@ void ley::Board::clear() {
     setSize(mWidth, mHeight);
 }
 
-bool ley::Board::canPut(Block& b, Command d) {
+std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
 
     SDL_Rect block = b.getRect();
 
@@ -98,7 +98,7 @@ bool ley::Board::canPut(Block& b, Command d) {
                     bool boardPart = block.y + j + 1 >= mHeight
                                         || at(block.x + i, block.y + j + 1)->second; //the space is already occupied
                     if(renderPart && boardPart) {
-                            return false; /*** EARLY EXIT! ***/
+                            return {false, "test"}; /*** EARLY EXIT! ***/
                     }
                }
            }
@@ -112,7 +112,7 @@ bool ley::Board::canPut(Block& b, Command d) {
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
-                           return false; /*** EARLY EXIT! ***/
+                           return {false, "test"}; /*** EARLY EXIT! ***/
                     }
                }
            }
@@ -126,24 +126,28 @@ bool ley::Board::canPut(Block& b, Command d) {
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
                     ) {
-                            return false; /*** EARLY EXIT! ***/
+                            return {false, "test"}; /*** EARLY EXIT! ***/
                     }
                }
            }
         break;
+        // TODO will rotation actually work for all cases??
         case Command::up : //this is a rotation
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
                     //if there is a block piece to put,then check to see if it can be put.
-                    bool boardPart =  //board empty.
-                                    block.y + j > mHeight - 1 || block.y + j > mHeight //above the board
-                                    || block.x + i > mWidth - 1 //right of the board
-                                    || block.x + i < 0 // left of the board
-                                    || at(block.x + i, block.y + j)->second;
+                    bool boardBottomPart =  //board empty.
+                                    // TODO this logic is weird, why mHeight and mHeight -1?
+                                    block.y + j > mHeight - 1 || block.y + j > mHeight; //below the board
+                    bool boardPart = block.x + i > mWidth - 1 //right of the board
+                                    || block.x + i < 0; // left of the board
+                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i, block.y + j);
+                    bool blockCollide = boardAt ? boardAt->second : false;
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
+                        && (boardPart || blockCollide || boardBottomPart)//the space is already occupied
                     ) {
-                            return false; /*** EARLY EXIT! ***/
+                            // TODO this double ternary is a little hard to read.
+                            return {false, boardBottomPart ? "board_bottom" : boardPart ? "board" : "block"}; /*** EARLY EXIT! ***/
                     }
                }
            }
@@ -151,7 +155,7 @@ bool ley::Board::canPut(Block& b, Command d) {
         default : break;
     }
 
-    return true;
+    return {true, "test"};
 }
 void ley::Board::putBlock(Block& b) {
     SDL_Rect rect = b.getRect();

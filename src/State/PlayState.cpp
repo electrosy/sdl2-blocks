@@ -26,24 +26,12 @@ void PlayState::update(ley::Command command) {
             fallTimer.pause(!fallTimer.isPaused());
         break;
         case ley::Command::cclockwise :
-
-            // TODO we need to make this generic so that it will work with the block editor.
-            /*
-            if (mGameModel->getActiveBlock().getType() == ley::BlockType::cube) {
-                break;
-            }
-            */
-            if (mGameModel->rotateBlock(false)) {
+            if (mGameModel->rotateBlock(false).first) {
                 mGameModel->audio()->playSfx(ley::sfx::swoosh);
             }
         break;
         case ley::Command::clockwise :
-            /*
-            if (mGameModel->getActiveBlock().getType() == ley::BlockType::cube) {
-                break;
-            }
-            */
-            if (mGameModel->rotateBlock(true)) {
+            if (mGameModel->rotateBlock(true).first) {
                 mGameModel->audio()->playSfx(ley::sfx::swoosh);
             }
         break;

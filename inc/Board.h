@@ -70,7 +70,7 @@ public:
     std::pair<ley::BlockTexCode, bool>* at(int inX, int inY); //The X and Y are 0 based.
     void render(SDL_Renderer * r, bool d);
     void clear();
-    bool canPut(Block& b, Command d);
+    std::pair<bool, std::string> canPut(Block& b, Command d);
     void setBlock(Block& b);
     void putBlock(Block& b);
     void fillLine(int l, std::pair<ley::BlockTexCode, bool> p);

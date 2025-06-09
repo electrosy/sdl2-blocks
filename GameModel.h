@@ -82,7 +82,6 @@ private:
     void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
     ley::LanguageModel mLanguageModel;
-    int mKick = 0; //amount of wall kick to the right or left.
 
 public:
     GameModel();
@@ -90,8 +89,8 @@ public:
     Board* getBoard();
     void debugResetActiveBlock();
     bool moveBlock(Command); //returns true for false if block actually moved
-    bool rotateBlock(bool);
-    bool canRotate(bool); //false for counterclockwise and true for clockwise
+    std::pair<bool, std::string> rotateBlock(bool);
+    std::pair<bool, std::string> canRotate(bool); //false for counterclockwise and true for clockwise
     void overlayToggle();
     bool isOverlayOn();
     bool newBlock();
