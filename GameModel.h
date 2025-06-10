@@ -56,7 +56,7 @@ private:
     void clearOldBlock();
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
-    std::string mGuideGridOn = "off";
+    std::string mGuideGridOn = "purple";
     std::vector<char> checkForLines(char start);
     int firstLineAt(int); //returns the first complete line from the bottom or -1 if there is no line.
     bool processLines(int &numLines); //returns true if any number of lines are removed.
@@ -82,6 +82,7 @@ private:
     void loadKeyBindings(); //keyboard
     void loadButtonBindings(); //gamepad
     ley::LanguageModel mLanguageModel;
+    std::string mWallKickOn = "on";
 
 public:
     GameModel();
@@ -141,8 +142,9 @@ public:
     std::string getGuideGridOn() { return mGuideGridOn;};
     void setGuideGridOn(std::string inOn);
     bool rotateWithKick(bool r);
-
     ley::Block getActiveBlock() { return activeBlock; };
+    std::string getWallKickOn() { return mWallKickOn; };
+    void setWallKickOn(std::string on);
 };
 
 }

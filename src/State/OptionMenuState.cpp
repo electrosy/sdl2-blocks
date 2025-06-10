@@ -17,10 +17,11 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mBoardSizeLabelFont{31,100,10,20},
     mDelayLabelFont{31,150,10,20},
     mRepeatLabelFont{31,200,10,20},
-    mGuideGridOnLabelFont{31,250,10,20}
+    mGuideGridOnLabelFont{31,250,10,20},
+    mWallKickOnLabelFont{31,300,10,20}
 
     {
-
+    // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
     // TODO Clean up setHelpMessage and setErrorMessage methods as they should all be in the init function.
     mBoardSizeTextEntry.setVisible(false);
     mBoardSizeTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
@@ -59,7 +60,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan|purple)$");
     mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst));
     mGuideGridOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst), "");
-    
+
+    mWallKickOnTextEntry.setVisible(false);
+    mWallKickOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mWallKickOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mWallKickOnTextEntry.setWidthByChar(6);
+    mWallKickOnTextEntry.setPos({325,300});
+    mWallKickOnTextEntry.setRegEx("^(off|on)$");
+    mWallKickOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
+    mWallKickOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
 
     mOptionUI.pushTextEntry(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
@@ -84,15 +93,24 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mGuideGridOnTextEntry.hasFocus();},
         [this](){ commitGuideGridOn(); });
 
-    mOptionUI.pushFont("languageOptions", {29,300,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mOptionUI.pushFont("keyboardOptions", {29,350,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushTextEntry(
+        [this](){mWallKickOnTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousWallKickOnValue);},
+        [this]()->bool{return mWallKickOnTextEntry.hasFocus();},
+        [this](){ commitWallKickOn(); });
+
+    mOptionUI.pushFont("languageOptions", {29,350,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,400,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
     mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
+    
     // TODO localization
     mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
     
     mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
+
+    // TODO localization
+    mWallKickOnLabelFont.updateMessage("Wall Kick");
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -102,11 +120,11 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 4) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 5) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 5) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 6) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
@@ -116,7 +134,10 @@ void OptionMenuState::update(ley::Command command) {
     mKeyDelayTextEntry.update();
     mKeyRepeatTextEntry.update();
     mGuideGridOnTextEntry.update();
+    mWallKickOnTextEntry.update();
 }
+
+// TODO moving the commit methods into the textEntries may make it easier to streamline the text entry fields.
 
 void OptionMenuState::commitBoardSize() {
 
@@ -207,6 +228,25 @@ void OptionMenuState::commitGuideGridOn() {
     }
 }
 
+void OptionMenuState::commitWallKickOn() {
+    if ( std::regex_match(mWallKickOnTextEntry.getTextBoxValue().c_str(), std::regex(mWallKickOnTextEntry.getRegEx()) )) {
+        SDL_Log("Regex matched.");
+
+        mGameModel->setWallKickOn( mWallKickOnTextEntry.getTextBoxValue() == "on" ? "on" : "off" );
+    }
+    else {
+        SDL_Log("Regex did not match: %s ", mWallKickOnTextEntry.getTextBoxValue().c_str());
+        mWallKickOnTextEntry.getErrorTimerPtr()->reset();
+        mWallKickOnTextEntry.getErrorFontPtr()->setVisible(true);
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mWallKickOnTextEntry.setTextBoxValue(mPreviousWallKickOnValue);
+    }
+
+    if(mWallKickOnTextEntry.hasFocus()) {
+        mWallKickOnTextEntry.toggleFocus();
+    }
+}
+
 void OptionMenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
@@ -227,12 +267,14 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mDelayLabelFont);
     mRenderables.push_back(&mRepeatLabelFont);
     mRenderables.push_back(&mGuideGridOnLabelFont);
+    mRenderables.push_back(&mWallKickOnLabelFont);
     
     //text entries
     mRenderables.push_back(&mBoardSizeTextEntry);
     mRenderables.push_back(&mKeyDelayTextEntry);
     mRenderables.push_back(&mKeyRepeatTextEntry);
     mRenderables.push_back(&mGuideGridOnTextEntry);
+    mRenderables.push_back(&mWallKickOnTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
@@ -242,6 +284,7 @@ bool OptionMenuState::onEnter() {
     mKeyDelayTextEntry.setVisible(true);
     mKeyRepeatTextEntry.setVisible(true);
     mGuideGridOnTextEntry.setVisible(true);
+    mWallKickOnTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -250,6 +293,7 @@ bool OptionMenuState::onEnter() {
     mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
     mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOn());
+    mWallKickOnTextEntry.setTextBoxValue(  mGameModel->getWallKickOn() == "on" ? "on" : "off" );
 
     positionOptionsLabels();
 
@@ -273,6 +317,7 @@ bool OptionMenuState::onExit() {
     commitKeyDelay();
     commitKeyRepeat();
     commitGuideGridOn();
+    commitWallKickOn();
 
     return true;
 }
@@ -307,6 +352,8 @@ void OptionMenuState::initTextEntryMessages() {
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
 
     mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
+
+    mWallKickOnLabelFont.updateMessage("Wall Kick");
 }
 
 void OptionMenuState::positionOptionsLabels() {
@@ -336,6 +383,10 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mGuideGridOnLabelFont.getTTFFont(), mGuideGridOnLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mGuideGridOnLabelFont.getPos();
     mGuideGridOnTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+
+    TTF_SizeUTF8( mWallKickOnLabelFont.getTTFFont(), mWallKickOnLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mWallKickOnLabelFont.getPos();
+    mWallKickOnTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
 }
 

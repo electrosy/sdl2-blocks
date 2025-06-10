@@ -26,13 +26,34 @@ void PlayState::update(ley::Command command) {
             fallTimer.pause(!fallTimer.isPaused());
         break;
         case ley::Command::cclockwise :
-            if (mGameModel->rotateWithKick(false)) {
-                mGameModel->audio()->playSfx(ley::sfx::swoosh);
+            {
+                bool rotated = false;
+                if(mGameModel->getWallKickOn() == "on") {
+                    rotated = mGameModel->rotateWithKick(false);
+                }
+                else {
+                    rotated = mGameModel->rotateBlock(false).first;
+                }
+
+                if(rotated) {
+                    mGameModel->audio()->playSfx(ley::sfx::swoosh);
+                }
             }
+
         break;
         case ley::Command::clockwise :
-            if (mGameModel->rotateWithKick(true)) {
-                mGameModel->audio()->playSfx(ley::sfx::swoosh);
+             {
+                bool rotated = false;
+                if(mGameModel->getWallKickOn() == "off") {
+                    rotated = mGameModel->rotateWithKick(true);
+                }
+                else {
+                    rotated = mGameModel->rotateBlock(true).first;
+                }
+
+                if(rotated) {
+                    mGameModel->audio()->playSfx(ley::sfx::swoosh);
+                }
             }
         break;
         case ley::Command::down :

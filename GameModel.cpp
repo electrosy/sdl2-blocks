@@ -727,6 +727,7 @@ void ley::GameModel::writeConfig() {
   myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
   myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
   myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
+  myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
   
   myfile.close();
 }
@@ -777,7 +778,17 @@ void ley::GameModel::readConfig() {
                     if(value == "yellow") {
                         setGuideGridOn("yellow");
                     }
-                }                
+                }    
+                
+                if(key == "wallkickon") {
+                    if(value == "on") {
+                        setWallKickOn("on");
+                    }
+                    else if(value == "off") {
+                        setWallKickOn("off");
+                    }
+
+                }
             }
         }
     }
@@ -785,4 +796,8 @@ void ley::GameModel::readConfig() {
 
 void ley::GameModel::setGuideGridOn(std::string inOn) {
     mGuideGridOn = inOn;
+}
+
+void ley::GameModel::setWallKickOn(std::string on) {
+    mWallKickOn = on;
 }

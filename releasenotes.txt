@@ -1,11 +1,10 @@
-Wallkick
+Wallkick and wallkick options
 
 0.6.5.4
 
 The gamepad now uses the user option for input delay and repeat to match how the keyboard works.
 Add the guidegrid option which allows for different colors.
 Add localization to the Board Size, Input Delay Input Repeat and Guide Grid labels in the options.
-
 
 0.6.5.3
 
