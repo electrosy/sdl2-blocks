@@ -26,12 +26,12 @@ void PlayState::update(ley::Command command) {
             fallTimer.pause(!fallTimer.isPaused());
         break;
         case ley::Command::cclockwise :
-            if (mGameModel->rotateBlock(false).first) {
+            if (mGameModel->rotateWithKick(false)) {
                 mGameModel->audio()->playSfx(ley::sfx::swoosh);
             }
         break;
         case ley::Command::clockwise :
-            if (mGameModel->rotateBlock(true).first) {
+            if (mGameModel->rotateWithKick(true)) {
                 mGameModel->audio()->playSfx(ley::sfx::swoosh);
             }
         break;

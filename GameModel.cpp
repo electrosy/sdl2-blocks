@@ -171,39 +171,33 @@ bool ley::GameModel::rotateWithKick(bool r) {
 
     int boardWidth = mBoard.width();
     const int MAX_KICK = boardWidth/2 > BLOCK_SIZE ? BLOCK_SIZE : boardWidth/2;
-
     std::pair<bool, std::string> result = {false, ""};
-    // TODO I would really prefer not to have a hard stop, it would be better to be more perscise here.
-    //int loops = 10; //Auto stop after 10 loops.
     result = rotateBlock(r);
 
-    // TODO we need to make this check more generic
+    // TODO we need to make this check more generic to support the block editor.
     if(activeBlock.getType() == ley::BlockType::cube) {
         return result.first;
     }
 
-    while(!result.first && (kick > -MAX_KICK && kick < MAX_KICK) /* && loops-- > 0 */) {
+    while(!result.first && (kick > -MAX_KICK && kick < MAX_KICK)) {
         // TODO if we can't rotate then see which side of the board we are on.
         // then try moving in either direction to then see if its possible to rotate.
-
-        //If not rotateable do a wall kick to the left or right
-        
-        //Assume left or right side if the block position is on the left or right of center of the board.
-        //assume left side
-        //if kick is positive stay positive don't go back and forth between pos and neg.
-
  
         //if the last rotate was blocked on a block or the bottom of the board.
         if(result.second == "block" || result.second == "board_bottom") {
             return false;
         }
+        //Assume left or right side if the block position is on the left or right of center of the board.
         else {
+
+            //assume left side
+            //if kick is positive stay positive don't go back and forth between pos and neg.
+            //If not rotateable do a wall kick to the left or right
             if(activeBlock.getPositionRect()->x < boardWidth/2 && kick >= 0) {
                 kick += 1;
                 moveBlock(ley::Command::right);
                 SDL_Log("Kick right");
           
-            
             }
             //assume right side
             else if(activeBlock.getPositionRect()->x >= boardWidth/2 && kick <= 0) {
@@ -212,15 +206,14 @@ bool ley::GameModel::rotateWithKick(bool r) {
                 SDL_Log("Kick left");
         
             }
-        
         }
 
         result = rotateBlock(r);
     }
     
     // TODO do we really need this if everything is working correctly?
-
     //If we try to kick 5 spaces and it still no rotatable then revert.
+    /*
     if(!result.first) {
         //Move the pieces back
         if(kick > 0) {
@@ -236,6 +229,7 @@ bool ley::GameModel::rotateWithKick(bool r) {
             }
         }
     }
+    */
 
     return result.first;
 }
