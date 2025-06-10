@@ -51,8 +51,7 @@ private:
     std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockType,int = 0);
-
-//    void setBlockOddBalls(BlockType,int = 0);
+    void setBlockFromFile(BlockType t, int o = 0);
 
 public:
 

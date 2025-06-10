@@ -175,6 +175,7 @@ bool ley::GameModel::rotateWithKick(bool r) {
     result = rotateBlock(r);
 
     // TODO we need to make this check more generic to support the block editor.
+    // If the block can not rotate (1 orientation) then return false.
     if(activeBlock.getType() == ley::BlockType::cube) {
         return result.first;
     }
@@ -210,26 +211,6 @@ bool ley::GameModel::rotateWithKick(bool r) {
 
         result = rotateBlock(r);
     }
-    
-    // TODO do we really need this if everything is working correctly?
-    //If we try to kick 5 spaces and it still no rotatable then revert.
-    /*
-    if(!result.first) {
-        //Move the pieces back
-        if(kick > 0) {
-            while(kick -= 1) {
-                moveBlock(ley::Command::left);
-                SDL_Log("Kick revert left");
-            }
-        }
-        if(kick < 0) {
-            while(kick += 1) {
-                moveBlock(ley::Command::right);
-                SDL_Log("Kick revert right");
-            }
-        }
-    }
-    */
 
     return result.first;
 }
