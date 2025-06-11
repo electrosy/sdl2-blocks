@@ -56,10 +56,12 @@ private:
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockNameType,int = 0);
     void setBlockFromFile(BlockNameType t, int o = 0);
-    bool mReadBlockFromFile = 0;
-    void loadSingleOrientation(std::string orientation);
+    bool mReadBlockFromFile = 1;
+    void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
     int bottomEdgeOfOrientation(BlockDataType* blockData);
     int rightEdgeOfOrientation(BlockDataType* blockData);
+    bool mCanRotate = false;
+    bool canRotate(std::string blockCharName);
 
 protected:
     static BlockFileDataMapType* mBlockDataPtr;
@@ -99,6 +101,7 @@ public:
     Uint8 getTopGap();
     SDL_Rect* getPositionRect() { return &rect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
+    bool getCanRotate(){ return mCanRotate;};
 };
 
 }

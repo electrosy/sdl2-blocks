@@ -181,8 +181,13 @@ bool ley::GameModel::rotateWithKick(bool r) {
 
     // TODO we need to make this check more generic to support the block editor.
     // If the block can not rotate (1 orientation) then return false.
+    /*
     if(activeBlock.getType() == ley::BlockNameType::cube) {
         return result.first;
+    }
+    */
+    if(!activeBlock.getCanRotate()) {
+        return result.first;    
     }
 
     while(!result.first && (kick > -MAX_KICK && kick < MAX_KICK)) {
@@ -812,7 +817,36 @@ void ley::GameModel::readBlockData() {
         }
     }
 
+    addCanRotateToBlockData();
     logBlockData();
+}
+
+void ley::GameModel::addCanRotateToBlockData() {
+
+    std::vector<std::string> blocksToCheck;
+    blocksToCheck.push_back("a");
+    blocksToCheck.push_back("b");
+    blocksToCheck.push_back("c");
+    blocksToCheck.push_back("d");
+    blocksToCheck.push_back("e");
+    blocksToCheck.push_back("f");
+    blocksToCheck.push_back("g");
+
+    for(std::string str : blocksToCheck) {
+        
+        for(int i = 0; i < BLOCK_SIZE; ++i) {
+            
+            if( mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
+            || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
+            || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
+            ) {
+                mBlockData.emplace(str + "-*", "yes");
+            }
+            else {
+                mBlockData.emplace(str + "-*", "no");
+            }
+        }
+    }
 }
 
 void ley::GameModel::logBlockData() {

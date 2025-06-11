@@ -107,7 +107,12 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     //early return if there is no other orientations for block, e.g. cube.
     // TODO we need to remove this hard coding for cube here so that the it will work with the block editor.
     // we need to calculate if the block can be rotated.
+    /*
     if(type == ley::BlockNameType::cube) { 
+        return false;
+    }
+        */
+    if(!getCanRotate()) {
         return false;
     }
 
@@ -209,7 +214,7 @@ void ley::Block::setBlockDataPtr(BlockFileDataMapType* blockDataPtr) {
     mBlockDataPtr = blockDataPtr;
 }
 
-void ley::Block::loadSingleOrientation(std::string orientation) {
+void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* blockData) {
 
     auto blockTexCodeFromString = [](char str_code) -> ley::BlockTexCode  {
 
@@ -239,7 +244,7 @@ void ley::Block::loadSingleOrientation(std::string orientation) {
         std::string str_data = (*mBlockDataPtr)[orientation + std::to_string(i)];
         
         for(int j = 0; j < BLOCK_SIZE; ++j) {
-            block[i][j] = blockTexCodeFromString(str_data[j]);
+            (*blockData)[i][j] = blockTexCodeFromString(str_data[j]);
         }
     }
 }
@@ -268,60 +273,96 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
     }
 }
 
+
+bool ley::Block::canRotate(std::string blockCharName) {
+
+
+    /*
+    BlockDataType block0; //orientation 0
+    BlockDataType block1; //orientation 1
+    BlockDataType block2; //orientation 2
+    BlockDataType block3; //orientation 3
+
+    loadSingleOrientation(blockCharName + "0" + "-", &block0);
+    loadSingleOrientation(blockCharName + "1" + "-", &block1);
+    loadSingleOrientation(blockCharName + "2" + "-", &block2);
+    loadSingleOrientation(blockCharName + "3" + "-", &block3);
+
+    //check if all the orientations are the same
+    for(int i = 0; i < BLOCK_SIZE; ++i) {
+        for(int j = 0; j < BLOCK_SIZE; ++j) {
+            if(block0[i][j] != block1[i][j]
+                || block0[i][j] != block2[i][j]
+                || block0[i][j] != block3[i][j]) {
+                    return true;
+            }
+        }
+    }
+    */
+
+    return (*mBlockDataPtr)[blockCharName + "*"] == "yes" ? true : false;;
+}
+
 void ley::Block::setBlockFromFile(BlockNameType t, int o) {
     orientation = o;
 
 //////////////////////////////////////////////
 switch (t) {
         case BlockNameType::cube :
-            loadSingleOrientation("a-" + std::to_string(o) + "-");
+            loadSingleOrientation("a-" + std::to_string(o) + "-", &block);
             rect.h = bottomEdgeOfOrientation(&block);
             rect.w = rightEdgeOfOrientation(&block);
+            mCanRotate = canRotate("a-");
         break;
         case BlockNameType::tee :
 
-            loadSingleOrientation("b-" + std::to_string(o) + "-");
+            loadSingleOrientation("b-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("b-");
 
           
         break;
         case BlockNameType::rLee :
 
-            loadSingleOrientation("c-" + std::to_string(o) + "-");
+            loadSingleOrientation("c-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("c-");
 
           
         break;
         case BlockNameType::zee :
 
-            loadSingleOrientation("d-" + std::to_string(o) + "-");
+            loadSingleOrientation("d-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("d-");
 
             
         break;
         case BlockNameType::mzee :
 
-            loadSingleOrientation("e-" + std::to_string(o) + "-");
+            loadSingleOrientation("e-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("e-");
 
         break;
         case BlockNameType::lLee :
 
-            loadSingleOrientation("f-" + std::to_string(o) + "-");
+            loadSingleOrientation("f-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("f-");
 
-            
         break;
         case BlockNameType::line :
 
-            loadSingleOrientation("g-" + std::to_string(o) + "-");
+            loadSingleOrientation("g-" + std::to_string(o) + "-", &block);
                 rect.h = bottomEdgeOfOrientation(&block);
                 rect.w = rightEdgeOfOrientation(&block);
+                mCanRotate = canRotate("g-");
         break;
         default : ;
     }

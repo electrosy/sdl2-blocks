@@ -88,6 +88,7 @@ private:
     BlockFileDataMapType mBlockData;
     void readBlockData();
     void logBlockData();
+    void addCanRotateToBlockData();
 
 public:
     GameModel();
