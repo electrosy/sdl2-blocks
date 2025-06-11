@@ -1,7 +1,7 @@
 a-0-0,ddddd
-a-0-1,dOOOd
-a-0-2,dOOOd
-a-0-3,dOOOd
+a-0-1,dOhOd
+a-0-2,dgOOd
+a-0-3,dOOfd
 a-0-4,ddddd
 
 a-1-0,ddddd
@@ -28,9 +28,9 @@ b-0-2,OeOOO
 b-0-3,OOOOO
 b-0-4,OOOOO
 
-b-1-0,OOOOO
+b-1-0,fOfOO
 b-1-1,eeeOO
-b-1-2,OefOO
+b-1-2,fOfOO
 b-1-3,OOOOO
 b-1-4,OOOOO
 
@@ -46,7 +46,7 @@ b-3-2,OOOOO
 b-3-3,OOOOO
 b-3-4,OOOOO
 
-c-0-0,fOOOO
+c-0-0,fffOO
 c-0-1,fOOOO
 c-0-2,ffOOO
 c-0-3,OOOOO

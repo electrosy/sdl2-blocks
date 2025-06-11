@@ -837,13 +837,16 @@ void ley::GameModel::addCanRotateToBlockData() {
         for(int i = 0; i < BLOCK_SIZE; ++i) {
             
             if( mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
-            || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
-            || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
+             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
+             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
+             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
             ) {
-                mBlockData.emplace(str + "-*", "yes");
+
+                mBlockData[str + "-*"] = "yes";
+                i = BLOCK_SIZE; //were done with this for loop go to the next block.
             }
             else {
-                mBlockData.emplace(str + "-*", "no");
+                mBlockData[str + "-*"] = "no";
             }
         }
     }
