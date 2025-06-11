@@ -9,6 +9,8 @@ Date: Feb/15/2020
 #define GAMEMODEL_H
 
 #include <array>
+#include <fstream>
+#include <sstream>
 
 #include "Audio.h"
 #include "Block.h"
@@ -83,6 +85,9 @@ private:
     void loadButtonBindings(); //gamepad
     ley::LanguageModel mLanguageModel;
     std::string mWallKickOn = "on";
+    BlockFileDataMapType mBlockData;
+    void readBlockData();
+    void logBlockData();
 
 public:
     GameModel();

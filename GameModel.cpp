@@ -7,8 +7,6 @@ Date: Feb/15/2020
 */
 #include <array>
 #include <iostream>
-#include <fstream>
-#include <sstream>
 
 #include <SDL2/SDL.h>
 #include "GameModel.h"
@@ -17,10 +15,7 @@ Date: Feb/15/2020
 
 /* RAII */
 ley::GameModel::GameModel()
-: 
-activeBlock(getRandomBlock()), 
-oldBlock(activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1),
-nextBlock(getRandomBlock()),
+:
 numLines(0),
 numLevel(1),
 gameRunning(true), 
@@ -31,22 +26,32 @@ score(0),
 running(true),
 mDebugOnlyLine(false)
 {
+    readBlockData();
+    ley::Block::setBlockDataPtr(&mBlockData);
+    activeBlock = getRandomBlock();
+    oldBlock = {activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1};
+    nextBlock = getRandomBlock();
+
+    SDL_Log("ley::GameModel::ctor");
     oldBlock.setH(activeBlock.getRect().h);
     oldBlock.setW(activeBlock.getRect().w);
       
     mHighScores.read();
     
     loadKeyBindings();
-//    loadButtonBindings();
     loadButtonBindings();
 
     readConfig();
     // TODO add the board size to the mainconfig
     readConfigOther();
+
+    activeBlock.setBlockDataPtr(&mBlockData);
     
     mLanguageModel.loadLanguage();
+
 }
 
+// TODO rule of 3/5
 ley::GameModel::~GameModel() {
     
     writeConfig();
@@ -105,7 +110,7 @@ void ley::GameModel::clearOldBlock() {
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
-    return Block(4,0,BlockType::tee,false);
+    return Block(4,0,BlockNameType::tee,false);
 }
 
 ley::Block ley::GameModel::getRandomBlock() {
@@ -113,30 +118,30 @@ ley::Block ley::GameModel::getRandomBlock() {
     ley::Rand_int rand0to6(0,6); //random number generator
     
     if(mDebugOnlyLine == true) { //debug return only line
-        return Block(4,2,BlockType::line,false);
+        return Block(4,2,BlockNameType::line,false);
     }
 
     switch(rand0to6()) {
         case 0 : 
-            a = Block(4,0,BlockType::tee,false);
+            a = Block(4,0,BlockNameType::tee,false);
         break;
         case 1 :
-            a = Block(4,0,BlockType::rLee,false);
+            a = Block(4,0,BlockNameType::rLee,false);
         break;
         case 2 : 
-            a = Block(4,1,BlockType::zee,false);
+            a = Block(4,1,BlockNameType::zee,false);
         break;
         case 3 : 
-            a = Block(4,1,BlockType::mzee,false);
+            a = Block(4,1,BlockNameType::mzee,false);
         break;
         case 4 : 
-            a = Block(4,0,BlockType::lLee,false);
+            a = Block(4,0,BlockNameType::lLee,false);
         break;
         case 5 :
-            a = Block(4,2,BlockType::line,false);
+            a = Block(4,2,BlockNameType::line,false);
         break;
         case 6 :
-            a = Block(4,1,BlockType::cube,false);
+            a = Block(4,1,BlockNameType::cube,false);
         break;
     }
 
@@ -176,7 +181,7 @@ bool ley::GameModel::rotateWithKick(bool r) {
 
     // TODO we need to make this check more generic to support the block editor.
     // If the block can not rotate (1 orientation) then return false.
-    if(activeBlock.getType() == ley::BlockType::cube) {
+    if(activeBlock.getType() == ley::BlockNameType::cube) {
         return result.first;
     }
 
@@ -782,3 +787,40 @@ void ley::GameModel::setGuideGridOn(std::string inOn) {
 void ley::GameModel::setWallKickOn(std::string on) {
     mWallKickOn = on;
 }
+
+void ley::GameModel::readBlockData() {
+    std::string key;
+    std::string value;
+
+    
+    std::ifstream inFile("blocks.csv");
+    if (inFile.is_open())
+    {
+        std::string line;
+        while( std::getline(inFile,line))
+        {
+            if (line.empty()) continue;
+            std::stringstream ss(line);
+            
+            std::getline(ss,key,',');
+            std::getline(ss,value,',');
+
+            if(!value.empty() && !key.empty()) {
+                // TODO sanatize values
+                mBlockData.emplace(key,value);
+            }
+        }
+    }
+
+    logBlockData();
+}
+
+void ley::GameModel::logBlockData() {
+
+    SDL_Log("Log Block Data:");
+    for (const auto& pair : mBlockData) {
+        
+        std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
+    }
+}
+ 

@@ -18,13 +18,17 @@ Date: Feb/15/2020
 
 const auto BLOCK_START_X = 4;
 const auto BLOCK_START_Y = 0;
-const auto BLOCK_SIZE = 5; //Maximum size of the block width and height.
+const int BLOCK_SIZE = 5; //Maximum size of the block width and height.
 
 namespace ley {
 
-enum class BlockType {cube,tee,rLee,zee,mzee,lLee,line,empty};
+enum class BlockNameType {cube,tee,rLee,zee,mzee,lLee,line,empty};
 // the letter 'O' means empty and is the default. Capital 'Z' means don't clear part if clear block.
 enum class BlockTexCode {a,b,c,d,e,f,g,h,i,j,k,l,O,Z};
+
+typedef std::map<std::string, std::string> BlockFileDataMapType;
+typedef std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
+typedef std::pair<ley::BlockTexCode, bool> BlockCellType;
 
 const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
     std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
@@ -45,25 +49,32 @@ const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
 class Block {
 
 private:
-    BlockType type; //type empty == null block
+    BlockNameType type; //type empty == null block
     unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and max dimension
-    std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> block;
+    BlockDataType block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
-    void setBlock(BlockType,int = 0);
-    void setBlockFromFile(BlockType t, int o = 0);
+    void setBlock(BlockNameType,int = 0);
+    void setBlockFromFile(BlockNameType t, int o = 0);
+    bool mReadBlockFromFile = 0;
+    void loadSingleOrientation(std::string orientation);
+    int bottomEdgeOfOrientation(BlockDataType* blockData);
+    int rightEdgeOfOrientation(BlockDataType* blockData);
+
+protected:
+    static BlockFileDataMapType* mBlockDataPtr;
 
 public:
 
     /* RAII */
     Block();
-    Block(unsigned int, unsigned int, BlockType, bool = 0); //x,y,type,clear
+    Block(unsigned int, unsigned int, BlockNameType, bool = 0); //x,y,type,clear
     Block(const Block& b); //copy constructor
     ~Block();
 
     /* Accessors */
     SDL_Rect getRect() {return rect;}; // TODO this should probably return a const
-    const BlockType getType() {return type;};
+    const BlockNameType getType() {return type;};
     const bool getClear() {return cf;};
     void setClear(bool c);
     void setH(unsigned int h) {rect.h = h;};
@@ -87,9 +98,8 @@ public:
     Uint8 getLeftGap();
     Uint8 getTopGap();
     SDL_Rect* getPositionRect() { return &rect;};
+    static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
 };
-
-
 
 }
 #endif

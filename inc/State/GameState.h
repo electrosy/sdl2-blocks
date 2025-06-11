@@ -15,7 +15,7 @@ private:
 
 protected:
     bool done = false;
-    static TextEntry* mActiveUIElement; //TODO does this need to be static to be shared across all the child states?
+    static TextEntry* mActiveUIElement;
     
 public:
     virtual void update(ley::Command command) = 0;
