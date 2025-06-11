@@ -300,7 +300,7 @@ bool ley::Block::canRotate(std::string blockCharName) {
     }
     */
 
-    return (*mBlockDataPtr)[blockCharName + "*"] == "yes" ? true : false;;
+    return (*mBlockDataPtr)[blockCharName + "*"] == "yes" ? true : false;
 }
 
 void ley::Block::setBlockFromFile(BlockNameType t, int o) {
