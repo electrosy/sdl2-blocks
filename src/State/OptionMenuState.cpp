@@ -100,6 +100,9 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     mOptionUI.pushFont("languageOptions", {29,350,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,400,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    // TODO localization
+    mOptionUI.pushFont("blockEditor", {29,450,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+
 
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
     mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
@@ -126,6 +129,10 @@ void OptionMenuState::update(ley::Command command) {
 
     if(command == ley::Command::enter && mOptionUI.getIndex() == 6) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
+    }
+
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 7) {
+        mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
     mOptionUI.runCommand(command);

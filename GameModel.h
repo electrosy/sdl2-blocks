@@ -33,6 +33,7 @@ enum class StateChange { //TODO this can probably be called State
     credits,
     keyboardoptions,
     languageoptions,
+    blockeditor,
     none}; //particular states that the game can be in
 
 // TODO what is this PTS_LINE used for?

@@ -202,6 +202,13 @@ void ley::GameController::processStates(ley::Command inCommand) {
         mGm->stateChange(ley::StateChange::none);
     }
 
+    if(mGm->currentStateChange() == ley::StateChange::blockeditor) {
+        //Goto the keyboardoptions menu state
+        mGameStateMachine.pushState(new ley::BlockEditorState(mVideoSystem, mGm));
+        //clear the statechange flag
+        mGm->stateChange(ley::StateChange::none);
+    }
+
     if(mGm->currentStateChange() == ley::StateChange::credits) {
         //Goto the options menu state
         mGameStateMachine.pushState(new ley::CreditsState(mVideoSystem, mGm));
