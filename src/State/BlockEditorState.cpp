@@ -18,7 +18,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     updateBlockEditorFonts();
 
     mLayout.setLayout({50,50,30,30},0,0,5,5);
-    //mBlockUIMenu.setWidth()
+    mBlockUIMenu.setWidth(5);
 
     //mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
 

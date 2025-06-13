@@ -42,8 +42,10 @@ public:
     UIMenu();
     ~UIMenu();
 
+    int row();
+    int column();
     void next(UIMenuItem item);
-    void previous();
+    void previous(UIMenuItem item);
     SDL_Texture* currentTex();
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
@@ -51,8 +53,6 @@ public:
     void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size);
     void pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     int getIndex();
-    // TODO this was from the old UI objects that could toggle with space. This isn't used anymore.
-//    void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
     int count();
     void addRenderables(ley::RenderablesPtr);
@@ -62,6 +62,7 @@ public:
     void renderHotItem(ley::Video* v);
     void render(ley::Video* v);
     void runCommand(ley::Command command);
+    void setWidth(int width) { mWidth = width; };
 };
 
 }

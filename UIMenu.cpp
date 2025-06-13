@@ -154,25 +154,30 @@ void ley::UIMenu::runCommand(ley::Command command) {
         }
         
         if(command == ley::Command::cclockwise || command == ley::Command::up || command == ley::Command::left) {
-            previous();
+            
+            if(mWidth > 1 && (command == ley::Command::up || command == ley::Command::cclockwise)) {
+                previous(ley::UIMenuItem::row);
+            } else {
+                previous(ley::UIMenuItem::cell);
+            }
         }
     }
 }
 
-/*
-void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*> > *baseElements) {
-    //Iterate through all elements and return only the base elements.
-
-    for(int i = 0; i < elements.size() && !elements.empty(); ++i) {
-        
-        baseElements->push_back(   std::make_tuple( 
-                                    elements.at(i).getSource(), elements.at(i).getDestination(), elements.at(i).getBase()
-                                    ));
+int ley::UIMenu::row() {
+    int row = -1;
+    if(mWidth != 0) {
+        row = currentIndex / mWidth;
     }
-}
-*/
 
-void ley::UIMenu::previous() {
+    return row;
+}
+
+int ley::UIMenu::column() {
+    return currentIndex % mWidth;
+}
+
+void ley::UIMenu::previous(UIMenuItem item) {
     if(currentIndex > 0) {
 
         //if we have an active ui element untoggle it before moving to the previous
@@ -184,7 +189,32 @@ void ley::UIMenu::previous() {
             elements[currentIndex].getEnterFunction()();
         }
 
-        currentIndex--;
+        if(item == UIMenuItem::cell) {
+
+            if(mWidth > 1) {
+                //int row = ??
+                SDL_Log("col: %i, row: %i", column(), row());
+                //if we are at the last column in a row
+                if( column() <= 0 ) {
+                    
+                    return;
+                }
+            }
+
+            currentIndex--;
+        }
+        else if (item == UIMenuItem::row) {
+            
+            int oldCurrentIndex = currentIndex;
+            
+            currentIndex -= mWidth;
+
+            if(currentIndex < 0) {
+                currentIndex = oldCurrentIndex;
+            }
+
+            SDL_Log("col: %i, row: %i", column(), row());
+        }
     }
 }
 
@@ -201,13 +231,29 @@ void ley::UIMenu::next(UIMenuItem item) {
         }
 
         if(item == UIMenuItem::cell) {
+
+            if(mWidth > 1) {
+                //if we are at the last column in a row
+                if( column() >= (mWidth - 1) ) {
+                    
+                    return;
+                }
+            }
+
             currentIndex++;
         }
         else if (item == UIMenuItem::row) {
+            
+            int oldCurrentIndex = currentIndex;
+            
             currentIndex += mWidth;
 
-            //inY * mWidth + inX
+            if(currentIndex > elements.size() - 1) {
+                currentIndex = oldCurrentIndex;
+            }
         }
+
+        SDL_Log("col: %i, row: %i", column(), row());
     }
 }
 
