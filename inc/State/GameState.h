@@ -16,7 +16,8 @@ private:
 
 protected:
     bool done = false;
-    static TextEntry* mActiveUIElement;
+    //static TextEntry* mActiveUIElement;
+    static UIWidget* mActiveUIElement;
     
 public:
     virtual void update(ley::Command command) = 0;
@@ -27,7 +28,7 @@ public:
     virtual bool onExit() = 0; //when the state is poped off
     virtual bool onReEnter() = 0; //rentering the state after the previous was popped off. //TODO this should probably be called resume
     virtual bool onPause() = 0; //When another state is pushed on after this one.
-    ley::TextEntry* activeUIelement();
+    ley::UIWidget* activeUIelement();
     virtual void UI_ToggleFocus();
     virtual void commitUI();
     bool isDone(); // Returns true when everything in this state is finished.

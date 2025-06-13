@@ -73,7 +73,7 @@ void ley::Input::pollEvents(
     PadBindingsType* buttonBindings2,
     KeyBindingsType* inKeyboardBindings,
     std::queue<ley::Command>* commandQueuePtr,
-    ley::TextEntry* te,
+    ley::UIWidget* te,
     const std::function<void(ley::Command c)>& function,
     int inKeyDelay,
     int inKeyRepeat) {

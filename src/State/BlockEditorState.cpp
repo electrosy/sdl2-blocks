@@ -86,6 +86,11 @@ bool BlockEditorState::onReEnter() {
 
 bool BlockEditorState::onExit() {
     SDL_Log("Exiting BlockEditorState");
+
+    commitTile();
+
+    mActiveUIElement = {};
+
     return true;
 }
 
@@ -101,7 +106,9 @@ void BlockEditorState::updateBlockEditorFonts() {
 }
 
 void BlockEditorState::commitTile() {
-    
+    if(mFirstTile.hasFocus()) {
+        mFirstTile.toggleFocus();
+    }
 }
 
 }

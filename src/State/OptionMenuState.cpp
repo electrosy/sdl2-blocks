@@ -325,6 +325,8 @@ bool OptionMenuState::onExit() {
     commitKeyRepeat();
     commitGuideGridOn();
     commitWallKickOn();
+    
+    mActiveUIElement = {};
 
     return true;
 }

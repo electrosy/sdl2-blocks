@@ -18,7 +18,7 @@ public:
     void render();
     std::string getStateId();
     bool isStateDone();
-    ley::TextEntry* activeUIElement();
+    ley::UIWidget* activeUIElement();
     void commitUI();
     void UI_ToggleFocus();
 

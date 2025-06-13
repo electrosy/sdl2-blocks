@@ -201,7 +201,7 @@ void ley::TextEntry::setErrorMessage(std::string errorMessage) {
 
 }
 
-void ley::TextEntry::handleFocusChange(TextEntry** activeUIElement, std::string* previousValue) {
+void ley::TextEntry::handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) {
 
     if(!hasFocus()){
         (*activeUIElement) = this;
