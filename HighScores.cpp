@@ -31,7 +31,7 @@ bool ley::HighScores::isClean() {
   return clean;
 }
 
-void ley::HighScores::renderScoreFonts(ley::Renderables* re, std::vector<ley::Font*> fonts, HighScoresRow placeholder, int placeholderrow) {
+void ley::HighScores::renderScoreFonts(ley::RenderablesPtr* re, std::vector<ley::Font*> fonts, HighScoresRow placeholder, int placeholderrow) {
 
     HighScoresType::reverse_iterator it;
     int counter = 1;

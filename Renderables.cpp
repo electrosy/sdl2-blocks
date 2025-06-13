@@ -8,26 +8,26 @@ Date: Feb/17/2020
 #include "Renderables.h"
 
 /* RAII */
-ley::Renderables::Renderables() {
+ley::RenderablesPtr::RenderablesPtr() {
     
 }
  
-ley::Renderables::~Renderables() {
+ley::RenderablesPtr::~RenderablesPtr() {
 
 }
 /* Accessors */
-unsigned int ley::Renderables::size() {
+unsigned int ley::RenderablesPtr::size() {
    
    return renderables.size() > 0 ? renderables.size() : 0;
 }
 
 /* Functions */
-void ley::Renderables::push_back(Renderable * r) {
+void ley::RenderablesPtr::push_back(Renderable * r) {
     
     renderables.push_back(r);
 }
 
-void ley::Renderables::renderAll(SDL_Renderer * r, bool d) {           
+void ley::RenderablesPtr::renderAll(SDL_Renderer * r, bool d) {           
     
     if(renderables.size() > 0) {
         for(const auto value : renderables) {

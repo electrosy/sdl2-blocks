@@ -4,6 +4,7 @@
 #include "../../GameModel.h"
 #include "../../UIMenu.h"
 #include "../../inc/UI/UI_Tile.h"
+#include "../../inc/Layout.h"
 
 #ifndef BLOCKEDITORSTATE_H
 #define BLOCKEDITORSTATE_H
@@ -11,6 +12,31 @@
 namespace ley {
 
 class BlockEditorState : public ley::GameState {
+
+private:
+
+    Video * mVideoSystem;
+    GameModel * mGameModel;
+    static const std::string sBlockEditorID;
+
+    Font mTitleFont;
+    UIMenu mBlockUIMenu;
+
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
+
+    Layout mLayout;
+
+//    ley::UI_Tile mFirstTile;
+//    ley::UI_Tile mSecondTile;
+
+    std::vector<std::unique_ptr<UI_Tile>> mTiles;
+
+    std::string mPreviousOptionsValue;
+
+
+    void updateBlockEditorFonts();
+
 public:
 
     BlockEditorState(ley::Video * v, ley::GameModel * gm);
@@ -25,25 +51,8 @@ public:
 
     virtual std::string getStateID() const { return sBlockEditorID; }
 
-    ley::UI_Tile mFirstTile;
+    
 
-    std::string mPreviousOptionsValue;
-
-private:
-
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
-    static const std::string sBlockEditorID;
-
-    ley::Font mTitleFont;
-    ley::UIMenu mBlockUIMenu;
-
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
-
-    void updateBlockEditorFonts();
-
-    void commitTile();
 };
 
 }

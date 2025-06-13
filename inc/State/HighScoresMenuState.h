@@ -38,13 +38,13 @@ private:
     ley::Font mScoreFont;
     ley::Font mHighScoresTitleFont;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     int optionItem; //Store the option selected from the options menu.
 
     ley::UIMenu highscoresmenu;
-    ley::Renderables highScoreRenderables;
+    ley::RenderablesPtr highScoreRenderables;
 
     SDL_Rect pos_col1; // name
     std::vector<ley::Font*> mFontsHighScores;

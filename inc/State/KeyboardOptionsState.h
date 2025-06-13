@@ -34,8 +34,8 @@ private:
     ley::Font font_objects[20];
     std::vector<ley::Font*> fonts;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 };
 
 }

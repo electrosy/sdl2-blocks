@@ -21,15 +21,15 @@ namespace ley {
 
 typedef std::vector<Renderable*> RenderableType;
 
-class Renderables {
+class RenderablesPtr {
 
 private:
     RenderableType renderables;
 protected:
    
 public:
-    Renderables();
-    ~Renderables();
+    RenderablesPtr();
+    ~RenderablesPtr();
 
     void push_back(Renderable * r);
     void renderAll(SDL_Renderer * r, bool d);

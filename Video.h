@@ -39,9 +39,9 @@ private:
     bool renderbg; //render background or not.
     double mili_adjust; //number of mili seconds to delay the frame
     Uint32 frame_start;
-    ley::Renderables mRenderables;
-    ley::Renderables mRenderablesTopLayer;
-    ley::Renderables mDebugRenderables;
+    ley::RenderablesPtr mRenderables;
+    ley::RenderablesPtr mRenderablesTopLayer;
+    ley::RenderablesPtr mDebugRenderables;
     ley::RectContainer firstRectContainer;
     ley::RectContainer debugRectContainer;
 

@@ -19,6 +19,8 @@ Date: Jul/17/2021
 
 namespace ley {
 
+enum class UIMenuItem {cell,row};
+
 class UIMenu {
 
 private:
@@ -27,10 +29,11 @@ private:
     std::vector<ley::Font*> fontsUsed;
     int currentIndex;
     bool hot; //indicates that this menu item is currently selected.
-    ley::Renderables renderables;
+    ley::RenderablesPtr renderables;
     ley::Timer fader;
     ley::Fader mFader;
     char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
+    int mWidth = 1; //1 is single dimensional. If width is more than one then the menu is created as a grid and down will jump down to the next row. ;)
 
 protected:
    
@@ -39,7 +42,7 @@ public:
     UIMenu();
     ~UIMenu();
 
-    void next();
+    void next(UIMenuItem item);
     void previous();
     SDL_Texture* currentTex();
     SDL_Rect currentSrc();
@@ -52,7 +55,7 @@ public:
 //    void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
     int count();
-    void addRenderables(ley::Renderables);
+    void addRenderables(ley::RenderablesPtr);
     int getElementId(std::string);
     ley::UIElement* getElementPtr(std::string label); //Get elementPtr from label
     void renderBaseMenuItems(ley::Video* v);

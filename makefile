@@ -11,7 +11,7 @@ OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/Spr
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \
        $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o $(OBJDIR)/src/State/LanguageOptionsState.o \
        $(OBJDIR)/src/TextEntry.o $(OBJDIR)/src/Fader.o $(OBJDIR)/src/Config.o $(OBJDIR)/src/Board.o $(OBJDIR)/src/LanguageModel.o \
-       $(OBJDIR)/src/State/BlockEditorState.o $(OBJDIR)/src/UI/UI_Tile.o
+       $(OBJDIR)/src/State/BlockEditorState.o $(OBJDIR)/src/UI/UI_Tile.o $(OBJDIR)/src/Layout.o
 
 # OBJ_NAME name of executable
 OBJ_NAME = sdl2-blocks
@@ -43,7 +43,7 @@ else
 endif
 
 # Directories to create
-DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State
+DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State $(OBJDIR)/src/UI
 
 # Default target
 all: $(DIRS) $(BUILD_CONFIG) $(OBJ_NAME)

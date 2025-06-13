@@ -33,8 +33,8 @@ private:
     bool lastLogo = false; //true when last logo has been displayed
     int mAnimationStep = 0; //keep track of the different animation steps
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 };
 
 }

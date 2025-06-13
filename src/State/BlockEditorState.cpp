@@ -15,30 +15,56 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     // TODO localization
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
 
-//    mBlockEditorUI.p
-
     updateBlockEditorFonts();
 
-    mActiveUIElement = {};
-    
-    mFirstTile.setVisible(false);
-    mFirstTile.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mFirstTile.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mFirstTile.setWidthByChar(5);
-    mFirstTile.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-    mFirstTile.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
-        + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
-        , "");
-    mFirstTile.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-    mFirstTile.setPos({224,100});
+    mLayout.setLayout({50,50,30,30},0,0,5,5);
+    //mBlockUIMenu.setWidth()
+
+    //mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
+
+    for(int i = 0; i < 25; ++i) {
+        
+        mTiles.push_back(std::make_unique<UI_Tile>());
+        SDL_Rect layoutRect = mLayout.getRectForCell(i);
+
+        mTiles.back()->setPos({layoutRect.x,layoutRect.y});
+        mTiles.back()->setWidth(layoutRect.w, layoutRect.w, 2);
+        //mTiles.back()->setWidth(layoutRect.w, layoutRect.w, 1);
+        // TODO create setHeightmTiles.back()->setHeight(layoutRect.h);
+        mTiles.back()->setVisible(false);
+        mTiles.back()->setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+        mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+        mTiles.back()->setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+        mTiles.back()->setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+            + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
+            , "");
+        mTiles.back()->setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+
+    }
+
+    mActiveUIElement = mTiles.back().get();
 
 
     /*
-    mBlockUIMenu.pushUIElement(
-        [this](){mFirstTile.handleFocusChange({}, &mPreviousOptionsValue);},
-        [this]()->bool{return mFirstTile.hasFocus();},
-        [this](){ commitTile(); } );
-    */
+    mOptionUI.pushUIElement(
+        [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
+        [this]()->bool{return mKeyDelayTextEntry.hasFocus();},
+        [this](){commitKeyDelay();});
+        */
+        
+
+    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+        //UIWidget* ptr = dynamic_cast<UIWidget*>( tile.get() );
+
+    
+        
+        mBlockUIMenu.pushUIElement(
+            [this,&tile](){tile->handleFocusChange(&mActiveUIElement, tile->getPreviousValuePtr());},
+            [this,&tile]()->bool{return tile->hasFocus();},
+            [this,&tile]() {tile->commit();}
+        );
+        
+    }
 
 }
 
@@ -50,6 +76,11 @@ void BlockEditorState::update(ley::Command command) {
     }
 
     mBlockUIMenu.runCommand(command);
+
+    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+        dynamic_cast<UIWidget*>( tile.get() )->update();
+    }
+
 }
 
 void BlockEditorState::render() {
@@ -65,7 +96,10 @@ void BlockEditorState::render() {
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
 
-    mRenderables.push_back(&mFirstTile);
+
+    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+        mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
+    }
 }
 
 bool BlockEditorState::onEnter() {
@@ -73,7 +107,9 @@ bool BlockEditorState::onEnter() {
     SDL_Log("Entering BlockEditorState");
     loadRenderables();
 
-    mFirstTile.setVisible(true);
+    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+        dynamic_cast<UIWidget*>( tile.get() )->setVisible(true);
+    }
 
     
     return true;
@@ -86,8 +122,6 @@ bool BlockEditorState::onReEnter() {
 
 bool BlockEditorState::onExit() {
     SDL_Log("Exiting BlockEditorState");
-
-    commitTile();
 
     mActiveUIElement = {};
 
@@ -103,12 +137,6 @@ bool BlockEditorState::onPause() {
 void BlockEditorState::updateBlockEditorFonts() {
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor coming soon", 0, false, capitalizationtype::capitalizeWords));
-}
-
-void BlockEditorState::commitTile() {
-    if(mFirstTile.hasFocus()) {
-        mFirstTile.toggleFocus();
-    }
 }
 
 }

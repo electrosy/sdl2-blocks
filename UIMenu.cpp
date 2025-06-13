@@ -72,7 +72,7 @@ int ley::UIMenu::getElementId(std::string label) {
     }
     return index;
 }
-void ley::UIMenu::addRenderables(ley::Renderables r) {
+void ley::UIMenu::addRenderables(ley::RenderablesPtr r) {
     renderables = r;
 }
 
@@ -145,7 +145,12 @@ void ley::UIMenu::runCommand(ley::Command command) {
     if(count() > 0) {
             
         if(command == ley::Command::down || command == ley::Command::right) {
-            next();
+
+            if(mWidth > 1 && command == ley::Command::down) {
+                next(ley::UIMenuItem::row);
+            } else {
+                next(ley::UIMenuItem::cell);
+            }
         }
         
         if(command == ley::Command::cclockwise || command == ley::Command::up || command == ley::Command::left) {
@@ -183,7 +188,7 @@ void ley::UIMenu::previous() {
     }
 }
 
-void ley::UIMenu::next() {
+void ley::UIMenu::next(UIMenuItem item) {
     if(currentIndex < elements.size()-1) {
 
         //if we have an active ui element untoggle it before moving to the next
@@ -195,7 +200,14 @@ void ley::UIMenu::next() {
             elements[currentIndex].getEnterFunction()();
         }
 
-        currentIndex++;
+        if(item == UIMenuItem::cell) {
+            currentIndex++;
+        }
+        else if (item == UIMenuItem::row) {
+            currentIndex += mWidth;
+
+            //inY * mWidth + inX
+        }
     }
 }
 

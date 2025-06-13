@@ -34,8 +34,8 @@ private:
     ley::Font mCurrentLanguageFont;
     ley::UIMenu mLanguageUI;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     void updateLanguageFont();
 };

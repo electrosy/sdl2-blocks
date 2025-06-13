@@ -33,8 +33,8 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 };
 
 }

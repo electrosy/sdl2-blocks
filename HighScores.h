@@ -39,7 +39,7 @@ public:
     void write();
     int read();
     void push(unsigned long, std::string, int, int);
-    void renderScoreFonts(ley::Renderables*, std::vector<ley::Font*>, HighScoresRow placeholder, int placeholderrow);
+    void renderScoreFonts(ley::RenderablesPtr*, std::vector<ley::Font*>, HighScoresRow placeholder, int placeholderrow);
     void setClean(bool c);
     bool isClean();
     int isNewHigh(int n);

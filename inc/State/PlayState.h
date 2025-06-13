@@ -29,8 +29,8 @@ public:
 
 private:
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     //Font
     ley::Font mStatusFont;

@@ -26,8 +26,8 @@ public:
 
 private:
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;

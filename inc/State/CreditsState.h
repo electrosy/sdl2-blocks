@@ -34,8 +34,8 @@ private:
     ley::Sprite mBackground;
 //    ley::Sprite mCreditsPanel;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;

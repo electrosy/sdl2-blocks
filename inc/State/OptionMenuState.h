@@ -32,8 +32,8 @@ private:
     ley::TextEntry mWallKickOnTextEntry;
 
     ley::Sprite mBackground;
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu mOptionUI;
     std::string mPreviousOptionsValue;

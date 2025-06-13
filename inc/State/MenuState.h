@@ -35,8 +35,8 @@ private:
     ley::Sprite mCompanyLogo;
     ley::Sprite mAblockalypseLogo;
 
-    Renderables mRenderables;
-    Renderables mDebugRenderables;
+    RenderablesPtr mRenderables;
+    RenderablesPtr mDebugRenderables;
 
     ley::UIMenu mainUI;
     int menuItem; //Store the option selected from the main menu.
