@@ -15,10 +15,31 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     // TODO localization
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
 
+//    mBlockEditorUI.p
 
     updateBlockEditorFonts();
 
     mActiveUIElement = {};
+    
+    mFirstTile.setVisible(false);
+    mFirstTile.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mFirstTile.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mFirstTile.setWidthByChar(5);
+    mFirstTile.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+    mFirstTile.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+        + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
+        , "");
+    mFirstTile.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+    mFirstTile.setPos({224,100});
+
+
+    /*
+    mBlockUIMenu.pushUIElement(
+        [this](){mFirstTile.handleFocusChange({}, &mPreviousOptionsValue);},
+        [this]()->bool{return mFirstTile.hasFocus();},
+        [this](){ commitTile(); } );
+    */
+
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -28,7 +49,7 @@ void BlockEditorState::update(ley::Command command) {
         break;
     }
 
-    mBlockEditorUI.runCommand(command);
+    mBlockUIMenu.runCommand(command);
 }
 
 void BlockEditorState::render() {
@@ -38,17 +59,23 @@ void BlockEditorState::render() {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
-    mBlockEditorUI.render(mVideoSystem);
+    mBlockUIMenu.render(mVideoSystem);
 }
 
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
+
+    mRenderables.push_back(&mFirstTile);
 }
 
 bool BlockEditorState::onEnter() {
 
     SDL_Log("Entering BlockEditorState");
     loadRenderables();
+
+    mFirstTile.setVisible(true);
+
+    
     return true;
 }
 
@@ -71,6 +98,10 @@ bool BlockEditorState::onPause() {
 void BlockEditorState::updateBlockEditorFonts() {
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor coming soon", 0, false, capitalizationtype::capitalizeWords));
+}
+
+void BlockEditorState::commitTile() {
+    
 }
 
 }

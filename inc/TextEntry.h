@@ -7,6 +7,7 @@
 #include "../Input.h"
 #include "Fader.h"
 #include "../UIElement.h"
+#include "./UI/UIWidget.h"
 
 
 #ifndef TEXTENTRY_H
@@ -18,11 +19,7 @@ const auto TEXTENTRY_WIDTH = 731;
 constexpr auto UNDERLINE_WIDTH = 321;
 constexpr auto MAX_CHAR_LENGTH = 18;
 
-enum class Character {
-    backspace,enter,none
-};
-
-class TextEntry : public Renderable
+class TextEntry : public UIWidget
 {
 
 private:

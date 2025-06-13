@@ -46,9 +46,10 @@ public:
     SDL_Rect currentDest();
     void setHot(bool);
     void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size);
-    void pushTextEntry(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
+    void pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     int getIndex();
-    void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
+    // TODO this was from the old UI objects that could toggle with space. This isn't used anymore.
+//    void getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*>> *baseElements);
     void clear(); //clear out all the elements.
     int count();
     void addRenderables(ley::Renderables);

@@ -38,7 +38,7 @@ void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::st
     elements.push_back(temp);
 }
 
-void ley::UIMenu::pushTextEntry(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter) {
+void ley::UIMenu::pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter) {
 
     UIElement temp(toggle, focus, enter);
     elements.push_back(temp);
@@ -154,6 +154,7 @@ void ley::UIMenu::runCommand(ley::Command command) {
     }
 }
 
+/*
 void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SDL_Texture*> > *baseElements) {
     //Iterate through all elements and return only the base elements.
 
@@ -164,6 +165,7 @@ void ley::UIMenu::getBaseElements(std::vector< std::tuple<SDL_Rect, SDL_Rect, SD
                                     ));
     }
 }
+*/
 
 void ley::UIMenu::previous() {
     if(currentIndex > 0) {

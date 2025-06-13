@@ -3,6 +3,7 @@
 #include "../../Video.h"
 #include "../../GameModel.h"
 #include "../../UIMenu.h"
+#include "../../inc/UI/UI_Tile.h"
 
 #ifndef BLOCKEDITORSTATE_H
 #define BLOCKEDITORSTATE_H
@@ -24,6 +25,10 @@ public:
 
     virtual std::string getStateID() const { return sBlockEditorID; }
 
+    ley::UI_Tile mFirstTile;
+
+    std::string mPreviousOptionsValue;
+
 private:
 
     ley::Video * mVideoSystem;
@@ -31,12 +36,14 @@ private:
     static const std::string sBlockEditorID;
 
     ley::Font mTitleFont;
-    ley::UIMenu mBlockEditorUI;
+    ley::UIMenu mBlockUIMenu;
 
     Renderables mRenderables;
     Renderables mDebugRenderables;
 
     void updateBlockEditorFonts();
+
+    void commitTile();
 };
 
 }

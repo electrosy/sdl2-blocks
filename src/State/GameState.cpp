@@ -3,6 +3,7 @@
 namespace ley {
 
 TextEntry* GameState::mActiveUIElement = {};
+//TextEntry* GameState::mActiveUIElement = {};
 
 bool GameState::onPause() {
     std::string pause = "Pausing " + getStateID();

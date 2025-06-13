@@ -70,7 +70,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mWallKickOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
     mWallKickOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
 
-    mOptionUI.pushTextEntry(
+    mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
         [this](){commitBoardSize();});
@@ -78,22 +78,22 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     //Initialize the active ui element as the first text entry.
     mActiveUIElement = &mBoardSizeTextEntry;
         
-    mOptionUI.pushTextEntry(
+    mOptionUI.pushUIElement(
         [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
         [this]()->bool{return mKeyDelayTextEntry.hasFocus();},
         [this](){commitKeyDelay();});
 
-    mOptionUI.pushTextEntry(
+    mOptionUI.pushUIElement(
         [this](){mKeyRepeatTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyRepeatValue);},
         [this]()->bool{return mKeyRepeatTextEntry.hasFocus();},
         [this](){commitKeyRepeat();});
 
-    mOptionUI.pushTextEntry(
+    mOptionUI.pushUIElement(
         [this](){mGuideGridOnTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousGuideGridOnValue);},
         [this]()->bool{return mGuideGridOnTextEntry.hasFocus();},
         [this](){ commitGuideGridOn(); });
 
-    mOptionUI.pushTextEntry(
+    mOptionUI.pushUIElement(
         [this](){mWallKickOnTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousWallKickOnValue);},
         [this]()->bool{return mWallKickOnTextEntry.hasFocus();},
         [this](){ commitWallKickOn(); });
