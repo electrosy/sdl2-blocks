@@ -16,7 +16,7 @@ jobs:
       image: registry.gitlab.steamos.cloud/steamrt/sniper/sdk:latest  # Official Sniper SDK container
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # Checks out your repository code
+        uses: actions/checkout@v4  # Checks out your repository code 
         
       - name: Install dependencies
         run: |
