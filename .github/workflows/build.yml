@@ -19,6 +19,8 @@ jobs:
         uses: actions/checkout@v4  # Checks out your repository code
         with:
           ref: 1d9a861
+          fetch-depth: 0
+        
 
       - name: Install dependencies
         run: |
