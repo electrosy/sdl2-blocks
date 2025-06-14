@@ -44,6 +44,8 @@ public:
 
     int row();
     int column();
+    int rowAt(int index);
+    int columnAt(int index);
     void next(UIMenuItem item);
     void previous(UIMenuItem item);
     SDL_Texture* currentTex();

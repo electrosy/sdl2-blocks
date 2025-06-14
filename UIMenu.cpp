@@ -165,16 +165,24 @@ void ley::UIMenu::runCommand(ley::Command command) {
 }
 
 int ley::UIMenu::row() {
+    return rowAt(currentIndex);
+}
+
+int ley::UIMenu::column() {
+    return columnAt(currentIndex);
+}
+
+int ley::UIMenu::rowAt(int index) {
     int row = -1;
     if(mWidth != 0) {
-        row = currentIndex / mWidth;
+        row = index / mWidth;
     }
 
     return row;
 }
 
-int ley::UIMenu::column() {
-    return currentIndex % mWidth;
+int ley::UIMenu::columnAt(int index) {
+    return index % mWidth;
 }
 
 void ley::UIMenu::previous(UIMenuItem item) {
@@ -192,9 +200,8 @@ void ley::UIMenu::previous(UIMenuItem item) {
         if(item == UIMenuItem::cell) {
 
             if(mWidth > 1) {
-                //int row = ??
                 SDL_Log("col: %i, row: %i", column(), row());
-                //if we are at the last column in a row
+                //if we are at the first column in a row
                 if( column() <= 0 ) {
                     
                     return;

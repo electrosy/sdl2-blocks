@@ -1,5 +1,5 @@
 #include "../../inc/State/BlockEditorState.h"
-
+ 
 
 typedef ley::Textures TextureManager;
 
@@ -20,8 +20,6 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mLayout.setLayout({50,50,30,30},0,0,5,5);
     mBlockUIMenu.setWidth(5);
 
-    //mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
-
     for(int i = 0; i < 25; ++i) {
         
         mTiles.push_back(std::make_unique<UI_Tile>());
@@ -29,43 +27,23 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
         mTiles.back()->setPos({layoutRect.x,layoutRect.y});
         mTiles.back()->setWidth(layoutRect.w, layoutRect.w, 2);
-        //mTiles.back()->setWidth(layoutRect.w, layoutRect.w, 1);
-        // TODO create setHeightmTiles.back()->setHeight(layoutRect.h);
         mTiles.back()->setVisible(false);
         mTiles.back()->setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
         mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
         mTiles.back()->setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-        mTiles.back()->setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
-            + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
-            , "");
-        mTiles.back()->setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-
+        mTiles.back()->setHelpMessages(mGameModel->getLanguageModel()->getWord("block editor tile " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst), "");
+        mTiles.back()->setErrorMessage(mGameModel->getLanguageModel()->getWord("block editor tile. " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst));
     }
 
     mActiveUIElement = mTiles.back().get();
-
-
-    /*
-    mOptionUI.pushUIElement(
-        [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
-        [this]()->bool{return mKeyDelayTextEntry.hasFocus();},
-        [this](){commitKeyDelay();});
-        */
         
-
     for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
-        //UIWidget* ptr = dynamic_cast<UIWidget*>( tile.get() );
-
-    
-        
         mBlockUIMenu.pushUIElement(
             [this,&tile](){tile->handleFocusChange(&mActiveUIElement, tile->getPreviousValuePtr());},
             [this,&tile]()->bool{return tile->hasFocus();},
             [this,&tile]() {tile->commit();}
-        );
-        
+        );   
     }
-
 }
 
 void BlockEditorState::update(ley::Command command) {
