@@ -244,7 +244,9 @@ void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* b
         std::string str_data = (*mBlockDataPtr)[orientation + std::to_string(i)];
         
         for(int j = 0; j < BLOCK_SIZE; ++j) {
-            (*blockData)[i][j] = blockTexCodeFromString(str_data[j]);
+            if(str_data[j]) {
+                (*blockData)[i][j] = blockTexCodeFromString(str_data[j]);
+            }
         }
     }
 }
