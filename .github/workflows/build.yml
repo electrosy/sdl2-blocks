@@ -17,10 +17,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4  # Checks out your repository code
-        with:
-          ref: 6ebb5c545fb38c0c541d185e93220b81988f554c
         
-
       - name: Install dependencies
         run: |
           apt-get update
