@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4  # Checks out your repository code
+        with:
+          ref: 1d9a861
 
       - name: Install dependencies
         run: |
