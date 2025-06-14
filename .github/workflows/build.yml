@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4  # Checks out your repository code
         with:
-          ref: 5692cbb3ecd3483493059f66041fb768a604c4cb
+          ref: f55fadec8a0e80433962ef29159b97faacb86dd2
         
 
       - name: Install dependencies
