@@ -262,6 +262,8 @@ int ley::Block::bottomEdgeOfOrientation(BlockDataType* blockData) {
             }
         }
     }
+
+    return -1;
 }
 
 int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
@@ -275,6 +277,8 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
             }
         }
     }
+
+    return -1;
 }
 
 
