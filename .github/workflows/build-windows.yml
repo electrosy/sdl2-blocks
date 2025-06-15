@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: cdb30438cacb72afe2a467d7f8d35f0d3650b8dd
+          ref: 974d3b590817e6f0f8c37b7b2a7aee5c5c674726
 
       - name: Install MinGW
         run: |
