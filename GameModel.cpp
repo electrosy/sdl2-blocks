@@ -794,10 +794,10 @@ void ley::GameModel::setWallKickOn(std::string on) {
 }
 
 void ley::GameModel::readBlockData() {
-    std::string key;
-    std::string value;
+    SDL_Log("ley::GameModel::readBlockData()");
+    std::string key = "";
+    std::string value = "";
 
-    
     std::ifstream inFile("blocks.csv");
     if (inFile.is_open())
     {
