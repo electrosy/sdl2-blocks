@@ -16,6 +16,8 @@ Date: Feb/20/2020
 
 #include <SDL2/SDL_image.h>
 
+const auto BLOCKSIZE_PX = 30; // blocksize in pixels
+
 namespace ley {
 
 class Textures {

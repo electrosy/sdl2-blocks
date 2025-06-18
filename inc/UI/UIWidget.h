@@ -19,7 +19,7 @@ public:
     virtual void setPos(SDL_Point p) = 0;
     virtual void onKeyDown(ley::Character c) = 0;
     virtual void onTextInput(const char* cstr) = 0;
-    virtual void adjustCursor() = 0;
+//    virtual void adjustCursor() = 0;
     virtual void setCharSound(const std::function<void()> &func) = 0;
     virtual void setBackspaceSound(const std::function<void()> &func) = 0;
     virtual std::string getHelpMessage() = 0;

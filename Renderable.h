@@ -18,6 +18,10 @@ Date: Feb/17/2020
 
 namespace ley {
 
+const SDL_Color CWHITE = {255, 255, 255, 255};
+const SDL_Color CBRIGHTRED = {238, 51, 84, 255};
+const SDL_Color CDARKTEAL = {32, 85, 83, 255};
+
 enum class Color {red,blue,green,orange,yellow,violet,indigo,white};
 
 class Renderable {

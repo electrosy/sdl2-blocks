@@ -15,9 +15,6 @@ namespace ley {
 
 const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
 
-const SDL_Color CWHITE = {255, 255, 255};
-const SDL_Color CBRIGHTRED = {238, 51, 84};
-const SDL_Color CDARKTEAL = {32, 85, 83};
 const auto DEFAULT_FONT_SIZE = 24;
 
 class Font : public Renderable {

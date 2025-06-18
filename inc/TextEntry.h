@@ -56,7 +56,7 @@ public:
     void setPos(SDL_Point p) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
-    void adjustCursor() override;
+    void adjustCursor();
     void setCharSound(const std::function<void()> &func) override;
     void setBackspaceSound(const std::function<void()> &func) override;
     std::string getHelpMessage() override;

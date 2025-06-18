@@ -1,12 +1,14 @@
 #include "../../inc/UI/UI_Tile.h"
 #include "../../inc/Screen.h"
 
+// TODO clean up all the left overs from copying from TextEntry.
+
+typedef ley::Textures TextureManager;
+
 ley::UI_Tile::UI_Tile()
 :
 pos{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
-cursor{pos.x, pos.y, 2, 25},
-mUnderLine{pos.x, pos.y, TILE_UNDERLINE_WIDTH, 1},
 mErrorTimer{2500, {0,0,0,0}},
 mHelpFont{20,600,100,100}
 {
@@ -26,19 +28,18 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
         //SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND); // TODO we don't need this because blendmode is set in video.
         SDL_RenderFillRect(r, &background);
         
+
+        int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX;
+        SDL_Rect start_rect;
+        start_rect = {0,0,BLOCKSIZE_PX,BLOCKSIZE_PX};
+        if(mCurrentTexture != "") {
+            SDL_RenderCopy(r, TextureManager::Instance()->getTexture(mCurrentTexture), &start_rect, &background);
+        }
+
+        // Draw rect around the widget by using the dimensions of the backgorund.   
         if(mHasFocus) {
-            SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(r, CWHITE.r, CWHITE.g, CWHITE.b, CWHITE.a);
             SDL_RenderDrawRect(r, &background);
-
-            //draw underline
-            SDL_RenderFillRect(r, &mUnderLine);
-
-            //draw cursor
-            SDL_RenderFillRect(r, &cursor);
-
-            //draw cursor higlight
-            SDL_SetRenderDrawColor(r, 238, 50, 83, mCursorFader.alpha());
-            SDL_RenderFillRect(r, &cursor);
         }
 
         value.render(r, d);
@@ -63,7 +64,7 @@ void ley::UI_Tile::update() {
 void ley::UI_Tile::processInput(std::string s) {
 
     if(s == "backspace") {
-        value.updateMessage(value.getMessage().substr(0, value.getMessage().size()-1));
+        mCurrentTexture = "";
         mBackspaceSound();
         
         return;
@@ -85,7 +86,6 @@ void ley::UI_Tile::toggleFocus() {
     mHasFocus = !mHasFocus;
     if(mHasFocus) {
         SDL_StartTextInput();
-        adjustCursor();
         // help message is based on focus
         mHelpFont.updateMessage(getHelpMessage());
     }
@@ -101,10 +101,7 @@ void ley::UI_Tile::setPos(SDL_Point p) {
     pos = p;
     background.x = p.x;
     background.y = p.y;
-    mUnderLine.x = p.x;
-    mUnderLine.y = p.y + 25;
     value.setPos({p.x,p.y});
-    adjustCursor();
 }
 
 void ley::UI_Tile::setWidthByChar(int maxCharLength) {
@@ -118,7 +115,6 @@ void ley::UI_Tile::setWidthByChar(int maxCharLength) {
     mMaxCharLength = maxCharLength;
 
     background.w = mWidth;
-    mUnderLine.w = mUnderlineWidth;
 }
 
 void ley::UI_Tile::setWidth(int width, int underlineWidth, int maxCharLength) { 
@@ -127,8 +123,6 @@ void ley::UI_Tile::setWidth(int width, int underlineWidth, int maxCharLength) {
     mMaxCharLength = maxCharLength;
 
     background.w = mWidth;
-    mUnderLine.w = mUnderlineWidth;
-
 }
 
 void ley::UI_Tile::onKeyDown(ley::Character c) {
@@ -150,7 +144,6 @@ void ley::UI_Tile::onKeyDown(ley::Character c) {
     }
     
     processInput(character);
-    adjustCursor();
 }
 
 void ley::UI_Tile::onTextInput(const char* cstr) {
@@ -159,16 +152,9 @@ void ley::UI_Tile::onTextInput(const char* cstr) {
         value.updateMessage(value.getMessage() + cstr);
     }
 
-    adjustCursor();
 
     SDL_Log("onTextInput %s", cstr);
     mEnterCharSound();
-}
-
-void ley::UI_Tile::adjustCursor() {
-    std::pair<int, int> size = value.size();
-    cursor.x = pos.x + size.first;
-    cursor.y = pos.y + 2;
 }
 
 void ley::UI_Tile::setCharSound(const std::function<void()> &func) {

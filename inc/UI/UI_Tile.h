@@ -7,6 +7,7 @@
 #include "../../Input.h"
 #include "../Fader.h"
 #include "../../UIElement.h"
+#include "../../Textures.h"
 #include "../../inc/UI/UIWidget.h"
 
 
@@ -23,13 +24,12 @@ class UI_Tile : public UIWidget
 {
 
 private:
+    std::string mCurrentTexture = "d";
     int mWidth = UI_TILE_WIDTH;
     int mUnderlineWidth = TILE_UNDERLINE_WIDTH;
     int mMaxCharLength = TILE_MAX_CHAR_LENGTH;
     SDL_Point pos; //Position of UI_Tile field top/left.
     SDL_Rect background;
-    SDL_Rect cursor;
-    SDL_Rect mUnderLine;
     ley::Fader mCursorFader;
     Font value;
     bool visible = true;
@@ -57,7 +57,6 @@ public:
     void setPos(SDL_Point p) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
-    void adjustCursor() override;
     void setCharSound(const std::function<void()> &func) override;
     void setBackspaceSound(const std::function<void()> &func) override;
     std::string getHelpMessage() override;

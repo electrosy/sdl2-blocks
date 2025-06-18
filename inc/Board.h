@@ -18,7 +18,6 @@ Date: Mar/30/2024
 namespace ley {
 
 const int BOARDSIZE_BUFFER = 3; // buffer above board for piece to come into play
-const auto BLOCKSIZE_PX = 30; // blocksize in pixels
 
 const auto BOARD_POS_Y_PX = 40; //Board starting position y for block, when drawing border subtract 1px.
 const auto BLOCK_START_POS_Y_PX = BOARD_POS_Y_PX - (BLOCKSIZE_PX*BOARDSIZE_BUFFER); //Subtract three rows from board start_y //Number of pixels to offset the board.
