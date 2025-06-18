@@ -26,16 +26,22 @@ private:
     RenderablesPtr mDebugRenderables;
 
     Layout mLayout;
+    Layout mKeyLayout;
 
-//    ley::UI_Tile mFirstTile;
-//    ley::UI_Tile mSecondTile;
+    std::vector<ley::Sprite> mBlockKeySprites;
+    std::vector<ley::Font> mBlockKeyFonts;
+    std::vector<SDL_Rect> mBlocksKeyRects;
+    //std::vector<std::pair<bool, SDL_Rect> mBlocksKeyRects;
 
     std::vector<std::unique_ptr<UI_Tile>> mTiles;
 
     std::string mPreviousOptionsValue;
 
+    std::string mSelectedTextureChar;
+    ley::Font mLastCharFont;
 
     void updateBlockEditorFonts();
+    void loadBlocksKey();
 
 public:
 

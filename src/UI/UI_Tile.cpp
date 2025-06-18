@@ -27,13 +27,11 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
         SDL_SetRenderDrawColor(r, 125,125,125,50);
         //SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND); // TODO we don't need this because blendmode is set in video.
         SDL_RenderFillRect(r, &background);
-        
-
-        int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX;
+                
         SDL_Rect start_rect;
         start_rect = {0,0,BLOCKSIZE_PX,BLOCKSIZE_PX};
-        if(mCurrentTexture != "") {
-            SDL_RenderCopy(r, TextureManager::Instance()->getTexture(mCurrentTexture), &start_rect, &background);
+        if(mCurrentTextureName != "") {
+            SDL_RenderCopy(r, TextureManager::Instance()->getTexture(mCurrentTextureName), &start_rect, &background);
         }
 
         // Draw rect around the widget by using the dimensions of the backgorund.   
@@ -64,9 +62,13 @@ void ley::UI_Tile::update() {
 void ley::UI_Tile::processInput(std::string s) {
 
     if(s == "backspace") {
-        mCurrentTexture = "";
+        mCurrentTextureName = "";
         mBackspaceSound();
         
+        return;
+    }
+    else if(s == "space") {
+        SDL_Log("Space pressed for UI_Tile");
         return;
     }
 }
@@ -138,6 +140,9 @@ void ley::UI_Tile::onKeyDown(ley::Character c) {
         case ley::Character::backspace : character = "backspace";
         break;
 
+        case ley::Character::space : character = "space";
+        break;
+
         default:
             break;
 
@@ -148,12 +153,17 @@ void ley::UI_Tile::onKeyDown(ley::Character c) {
 
 void ley::UI_Tile::onTextInput(const char* cstr) {
 
-    if(value.getMessage().size() <= mMaxCharLength - 1) {
-        value.updateMessage(value.getMessage() + cstr);
+    SDL_Log("onTextInput %s", cstr);
+    if (std::regex_match(cstr, std::regex(getRegEx()))) {
+
+        if(value.getMessage().size() <= mMaxCharLength - 1) {
+            value.updateMessage(value.getMessage() + cstr);
+        }
+    
+        mCurrentTextureName = cstr;
+        mLastCharPressed = cstr;
     }
 
-
-    SDL_Log("onTextInput %s", cstr);
     mEnterCharSound();
 }
 
@@ -205,4 +215,3 @@ void ley::UI_Tile::commit() {
         toggleFocus();
     }
 }
-

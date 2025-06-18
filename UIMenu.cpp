@@ -61,6 +61,10 @@ SDL_Texture* ley::UIMenu::currentTex() {
 
     return nullptr;
 }
+ley::UIElement* ley::UIMenu::getCurrentElementPtr() {
+    return &elements[currentIndex];
+}
+
 int ley::UIMenu::getElementId(std::string label) {
     
     //Iterate through the elements and find the ID that matches the label.

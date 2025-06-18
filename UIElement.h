@@ -18,7 +18,7 @@ Date: Jul/17/2021
 namespace ley {
 
 enum class Character {
-    backspace,enter,none
+    space,backspace,enter,none
 };
 
 class UIElement {

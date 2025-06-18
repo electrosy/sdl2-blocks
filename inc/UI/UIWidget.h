@@ -1,4 +1,8 @@
+#include <regex>
+
 #include "../../Renderable.h"
+#include "../../UIElement.h"
+#include "../../Timer.h"
 
 #ifndef UIWIDGET_H
 #define UIWIDGET_H
@@ -6,6 +10,9 @@
 namespace ley {
 
 class UIWidget : public Renderable {
+
+protected:
+    static std::string mLastCharPressed;
 
 public:
     virtual void render(SDL_Renderer* r, bool d) = 0;
@@ -33,6 +40,8 @@ public:
     virtual void setErrorMessage(std::string errorMessage) = 0;
     virtual void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) = 0;
     virtual void setWidthByChar(int maxCharLength) = 0;
+
+    std::string getLastChar(); 
 
 };
 

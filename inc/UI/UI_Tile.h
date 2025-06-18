@@ -24,7 +24,7 @@ class UI_Tile : public UIWidget
 {
 
 private:
-    std::string mCurrentTexture = "d";
+    std::string mCurrentTextureName = "d";
     int mWidth = UI_TILE_WIDTH;
     int mUnderlineWidth = TILE_UNDERLINE_WIDTH;
     int mMaxCharLength = TILE_MAX_CHAR_LENGTH;

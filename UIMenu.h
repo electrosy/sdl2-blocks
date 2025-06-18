@@ -60,6 +60,7 @@ public:
     void addRenderables(ley::RenderablesPtr);
     int getElementId(std::string);
     ley::UIElement* getElementPtr(std::string label); //Get elementPtr from label
+    ley::UIElement* getCurrentElementPtr();
     void renderBaseMenuItems(ley::Video* v);
     void renderHotItem(ley::Video* v);
     void render(ley::Video* v);

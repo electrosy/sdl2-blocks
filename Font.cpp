@@ -40,7 +40,7 @@ void ley::Font::init(int size) {
         SDL_Log("TTF_Init failed");
     }
 
-    SDL_Log("Open font");
+//    SDL_Log("Open font");
     mClassic = TTF_OpenFont(FONTFILE, size);
     if(!mClassic) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -63,7 +63,7 @@ void ley::Font::cleanUp() {
 
     
     if(mClassic) {
-        SDL_Log("Close font");
+//        SDL_Log("Close font");
         TTF_CloseFont(mClassic);
         mClassic = nullptr;
     }

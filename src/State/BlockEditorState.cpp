@@ -10,17 +10,23 @@ const std::string BlockEditorState::sBlockEditorID = "BLOCKEDITOR";
 BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mTitleFont{20,20,100,50} {
+    mTitleFont{0,0,100,50},
+    mLastCharFont{10,650,100,50} {
 
     // TODO localization
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
+    mLastCharFont.updateMessage("Testing");
 
     updateBlockEditorFonts();
 
-    mLayout.setLayout({50,50,30,30},0,0,5,5);
-    mBlockUIMenu.setWidth(5);
+    int boardWidth = 35;
+    int boardHeight = 20;
+    mLayout.setLayout({20,20,30,30},0,0,boardWidth,boardHeight);
+    mLayout.setMajorGrid(5, 10, 10);
+    mBlockUIMenu.setWidth(boardWidth);
 
-    for(int i = 0; i < 25; ++i) {
+    int numCells = boardWidth * boardHeight;
+    for(int i = 0; i < numCells; ++i) {
         
         mTiles.push_back(std::make_unique<UI_Tile>());
         SDL_Rect layoutRect = mLayout.getRectForCell(i);
@@ -30,7 +36,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         mTiles.back()->setVisible(false);
         mTiles.back()->setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
         mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-        mTiles.back()->setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
+        mTiles.back()->setRegEx("\\b[defghij]\\b");
         mTiles.back()->setHelpMessages(mGameModel->getLanguageModel()->getWord("block editor tile " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst), "");
         mTiles.back()->setErrorMessage(mGameModel->getLanguageModel()->getWord("block editor tile. " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst));
     }
@@ -44,6 +50,8 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
             [this,&tile]() {tile->commit();}
         );   
     }
+
+    loadBlocksKey();
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -52,6 +60,9 @@ void BlockEditorState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
+
+    mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
+    mLastCharFont.updateMessage(mSelectedTextureChar);
 
     mBlockUIMenu.runCommand(command);
 
@@ -68,11 +79,18 @@ void BlockEditorState::render() {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
 
+    //render the highlight rects.
+    for(SDL_Rect& rect : mBlocksKeyRects) {
+        SDL_SetRenderDrawColor(mVideoSystem->getRenderer(), CWHITE.r, CWHITE.g, CWHITE.b, CWHITE.a);
+        SDL_RenderDrawRect(mVideoSystem->getRenderer(), &rect);
+    }
+    
     mBlockUIMenu.render(mVideoSystem);
 }
 
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
+    mRenderables.push_back(&mLastCharFont);
 
 
     for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
@@ -115,6 +133,52 @@ bool BlockEditorState::onPause() {
 void BlockEditorState::updateBlockEditorFonts() {
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor coming soon", 0, false, capitalizationtype::capitalizeWords));
+}
+
+void BlockEditorState::loadBlocksKey() {
+
+    std::vector<std::string> blocksToCheck;
+    blocksToCheck.push_back("d");
+    blocksToCheck.push_back("e");
+    blocksToCheck.push_back("f");
+    blocksToCheck.push_back("g");
+    blocksToCheck.push_back("h");
+    blocksToCheck.push_back("i");
+    blocksToCheck.push_back("j");
+
+    mKeyLayout.setLayout({375,650,0,0}, 100,0,7,1);
+
+    SDL_Rect start_rect;
+    start_rect.x = 0;
+    start_rect.y = 0;
+    start_rect.w = BLOCKSIZE_PX;
+    start_rect.h = BLOCKSIZE_PX;
+
+    mKeyLayout.resetIndex();
+    for(std::string blockStr : blocksToCheck) {
+        mBlockKeyFonts.push_back(ley::Font());
+        mBlockKeyFonts.back().updateMessage(blockStr);
+        SDL_Rect fontLayoutRect = mKeyLayout.getNextRect();
+        mBlockKeyFonts.back().setPos({fontLayoutRect.x - 25, fontLayoutRect.y});
+        mBlocksKeyRects.push_back({fontLayoutRect.x - 30, fontLayoutRect.y - 10, 90, 50});
+    }
+
+    for(int i = 0; i < blocksToCheck.size(); ++i) {
+        //spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {500,{0,0,0,0}});
+        mBlockKeySprites.push_back(ley::Sprite(TextureManager::Instance()->getTexture(blocksToCheck[i]), 0, {start_rect}, {10,{0,0,0,0}}));
+        SDL_Rect blockKeyPosition = mKeyLayout.getRectForCell(i);
+        mBlockKeySprites.back().setPos(blockKeyPosition.x, blockKeyPosition.y);
+    }
+
+    //Load the block sprites into the renderables.
+    for(ley::Sprite& sprite : mBlockKeySprites) {
+        mRenderables.push_back(&sprite);
+    }
+
+    //Load the fonts into the renderables.
+    for(ley::Font& font : mBlockKeyFonts) {
+        mRenderables.push_back(&font);
+    }
 }
 
 }
