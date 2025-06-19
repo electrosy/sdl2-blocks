@@ -34,7 +34,6 @@ private:
     void loadBlocksKey();
     BlockDataType mBlockData;
     void transferBlockToTiles(BlockDataType* inBlockPtr);
-    Block mBlock;
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

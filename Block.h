@@ -67,7 +67,7 @@ public:
     Block(unsigned int, unsigned int, BlockNameType, bool = 0); //x,y,type,clear
     Block(const Block& b); //copy constructor
     ~Block();
-    static void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
+    static void loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr);
     static int bottomEdgeOfOrientation(BlockDataType* blockData);
     static int rightEdgeOfOrientation(BlockDataType* blockData);
     /* Accessors */
@@ -99,7 +99,7 @@ public:
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};
     static bool canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
-    void setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf);
+    static void setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr);
     BlockDataType* getBlockData() {return &mBlockData;};
 };
 

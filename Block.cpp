@@ -18,7 +18,7 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockNameType ty, bool c)
     mRect.x = x, mRect.y = y;
     mOrientation = 0;
     if(mReadBlockFromFile) {
-        setBlockFromFile(mType, mOrientation, &mBlockData, mClearFlag);
+        setBlockDataFromFile(mType, mOrientation, &mBlockData, mClearFlag, &mRect, &mCanRotate);
     }
     else {
         setBlock(mType);
@@ -32,7 +32,7 @@ ley::Block::Block(const Block& b) {
     mClearFlag = b.mClearFlag;
     
     if(mReadBlockFromFile) {
-        setBlockFromFile(b.mType, mOrientation, &mBlockData, mClearFlag);
+        setBlockDataFromFile(b.mType, mOrientation, &mBlockData, mClearFlag, &mRect, &mCanRotate);
     }
     else {
         setBlock(b.mType);
@@ -45,7 +45,7 @@ void ley::Block::operator=(const Block& b) {
     mRect = b.mRect; //Position and dimension
     mClearFlag = b.mClearFlag;
     if(mReadBlockFromFile) {
-        setBlockFromFile(b.mType, mOrientation, &mBlockData, mClearFlag);
+        setBlockDataFromFile(b.mType, mOrientation, &mBlockData, mClearFlag, &mRect, &mCanRotate);
     }
     else {
         setBlock(b.mType);
@@ -66,7 +66,7 @@ void ley::Block::setClear(bool c) {
 
     if(mReadBlockFromFile) {
         mOrientation = 0;
-        setBlockFromFile(mType, 0, &mBlockData, mClearFlag);
+        setBlockDataFromFile(mType, 0, &mBlockData, mClearFlag, &mRect, &mCanRotate);
     }
     else {
         setBlock(mType);
@@ -135,7 +135,7 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     }
 
     if(mReadBlockFromFile) {
-        setBlockFromFile(mType,this->mOrientation, &mBlockData, mClearFlag);
+        setBlockDataFromFile(mType,this->mOrientation, &mBlockData, mClearFlag, &mRect, &mCanRotate);
     }
     else {
         setBlock(mType,this->mOrientation);
@@ -215,7 +215,7 @@ void ley::Block::setBlockDataPtr(BlockFileDataMapType* blockDataPtr) {
     mBlockDataPtr = blockDataPtr;
 }
 
-void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* blockData) {
+void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr) {
 
     auto blockTexCodeFromString = [](char str_code) -> ley::BlockTexCode  {
 
@@ -242,7 +242,7 @@ void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* b
     // TODO BLOCK_SIZE is assumed to be square, maybe we should define a height and width.
     for(int i = 0; i < BLOCK_SIZE; ++i) {
 
-        std::string str_data = (*mBlockDataPtr)[orientation + std::to_string(i)];
+        std::string str_data = (*inBlockDataFileMapPtr)[orientation + std::to_string(i)];
         
         for(int j = 0; j < BLOCK_SIZE; ++j) {
             
@@ -288,7 +288,7 @@ bool ley::Block::canRotate(std::string blockCharName, BlockFileDataMapType* inBl
     return (*inBlockDataFileMapPtr)[blockCharName + "*"] == "yes" ? true : false;
 }
 
-void ley::Block::setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf) {
+void ley::Block::setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr) {
 
     std::map<BlockNameType, std::string> blocksToLoad;
     blocksToLoad.emplace(BlockNameType::cube, "a-");
@@ -299,10 +299,10 @@ void ley::Block::setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlock
     blocksToLoad.emplace(BlockNameType::lLee, "f-");
     blocksToLoad.emplace(BlockNameType::line, "g-");
 
-    loadSingleOrientation(blocksToLoad[t] + std::to_string(o) + "-", inBlockPtr);
-            mRect.h = bottomEdgeOfOrientation(inBlockPtr);
-            mRect.w = rightEdgeOfOrientation(inBlockPtr);
-            mCanRotate = canRotate(blocksToLoad[t], mBlockDataPtr);
+    loadSingleOrientation(blocksToLoad[t] + std::to_string(o) + "-", inBlockPtr, mBlockDataPtr);
+            inRectPtr->h = bottomEdgeOfOrientation(inBlockPtr);
+            inRectPtr->w = rightEdgeOfOrientation(inBlockPtr);
+            (*inCanRotatePtr) = canRotate(blocksToLoad[t], mBlockDataPtr);
 
     //This is for the clear block.
     if(inCf == 1) {
