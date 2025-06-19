@@ -199,18 +199,41 @@ void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPt
     bool canRotate;
     BlockNameType blockType = BlockNameType::cube;
 
-    Block::setBlockDataFromFile(blockType,0,blockDataTypePtr, false, &rect, &canRotate);
-    transferBlockToTiles(1,0,blockDataTypePtr);
+    std::vector<BlockNameType> blocksToLoad;
+
+    blocksToLoad.push_back(BlockNameType::cube);
+    blocksToLoad.push_back(BlockNameType::tee);
+    blocksToLoad.push_back(BlockNameType::rLee);
+    blocksToLoad.push_back(BlockNameType::zee);
+    blocksToLoad.push_back(BlockNameType::mzee);
+    blocksToLoad.push_back(BlockNameType::lLee);
+    blocksToLoad.push_back(BlockNameType::line);
+
+
+    int blockTypeIndex = 0;
+    for(BlockNameType blockType : blocksToLoad) {
+
+        for(int i = 0; i < 4; ++i) {
+            Block::setBlockDataFromFile(blockType,i,blockDataTypePtr, false, &rect, &canRotate);
+            transferBlockToTiles(blockTypeIndex,i,blockDataTypePtr);
+        }
+
+        ++blockTypeIndex;
+    }
+    
 }
 
 void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr) {
 
     SDL_Point layoutSize = mLayout.getSize();
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
     Uint16 row = 0;
     for(std::array<BlockTexCode, BLOCK_SIZE>& blockRow : (*inBlockPtr) ) {
         Uint16 col = 0;
         for(BlockTexCode code : blockRow) {
-            tileAt(col, row)->setTextureName(TEXCODE_CHAR.at(code));
+            int tileX = col + (xMajor * layoutMajorSize);
+            int tileY = row + (yMajor * layoutMajorSize);;
+            tileAt(tileX, tileY)->setTextureName(TEXCODE_CHAR.at(code));
             SDL_Log("x: %d, y: %d, Char code: %s", row, col, TEXCODE_CHAR.at(code).c_str());
             ++col;
         }
