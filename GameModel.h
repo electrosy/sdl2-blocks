@@ -86,10 +86,12 @@ private:
     void loadButtonBindings(); //gamepad
     ley::LanguageModel mLanguageModel;
     std::string mWallKickOn = "on";
-    BlockFileDataMapType mBlockData;
+    BlockFileDataMapType mBlockMapData;
     void readBlockData();
     void logBlockData();
-    void addCanRotateToBlockData();
+
+    /* we calculate if the block can rotate by checking to see if any orientation is different*/
+    void addCanRotateToBlockData(); 
 
 public:
     GameModel();
@@ -152,6 +154,7 @@ public:
     ley::Block getActiveBlock() { return activeBlock; };
     std::string getWallKickOn() { return mWallKickOn; };
     void setWallKickOn(std::string on);
+    BlockFileDataMapType* getBlockDataPtr();
 };
 
 }

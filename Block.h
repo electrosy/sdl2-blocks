@@ -50,18 +50,13 @@ class Block {
 
 private:
     BlockNameType type; //type empty == null block
-    unsigned int orientation; // 0-3 - rotating to the left piece points right,down,left,up
+    unsigned int mOrientation; // 0-3 - rotating to the left piece points right,down,left,up
     SDL_Rect rect; //Position and max dimension
     BlockDataType block;
     bool cf; //clear flag, used for a clear block, to clean up the oldposition.
     void setBlock(BlockNameType,int = 0);
-    void setBlockFromFile(BlockNameType t, int o = 0);
     bool mReadBlockFromFile = 1;
-    void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
-    int bottomEdgeOfOrientation(BlockDataType* blockData);
-    int rightEdgeOfOrientation(BlockDataType* blockData);
     bool mCanRotate = false;
-    bool canRotate(std::string blockCharName);
 
 protected:
     static BlockFileDataMapType* mBlockDataPtr;
@@ -73,7 +68,9 @@ public:
     Block(unsigned int, unsigned int, BlockNameType, bool = 0); //x,y,type,clear
     Block(const Block& b); //copy constructor
     ~Block();
-
+    void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
+    static int bottomEdgeOfOrientation(BlockDataType* blockData);
+    static int rightEdgeOfOrientation(BlockDataType* blockData);
     /* Accessors */
     SDL_Rect getRect() {return rect;}; // TODO this should probably return a const
     const BlockNameType getType() {return type;};
@@ -102,6 +99,9 @@ public:
     SDL_Rect* getPositionRect() { return &rect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};
+    bool canRotate(std::string blockCharName);
+    void setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr);
+    BlockDataType* getBlockData() {return &block;};
 };
 
 }

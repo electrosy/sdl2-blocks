@@ -71,7 +71,7 @@ public:
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void setWidthByChar(int maxCharLength) override;
     std::string* getPreviousValuePtr() {return &mPreviousValue;};
-    
+    void setTextureName(std::string name);
     void commit();
 };
 

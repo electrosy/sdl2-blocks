@@ -13,7 +13,7 @@ const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.6.7.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.6.8.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Beta";
 const std::string APPLICATION_ENV = "Development";
@@ -305,7 +305,6 @@ void ley::Video::loadTextures() {
 
     //Cat
     TextureManager::Instance()->loadTexture("assets/cat-trans.png", "cat");
-
     //Game controls
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
@@ -356,19 +355,17 @@ void ley::Video::decreaseTransparency() {
 void ley::Video::renderGridLines() {
 
     //Render grid lines
-
+    // TODO these colors need to go up into the constants.
     SDL_Color red {245, 96, 66, 100};
-
     SDL_Color cyan {64, 230, 205, 100};
-
     SDL_Color green {37, 50, 232, 100};
-
     SDL_Color purple {229, 232, 30, 100};
-
     SDL_Color yellow {222, 30, 232, 100};
-
     SDL_Color currentColor;
 
+
+    //TODO use a map here for the lookup.
+    
     if(gm->getGuideGridOn() == "red") {
         currentColor = red;
     }

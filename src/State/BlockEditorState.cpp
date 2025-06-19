@@ -10,12 +10,10 @@ const std::string BlockEditorState::sBlockEditorID = "BLOCKEDITOR";
 BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mTitleFont{0,0,100,50},
-    mLastCharFont{10,650,100,50} {
+    mTitleFont{0,0,100,50} {
 
     // TODO localization
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
-    mLastCharFont.updateMessage("Testing");
 
     updateBlockEditorFonts();
 
@@ -52,6 +50,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     }
 
     loadBlocksKey();
+    loadFromBlockDataPtr(mGameModel->getBlockDataPtr(), &mBlockData);
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -62,7 +61,16 @@ void BlockEditorState::update(ley::Command command) {
     }
 
     mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
-    mLastCharFont.updateMessage(mSelectedTextureChar);
+    
+    //set all the key borders to hidden
+    for(auto& entry : mBlocksKeyRects) {
+        entry.second.first = false;
+    }
+
+    //set the selected box to true.
+    if(mBlocksKeyRects.find(mSelectedTextureChar) != mBlocksKeyRects.end()) {
+        mBlocksKeyRects[mSelectedTextureChar].first = true;
+    }
 
     mBlockUIMenu.runCommand(command);
 
@@ -80,9 +88,14 @@ void BlockEditorState::render() {
     }
 
     //render the highlight rects.
-    for(SDL_Rect& rect : mBlocksKeyRects) {
+    for(std::pair<const std::string, std::pair<bool, SDL_Rect>>& rect_pair : mBlocksKeyRects) {
+        const std::string& key = rect_pair.first; // Key (std::string)
+        std::pair<bool, SDL_Rect>& value = rect_pair.second; // Value (std::pair<bool, SDL_Rect>)
+
         SDL_SetRenderDrawColor(mVideoSystem->getRenderer(), CWHITE.r, CWHITE.g, CWHITE.b, CWHITE.a);
-        SDL_RenderDrawRect(mVideoSystem->getRenderer(), &rect);
+        if(value.first) {
+            SDL_RenderDrawRect(mVideoSystem->getRenderer(), &value.second);
+        }
     }
     
     mBlockUIMenu.render(mVideoSystem);
@@ -90,8 +103,6 @@ void BlockEditorState::render() {
 
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
-    mRenderables.push_back(&mLastCharFont);
-
 
     for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
@@ -160,7 +171,7 @@ void BlockEditorState::loadBlocksKey() {
         mBlockKeyFonts.back().updateMessage(blockStr);
         SDL_Rect fontLayoutRect = mKeyLayout.getNextRect();
         mBlockKeyFonts.back().setPos({fontLayoutRect.x - 25, fontLayoutRect.y});
-        mBlocksKeyRects.push_back({fontLayoutRect.x - 30, fontLayoutRect.y - 10, 90, 50});
+        mBlocksKeyRects.emplace( blockStr,  std::make_pair(false, (SDL_Rect){fontLayoutRect.x - 37, fontLayoutRect.y - 10, 90, 50})  );
     }
 
     for(int i = 0; i < blocksToCheck.size(); ++i) {
@@ -181,4 +192,25 @@ void BlockEditorState::loadBlocksKey() {
     }
 }
 
+void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr) {
+
+    SDL_Rect rect;
+    char o = '0';
+    bool canRotate;
+    BlockNameType blockType = BlockNameType::cube;
+
+    mBlock.setBlockFromFile(blockType,0,blockDataTypePtr);
+    transferBlockToTiles(blockDataTypePtr);
 }
+
+void BlockEditorState::transferBlockToTiles(BlockDataType* inBlockPtr) {
+
+    for(std::array<BlockTexCode, BLOCK_SIZE>& blockRow : (*inBlockPtr) ) {
+        blockRow;
+        SDL_Log("Blowrow");
+    }
+
+}
+
+}
+

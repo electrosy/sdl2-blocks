@@ -16,9 +16,9 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockNameType ty, bool c)
 : type(ty), cf(c) {
     
     rect.x = x, rect.y = y;
-    orientation = 0;
+    mOrientation = 0;
     if(mReadBlockFromFile) {
-        setBlockFromFile(type);
+        setBlockFromFile(type, mOrientation, &block);
     }
     else {
         setBlock(type);
@@ -27,12 +27,12 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockNameType ty, bool c)
 
 ley::Block::Block(const Block& b) {
     type = b.type;
-    orientation = b.orientation; // 0-3 - rotating to the left piece points right,down,left,up
+    mOrientation = b.mOrientation; // 0-3 - rotating to the left piece points right,down,left,up
     rect = b.rect; //Position and dimension
     cf = b.cf;
     
     if(mReadBlockFromFile) {
-        setBlockFromFile(b.type);
+        setBlockFromFile(b.type, mOrientation, &block);
     }
     else {
         setBlock(b.type);
@@ -41,11 +41,11 @@ ley::Block::Block(const Block& b) {
 
 void ley::Block::operator=(const Block& b) {
     type = b.type;
-    orientation = b.orientation; // 0-3 - rotating to the left piece points right,down,left,up
+    mOrientation = b.mOrientation; // 0-3 - rotating to the left piece points right,down,left,up
     rect = b.rect; //Position and dimension
     cf = b.cf;
     if(mReadBlockFromFile) {
-        setBlockFromFile(b.type);
+        setBlockFromFile(b.type, mOrientation, &block);
     }
     else {
         setBlock(b.type);
@@ -65,7 +65,7 @@ void ley::Block::setClear(bool c) {
     cf = c;
 
     if(mReadBlockFromFile) {
-        setBlockFromFile(type);
+        setBlockFromFile(type, 0, &block);
     }
     else {
         setBlock(type);
@@ -117,27 +117,27 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     }
 
     if(direction) {
-        if(orientation == 3) {
-            orientation = 0;
+        if(mOrientation == 3) {
+            mOrientation = 0;
         }
         else {
-            ++orientation;
+            ++mOrientation;
         }
     } 
     else {
-        if(orientation == 0) {
-            orientation = 3;
+        if(mOrientation == 0) {
+            mOrientation = 3;
         }
         else {
-            --orientation;
+            --mOrientation;
         }
     }
 
     if(mReadBlockFromFile) {
-        setBlockFromFile(type,this->orientation);
+        setBlockFromFile(type,this->mOrientation, &block);
     }
     else {
-        setBlock(type,this->orientation);
+        setBlock(type,this->mOrientation);
     }
 
     rotated = true;
@@ -284,92 +284,68 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
 
 bool ley::Block::canRotate(std::string blockCharName) {
 
-
-    /*
-    BlockDataType block0; //orientation 0
-    BlockDataType block1; //orientation 1
-    BlockDataType block2; //orientation 2
-    BlockDataType block3; //orientation 3
-
-    loadSingleOrientation(blockCharName + "0" + "-", &block0);
-    loadSingleOrientation(blockCharName + "1" + "-", &block1);
-    loadSingleOrientation(blockCharName + "2" + "-", &block2);
-    loadSingleOrientation(blockCharName + "3" + "-", &block3);
-
-    //check if all the orientations are the same
-    for(int i = 0; i < BLOCK_SIZE; ++i) {
-        for(int j = 0; j < BLOCK_SIZE; ++j) {
-            if(block0[i][j] != block1[i][j]
-                || block0[i][j] != block2[i][j]
-                || block0[i][j] != block3[i][j]) {
-                    return true;
-            }
-        }
-    }
-    */
-
     return (*mBlockDataPtr)[blockCharName + "*"] == "yes" ? true : false;
 }
 
-void ley::Block::setBlockFromFile(BlockNameType t, int o) {
-    orientation = o;
+void ley::Block::setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr) {
+    mOrientation = o;
 
-//////////////////////////////////////////////
-switch (t) {
+    // TODO use a map and iterate over this.
+    switch (t) {
         case BlockNameType::cube :
-            loadSingleOrientation("a-" + std::to_string(o) + "-", &block);
-            rect.h = bottomEdgeOfOrientation(&block);
-            rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("a-" + std::to_string(o) + "-", inBlockPtr);
+            rect.h = bottomEdgeOfOrientation(inBlockPtr);
+            rect.w = rightEdgeOfOrientation(inBlockPtr);
             mCanRotate = canRotate("a-");
         break;
         case BlockNameType::tee :
 
-            loadSingleOrientation("b-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("b-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("b-");
 
           
         break;
         case BlockNameType::rLee :
 
-            loadSingleOrientation("c-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("c-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("c-");
 
           
         break;
         case BlockNameType::zee :
 
-            loadSingleOrientation("d-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("d-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("d-");
 
             
         break;
         case BlockNameType::mzee :
 
-            loadSingleOrientation("e-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("e-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("e-");
 
         break;
         case BlockNameType::lLee :
 
-            loadSingleOrientation("f-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("f-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("f-");
 
         break;
         case BlockNameType::line :
 
-            loadSingleOrientation("g-" + std::to_string(o) + "-", &block);
-                rect.h = bottomEdgeOfOrientation(&block);
-                rect.w = rightEdgeOfOrientation(&block);
+            loadSingleOrientation("g-" + std::to_string(o) + "-", inBlockPtr);
+                rect.h = bottomEdgeOfOrientation(inBlockPtr);
+                rect.w = rightEdgeOfOrientation(inBlockPtr);
                 mCanRotate = canRotate("g-");
         break;
         default : ;
@@ -381,18 +357,18 @@ switch (t) {
     
     //This is for the clear block.
     if(cf == 1) {
-        block[0].fill(BlockTexCode::O);
-        block[1].fill(BlockTexCode::O);
-        block[2].fill(BlockTexCode::O);
-        block[3].fill(BlockTexCode::O);
-        block[4].fill(BlockTexCode::O);
+        (*inBlockPtr)[0].fill(BlockTexCode::O);
+        (*inBlockPtr)[1].fill(BlockTexCode::O);
+        (*inBlockPtr)[2].fill(BlockTexCode::O);
+        (*inBlockPtr)[3].fill(BlockTexCode::O);
+        (*inBlockPtr)[4].fill(BlockTexCode::O);
     }
 }
 
 //cube,tee,rLee,zee,mzee,lLee,line,empty
 void ley::Block::setBlock(BlockNameType t, int o) {
     
-    orientation = o;
+    mOrientation = o;
 
     switch (t) {
         case BlockNameType::cube :

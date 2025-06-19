@@ -27,7 +27,7 @@ running(true),
 mDebugOnlyLine(false)
 {
     readBlockData();
-    ley::Block::setBlockDataPtr(&mBlockData);
+    ley::Block::setBlockDataPtr(&mBlockMapData);
     activeBlock = getRandomBlock();
     oldBlock = {activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1};
     nextBlock = getRandomBlock();
@@ -45,7 +45,7 @@ mDebugOnlyLine(false)
     // TODO add the board size to the mainconfig
     readConfigOther();
 
-    activeBlock.setBlockDataPtr(&mBlockData);
+    activeBlock.setBlockDataPtr(&mBlockMapData);
     
     mLanguageModel.loadLanguage();
 
@@ -812,7 +812,7 @@ void ley::GameModel::readBlockData() {
 
             if(!value.empty() && !key.empty()) {
                 // TODO sanatize values
-                mBlockData.emplace(key,value);
+                mBlockMapData.emplace(key,value);
             }
         }
     }
@@ -836,17 +836,17 @@ void ley::GameModel::addCanRotateToBlockData() {
         
         for(int i = 0; i < BLOCK_SIZE; ++i) {
             
-            if( mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
-             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
-             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
-             || mBlockData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
+            if( mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
+             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
+             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
+             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
             ) {
 
-                mBlockData[str + "-*"] = "yes";
+                mBlockMapData[str + "-*"] = "yes";
                 i = BLOCK_SIZE; //were done with this for loop go to the next block.
             }
             else {
-                mBlockData[str + "-*"] = "no";
+                mBlockMapData[str + "-*"] = "no";
             }
         }
     }
@@ -855,9 +855,12 @@ void ley::GameModel::addCanRotateToBlockData() {
 void ley::GameModel::logBlockData() {
 
     SDL_Log("Log Block Data:");
-    for (const auto& pair : mBlockData) {
+    for (const auto& pair : mBlockMapData) {
         
         std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
     }
 }
- 
+
+ley::BlockFileDataMapType* ley::GameModel::getBlockDataPtr() {
+    return &mBlockMapData;
+} 

@@ -155,10 +155,6 @@ void ley::UI_Tile::onTextInput(const char* cstr) {
 
     SDL_Log("onTextInput %s", cstr);
     if (std::regex_match(cstr, std::regex(getRegEx()))) {
-
-        if(value.getMessage().size() <= mMaxCharLength - 1) {
-            value.updateMessage(value.getMessage() + cstr);
-        }
     
         mCurrentTextureName = cstr;
         mLastCharPressed = cstr;
@@ -214,4 +210,8 @@ void ley::UI_Tile::commit() {
     if(hasFocus()) {
         toggleFocus();
     }
+}
+
+void  ley::UI_Tile::setTextureName(std::string name) {
+    mCurrentTextureName = name;
 }
