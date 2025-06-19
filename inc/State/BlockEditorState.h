@@ -27,13 +27,14 @@ private:
     std::vector<ley::Font> mBlockKeyFonts;
     //std::vector<SDL_Rect> mBlocksKeyRects;
     std::map<std::string, std::pair<bool, SDL_Rect>> mBlocksKeyRects;
-    std::vector<std::unique_ptr<UI_Tile>> mTiles;
+    std::vector<std::shared_ptr<UI_Tile>> mTiles;
     std::string mPreviousOptionsValue;
     std::string mSelectedTextureChar;
     void updateBlockEditorFonts();
     void loadBlocksKey();
     BlockDataType mBlockData;
-    void transferBlockToTiles(BlockDataType* inBlockPtr);
+    void transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr);
+    std::shared_ptr<UI_Tile> tileAt(int inX, int inY);
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

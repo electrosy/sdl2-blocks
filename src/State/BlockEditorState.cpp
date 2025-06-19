@@ -41,7 +41,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
     mActiveUIElement = mTiles.back().get();
         
-    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+    for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mBlockUIMenu.pushUIElement(
             [this,&tile](){tile->handleFocusChange(&mActiveUIElement, tile->getPreviousValuePtr());},
             [this,&tile]()->bool{return tile->hasFocus();},
@@ -74,7 +74,7 @@ void BlockEditorState::update(ley::Command command) {
 
     mBlockUIMenu.runCommand(command);
 
-    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+    for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         dynamic_cast<UIWidget*>( tile.get() )->update();
     }
 
@@ -104,7 +104,7 @@ void BlockEditorState::render() {
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
 
-    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+    for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
     }
 }
@@ -114,7 +114,7 @@ bool BlockEditorState::onEnter() {
     SDL_Log("Entering BlockEditorState");
     loadRenderables();
 
-    for(const std::unique_ptr<UI_Tile> &tile : mTiles) {
+    for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         dynamic_cast<UIWidget*>( tile.get() )->setVisible(true);
     }
 
@@ -200,15 +200,36 @@ void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPt
     BlockNameType blockType = BlockNameType::cube;
 
     Block::setBlockDataFromFile(blockType,0,blockDataTypePtr, false, &rect, &canRotate);
-    transferBlockToTiles(blockDataTypePtr);
+    transferBlockToTiles(1,0,blockDataTypePtr);
 }
 
-void BlockEditorState::transferBlockToTiles(BlockDataType* inBlockPtr) {
+void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr) {
 
+    SDL_Point layoutSize = mLayout.getSize();
+    Uint16 row = 0;
     for(std::array<BlockTexCode, BLOCK_SIZE>& blockRow : (*inBlockPtr) ) {
-        blockRow;
-        SDL_Log("Blowrow");
+        Uint16 col = 0;
+        for(BlockTexCode code : blockRow) {
+            tileAt(col, row)->setTextureName(TEXCODE_CHAR.at(code));
+            SDL_Log("x: %d, y: %d, Char code: %s", row, col, TEXCODE_CHAR.at(code).c_str());
+            ++col;
+        }
+        ++row;
     }
+}
+
+
+std::shared_ptr<UI_Tile> BlockEditorState::tileAt(int inX, int inY) {
+    
+    SDL_Point layoutSize = mLayout.getSize();
+
+    int value = inY * layoutSize.x + inX;
+
+    if(value >= 0 && value < mTiles.size()) {
+        return mTiles[value];
+    }
+    else
+        return {};
 
 }
 

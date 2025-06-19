@@ -30,7 +30,7 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
                 
         SDL_Rect start_rect;
         start_rect = {0,0,BLOCKSIZE_PX,BLOCKSIZE_PX};
-        if(mCurrentTextureName != "") {
+        if(mCurrentTextureName != "" && mCurrentTextureName != "O") {
             SDL_RenderCopy(r, TextureManager::Instance()->getTexture(mCurrentTextureName), &start_rect, &background);
         }
 
