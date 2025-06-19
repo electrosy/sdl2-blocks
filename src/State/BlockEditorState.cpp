@@ -199,7 +199,7 @@ void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPt
     bool canRotate;
     BlockNameType blockType = BlockNameType::cube;
 
-    mBlock.setBlockFromFile(blockType,0,blockDataTypePtr);
+    mBlock.setBlockFromFile(blockType,0,blockDataTypePtr, false);
     transferBlockToTiles(blockDataTypePtr);
 }
 

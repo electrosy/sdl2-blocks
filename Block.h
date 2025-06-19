@@ -49,35 +49,34 @@ const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
 class Block {
 
 private:
-    BlockNameType type; //type empty == null block
-    unsigned int mOrientation; // 0-3 - rotating to the left piece points right,down,left,up
-    SDL_Rect rect; //Position and max dimension
-    BlockDataType block;
-    bool cf; //clear flag, used for a clear block, to clean up the oldposition.
-    void setBlock(BlockNameType,int = 0);
+    bool mClearFlag; //clear flag, used for a clear block, to clean up the oldposition.
     bool mReadBlockFromFile = 1;
     bool mCanRotate = false;
+    unsigned int mOrientation; // 0-3 - rotating to the left piece points right,down,left,up
+    SDL_Rect mRect; //Position and max dimension
+    BlockNameType mType; //type empty == null block
+    BlockDataType mBlockData;
+    void setBlock(BlockNameType,int = 0);
 
 protected:
     static BlockFileDataMapType* mBlockDataPtr;
 
 public:
-
     /* RAII */
     Block();
     Block(unsigned int, unsigned int, BlockNameType, bool = 0); //x,y,type,clear
     Block(const Block& b); //copy constructor
     ~Block();
-    void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
+    static void loadSingleOrientation(std::string orientation, BlockDataType* blockData);
     static int bottomEdgeOfOrientation(BlockDataType* blockData);
     static int rightEdgeOfOrientation(BlockDataType* blockData);
     /* Accessors */
-    SDL_Rect getRect() {return rect;}; // TODO this should probably return a const
-    const BlockNameType getType() {return type;};
-    const bool getClear() {return cf;};
+    SDL_Rect getRect() {return mRect;}; // TODO this should probably return a const
+    const BlockNameType getType() {return mType;};
+    const bool getClear() {return mClearFlag;};
     void setClear(bool c);
-    void setH(unsigned int h) {rect.h = h;};
-    void setW(unsigned int w) {rect.w = w;};
+    void setH(unsigned int h) {mRect.h = h;};
+    void setW(unsigned int w) {mRect.w = w;};
     void debugResetPos();
     bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
     std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
@@ -96,12 +95,12 @@ public:
     void reset(); //return block to original position for restarting the game.
     Uint8 getLeftGap();
     Uint8 getTopGap();
-    SDL_Rect* getPositionRect() { return &rect;};
+    SDL_Rect* getPositionRect() { return &mRect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};
-    bool canRotate(std::string blockCharName);
-    void setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr);
-    BlockDataType* getBlockData() {return &block;};
+    static bool canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
+    void setBlockFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf);
+    BlockDataType* getBlockData() {return &mBlockData;};
 };
 
 }
