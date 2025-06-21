@@ -40,6 +40,7 @@ private:
     void rowDataDown(std::vector<std::string>* rowData);
     void rowDataRight(std::vector<std::string>* rowData);
     void rowDataLeft(std::vector<std::string>* rowData);
+    SDL_Point getMajorTileFromMinor(SDL_Point minor); //returns the major tiles based on the minor x,y.
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

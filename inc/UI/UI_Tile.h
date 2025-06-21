@@ -28,7 +28,7 @@ private:
     int mWidth = UI_TILE_WIDTH;
     int mUnderlineWidth = TILE_UNDERLINE_WIDTH;
     int mMaxCharLength = TILE_MAX_CHAR_LENGTH;
-    SDL_Point pos; //Position of UI_Tile field top/left.
+    SDL_Point mPosPx; //Position of UI_Tile field top/left.
     SDL_Rect background;
     ley::Fader mCursorFader;
     Font value;

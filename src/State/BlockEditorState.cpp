@@ -40,8 +40,13 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
             SDL_Log("Block Size is 0");
             return;
         }
-        mTiles.back()->setHelpMessages("block editor tile " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), "");
-        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1));
+
+        int xTile = mBlockUIMenu.rowAt(i);
+        int yTile = mBlockUIMenu.columnAt(i);
+        SDL_Point major = getMajorTileFromMinor({xTile,yTile});
+
+        mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
+        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -63,12 +68,18 @@ void BlockEditorState::update(ley::Command command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
             break;
+
         case ley::Command::shiftdown :
         case ley::Command::shiftup :
         case ley::Command::shiftright :
         case ley::Command::shiftleft :
-            shiftBlock(0,0, command);
+        {
+                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row
+                    ()});
+                shiftBlock(major.x,major.y, command);
+        }
             break;
+
         default :
             break;
     }
@@ -437,6 +448,15 @@ void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, s
         }
         ++row;
     }
+}
+
+SDL_Point BlockEditorState::getMajorTileFromMinor(SDL_Point minor) {
+    
+    SDL_Point major;
+    major.x = minor.x / mLayout.getMajorGridSize();
+    major.y = minor.y / mLayout.getMajorGridSize();
+
+    return {major.x,major.y};
 }
 
 }

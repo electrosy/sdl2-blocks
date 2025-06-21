@@ -7,13 +7,13 @@ typedef ley::Textures TextureManager;
 
 ley::UI_Tile::UI_Tile()
 :
-pos{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
-value{pos.x, pos.y, 0, 30},
+mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
+value{mPosPx.x, mPosPx.y, 0, 30},
 mErrorTimer{2500, {0,0,0,0}},
 mHelpFont{20,600,100,100}
 {
-    background.x = pos.x;
-    background.y = pos.y;
+    background.x = mPosPx.x;
+    background.y = mPosPx.y;
     background.w = UI_TILE_WIDTH;
     background.h = TTF_FontHeight(value.getTTFFont());
     mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
@@ -100,7 +100,7 @@ void ley::UI_Tile::toggleFocus() {
 
 void ley::UI_Tile::setPos(SDL_Point p) {
     
-    pos = p;
+    mPosPx = p;
     background.x = p.x;
     background.y = p.y;
     value.setPos({p.x,p.y});
