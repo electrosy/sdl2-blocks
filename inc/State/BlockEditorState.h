@@ -35,11 +35,11 @@ private:
     void transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr);
     std::shared_ptr<UI_Tile> tileAt(int inX, int inY);
     void shiftBlock(int inXMajor, int inYMajor, ley::Command direction);
-    void shiftBlockDown(int inXMajor, int inYMajor, bool inDown); //true is down, false is up.
-    void shiftBlockRight(int inXMajor, int inYMajor, bool inRight); 
     void createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr);
     void rowDataUp(std::vector<std::string>* rowData);
     void rowDataDown(std::vector<std::string>* rowData);
+    void rowDataRight(std::vector<std::string>* rowData);
+    void rowDataLeft(std::vector<std::string>* rowData);
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

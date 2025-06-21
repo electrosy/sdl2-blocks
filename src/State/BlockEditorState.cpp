@@ -64,13 +64,10 @@ void BlockEditorState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
             break;
         case ley::Command::shiftdown :
-            shiftBlockDown(0,0, true);
-            break;
         case ley::Command::shiftup :
-            shiftBlockDown(0,0, false);
-            break;
         case ley::Command::shiftright :
-            shiftBlockRight(0,0, true);
+        case ley::Command::shiftleft :
+            shiftBlock(0,0, command);
             break;
         default :
             break;
@@ -346,7 +343,29 @@ void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string 
 
 void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direction) {
 
+    std::vector<std::string> rowData;
+    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
 
+    switch (direction) {
+        case ley::Command::shiftdown :
+            rowDataDown(&rowData);
+        break;
+
+        case ley::Command::shiftup :
+            rowDataUp(&rowData);
+        break;
+        
+        case ley::Command::shiftright :
+            rowDataRight(&rowData);
+        break;
+
+        case ley::Command::shiftleft :
+            rowDataLeft(&rowData);
+    }
+
+    BlockDataType blockData;
+    createBlockDataFromStrings(&blockData, &rowData);
+    transferBlockToTiles(inXMajor, inYMajor, &blockData);
 
 }
 void BlockEditorState::rowDataUp(std::vector<std::string>* rowData) {
@@ -375,48 +394,39 @@ void BlockEditorState::rowDataDown(std::vector<std::string>* rowData) {
     (*rowData)[topRowIndex] = bottomRow;
 }
 
-void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor, bool inDown) {
-    
-    std::vector<std::string> rowData;
-    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
-
-    if(inDown) {
-        rowDataDown(&rowData);
-    } else {
-        rowDataUp(&rowData);
-    }
-
-    BlockDataType blockData;
-    createBlockDataFromStrings(&blockData, &rowData);
-    transferBlockToTiles(inXMajor, inYMajor, &blockData);
-}
-
-void BlockEditorState::shiftBlockRight(int inXMajor, int inYMajor, bool inRight) {
-    
-    std::vector<std::string> rowData;
-    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
+void BlockEditorState::rowDataRight(std::vector<std::string>* rowData) {
 
     int topRowIndex = 0;
     int firstColumnIndex = 0;
     int lastColumnIndex = mLayout.getMajorGridSize() - 1;
     int lastRowIndex = mLayout.getMajorGridSize() - 1;
-    
     //for each row shift the characters to the right
     for(int i = 0; i <= lastRowIndex; ++i) {
-        char c = rowData[i][lastColumnIndex];
+        char c = (*rowData)[i][lastColumnIndex];
         for(int j = lastColumnIndex; j > 0; --j) {
-            rowData[i][j] = rowData[i][j - 1];
+            (*rowData)[i][j] = (*rowData)[i][j - 1];
         }
-        rowData[i][firstColumnIndex] = c;
+        (*rowData)[i][firstColumnIndex] = c;
     }
-    
-    BlockDataType blockData;
-    createBlockDataFromStrings(&blockData, &rowData);
-    transferBlockToTiles(inXMajor, inYMajor, &blockData);
+}
+
+void BlockEditorState::rowDataLeft(std::vector<std::string>* rowData) {
+    int topRowIndex = 0;
+    int firstColumnIndex = 0;
+    int lastColumnIndex = mLayout.getMajorGridSize() - 1;
+    int lastRowIndex = mLayout.getMajorGridSize() - 1;
+    //for each row shift the characters to the left
+    for(int i = 0; i <= lastRowIndex; ++i) {
+        char c = (*rowData)[i][firstColumnIndex];
+        for(int j = 0; j < lastColumnIndex; ++j) {
+            (*rowData)[i][j] = (*rowData)[i][j + 1];
+        }
+        (*rowData)[i][lastColumnIndex] = c;
+    }
 }
 
 void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr) {
-
+    
     int row = 0;
     for(std::string stringRow : (*stringDataPtr)) {
         int col = 0;

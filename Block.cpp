@@ -103,19 +103,7 @@ ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned in
 
 bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for clockwise  
     
-    bool rotated = false;
-
-    //early return if there is no other orientations for block, e.g. cube.
-    // TODO we need to remove this hard coding for cube here so that the it will work with the block editor.
-    // we need to calculate if the block can be rotated.
-    /*
-    if(type == ley::BlockNameType::cube) { 
-        return false;
-    }
-        */
-    if(!getCanRotate()) {
-        return false;
-    }
+    bool rotated = false;    
 
     if(direction) {
         if(mOrientation == 3) {
@@ -141,9 +129,11 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
         setBlock(mType,this->mOrientation);
     }
 
-    rotated = true;
+    if(!getCanRotate()) {
+        return false;
+    }
 
-    return rotated;
+    return true;
 }
 
 // TODO this should be called only once when the block is created.

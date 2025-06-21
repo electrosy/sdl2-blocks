@@ -62,7 +62,7 @@ void ley::UI_Tile::update() {
 void ley::UI_Tile::processInput(std::string s) {
 
     if(s == "backspace") {
-        mCurrentTextureName = "";
+        mCurrentTextureName = "O";
         mBackspaceSound();
         
         return;
@@ -105,21 +105,6 @@ void ley::UI_Tile::setPos(SDL_Point p) {
     background.y = p.y;
     value.setPos({p.x,p.y});
 }
-
-/*
-void ley::UI_Tile::setWidthByChar(int maxCharLength) {
-
-    int w;
-    int h;
-    TTF_SizeUTF8(value.getTTFFont(), "a", &w, &h);
-
-    mWidth = w * maxCharLength;
-    mUnderlineWidth = mWidth;
-    mMaxCharLength = maxCharLength;
-
-    background.w = mWidth;
-}
-*/
 
 void ley::UI_Tile::setWidth(int width, int underlineWidth, int maxCharLength) { 
     mWidth = width;

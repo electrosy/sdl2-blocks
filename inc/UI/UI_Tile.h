@@ -67,7 +67,6 @@ public:
     void setBackspaceSound(const std::function<void()> &func) override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
-//    void setWidthByChar(int maxCharLength) override;
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
     void setErrorMessage(std::string errorMessage) override;    
 
