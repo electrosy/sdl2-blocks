@@ -64,10 +64,10 @@ void BlockEditorState::update(ley::Command command) {
             mGameModel->stateChange(ley::StateChange::quitstate);
             break;
         case ley::Command::shiftdown :
-            shiftBlockDown(0,0);
+            shiftBlockDown(0,0, true);
             break;
         case ley::Command::shiftup :
-            shiftBlockUp(0,0);
+            shiftBlockDown(0,0, false);
             break;
         break;
     }
@@ -248,13 +248,11 @@ void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataTyp
             int tileX = col + (xMajor * layoutMajorSize);
             int tileY = row + (yMajor * layoutMajorSize);
             tileAt(tileX, tileY)->setTextureName(TEXCODE_CHAR.at(code));
-            //SDL_Log("x: %d, y: %d, Char code: %s", row, col, TEXCODE_CHAR.at(code).c_str());
             ++col;
         }
         ++row;
     }
 }
-
 
 std::shared_ptr<UI_Tile> BlockEditorState::tileAt(int inX, int inY) {
     
@@ -347,55 +345,44 @@ void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direc
 
 
 }
-void BlockEditorState::rowDataUp(std::string* rowData) {
+void BlockEditorState::rowDataUp(std::vector<std::string>* rowData) {
 
-}
-
-void BlockEditorState::rowDataDown(std::string* rowData) {
-
-}
-
-void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor) {
-    
-    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
-    std::vector<std::string> rowData;
     int topRowIndex = 0;
-    int bottomRowIndex = layoutMajorSize - 1;
-    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
-
-
-    std::string bottomRow = rowData[bottomRowIndex];
-    //shift all rows down
-    for(int i = bottomRowIndex; i > 0; --i) {
-         rowData[i] = rowData[i - 1];
-    }
-    //put the old bottom row onto the top row.
-    rowData[topRowIndex] = bottomRow;
-
-
-    BlockDataType blockData;
-    createBlockDataFromStrings(&blockData, &rowData);
-    transferBlockToTiles(inXMajor, inYMajor, &blockData);
-}
-
-void BlockEditorState::shiftBlockUp(int inXMajor, int inYMajor) {
-    
-    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
-    std::vector<std::string> rowData;
-    int topRowIndex = 0;
-    int bottomRowIndex = layoutMajorSize - 1;
-    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
-
-    std::string topRow = rowData[topRowIndex];
+    int bottomRowIndex = mLayout.getMajorGridSize() - 1;
+    std::string topRow = (*rowData)[topRowIndex];
     //shift all rows down
     for(int i = 0; i < bottomRowIndex; ++i) {
-         rowData[i] = rowData[i + 1];
+         (*rowData)[i] = (*rowData)[i + 1];
     }
     //put the old bottom row onto the top row
-    rowData[bottomRowIndex] = topRow;
+    (*rowData)[bottomRowIndex] = topRow;
+}
+
+void BlockEditorState::rowDataDown(std::vector<std::string>* rowData) {
+
+    int topRowIndex = 0;
+    int bottomRowIndex = mLayout.getMajorGridSize() - 1;
+    std::string bottomRow = (*rowData)[bottomRowIndex];
+    //shift all rows down
+    for(int i = bottomRowIndex; i > 0; --i) {
+         (*rowData)[i] = (*rowData)[i - 1];
+    }
+    //put the old bottom row onto the top row.
+    (*rowData)[topRowIndex] = bottomRow;
+}
+
+void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor, bool inDown) {
+    
+    std::vector<std::string> rowData;
+    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
+
+    if(inDown) {
+        rowDataDown(&rowData);
+    } else {
+        rowDataUp(&rowData);
+    }
 
     BlockDataType blockData;
-
     createBlockDataFromStrings(&blockData, &rowData);
     transferBlockToTiles(inXMajor, inYMajor, &blockData);
 }
