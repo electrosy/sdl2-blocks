@@ -267,6 +267,7 @@ void BlockEditorState::WriteTileDataToFile() {
     
     SDL_Point layoutSize = mLayout.getSize();
     Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+    std::vector<std::string> rowDataVector;
 
     std::vector<std::string> blockNamesToSave;
     blockNamesToSave.push_back("a-");
@@ -283,58 +284,55 @@ void BlockEditorState::WriteTileDataToFile() {
     }
 
     std::string rowData;
-    for(int i = 0; i < layoutSize.x / layoutMajorSize; ++i) {
-        
-        for(int j = 0; j < layoutSize.y / layoutMajorSize; ++j) {
-
+    int numBlocks = layoutSize.x / layoutMajorSize;
+    int numOrientations = layoutSize.y / layoutMajorSize;
+    for(int i = 0; i < numBlocks; ++i) { // each block
+        for(int j = 0; j < numOrientations; ++j) { // each orientation
             rowData = blockNamesToSave[i] + std::to_string(j) + "-";
-            WriteMajorTileToFile(i,j, rowData);        
-        }
-    }
-}
-
-void BlockEditorState::WriteMajorTileToFile(int inXMajor, int inYMajor, std::string prefix) {
-
-    SDL_Point layoutSize = mLayout.getSize();
-    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
-
-    std::string rowOfData;
-
-    //std::ofstream myfile;
-    //myfile.open("blocks-edit-test.csv");
-
-    SDL_Log("Currentoutputtexture: ");
-    for(int i = 0; i < layoutMajorSize; ++i) {
-        int row = i;
-        rowOfData = prefix + std::to_string(i) + ",";
-        for(int j = 0; j < layoutMajorSize; ++j) {
-            int col = j;
-            int tileX = row + (inXMajor * layoutMajorSize);
-            int tileY = col + (inYMajor * layoutMajorSize);
-
-            
-            rowOfData += tileAt(tileX, tileY)->getCurrentTextureName();
-            
-            if((j + 1) % layoutMajorSize == 0) {
-                SDL_Log("Currentoutputtexture: %s", rowOfData.c_str());
-                rowOfData = "";
+            GetMajorTileRows(i,j, rowData, &rowDataVector);
+            if( !(i==numBlocks-1&&j==numOrientations-1)) { //not the very last line
+                rowDataVector.push_back(""); // add an empty line
             }
         }
     }
 
+    std::ofstream myfile;
+    myfile.open("blocks-edit-test.csv");
+    
+    for(std::string row : rowDataVector) {
+        SDL_Log("RowData: %s", row.c_str());
+        myfile << row.c_str() << std::endl;
+    }
 
-        /*
+    myfile.close();
+}
 
-        myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
-        myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
-        myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
-        myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
-        myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
+void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, std::vector<std::string>* rowDataVectorPtr) {
+
+    SDL_Point layoutSize = mLayout.getSize();
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+    std::string rowOfData;
+    
+    for(int i = 0; i < layoutMajorSize; ++i) { //each row
+        int row = i;
+        rowOfData = prefix + std::to_string(i) + ",";
         
-        myfile.close();
+        for(int j = 0; j < layoutMajorSize; ++j) { // each texture
+            int col = j;
+            int tileX = row + (inXMajor * layoutMajorSize);
+            int tileY = col + (inYMajor * layoutMajorSize);
 
-        */
-
+            rowOfData += tileAt(tileX, tileY)->getCurrentTextureName();
+            
+            if((j + 1) % layoutMajorSize == 0) {
+                //SDL_Log("Currentoutputtexture: %s", rowOfData.c_str());
+                //myfile << rowOfData;
+                rowDataVectorPtr->push_back(rowOfData);
+                rowOfData = "";
+            }
+        }
+    }   
+    
 
 }
 
