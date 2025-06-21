@@ -871,3 +871,12 @@ void ley::GameModel::logBlockData() {
 ley::BlockFileDataMapType* ley::GameModel::getBlockDataPtr() {
     return &mBlockMapData;
 } 
+
+void ley::GameModel::outputActiveAndOldOrientation() {
+    SDL_Log("Active Block Orientation: %d", activeBlock.getBlockOrientation());
+    SDL_Log("Old Block Orientation: %d", oldBlock.getBlockOrientation());
+
+    if(activeBlock.getBlockOrientation() != oldBlock.getBlockOrientation()) {
+        SDL_Log("Active and old block orientations are not the same");
+    }
+}

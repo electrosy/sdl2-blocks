@@ -155,6 +155,7 @@ public:
     void setWallKickOn(std::string on);
     BlockFileDataMapType* getBlockDataPtr();
     void readBlockData();
+    void outputActiveAndOldOrientation();
 };
 
 }

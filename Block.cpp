@@ -77,6 +77,7 @@ void ley::Block::reset() {
     
     mRect.x = BLOCK_START_X;
     mRect.y = BLOCK_START_Y;
+    mOrientation = 0;
 }
 
 std::array<std::array<ley::BlockTexCode, 5>,5> ley::Block::getBlockParts() {

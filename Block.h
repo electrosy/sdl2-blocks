@@ -117,6 +117,7 @@ public:
     static bool canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
     static void setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr);
     BlockDataType* getBlockData() {return &mBlockData;};
+    unsigned int getBlockOrientation() {return mOrientation;};
 };
 
 }

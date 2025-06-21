@@ -147,6 +147,7 @@ bool BlockEditorState::onExit() {
 
     WriteTileDataToFile();
     mGameModel->readBlockData();
+    mGameModel->outputActiveAndOldOrientation();
 
     return true;
 }
@@ -426,7 +427,7 @@ void BlockEditorState::rowDataLeft(std::vector<std::string>* rowData) {
 }
 
 void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr) {
-    
+
     int row = 0;
     for(std::string stringRow : (*stringDataPtr)) {
         int col = 0;
