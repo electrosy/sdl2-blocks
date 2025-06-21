@@ -36,8 +36,12 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
         mTiles.back()->setRegEx("\\b[defghij]\\b");
         // TODO localization
-        mTiles.back()->setHelpMessages("block editor tile ", "");
-        mTiles.back()->setErrorMessage("block editor tile. ");
+        if(BLOCK_SIZE == 0) {
+            SDL_Log("Block Size is 0");
+            return;
+        }
+        mTiles.back()->setHelpMessages("block editor tile " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), "");
+        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1));
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -52,6 +56,8 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
     loadBlocksKey();
     loadFromBlockDataPtr(mGameModel->getBlockDataPtr(), &mBlockData);
+
+    WriteTileDataToFile();
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -259,19 +265,77 @@ std::shared_ptr<UI_Tile> BlockEditorState::tileAt(int inX, int inY) {
 
 void BlockEditorState::WriteTileDataToFile() {
     
-    
+    SDL_Point layoutSize = mLayout.getSize();
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+
+    std::vector<std::string> blockNamesToSave;
+    blockNamesToSave.push_back("a-");
+    blockNamesToSave.push_back("b-");
+    blockNamesToSave.push_back("c-");
+    blockNamesToSave.push_back("d-");
+    blockNamesToSave.push_back("e-");
+    blockNamesToSave.push_back("f-");
+    blockNamesToSave.push_back("g-");
+
+    if(layoutMajorSize == 0) {
+        SDL_Log("BlockEditorState::WriteTileDataToFile() - layoutMajorSize was 0");
+        return;
+    }
+
+    std::string rowData;
+    for(int i = 0; i < layoutSize.x / layoutMajorSize; ++i) {
+        
+        for(int j = 0; j < layoutSize.y / layoutMajorSize; ++j) {
+
+            rowData = blockNamesToSave[i] + std::to_string(j) + "-";
+            WriteMajorTileToFile(i,j, rowData);        
+        }
+    }
 }
 
-void BlockEditorState::WriteMajorTileToFile(SDL_Point majorTile) {
+void BlockEditorState::WriteMajorTileToFile(int inXMajor, int inYMajor, std::string prefix) {
 
     SDL_Point layoutSize = mLayout.getSize();
     Uint16 layoutMajorSize = mLayout.getMajorGridSize();
-    Uint16 row = 0;
-    for(std::shared_ptr<UI_Tile> tile : mTiles ) {
-        Uint16 col = 0;
-        
-        //tile->getText   
+
+    std::string rowOfData;
+
+    //std::ofstream myfile;
+    //myfile.open("blocks-edit-test.csv");
+
+    SDL_Log("Currentoutputtexture: ");
+    for(int i = 0; i < layoutMajorSize; ++i) {
+        int row = i;
+        rowOfData = prefix + std::to_string(i) + ",";
+        for(int j = 0; j < layoutMajorSize; ++j) {
+            int col = j;
+            int tileX = row + (inXMajor * layoutMajorSize);
+            int tileY = col + (inYMajor * layoutMajorSize);
+
+            
+            rowOfData += tileAt(tileX, tileY)->getCurrentTextureName();
+            
+            if((j + 1) % layoutMajorSize == 0) {
+                SDL_Log("Currentoutputtexture: %s", rowOfData.c_str());
+                rowOfData = "";
+            }
+        }
     }
+
+
+        /*
+
+        myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
+        myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
+        myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
+        myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
+        myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
+        
+        myfile.close();
+
+        */
+
+
 }
 
 }

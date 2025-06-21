@@ -25,7 +25,6 @@ private:
     Layout mKeyLayout;
     std::vector<ley::Sprite> mBlockKeySprites;
     std::vector<ley::Font> mBlockKeyFonts;
-    //std::vector<SDL_Rect> mBlocksKeyRects;
     std::map<std::string, std::pair<bool, SDL_Rect>> mBlocksKeyRects;
     std::vector<std::shared_ptr<UI_Tile>> mTiles;
     std::string mPreviousOptionsValue;
@@ -50,7 +49,7 @@ public:
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);
     void WriteTileDataToFile();
-    void WriteMajorTileToFile(SDL_Point majorTile);
+    void WriteMajorTileToFile(int inX, int inY, std::string prefix);
     
 };
 
