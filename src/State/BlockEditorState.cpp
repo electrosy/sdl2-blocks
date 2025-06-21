@@ -57,7 +57,6 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     loadBlocksKey();
     loadFromBlockDataPtr(mGameModel->getBlockDataPtr(), &mBlockData);
 
-    WriteTileDataToFile();
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -138,6 +137,9 @@ bool BlockEditorState::onExit() {
     SDL_Log("Exiting BlockEditorState");
 
     mActiveUIElement = {};
+
+    WriteTileDataToFile();
+    mGameModel->readBlockData();
 
     return true;
 }
@@ -297,7 +299,7 @@ void BlockEditorState::WriteTileDataToFile() {
     }
 
     std::ofstream myfile;
-    myfile.open("blocks-edit-test.csv");
+    myfile.open("blocks.csv");
     
     for(std::string row : rowDataVector) {
         SDL_Log("RowData: %s", row.c_str());
@@ -319,8 +321,8 @@ void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string 
         
         for(int j = 0; j < layoutMajorSize; ++j) { // each texture
             int col = j;
-            int tileX = row + (inXMajor * layoutMajorSize);
-            int tileY = col + (inYMajor * layoutMajorSize);
+            int tileX = col + (inXMajor * layoutMajorSize);
+            int tileY = row + (inYMajor * layoutMajorSize);
 
             rowOfData += tileAt(tileX, tileY)->getCurrentTextureName();
             

@@ -798,6 +798,8 @@ void ley::GameModel::readBlockData() {
     std::string key = "";
     std::string value = "";
 
+    mBlockMapData.clear();
+
     std::ifstream inFile("blocks.csv");
     if (inFile.is_open())
     {

@@ -87,7 +87,6 @@ private:
     ley::LanguageModel mLanguageModel;
     std::string mWallKickOn = "on";
     BlockFileDataMapType mBlockMapData;
-    void readBlockData();
     void logBlockData();
 
     /* we calculate if the block can rotate by checking to see if any orientation is different*/
@@ -155,6 +154,7 @@ public:
     std::string getWallKickOn() { return mWallKickOn; };
     void setWallKickOn(std::string on);
     BlockFileDataMapType* getBlockDataPtr();
+    void readBlockData();
 };
 
 }
