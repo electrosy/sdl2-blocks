@@ -106,6 +106,7 @@ void ley::UI_Tile::setPos(SDL_Point p) {
     value.setPos({p.x,p.y});
 }
 
+/*
 void ley::UI_Tile::setWidthByChar(int maxCharLength) {
 
     int w;
@@ -118,6 +119,7 @@ void ley::UI_Tile::setWidthByChar(int maxCharLength) {
 
     background.w = mWidth;
 }
+*/
 
 void ley::UI_Tile::setWidth(int width, int underlineWidth, int maxCharLength) { 
     mWidth = width;

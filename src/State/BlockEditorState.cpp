@@ -35,8 +35,9 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         mTiles.back()->setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
         mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
         mTiles.back()->setRegEx("\\b[defghij]\\b");
-        mTiles.back()->setHelpMessages(mGameModel->getLanguageModel()->getWord("block editor tile " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst), "");
-        mTiles.back()->setErrorMessage(mGameModel->getLanguageModel()->getWord("block editor tile. " + std::to_string(mBlockUIMenu.rowAt(i) + 1) + "," + std::to_string(mBlockUIMenu.columnAt(i) + 1), 0, false, capitalizationtype::capitalizeFirst));
+        // TODO localization
+        mTiles.back()->setHelpMessages("block editor tile ", "");
+        mTiles.back()->setErrorMessage("block editor tile. ");
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -193,7 +194,6 @@ void BlockEditorState::loadBlocksKey() {
 }
 
 void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr) {
-
     SDL_Rect rect;
     char o = '0';
     bool canRotate;
@@ -232,9 +232,9 @@ void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataTyp
         Uint16 col = 0;
         for(BlockTexCode code : blockRow) {
             int tileX = col + (xMajor * layoutMajorSize);
-            int tileY = row + (yMajor * layoutMajorSize);;
+            int tileY = row + (yMajor * layoutMajorSize);
             tileAt(tileX, tileY)->setTextureName(TEXCODE_CHAR.at(code));
-            SDL_Log("x: %d, y: %d, Char code: %s", row, col, TEXCODE_CHAR.at(code).c_str());
+            //SDL_Log("x: %d, y: %d, Char code: %s", row, col, TEXCODE_CHAR.at(code).c_str());
             ++col;
         }
         ++row;
@@ -251,9 +251,27 @@ std::shared_ptr<UI_Tile> BlockEditorState::tileAt(int inX, int inY) {
     if(value >= 0 && value < mTiles.size()) {
         return mTiles[value];
     }
-    else
+    else {
         return {};
+    }
 
+}
+
+void BlockEditorState::WriteTileDataToFile() {
+    
+    
+}
+
+void BlockEditorState::WriteMajorTileToFile(SDL_Point majorTile) {
+
+    SDL_Point layoutSize = mLayout.getSize();
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+    Uint16 row = 0;
+    for(std::shared_ptr<UI_Tile> tile : mTiles ) {
+        Uint16 col = 0;
+        
+        //tile->getText   
+    }
 }
 
 }

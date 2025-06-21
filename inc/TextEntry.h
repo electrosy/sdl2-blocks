@@ -69,7 +69,7 @@ public:
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
     void setErrorMessage(std::string errorMessage) override;
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
-    void setWidthByChar(int maxCharLength) override;
+    void setWidthByChar(int maxCharLength);
 };
 
 }

@@ -49,6 +49,8 @@ public:
     virtual void loadRenderables();
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);
+    void WriteTileDataToFile();
+    void WriteMajorTileToFile(SDL_Point majorTile);
     
 };
 

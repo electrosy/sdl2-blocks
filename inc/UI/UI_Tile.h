@@ -49,30 +49,33 @@ public:
     void render(SDL_Renderer* r, bool d) override;
     void update() override; //handles update part of the lifecycle.
     void processInput(std::string s) override;
-    std::string getTextBoxValue() override;
-    void setTextBoxValue(std::string s) override;
-    std::string* getTextBoxField() override;
     void toggleFocus() override;
     bool hasFocus() override {return mHasFocus;};
-    void setPos(SDL_Point p) override;
+    void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
-    void setCharSound(const std::function<void()> &func) override;
-    void setBackspaceSound(const std::function<void()> &func) override;
-    std::string getHelpMessage() override;
-    void setWidth(int width, int underlineWidth, int maxCharLength) override;
+    std::string* getTextBoxField() override;
     ley::Font* getErrorFontPtr() override { return &mErrorFont; };
     ley::Font* getHelpFontPtr() override { return &mHelpFont; };
-    std::string getRegEx() override { return mRegEx; };
-    void setRegEx(std::string regEx) override { mRegEx = regEx; };
     ley::Timer* getErrorTimerPtr() override { return &mErrorTimer; };
+    std::string getTextBoxValue() override;
+    std::string getHelpMessage() override;
+    std::string getRegEx() override { return mRegEx; };
+    void setPos(SDL_Point p) override;
+    void setTextBoxValue(std::string s) override;
+    void setCharSound(const std::function<void()> &func) override;
+    void setBackspaceSound(const std::function<void()> &func) override;
+    void setWidth(int width, int underlineWidth, int maxCharLength) override;
+    void setRegEx(std::string regEx) override { mRegEx = regEx; };
+//    void setWidthByChar(int maxCharLength) override;
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
-    void setErrorMessage(std::string errorMessage) override;
-    void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
-    void setWidthByChar(int maxCharLength) override;
-    std::string* getPreviousValuePtr() {return &mPreviousValue;};
-    void setTextureName(std::string name);
+    void setErrorMessage(std::string errorMessage) override;    
+
     void commit();
+    std::string* getPreviousValuePtr() {return &mPreviousValue;};
+    std::string getCurrentTextureName()  { return mCurrentTextureName; };
+    void setTextureName(std::string name);
+
 };
 
 }
