@@ -69,7 +69,11 @@ void BlockEditorState::update(ley::Command command) {
         case ley::Command::shiftup :
             shiftBlockDown(0,0, false);
             break;
-        break;
+        case ley::Command::shiftright :
+            shiftBlockRight(0,0, true);
+            break;
+        default :
+            break;
     }
 
     mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
@@ -387,9 +391,32 @@ void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor, bool inDown) {
     transferBlockToTiles(inXMajor, inYMajor, &blockData);
 }
 
+void BlockEditorState::shiftBlockRight(int inXMajor, int inYMajor, bool inRight) {
+    
+    std::vector<std::string> rowData;
+    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
+
+    int topRowIndex = 0;
+    int firstColumnIndex = 0;
+    int lastColumnIndex = mLayout.getMajorGridSize() - 1;
+    int lastRowIndex = mLayout.getMajorGridSize() - 1;
+    
+    //for each row shift the characters to the right
+    for(int i = 0; i <= lastRowIndex; ++i) {
+        char c = rowData[i][lastColumnIndex];
+        for(int j = lastColumnIndex; j > 0; --j) {
+            rowData[i][j] = rowData[i][j - 1];
+        }
+        rowData[i][firstColumnIndex] = c;
+    }
+    
+    BlockDataType blockData;
+    createBlockDataFromStrings(&blockData, &rowData);
+    transferBlockToTiles(inXMajor, inYMajor, &blockData);
+}
+
 void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr) {
 
-    //std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
     int row = 0;
     for(std::string stringRow : (*stringDataPtr)) {
         int col = 0;
