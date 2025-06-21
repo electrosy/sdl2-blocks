@@ -56,13 +56,19 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
     loadBlocksKey();
     loadFromBlockDataPtr(mGameModel->getBlockDataPtr(), &mBlockData);
-
 }
 
 void BlockEditorState::update(ley::Command command) {
     switch (command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
+            break;
+        case ley::Command::shiftdown :
+            shiftBlockDown(0,0);
+            break;
+        case ley::Command::shiftup :
+            shiftBlockUp(0,0);
+            break;
         break;
     }
 
@@ -291,7 +297,7 @@ void BlockEditorState::WriteTileDataToFile() {
     for(int i = 0; i < numBlocks; ++i) { // each block
         for(int j = 0; j < numOrientations; ++j) { // each orientation
             rowData = blockNamesToSave[i] + std::to_string(j) + "-";
-            GetMajorTileRows(i,j, rowData, &rowDataVector);
+            GetMajorTileRows(i,j, rowData, true, &rowDataVector);
             if( !(i==numBlocks-1&&j==numOrientations-1)) { //not the very last line
                 rowDataVector.push_back(""); // add an empty line
             }
@@ -309,7 +315,7 @@ void BlockEditorState::WriteTileDataToFile() {
     myfile.close();
 }
 
-void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, std::vector<std::string>* rowDataVectorPtr) {
+void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr) {
 
     SDL_Point layoutSize = mLayout.getSize();
     Uint16 layoutMajorSize = mLayout.getMajorGridSize();
@@ -317,7 +323,7 @@ void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string 
     
     for(int i = 0; i < layoutMajorSize; ++i) { //each row
         int row = i;
-        rowOfData = prefix + std::to_string(i) + ",";
+        rowOfData = prefix + (outputOrientation ? std::to_string(i) + "," : "");
         
         for(int j = 0; j < layoutMajorSize; ++j) { // each texture
             int col = j;
@@ -334,8 +340,77 @@ void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string 
             }
         }
     }   
-    
+}
 
+void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direction) {
+
+
+
+}
+
+void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor) {
+    
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+    std::vector<std::string> rowData;
+    int topRowIndex = 0;
+    int bottomRowIndex = layoutMajorSize - 1;
+
+    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
+
+    std::string bottomRow = rowData[bottomRowIndex];
+
+    //shift all rows down
+    for(int i = bottomRowIndex; i > 0; --i) {
+         rowData[i] = rowData[i - 1];
+    }
+
+    //put the old bottom row onto the top row.
+    rowData[topRowIndex] = bottomRow;
+
+    BlockDataType blockData;
+
+    createBlockDataFromStrings(&blockData, &rowData);
+    transferBlockToTiles(inXMajor, inYMajor, &blockData);
+}
+
+void BlockEditorState::shiftBlockUp(int inXMajor, int inYMajor) {
+    
+    Uint16 layoutMajorSize = mLayout.getMajorGridSize();
+    std::vector<std::string> rowData;
+    int topRowIndex = 0;
+    int bottomRowIndex = layoutMajorSize - 1;
+
+    GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
+
+    std::string topRow = rowData[topRowIndex];
+
+    //shift all rows down
+    for(int i = 0; i < bottomRowIndex - 1; ++i) {
+         rowData[i] = rowData[i + 1];
+         
+    }
+
+    //put the old bottom row onto the top row.
+    rowData[bottomRowIndex] = topRow;
+
+    BlockDataType blockData;
+
+    createBlockDataFromStrings(&blockData, &rowData);
+    transferBlockToTiles(inXMajor, inYMajor, &blockData);
+}
+
+void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr) {
+
+    //std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
+    int row = 0;
+    for(std::string stringRow : (*stringDataPtr)) {
+        int col = 0;
+        for(char chars : stringRow) {
+           (*blockDataPtr)[row][col] = CHAR_TEXCODE.at({chars});
+            ++col;
+        }
+        ++row;
+    }
 }
 
 }

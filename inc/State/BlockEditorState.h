@@ -34,6 +34,10 @@ private:
     BlockDataType mBlockData;
     void transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr);
     std::shared_ptr<UI_Tile> tileAt(int inX, int inY);
+    void shiftBlock(int inXMajor, int inYMajor, ley::Command direction);
+    void shiftBlockDown(int inXMajor, int inYMajor);
+    void shiftBlockUp(int inXMajor, int inYMajor);
+    void createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr);
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);
@@ -49,7 +53,7 @@ public:
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);
     void WriteTileDataToFile();
-    void GetMajorTileRows(int inX, int inY, std::string prefix, std::vector<std::string>* rowDataVectorPtr);
+    void GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr);
     
 };
 
