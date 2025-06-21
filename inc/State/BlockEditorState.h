@@ -38,6 +38,8 @@ private:
     void shiftBlockDown(int inXMajor, int inYMajor);
     void shiftBlockUp(int inXMajor, int inYMajor);
     void createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr);
+    void rowDataUp(std::string* rowData);
+    void rowDataDown(std::string* rowData);
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

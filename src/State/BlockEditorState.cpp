@@ -347,6 +347,13 @@ void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direc
 
 
 }
+void BlockEditorState::rowDataUp(std::string* rowData) {
+
+}
+
+void BlockEditorState::rowDataDown(std::string* rowData) {
+
+}
 
 void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor) {
     
@@ -354,21 +361,19 @@ void BlockEditorState::shiftBlockDown(int inXMajor, int inYMajor) {
     std::vector<std::string> rowData;
     int topRowIndex = 0;
     int bottomRowIndex = layoutMajorSize - 1;
-
     GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
 
-    std::string bottomRow = rowData[bottomRowIndex];
 
+    std::string bottomRow = rowData[bottomRowIndex];
     //shift all rows down
     for(int i = bottomRowIndex; i > 0; --i) {
          rowData[i] = rowData[i - 1];
     }
-
     //put the old bottom row onto the top row.
     rowData[topRowIndex] = bottomRow;
 
-    BlockDataType blockData;
 
+    BlockDataType blockData;
     createBlockDataFromStrings(&blockData, &rowData);
     transferBlockToTiles(inXMajor, inYMajor, &blockData);
 }
@@ -379,18 +384,14 @@ void BlockEditorState::shiftBlockUp(int inXMajor, int inYMajor) {
     std::vector<std::string> rowData;
     int topRowIndex = 0;
     int bottomRowIndex = layoutMajorSize - 1;
-
     GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
 
     std::string topRow = rowData[topRowIndex];
-
     //shift all rows down
-    for(int i = 0; i < bottomRowIndex - 1; ++i) {
+    for(int i = 0; i < bottomRowIndex; ++i) {
          rowData[i] = rowData[i + 1];
-         
     }
-
-    //put the old bottom row onto the top row.
+    //put the old bottom row onto the top row
     rowData[bottomRowIndex] = topRow;
 
     BlockDataType blockData;
