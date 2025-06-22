@@ -8,10 +8,14 @@ enum class Command {
     right,
     up,
     left,
-    shiftdown,
+    shiftdown, //used for shifting blocks in the block editor
     shiftright,
     shiftup,
     shiftleft,
+    shiftmajup, // shift an entire blocks set of orientations all at the same time.
+    shiftmajdown,
+    shiftmajright,
+    shiftmajleft,
     none,
     pause,
     space,

@@ -64,6 +64,10 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 }
 
 void BlockEditorState::update(ley::Command command) {
+    if(command == ley::Command::none) {
+        return; // do nothing if there is no command to process.
+    }
+
     switch (command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
@@ -74,11 +78,22 @@ void BlockEditorState::update(ley::Command command) {
         case ley::Command::shiftright :
         case ley::Command::shiftleft :
         {
-                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row
-                    ()});
+                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
                 shiftBlock(major.x,major.y, command);
         }
             break;
+
+        case ley::Command::shiftmajleft :
+        case ley::Command::shiftmajright :
+        case ley::Command::shiftmajup :
+        case ley::Command::shiftmajdown :
+        {
+            SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
+            shiftBlock(major.x,0, command);
+            shiftBlock(major.x,1, command);
+            shiftBlock(major.x,2, command);
+            shiftBlock(major.x,3, command);
+        }
 
         default :
             break;
@@ -359,18 +374,22 @@ void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direc
     GetMajorTileRows(inXMajor, inYMajor, "", false, &rowData);
 
     switch (direction) {
+        case ley::Command::shiftmajdown :
         case ley::Command::shiftdown :
             rowDataDown(&rowData);
         break;
 
+        case ley::Command::shiftmajup :
         case ley::Command::shiftup :
             rowDataUp(&rowData);
         break;
         
+        case ley::Command::shiftmajright :
         case ley::Command::shiftright :
             rowDataRight(&rowData);
         break;
 
+        case ley::Command::shiftmajleft :
         case ley::Command::shiftleft :
             rowDataLeft(&rowData);
     }

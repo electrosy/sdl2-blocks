@@ -95,8 +95,9 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
                for(int j = 0; j < block.h; ++j) {
                     
                     bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
+                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i, block.y + j + 1);
                     bool boardPart = block.y + j + 1 >= mHeight
-                                        || at(block.x + i, block.y + j + 1)->second; //the space is already occupied
+                                        || (boardAt ? boardAt->second : false); //the space is already occupied
                     if(renderPart && boardPart) {
                             return {false, "test"}; /*** EARLY EXIT! ***/
                     }
@@ -106,8 +107,8 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
         case Command::right : 
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
-                    bool boardPart = ((block.x + 1) + i) > (mWidth - 1)
-                                        || at(block.x + i + 1, block.y + j)->second;
+                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i + 1, block.y + j);
+                    bool boardPart = ((block.x + 1) + i) > (mWidth - 1) || (boardAt ? boardAt->second : false);
                                     
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
@@ -120,8 +121,9 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
         case Command::left :
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) { 
+                    std::pair<ley::BlockTexCode, bool>* boardAt = at((block.x - 1) + i, block.y + j);
                     bool boardPart = ((block.x - 1) + i) < 0
-                                     || at((block.x - 1) + i, block.y + j)->second;
+                                     || (boardAt ? boardAt->second : false);
                                     
                     if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
                         && (boardPart == true)//the space is already occupied
