@@ -293,7 +293,9 @@ void ley::Block::setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inB
     loadSingleOrientation(blocksToLoad[t] + std::to_string(o) + "-", inBlockPtr, mBlockDataPtr);
             inRectPtr->h = bottomEdgeOfOrientation(inBlockPtr);
             inRectPtr->w = rightEdgeOfOrientation(inBlockPtr);
-            (*inCanRotatePtr) = canRotate(blocksToLoad[t], mBlockDataPtr);
+            if(inCanRotatePtr) {
+                (*inCanRotatePtr) = canRotate(blocksToLoad[t], mBlockDataPtr);
+            }
 
     //This is for the clear block.
     if(inCf == 1) {

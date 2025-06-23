@@ -511,9 +511,19 @@ void ley::GameModel::resetGame() {
 
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
+
+    // Ensure that we have the latest block data if we start a new game right after mading modifications in the block editor.
+    SDL_Rect tempRect;
+    Block::setBlockDataFromFile(activeBlock.getType(), activeBlock.getBlockOrientation(), activeBlock.getBlockDataPtr(), false, &tempRect,{});
+    activeBlock.setH(tempRect.h);
+    activeBlock.setW(tempRect.w);
+    Block::setBlockDataFromFile(oldBlock.getType(), oldBlock.getBlockOrientation(), oldBlock.getBlockDataPtr(), true, &tempRect,{});
+    oldBlock.setH(tempRect.h);
+    oldBlock.setW(tempRect.w);
+
     newLevelToReport = true; //we always want to reset the game background when we restart the game.
     mNewHighScore = false;
-    stopProgram(false);   
+    stopProgram(false);
 }
 bool ley::GameModel::isPaused() {
     return !active;
