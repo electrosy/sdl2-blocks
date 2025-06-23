@@ -49,7 +49,7 @@ const auto BOARDSIZE_HEIGHT_PX = (BOARDSIZE_HEIGHT - BOARDSIZE_BUFFER) * BLOCKSI
 class Board : public Renderable {
 
 private:
-    typedef std::vector<std::pair<ley::BlockTexCode,bool>> BoardType;
+    typedef std::vector<BoardCellType> BoardType;
     int mWidth = 0;
     int mHeight = 0;
     int mWidthPx = 0;

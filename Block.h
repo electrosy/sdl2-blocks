@@ -30,7 +30,7 @@ enum class BlockTexCode {a,b,c,d,e,f,g,h,i,j,k,l,O,Z};
 
 typedef std::map<std::string, std::string> BlockFileDataMapType;
 typedef std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
-typedef std::pair<ley::BlockTexCode, bool> BlockCellType;
+typedef std::pair<ley::BlockTexCode, bool> BoardCellType;
 
 const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
     std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
@@ -108,12 +108,12 @@ public:
     void moveRight();
     int height(); // return the actual height of the block
     int width(); // return the actual width of the block
-    int heightAtWidth(int); //return the number of blocks high at a particular x location
+    int heightAtWidth(int width); //return the number of blocks high at a particular x location
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
     Uint8 getLeftGap();
     Uint8 getTopGap();
-    SDL_Rect* getPositionRect() { return &mRect;};
+    SDL_Rect* getPosRectPtr() { return &mRect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};
     static bool canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);

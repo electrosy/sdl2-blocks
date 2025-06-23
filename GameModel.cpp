@@ -115,6 +115,7 @@ ley::Block ley::GameModel::debugGetBlock() {
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
+    Uint8 yStartPos = 2;
 
     if(mDebugOnlyLine == true) { //debug return only line
         return Block(4,2,BlockNameType::line,false);
@@ -122,27 +123,30 @@ ley::Block ley::GameModel::getRandomBlock() {
 
     switch(rand0to6()) {
         case 0 : 
-            a = Block(4,0,BlockNameType::tee,false);
+            a = Block(4,yStartPos,BlockNameType::tee,false);
         break;
         case 1 :
-            a = Block(4,0,BlockNameType::rLee,false);
+            a = Block(4,yStartPos,BlockNameType::rLee,false);
         break;
         case 2 : 
-            a = Block(4,1,BlockNameType::zee,false);
+            a = Block(4,yStartPos,BlockNameType::zee,false);
         break;
         case 3 : 
-            a = Block(4,1,BlockNameType::mzee,false);
+            a = Block(4,yStartPos,BlockNameType::mzee,false);
         break;
         case 4 : 
-            a = Block(4,0,BlockNameType::lLee,false);
+            a = Block(4,yStartPos,BlockNameType::lLee,false);
         break;
         case 5 :
-            a = Block(4,2,BlockNameType::line,false);
+            a = Block(4,yStartPos,BlockNameType::line,false);
         break;
         case 6 :
-            a = Block(4,1,BlockNameType::cube,false);
+            a = Block(4,yStartPos,BlockNameType::cube,false);
         break;
     }
+
+    //set the position so the bottom of the block will appear at the top of the board regardless of block size or shape
+    a.getPosRectPtr()->y = a.getPosRectPtr()->y - a.getPosRectPtr()->h;
 
     return a;
 }
@@ -202,14 +206,14 @@ bool ley::GameModel::rotateWithKick(bool r) {
             //assume left side
             //if kick is positive stay positive don't go back and forth between pos and neg.
             //If not rotateable do a wall kick to the left or right
-            if(activeBlock.getPositionRect()->x < boardWidth/2 && kick >= 0) {
+            if(activeBlock.getPosRectPtr()->x < boardWidth/2 && kick >= 0) {
                 kick += 1;
                 moveBlock(ley::Command::right);
                 SDL_Log("Kick right");
           
             }
             //assume right side
-            else if(activeBlock.getPositionRect()->x >= boardWidth/2 && kick <= 0) {
+            else if(activeBlock.getPosRectPtr()->x >= boardWidth/2 && kick <= 0) {
                 kick -= 1;
                 moveBlock(ley::Command::left);
                 SDL_Log("Kick left");

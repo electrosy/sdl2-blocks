@@ -175,7 +175,12 @@ void ley::Board::setBlock(Block& b) {
     for(auto i=0; i<blockRect.w; ++i) {
         for(auto j=0; j<blockRect.h; ++j) {
             if(b.renderPart(i,j) != BlockTexCode::O) {
-                at(blockRect.x + i, blockRect.y + j)->second = true;
+                // TODO add the check here for board out of bounds
+                BoardCellType* boardAt;
+                boardAt = at(blockRect.x + i, blockRect.y + j);
+                if(boardAt) {
+                    boardAt->second = true;
+                }
             }
         }
     }

@@ -293,6 +293,9 @@ void ley::Block::setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inB
     loadSingleOrientation(blocksToLoad[t] + std::to_string(o) + "-", inBlockPtr, mBlockDataPtr);
             inRectPtr->h = bottomEdgeOfOrientation(inBlockPtr);
             inRectPtr->w = rightEdgeOfOrientation(inBlockPtr);
+
+            SDL_Log("Width Height: %d,%d", inRectPtr->w, inRectPtr->h);
+
             if(inCanRotatePtr) {
                 (*inCanRotatePtr) = canRotate(blocksToLoad[t], mBlockDataPtr);
             }

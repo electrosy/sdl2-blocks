@@ -1,3 +1,9 @@
+Blockeditor.
+Ensure blocks are regenerated when exiting and starting the game.
+Ensure the y axis is correct for blocks put into play regardless of shape or size so that the bottom of the block lines up with the top of the board.
+
+0.6.7.0
+
 Wallkick and wallkick options
 
 0.6.5.4
