@@ -85,7 +85,6 @@ void ley::Board::clear() {
 std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
 
     SDL_Rect block = b.getRect();
-
     // TODO these 4 nested loops can probably be combined into one as there are only minor differences.
     //Iterate through the block and check and see if the board is empty where we need to put a block part.
     //Check if there is already a block along the edge of the existing block.

@@ -87,13 +87,28 @@ void BlockEditorState::update(ley::Command command) {
         case ley::Command::shiftmajright :
         case ley::Command::shiftmajup :
         case ley::Command::shiftmajdown :
-        {
-            SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
-            shiftBlock(major.x,0, command);
-            shiftBlock(major.x,1, command);
-            shiftBlock(major.x,2, command);
-            shiftBlock(major.x,3, command);
-        }
+            {
+                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
+                shiftBlock(major.x,0, command);
+                shiftBlock(major.x,1, command);
+                shiftBlock(major.x,2, command);
+                shiftBlock(major.x,3, command);
+            }
+            break;
+
+        case ley::Command::shiftalldown :
+            {
+                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
+                shiftBlock(major.x,0, command);
+                shiftBlock(major.x,1, command);
+                shiftBlock(major.x,2, command);
+                shiftBlock(major.x,3, command);
+
+                for(int i = 0; i < major.x; ++i) {
+                    
+                }
+            }
+            break;
 
         default :
             break;
@@ -376,22 +391,27 @@ void BlockEditorState::shiftBlock(int inXMajor, int inYMajor, ley::Command direc
     switch (direction) {
         case ley::Command::shiftmajdown :
         case ley::Command::shiftdown :
+        case ley::Command::shiftalldown :
             rowDataDown(&rowData);
         break;
 
         case ley::Command::shiftmajup :
         case ley::Command::shiftup :
+        case ley::Command::shiftallup :
             rowDataUp(&rowData);
         break;
         
         case ley::Command::shiftmajright :
         case ley::Command::shiftright :
+        case ley::Command::shiftallright :
             rowDataRight(&rowData);
         break;
 
         case ley::Command::shiftmajleft :
         case ley::Command::shiftleft :
+        case ley::Command::shiftallleft :
             rowDataLeft(&rowData);
+        break;
     }
 
     BlockDataType blockData;
