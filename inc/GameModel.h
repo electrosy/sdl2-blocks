@@ -12,15 +12,15 @@ Date: Feb/15/2020
 #include <fstream>
 #include <sstream>
 
-#include "Audio.h"
-#include "Block.h"
-#include "Clock.h"
-#include "Timer.h"
-#include "Input.h"
-#include "HighScores.h"
-#include "inc/Config.h"
-#include "inc/Board.h"
-#include "inc/LanguageModel.h"
+#include "../Audio.h"
+#include "../Block.h"
+#include "../Clock.h"
+#include "../Timer.h"
+#include "../Input.h"
+#include "../HighScores.h"
+#include "../inc/Config.h"
+#include "../inc/Board.h"
+#include "../inc/LanguageModel.h"
 
 namespace ley {
 

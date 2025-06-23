@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 #include "../../Video.h"
-#include "../../GameModel.h"
+#include "../../inc/GameModel.h"
 #include "../../UIMenu.h"
 #include "../../inc/UI/UI_Tile.h"
 #include "../../inc/Layout.h"

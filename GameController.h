@@ -10,7 +10,7 @@ Date: Feb/15/2020
 #define GAMECONTROLLER_H
 
 #include "Video.h"
-#include "GameModel.h"
+#include "./inc/GameModel.h"
 #include "Clock.h"
 #include "Block.h"
 #include "Font.h"

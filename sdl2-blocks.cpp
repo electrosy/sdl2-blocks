@@ -26,7 +26,7 @@ Notes: Intended to be built around the MVC philosophy.
 #include <SDL2/SDL.h>
 
 #include "GameController.h"
-#include "GameModel.h"
+#include "inc/GameModel.h"
 #include "Video.h"
 
 enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model

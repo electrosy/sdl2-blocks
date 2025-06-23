@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 #include "../../Video.h"
-#include "../../GameModel.h"
+#include "../../inc/GameModel.h"
 
 #ifndef KEYBOARDOPTIONSSTATE_H
 #define KEYBOARDOPTIONSSTATE_H
