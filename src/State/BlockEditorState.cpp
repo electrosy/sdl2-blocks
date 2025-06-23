@@ -97,15 +97,14 @@ void BlockEditorState::update(ley::Command command) {
             break;
 
         case ley::Command::shiftalldown :
+        case ley::Command::shiftallup :
+        case ley::Command::shiftallleft :
+        case ley::Command::shiftallright :
             {
-                SDL_Point major = getMajorTileFromMinor({mBlockUIMenu.column(), mBlockUIMenu.row()});
-                shiftBlock(major.x,0, command);
-                shiftBlock(major.x,1, command);
-                shiftBlock(major.x,2, command);
-                shiftBlock(major.x,3, command);
-
-                for(int i = 0; i < major.x; ++i) {
-                    
+                for(int i = 0; i < NUM_DIFFERENT_BLOCKS; ++i) {
+                    for(int j = 0; j < MAX_ORIENTATIONS; ++j) {
+                        shiftBlock(i,j, command);
+                    }
                 }
             }
             break;

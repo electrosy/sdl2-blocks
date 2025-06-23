@@ -19,6 +19,8 @@ Date: Feb/15/2020
 const auto BLOCK_START_X = 4;
 const auto BLOCK_START_Y = 0;
 const int BLOCK_SIZE = 5; //Maximum size of the block width and height.
+const Uint8 MAX_ORIENTATIONS = 4;
+const Uint8 NUM_DIFFERENT_BLOCKS = 7;
 
 namespace ley {
 

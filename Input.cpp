@@ -214,7 +214,7 @@ void ley::Input::pollEvents(
                     }
                            
                     command = lookupKeyCommand(pressedKey, pressedModifiers, inKeyboardBindings);
-
+                    
                     if(command == ley::Command::fullscreen) {
                         fullscreen = !fullscreen;
                     }
