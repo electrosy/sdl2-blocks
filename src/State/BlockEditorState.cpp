@@ -13,13 +13,13 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mTitleFont{0,0,100,50} {
 
     // TODO localization
-    mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
+    //mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
 
     updateBlockEditorFonts();
 
     int boardWidth = 35;
     int boardHeight = 20;
-    mLayout.setLayout({20,20,30,30},0,0,boardWidth,boardHeight);
+    mLayout.setLayout({84,20,30,30},0,0,boardWidth,boardHeight);
     mLayout.setMajorGrid(5, 10, 10);
     mBlockUIMenu.setWidth(boardWidth);
 
@@ -47,6 +47,9 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
         mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
         mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
+
+        mTiles.back()->getErrorFontPtr()->setFontSize(16);
+        mTiles.back()->getHelpFontPtr()->setFontSize(16);
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -199,7 +202,7 @@ bool BlockEditorState::onPause() {
 
 void BlockEditorState::updateBlockEditorFonts() {
 
-    mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor coming soon", 0, false, capitalizationtype::capitalizeWords));
+    //mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor coming soon", 0, false, capitalizationtype::capitalizeWords));
 }
 
 void BlockEditorState::loadBlocksKey() {
@@ -213,7 +216,7 @@ void BlockEditorState::loadBlocksKey() {
     blocksToCheck.push_back("i");
     blocksToCheck.push_back("j");
 
-    mKeyLayout.setLayout({375,650,0,0}, 100,0,7,1);
+    mKeyLayout.setLayout({330,640,0,0}, 100,0,7,1);
 
     SDL_Rect start_rect;
     start_rect.x = 0;

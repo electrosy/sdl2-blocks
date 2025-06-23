@@ -10,7 +10,7 @@ ley::UI_Tile::UI_Tile()
 mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
 value{mPosPx.x, mPosPx.y, 0, 30},
 mErrorTimer{2500, {0,0,0,0}},
-mHelpFont{20,600,100,100}
+mHelpFont{1,SCREEN_HEIGHT-30,100,100}
 {
     background.x = mPosPx.x;
     background.y = mPosPx.y;
