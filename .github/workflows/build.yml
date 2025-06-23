@@ -63,6 +63,7 @@ jobs:
           cp sdl2-blocks dist/  # Copy the executable
           cp -r assets dist/  # Copy the assets directory
           cp blocks.csv dist/ # Copy blocks file
+          cp blocks-default.csv dist/ # Copy blocks file
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4

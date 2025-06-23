@@ -80,6 +80,7 @@ jobs:
           mkdir dist
           copy sdl2-blocks.exe dist\
           copy blocks.csv dist\
+          copy blocks-default.csv dist\
           xcopy assets dist\assets\ /E /H /C /I
           # Core SDL2 and related DLLs
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2.dll" dist\
