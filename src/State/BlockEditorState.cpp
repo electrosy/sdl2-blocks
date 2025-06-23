@@ -60,7 +60,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     }
 
     loadBlocksKey();
-    loadFromBlockDataPtr(mGameModel->getBlockDataPtr(), &mBlockData);
+    loadFromBlockDataPtr(mGameModel->getFileDataPtr(), &mBlockData);
 }
 
 void BlockEditorState::update(ley::Command command) {
@@ -187,7 +187,6 @@ bool BlockEditorState::onExit() {
 
     WriteTileDataToFile();
     mGameModel->readBlockData();
-    mGameModel->outputActiveAndOldOrientation();
 
     return true;
 }

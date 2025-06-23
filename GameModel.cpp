@@ -28,9 +28,8 @@ mDebugOnlyLine(false)
 {
     readBlockData();
     ley::Block::setBlockDataPtr(&mBlockMapData);
-    activeBlock = getRandomBlock();
-    oldBlock = {activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1};
-    nextBlock = getRandomBlock();
+    
+    initGame();
 
     SDL_Log("ley::GameModel::ctor");
     oldBlock.setH(activeBlock.getRect().h);
@@ -116,7 +115,7 @@ ley::Block ley::GameModel::debugGetBlock() {
 ley::Block ley::GameModel::getRandomBlock() {
     Block a;
     ley::Rand_int rand0to6(0,6); //random number generator
-    
+
     if(mDebugOnlyLine == true) { //debug return only line
         return Block(4,2,BlockNameType::line,false);
     }
@@ -154,7 +153,6 @@ bool ley::GameModel::newBlock() {
     activeBlock = nextBlock;
     oldBlock = activeBlock;
     oldBlock.setClear(true);
-
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
@@ -512,6 +510,8 @@ void ley::GameModel::resetGame() {
     activeBlock.reset();
     oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
 
+    initGame();
+    /*
     // Ensure that we have the latest block data if we start a new game right after mading modifications in the block editor.
     SDL_Rect tempRect;
     Block::setBlockDataFromFile(activeBlock.getType(), activeBlock.getBlockOrientation(), activeBlock.getBlockDataPtr(), false, &tempRect,{});
@@ -520,7 +520,7 @@ void ley::GameModel::resetGame() {
     Block::setBlockDataFromFile(oldBlock.getType(), oldBlock.getBlockOrientation(), oldBlock.getBlockDataPtr(), true, &tempRect,{});
     oldBlock.setH(tempRect.h);
     oldBlock.setW(tempRect.w);
-
+    */
     newLevelToReport = true; //we always want to reset the game background when we restart the game.
     mNewHighScore = false;
     stopProgram(false);
@@ -563,8 +563,7 @@ bool ley::GameModel::newHighScore() {
 void ley::GameModel::quickDrop() {
 
     SDL_Log("Quick drop");
-    while(ley::GameModel::moveBlock(ley::Command::down))
-    {
+    while(ley::GameModel::moveBlock(ley::Command::down)) {
 
     }
 
@@ -581,9 +580,7 @@ void ley::GameModel::readConfigOther() {
 void ley::GameModel::resizeBoard(int width, int height) {
 
     mBoard.setSize(width, height + BOARDSIZE_BUFFER);
-    
     mPts_Line = mBoard.width() * (PTS_DROP * 2);
-
     mBoard.putBlock(activeBlock);
 }
 
@@ -592,24 +589,24 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(SDL_SCANCODE_F12, std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
 
     mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_CTRL, ley::Command::shiftleft));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_LSHIFT, ley::Command::shiftmajleft));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_ALT, ley::Command::shiftallleft));
+    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_ALT, ley::Command::shiftleft));
+    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajleft));
+    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_CTRL, ley::Command::shiftallleft));
 
     mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_NONE, ley::Command::right));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_CTRL, ley::Command::shiftright));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_LSHIFT, ley::Command::shiftmajright));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_ALT, ley::Command::shiftallright));
+    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_ALT, ley::Command::shiftright));
+    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajright));
+    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_CTRL, ley::Command::shiftallright));
 
     mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_NONE, ley::Command::down));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_LSHIFT, ley::Command::shiftmajdown));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_CTRL, ley::Command::shiftdown));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_ALT, ley::Command::shiftalldown));
+    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajdown));
+    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_ALT, ley::Command::shiftdown));
+    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_CTRL, ley::Command::shiftalldown));
 
     mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_CTRL, ley::Command::shiftup));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_LSHIFT, ley::Command::shiftmajup));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_ALT, ley::Command::shiftallup));
+    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_ALT, ley::Command::shiftup));
+    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajup));
+    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_CTRL, ley::Command::shiftallup));
 
     mKeyBindings.emplace(SDL_SCANCODE_E, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
     
@@ -886,16 +883,12 @@ void ley::GameModel::logBlockData() {
     }
 }
 
-ley::BlockFileDataMapType* ley::GameModel::getBlockDataPtr() {
+ley::BlockFileDataMapType* ley::GameModel::getFileDataPtr() {
     return &mBlockMapData;
-} 
+}
 
-void ley::GameModel::outputActiveAndOldOrientation() {
-    SDL_Log("Active Block Orientation: %d", activeBlock.getBlockOrientation());
-    SDL_Log("Old Block Orientation: %d", oldBlock.getBlockOrientation());
-
-    if(activeBlock.getBlockOrientation() != oldBlock.getBlockOrientation()) {
-        SDL_Log("Active and old block orientations are not the same");
-
-    }
+void ley::GameModel::initGame() {
+    activeBlock = getRandomBlock();
+    oldBlock = {activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1};
+    nextBlock = getRandomBlock();
 }
