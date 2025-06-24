@@ -212,11 +212,11 @@ void ley::Font::right(int screenWidth) {
 
 }
 
-void ley::Font::bottom(int screenHeight) {
+void ley::Font::bottom(int screenHeight, int linesFromBottom) {
 
     int fontWidth;
     int fontheight;
     TTF_SizeUTF8(mTTFFont, getMessage().c_str(), &fontWidth, &fontheight);
-    setY(screenHeight - fontheight);
+    setY(screenHeight - (fontheight * linesFromBottom));
 
 }

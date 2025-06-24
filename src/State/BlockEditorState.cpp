@@ -11,14 +11,19 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mTitleFont{0,0,100,50},
-    mHelpTipFont{1000,690,100,50} {
+    mHelpTipFont{1000,690,100,50},
+    mShiftControlsFont{1000,690,100,50} {
 
     // TODO localization
     //mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
+    mShiftControlsFont.updateMessage("Press \"alt + arrow\", \"shift + arrow\", \"ctrl + arrow\" to shift blocks");
+    mShiftControlsFont.setFontSize(EDITOR_FONT_SIZE);
+    mShiftControlsFont.right(SCREEN_WIDTH);
+    mShiftControlsFont.bottom(SCREEN_HEIGHT, 1);
     mHelpTipFont.updateMessage("Press \"right ctrl + d\" to restore to default blocks");
     mHelpTipFont.setFontSize(EDITOR_FONT_SIZE);
     mHelpTipFont.right(SCREEN_WIDTH);
-    mHelpTipFont.bottom(SCREEN_HEIGHT);
+    mHelpTipFont.bottom(SCREEN_HEIGHT, 2);
     
     updateBlockEditorFonts();
 
@@ -55,10 +60,10 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
 
         mTiles.back()->getErrorFontPtr()->setFontSize(EDITOR_FONT_SIZE);
-        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT);
+        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT, 1);
         mTiles.back()->getErrorFontPtr()->left();
         mTiles.back()->getHelpFontPtr()->setFontSize(EDITOR_FONT_SIZE);
-        mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT);
+        mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT, 1);
         mTiles.back()->getHelpFontPtr()->left();
     }
 
@@ -174,6 +179,7 @@ void BlockEditorState::render() {
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
     mRenderables.push_back(&mHelpTipFont);
+    mRenderables.push_back(&mShiftControlsFont);
 
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));

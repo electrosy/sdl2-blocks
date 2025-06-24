@@ -22,6 +22,7 @@ private:
     static const std::string sBlockEditorID;
     Font mTitleFont;
     Font mHelpTipFont;
+    Font mShiftControlsFont;
     UIMenu mBlockUIMenu;
     RenderablesPtr mRenderables;
     RenderablesPtr mDebugRenderables;

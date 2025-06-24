@@ -52,7 +52,7 @@ public:
     void setColor(SDL_Color c);
     void setFontSize(int size);
     void center();
-    void bottom(int screenHeight); //move the font to the bottom of the screen
+    void bottom(int screenHeight, int linesFromBottom); //move the font to the bottom of the screen
     void left();
     void right(int screenWidth); //move the font to the right of the screen
 };
