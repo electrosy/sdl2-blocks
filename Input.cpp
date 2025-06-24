@@ -190,47 +190,48 @@ void ley::Input::pollEvents(
                 //selection_len = event.edit.length;
                 break;
             case SDL_KEYDOWN:
-
-                //If letter and UI element is active use only UI element code and not keydown code.
-                if(te && (pressedKey >= SDL_SCANCODE_A && pressedKey <= SDL_SCANCODE_Z)) {
-                    break;
-                }
-
-                if(!event.key.repeat) {
-                                        
-                    
+                {
                     Uint16 pressedModifiers = event.key.keysym.mod;
+                    //If letter and UI element is active use only UI element code and not keydown code
+                    if(te && (pressedKey >= SDL_SCANCODE_A && pressedKey <= SDL_SCANCODE_Z) && !(pressedModifiers & (KMOD_ALT | KMOD_CTRL | KMOD_SHIFT)) ) {
+                        break;
+                    }
 
-                    //reset the timers if this key was previously not pressed 
-                    if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
+                    if(!event.key.repeat) {
+                        //reset the timers if this key was previously not pressed 
+                        if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
 
-                        //skip modifiers
-                        if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
-                        { 
-                            mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
-                            mKeysPressed[pressedKey]->getDelayTimerPtr()->reset();
-                            mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
+                            //skip modifiers as we don't want to repeat modifier keys
+                            if(pressedKey <= SDL_SCANCODE_LCTRL || pressedKey >= SDL_SCANCODE_RGUI)
+                            { 
+                                mKeysPressed.insert({pressedKey, std::make_unique<InputPressed>(pressedModifiers, inKeyDelay, inKeyRepeat)});
+                                mKeysPressed[pressedKey]->getDelayTimerPtr()->reset();
+                                mKeysPressed[pressedKey]->getRepeatTimerPtr()->reset();
+                            }
+                        }
+
+                        if(pressedKey == SDL_SCANCODE_D) {
+                            SDL_Log("Scancode D");
+                        }
+                            
+                        command = lookupKeyCommand(pressedKey, pressedModifiers, inKeyboardBindings);
+                        
+                        if(command == ley::Command::fullscreen) {
+                            fullscreen = !fullscreen;
+                        }
+                        else {
+                            // push on repeatable commands
+                            commandQueuePtr->push(command);
                         }
                     }
-                           
-                    command = lookupKeyCommand(pressedKey, pressedModifiers, inKeyboardBindings);
-                    
-                    if(command == ley::Command::fullscreen) {
-                        fullscreen = !fullscreen;
-                    }
-                    else {
-                        // push on repeatable commands
-                        commandQueuePtr->push(command);
-                    }
-                }
 
-                // backspace handler (backspace key only so far with function pointer passed in)
-                // TODO how to add repeat key for delete for text edit?
-                // If there is an active UI element then handle input.
-                if(te && te->hasFocus()) {
-                    function(command);
+                    // backspace handler (backspace key only so far with function pointer passed in)
+                    // TODO how to add repeat key for delete for text edit?
+                    // If there is an active UI element then handle input.
+                    if(te && te->hasFocus()) {
+                        function(command);
+                    }
                 }
-                
                 break;
 
             case SDL_KEYUP :

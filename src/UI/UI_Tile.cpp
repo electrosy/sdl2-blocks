@@ -10,7 +10,7 @@ ley::UI_Tile::UI_Tile()
 mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
 value{mPosPx.x, mPosPx.y, 0, 30},
 mErrorTimer{2500, {0,0,0,0}},
-mHelpFont{1,SCREEN_HEIGHT-30,100,100}
+mHelpFont{1,SCREEN_HEIGHT-25,100,100}
 {
     background.x = mPosPx.x;
     background.y = mPosPx.y;
@@ -18,6 +18,7 @@ mHelpFont{1,SCREEN_HEIGHT-30,100,100}
     background.h = TTF_FontHeight(value.getTTFFont());
     mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
     mErrorFont.setVisible(false);
+    mHelpFont.setPos({1,SCREEN_HEIGHT-TTF_FontHeight(mHelpFont.getTTFFont())});
 }
 
 void ley::UI_Tile::render(SDL_Renderer * r, bool d) {

@@ -33,7 +33,7 @@ ley::Font::Font(const Font& other) {
 void ley::Font::init(int size) {
 
     mMessageTexture = nullptr;
-    mClassic = nullptr;
+    mTTFFont = nullptr;
     mColor = {255, 255, 255, 255};
 
     if (TTF_Init() < 0) {
@@ -41,8 +41,8 @@ void ley::Font::init(int size) {
     }
 
 //    SDL_Log("Open font");
-    mClassic = TTF_OpenFont(FONTFILE, size);
-    if(!mClassic) {
+    mTTFFont = TTF_OpenFont(FONTFILE, size);
+    if(!mTTFFont) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
 
@@ -62,10 +62,10 @@ void ley::Font::cleanUp() {
     }
 
     
-    if(mClassic) {
+    if(mTTFFont) {
 //        SDL_Log("Close font");
-        TTF_CloseFont(mClassic);
-        mClassic = nullptr;
+        TTF_CloseFont(mTTFFont);
+        mTTFFont = nullptr;
     }
 
     TTF_Quit();
@@ -115,7 +115,7 @@ void ley::Font::preRender(SDL_Renderer* r)
 {
     if(!mMessageTexture) {
         SDL_Surface* surfaceMessage;
-        surfaceMessage = TTF_RenderUTF8_Blended_Wrapped(mClassic, mMessageString.c_str(), mColor, 0);
+        surfaceMessage = TTF_RenderUTF8_Blended_Wrapped(mTTFFont, mMessageString.c_str(), mColor, 0);
         mMessageTexture = SDL_CreateTextureFromSurface(r, surfaceMessage);
         SDL_FreeSurface(surfaceMessage);
         surfaceMessage = nullptr;
@@ -150,7 +150,7 @@ void ley::Font::render(SDL_Renderer * r, bool d) {
 }
 
 TTF_Font* ley::Font::getTTFFont() {
-    return mClassic;
+    return mTTFFont;
 }
 
 void ley::Font::setPos(SDL_Point p) {
@@ -158,11 +158,19 @@ void ley::Font::setPos(SDL_Point p) {
     mMessageRect.y = p.y;
 }
 
+void ley::Font::setX(int x) {
+    mMessageRect.x = x;
+}
+
+void ley::Font::setY(int y) {
+    mMessageRect.y = y;
+}
+
 std::pair<int, int> ley::Font::size() {
     int width = -1;
     int height = -1;
 
-    TTF_SizeText(mClassic, mMessageString.c_str(), &width, &height);
+    TTF_SizeText(mTTFFont, mMessageString.c_str(), &width, &height);
 
     return std::make_pair(width, height);
 }
@@ -170,7 +178,7 @@ std::pair<int, int> ley::Font::size() {
 void ley::Font::setFontSize(int size) {
 
     mPointSize = size;
-    TTF_SetFontSize(mClassic, mPointSize);
+    TTF_SetFontSize(mTTFFont, mPointSize);
 }
 
 void ley::Font::center() {
@@ -178,7 +186,7 @@ void ley::Font::center() {
     //Query for width and heigh of texture.
 
     SDL_Rect fontSize;
-    TTF_SizeUTF8(mClassic, mMessageString.c_str(), &fontSize.w, &fontSize.h);
+    TTF_SizeUTF8(mTTFFont, mMessageString.c_str(), &fontSize.w, &fontSize.h);
 
     tempRect.x = SCREEN_WCENTER - (fontSize.w / 2);
     
@@ -187,4 +195,28 @@ void ley::Font::center() {
     tempRect.y = mMessageRect.y;
 
     setPos({tempRect.x,tempRect.y});
+}
+void ley::Font::left() {
+    int fontWidth;
+    int fontheight;
+    TTF_SizeUTF8(mTTFFont, getMessage().c_str(), &fontWidth, &fontheight);
+    setX(0);
+}
+
+void ley::Font::right(int screenWidth) {
+
+    int fontWidth;
+    int fontheight;
+    TTF_SizeUTF8(mTTFFont, getMessage().c_str(), &fontWidth, &fontheight);
+    setX(screenWidth - fontWidth);
+
+}
+
+void ley::Font::bottom(int screenHeight) {
+
+    int fontWidth;
+    int fontheight;
+    TTF_SizeUTF8(mTTFFont, getMessage().c_str(), &fontWidth, &fontheight);
+    setY(screenHeight - fontheight);
+
 }

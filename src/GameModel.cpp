@@ -590,6 +590,8 @@ void ley::GameModel::resizeBoard(int width, int height) {
 
 void ley::GameModel::loadKeyBindings() {
 
+    mKeyBindings.emplace(SDL_SCANCODE_GRAVE, std::make_pair(KMOD_NONE, ley::Command::console));
+
     mKeyBindings.emplace(SDL_SCANCODE_F12, std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
 
     mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
@@ -620,7 +622,6 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(SDL_SCANCODE_ESCAPE, std::make_pair(KMOD_NONE, ley::Command::quit));
 
     mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::enter));
-    
     mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
 
     mKeyBindings.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
@@ -649,17 +650,16 @@ void ley::GameModel::loadKeyBindings() {
 
     mKeyBindings.emplace(SDL_SCANCODE_C, std::make_pair(KMOD_NONE, ley::Command::debugclear));
 
+    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
+    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_NONE, ley::Command::debugtexture));
+    
     mKeyBindings.emplace(SDL_SCANCODE_F, std::make_pair(KMOD_NONE, ley::Command::debugfill));
+
+    mKeyBindings.emplace(SDL_SCANCODE_I, std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
 
     mKeyBindings.emplace(SDL_SCANCODE_L, std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
 
-    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_NONE, ley::Command::debugtexture));
-
     mKeyBindings.emplace(SDL_SCANCODE_S, std::make_pair(KMOD_NONE, ley::Command::debugcolide));
-
-    mKeyBindings.emplace(SDL_SCANCODE_GRAVE, std::make_pair(KMOD_NONE, ley::Command::console));
-
-    mKeyBindings.emplace(SDL_SCANCODE_I, std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
 
     mKeyBindings.emplace(SDL_SCANCODE_U, std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
 }
@@ -844,7 +844,6 @@ void ley::GameModel::readBlockData() {
     }
 
     addCanRotateToBlockData();
-    logBlockData();
 }
 
 void ley::GameModel::addCanRotateToBlockData() {

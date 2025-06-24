@@ -10,11 +10,16 @@ const std::string BlockEditorState::sBlockEditorID = "BLOCKEDITOR";
 BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
-    mTitleFont{0,0,100,50} {
+    mTitleFont{0,0,100,50},
+    mHelpTipFont{1000,690,100,50} {
 
     // TODO localization
     //mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
-
+    mHelpTipFont.updateMessage("Press \"right ctrl + d\" to restore to default blocks");
+    mHelpTipFont.setFontSize(EDITOR_FONT_SIZE);
+    mHelpTipFont.right(SCREEN_WIDTH);
+    mHelpTipFont.bottom(SCREEN_HEIGHT);
+    
     updateBlockEditorFonts();
 
     int boardWidth = 35;
@@ -35,7 +40,7 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         mTiles.back()->setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
         mTiles.back()->setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
         mTiles.back()->setRegEx("\\b[defghij]\\b");
-        // TODO localization
+        
         if(BLOCK_SIZE == 0) {
             SDL_Log("Block Size is 0");
             return;
@@ -45,11 +50,16 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         int yTile = mBlockUIMenu.columnAt(i);
         SDL_Point major = getMajorTileFromMinor({xTile,yTile});
 
+        // TODO localization
         mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
         mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
 
-        mTiles.back()->getErrorFontPtr()->setFontSize(16);
-        mTiles.back()->getHelpFontPtr()->setFontSize(16);
+        mTiles.back()->getErrorFontPtr()->setFontSize(EDITOR_FONT_SIZE);
+        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT);
+        mTiles.back()->getErrorFontPtr()->left();
+        mTiles.back()->getHelpFontPtr()->setFontSize(EDITOR_FONT_SIZE);
+        mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT);
+        mTiles.back()->getHelpFontPtr()->left();
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -67,6 +77,19 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 }
 
 void BlockEditorState::update(ley::Command command) {
+    
+    setSelectedTextureChar();
+   
+    //set all the key borders to hidden
+    for(auto& entry : mBlocksKeyRects) {
+        entry.second.first = false;
+    }
+
+    //set the selected box to true.
+    if(mBlocksKeyRects.find(mSelectedTextureChar) != mBlocksKeyRects.end()) {
+        mBlocksKeyRects[mSelectedTextureChar].first = true;
+    }
+
     if(command == ley::Command::none) {
         return; // do nothing if there is no command to process.
     }
@@ -111,21 +134,12 @@ void BlockEditorState::update(ley::Command command) {
                 }
             }
             break;
+        case ley::Command::restoredefault :
+                restoreBlocksDefaultFile();
+            break;
 
         default :
             break;
-    }
-
-    mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
-    
-    //set all the key borders to hidden
-    for(auto& entry : mBlocksKeyRects) {
-        entry.second.first = false;
-    }
-
-    //set the selected box to true.
-    if(mBlocksKeyRects.find(mSelectedTextureChar) != mBlocksKeyRects.end()) {
-        mBlocksKeyRects[mSelectedTextureChar].first = true;
     }
 
     mBlockUIMenu.runCommand(command);
@@ -159,6 +173,7 @@ void BlockEditorState::render() {
 
 void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
+    mRenderables.push_back(&mHelpTipFont);
 
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
@@ -493,11 +508,31 @@ void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, s
 SDL_Point BlockEditorState::getMajorTileFromMinor(SDL_Point minor) {
     
     SDL_Point major;
-    major.x = minor.x / mLayout.getMajorGridSize();
-    major.y = minor.y / mLayout.getMajorGridSize();
+    Uint8 majorGridSize = mLayout.getMajorGridSize();
+    if(majorGridSize != 0) {
+        major.x = minor.x / majorGridSize;
+        major.y = minor.y / majorGridSize;
+    }
 
     return {major.x,major.y};
 }
 
+void BlockEditorState::restoreBlocksDefaultFile() {
+ 
+    copyFile("blocks-default.csv", "blocks.csv");
+    mGameModel->readBlockData();
+    loadFromBlockDataPtr(mGameModel->getFileDataPtr(), &mBlockData);
 }
 
+bool BlockEditorState::copyFile(const std::string& source, const std::string& destination) {
+    std::error_code ec;
+    std::filesystem::copy(source, destination, 
+                         std::filesystem::copy_options::overwrite_existing, ec);
+    return !ec; // Return true if no error
+}
+
+void BlockEditorState::setSelectedTextureChar() {
+    mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
+}
+
+}

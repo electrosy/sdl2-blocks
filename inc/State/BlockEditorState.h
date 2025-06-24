@@ -1,5 +1,6 @@
-#include "GameState.h"
+#include <filesystem>
 
+#include "GameState.h"
 #include "../../Video.h"
 #include "../../inc/GameModel.h"
 #include "../../UIMenu.h"
@@ -13,11 +14,14 @@ namespace ley {
 
 class BlockEditorState : public ley::GameState {
 
+Uint8 EDITOR_FONT_SIZE = 16;
+
 private:
     Video * mVideoSystem;
     GameModel * mGameModel;
     static const std::string sBlockEditorID;
     Font mTitleFont;
+    Font mHelpTipFont;
     UIMenu mBlockUIMenu;
     RenderablesPtr mRenderables;
     RenderablesPtr mDebugRenderables;
@@ -41,6 +45,9 @@ private:
     void rowDataRight(std::vector<std::string>* rowData);
     void rowDataLeft(std::vector<std::string>* rowData);
     SDL_Point getMajorTileFromMinor(SDL_Point minor); //returns the major tiles based on the minor x,y.
+    void restoreBlocksDefaultFile();
+    bool copyFile(const std::string& source, const std::string& destination);
+    void setSelectedTextureChar();
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);

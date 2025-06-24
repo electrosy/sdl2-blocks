@@ -23,7 +23,7 @@ private:
     std::string mMessageString;
     SDL_Texture* mMessageTexture;
     SDL_Rect mMessageRect;
-    TTF_Font* mClassic;
+    TTF_Font* mTTFFont;
     SDL_Color mColor;
     int mPointSize;
 
@@ -44,12 +44,17 @@ public:
     void preRender(SDL_Renderer* r);
     void render(SDL_Renderer * r, bool d);
     TTF_Font* getTTFFont();
+    void setX(int x);
+    void setY(int Y);
     void setPos(SDL_Point p);
     SDL_Point getPos() { return {mMessageRect.x, mMessageRect.y}; };
     std::pair<int, int> size();
     void setColor(SDL_Color c);
     void setFontSize(int size);
     void center();
+    void bottom(int screenHeight); //move the font to the bottom of the screen
+    void left();
+    void right(int screenWidth); //move the font to the right of the screen
 };
 
 }

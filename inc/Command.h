@@ -20,6 +20,7 @@ enum class Command {
     shiftalldown,
     shiftallright,
     shiftallleft,
+    restoredefault,
     none,
     pause,
     space,

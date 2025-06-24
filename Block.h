@@ -122,5 +122,5 @@ public:
     unsigned int getBlockOrientation() {return mOrientation;};
 };
 
-}
+} 
 #endif
