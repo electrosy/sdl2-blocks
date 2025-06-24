@@ -9,15 +9,12 @@ ley::UI_Tile::UI_Tile()
 :
 mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
 value{mPosPx.x, mPosPx.y, 0, 30},
-mErrorTimer{2500, {0,0,0,0}},
 mHelpFont{1,SCREEN_HEIGHT-25,100,100}
 {
     background.x = mPosPx.x;
     background.y = mPosPx.y;
     background.w = UI_TILE_WIDTH;
     background.h = TTF_FontHeight(value.getTTFFont());
-    mErrorFont.updateMessage("Must be two numbers seperated by an 'x' between 8x8 and 25x22");
-    mErrorFont.setVisible(false);
     mHelpFont.setPos({1,SCREEN_HEIGHT-TTF_FontHeight(mHelpFont.getTTFFont())});
 }
 
@@ -45,19 +42,11 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
     }
 
     mHelpFont.render(r, d);
-
-    if(mErrorFont.isVisible()) {
-        mErrorFont.render(r, d);
-    }
 } 
 
 void ley::UI_Tile::update() {
-    mErrorTimer.runFrame(false, 0.0);
     mCursorFader.runFrame();
     
-    if(mErrorTimer.hasExpired()) {
-        mErrorFont.setVisible(false);
-    }
 }
 
 void ley::UI_Tile::processInput(std::string s) {
@@ -173,12 +162,6 @@ void ley::UI_Tile::setHelpMessages(std::string focusHelp, std::string nonFocusHe
     mFocusHelp = focusHelp;
     mNonFocusHelp = nonFocusHelp;
     mHelpFont.updateMessage(getHelpMessage());
-}
-
-void ley::UI_Tile::setErrorMessage(std::string errorMessage) {
-
-    mErrorFont.updateMessage(errorMessage);
-
 }
 
 void ley::UI_Tile::handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) {

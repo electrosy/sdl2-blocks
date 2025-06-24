@@ -83,6 +83,7 @@
         "expected": "cpp",
         "regex": "cpp",
         "text_encoding": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "codecvt": "cpp"
     }
 }

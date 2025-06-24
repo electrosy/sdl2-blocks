@@ -61,15 +61,16 @@ public:
     void setBackspaceSound(const std::function<void()> &func) override;
     std::string getHelpMessage() override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
-    ley::Font* getErrorFontPtr() override { return &mErrorFont; };
     ley::Font* getHelpFontPtr() override { return &mHelpFont; };
     std::string getRegEx() override { return mRegEx; };
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
-    ley::Timer* getErrorTimerPtr() override { return &mErrorTimer; };
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
-    void setErrorMessage(std::string errorMessage) override;
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void setWidthByChar(int maxCharLength);
+
+    ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
+    ley::Font* getErrorFontPtr() { return &mErrorFont; };
+    void setErrorMessage(std::string errorMessage);
 };
 
 }

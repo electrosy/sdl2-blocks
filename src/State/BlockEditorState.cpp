@@ -57,11 +57,11 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
         // TODO localization
         mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
-        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
+//        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
 
-        mTiles.back()->getErrorFontPtr()->setFontSize(EDITOR_FONT_SIZE);
-        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT, 1);
-        mTiles.back()->getErrorFontPtr()->left();
+//        mTiles.back()->getErrorFontPtr()->setFontSize(EDITOR_FONT_SIZE);
+//        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT, 1);
+//        mTiles.back()->getErrorFontPtr()->left();
         mTiles.back()->getHelpFontPtr()->setFontSize(EDITOR_FONT_SIZE);
         mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT, 1);
         mTiles.back()->getHelpFontPtr()->left();
