@@ -56,15 +56,12 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         SDL_Point major = getMajorTileFromMinor({xTile,yTile});
 
         // TODO localization
+        /*
         mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
-//        mTiles.back()->setErrorMessage("block editor tile. " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
-
-//        mTiles.back()->getErrorFontPtr()->setFontSize(EDITOR_FONT_SIZE);
-//        mTiles.back()->getErrorFontPtr()->bottom(SCREEN_HEIGHT, 1);
-//        mTiles.back()->getErrorFontPtr()->left();
         mTiles.back()->getHelpFontPtr()->setFontSize(EDITOR_FONT_SIZE);
         mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT, 1);
         mTiles.back()->getHelpFontPtr()->left();
+        */
     }
 
     mActiveUIElement = mTiles.back().get();
@@ -84,6 +81,16 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 void BlockEditorState::update(ley::Command command) {
     
     setSelectedTextureChar();
+
+    //Update the current tile font
+    int xTile = mBlockUIMenu.column();
+    int yTile = mBlockUIMenu.row();
+    SDL_Point major = getMajorTileFromMinor({xTile,yTile});
+    mCurrentTileFont.updateMessage("Block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) 
+                                    + " Major " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1));
+    mCurrentTileFont.setFontSize(EDITOR_FONT_SIZE);
+    mCurrentTileFont.bottom(SCREEN_HEIGHT, 1);
+    mCurrentTileFont.left();
    
     //set all the key borders to hidden
     for(auto& entry : mBlocksKeyRects) {
@@ -180,6 +187,7 @@ void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mTitleFont);
     mRenderables.push_back(&mHelpTipFont);
     mRenderables.push_back(&mShiftControlsFont);
+    mRenderables.push_back(&mCurrentTileFont);
 
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
@@ -331,7 +339,6 @@ std::shared_ptr<UI_Tile> BlockEditorState::tileAt(int inX, int inY) {
     else {
         return {};
     }
-
 }
 
 void BlockEditorState::WriteTileDataToFile() {
