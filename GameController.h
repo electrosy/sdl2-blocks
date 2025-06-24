@@ -13,7 +13,7 @@ Date: Feb/15/2020
 #include "./inc/GameModel.h"
 #include "Clock.h"
 #include "Block.h"
-#include "Font.h"
+#include "./inc/Font.h"
 #include "Timer.h"
 #include "HighScores.h"
 #include "inc/State/GameStateMachine.h"

@@ -14,7 +14,7 @@ Date: Feb/14/2020
 #include "Renderables.h"
 #include "Sprite.h"
 #include "Textures.h"
-#include "Font.h"
+#include "./inc/Font.h"
 #include "./inc/RectContainer.h"
 #include "./inc/TextEntry.h"
 

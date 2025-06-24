@@ -9,7 +9,7 @@ Date: Aug/16/2021
 #include <tuple>
 
 #include "Renderables.h"
-#include "Font.h"
+#include "./inc/Font.h"
 
 
 #ifndef HIGHSCORES_H

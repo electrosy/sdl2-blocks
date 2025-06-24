@@ -5,7 +5,7 @@ SRCDIR = ./src
 # OBJS defines files to compile as part of the project
 OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/Sprite.o $(OBJDIR)/Block.o $(OBJDIR)/src/GameModel.o \
        $(OBJDIR)/Clock.o $(OBJDIR)/Renderable.o $(OBJDIR)/Renderables.o $(OBJDIR)/GameController.o \
-       $(OBJDIR)/Timer.o $(OBJDIR)/Textures.o $(OBJDIR)/Font.o $(OBJDIR)/Rand_int.o $(OBJDIR)/UIElement.o $(OBJDIR)/UIMenu.o \
+       $(OBJDIR)/Timer.o $(OBJDIR)/Textures.o $(OBJDIR)/src/Font.o $(OBJDIR)/Rand_int.o $(OBJDIR)/UIElement.o $(OBJDIR)/UIMenu.o \
        $(OBJDIR)/HighScores.o $(OBJDIR)/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
        $(OBJDIR)/src/State/MenuState.o $(OBJDIR)/src/State/OptionMenuState.o $(OBJDIR)/src/State/HighScoresMenuState.o $(OBJDIR)/src/State/PlayState.o \
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \

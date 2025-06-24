@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../../Font.h"
+#include "../Font.h"
 #include "../../Input.h"
 #include "../Fader.h"
 #include "../../UIElement.h"
