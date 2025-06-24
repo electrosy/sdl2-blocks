@@ -843,7 +843,10 @@ void ley::GameModel::readBlockData() {
         }
     }
 
+    inFile.close();
+
     addCanRotateToBlockData();
+    logBlockData();
 }
 
 void ley::GameModel::addCanRotateToBlockData() {

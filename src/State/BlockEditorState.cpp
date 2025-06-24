@@ -524,15 +524,84 @@ SDL_Point BlockEditorState::getMajorTileFromMinor(SDL_Point minor) {
 
 void BlockEditorState::restoreBlocksDefaultFile() {
  
-    copyFile("blocks-default.csv", "blocks.csv");
+    if(!copyFile2("blocks-default.csv", "blocks.csv")) {
+        SDL_Log("Error loading blocks file");
+    }
     mGameModel->readBlockData();
     loadFromBlockDataPtr(mGameModel->getFileDataPtr(), &mBlockData);
+}
+bool BlockEditorState::copyFile2(const std::string& source, const std::string& destination) {
+    std::filesystem::path srcPath = std::filesystem::absolute(source);
+    std::filesystem::path destPath = std::filesystem::absolute(destination);
+
+    SDL_Log("Current directory: %s", std::filesystem::current_path().string().c_str());
+    SDL_Log("Copying from %s to %s", srcPath.string().c_str(), destPath.string().c_str());
+
+    // Check if source exists
+    if (!std::filesystem::exists(srcPath)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Source file does not exist: %s", srcPath.string().c_str());
+        return false;
+    }
+
+    // Check if destination is a directory
+    if (std::filesystem::exists(destPath) && std::filesystem::is_directory(destPath)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Destination is a directory: %s", destPath.string().c_str());
+        return false;
+    }
+
+    // Check if destination directory exists
+    std::filesystem::path destDir = destPath.parent_path();
+    if (!destDir.empty() && !std::filesystem::exists(destDir)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Destination directory does not exist: %s", destDir.string().c_str());
+        return false;
+    }
+
+    // Check and set permissions if destination exists
+    if (std::filesystem::exists(destPath)) {
+        SDL_Log("Destination file exists: %s", destPath.string().c_str());
+        std::filesystem::perms perms = std::filesystem::status(destPath).permissions();
+        if ((perms & std::filesystem::perms::owner_write) == std::filesystem::perms::none) {
+            SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Destination file is read-only: %s", destPath.string().c_str());
+            std::error_code permEc;
+            std::filesystem::permissions(destPath, perms | std::filesystem::perms::owner_write, 
+                                        std::filesystem::perm_options::replace, permEc);
+            if (permEc) {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to set write permissions: %s (code: %d)",
+                             permEc.message().c_str(), permEc.value());
+                return false;
+            }
+        }
+
+        // Workaround: Remove destination file to avoid overwrite issues
+        std::error_code removeEc;
+        std::filesystem::remove(destPath, removeEc);
+        if (removeEc) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to remove existing destination: %s (code: %d)",
+                         removeEc.message().c_str(), removeEc.value());
+            return false;
+        }
+        SDL_Log("Removed existing destination file: %s", destPath.string().c_str());
+    }
+
+    std::error_code ec;
+    std::filesystem::copy(srcPath, destPath, std::filesystem::copy_options::overwrite_existing, ec);
+    if (ec) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File copy failed: %s (code: %d, category: %s)",
+                     ec.message().c_str(), ec.value(), ec.category().name());
+        return false;
+    }
+
+    SDL_Log("Copy succeeded.");
+    return true;
 }
 
 bool BlockEditorState::copyFile(const std::string& source, const std::string& destination) {
     std::error_code ec;
     std::filesystem::copy(source, destination, 
                          std::filesystem::copy_options::overwrite_existing, ec);
+    if(ec) {
+        SDL_Log("Files read error: %s . Value: %d", ec.message().c_str(), ec.value());
+    }
     return !ec; // Return true if no error
 }
 
