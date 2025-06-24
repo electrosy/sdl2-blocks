@@ -54,14 +54,6 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
         int xTile = mBlockUIMenu.rowAt(i);
         int yTile = mBlockUIMenu.columnAt(i);
         SDL_Point major = getMajorTileFromMinor({xTile,yTile});
-
-        // TODO localization
-        /*
-        mTiles.back()->setHelpMessages("block editor tile " + std::to_string(xTile + 1) + "," + std::to_string(yTile + 1) + " Major: " + std::to_string(major.x + 1) + "," + std::to_string(major.y + 1), "");
-        mTiles.back()->getHelpFontPtr()->setFontSize(EDITOR_FONT_SIZE);
-        mTiles.back()->getHelpFontPtr()->bottom(SCREEN_HEIGHT, 1);
-        mTiles.back()->getHelpFontPtr()->left();
-        */
     }
 
     mActiveUIElement = mTiles.back().get();

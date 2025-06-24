@@ -36,7 +36,6 @@ private:
     bool mHasFocus = false;
     std::function<void()> mEnterCharSound;
     std::function<void()> mBackspaceSound;
-    ley::Font mHelpFont;
     std::string mFocusHelp;
     std::string mNonFocusHelp;
     std::string mRegEx;
@@ -53,7 +52,6 @@ public:
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
     std::string* getTextBoxField() override;
-    ley::Font* getHelpFontPtr() override { return &mHelpFont; };
     std::string getTextBoxValue() override;
     std::string getHelpMessage() override;
     std::string getRegEx() override { return mRegEx; };
@@ -63,7 +61,7 @@ public:
     void setBackspaceSound(const std::function<void()> &func) override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
-    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;  
+    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
 
     void commit();
     std::string* getPreviousValuePtr() {return &mPreviousValue;};

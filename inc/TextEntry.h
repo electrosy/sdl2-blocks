@@ -61,7 +61,7 @@ public:
     void setBackspaceSound(const std::function<void()> &func) override;
     std::string getHelpMessage() override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
-    ley::Font* getHelpFontPtr() override { return &mHelpFont; };
+    ley::Font* getHelpFontPtr() { return &mHelpFont; };
     std::string getRegEx() override { return mRegEx; };
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;

@@ -24,9 +24,7 @@ public:
     virtual void onKeyDown(ley::Character c) = 0;
     virtual void onTextInput(const char* cstr) = 0;
     virtual std::string getHelpMessage() = 0;
-    virtual ley::Font* getHelpFontPtr()  = 0;
     virtual std::string getRegEx() = 0;
-    
     virtual std::string* getTextBoxField() = 0;
     virtual std::string getTextBoxValue() = 0;
     virtual void setPos(SDL_Point p) = 0;
@@ -36,7 +34,8 @@ public:
     virtual void setTextBoxValue(std::string s) = 0;
     virtual void setRegEx(std::string regEx)  = 0;
     virtual void setWidth(int width, int underlineWidth, int maxCharLength) = 0;
-   
+
+    //virtual ley::Font* getHelpFontPtr()  = 0;
     //virtual ley::Timer* getErrorTimerPtr() = 0;
     std::string getLastChar(); // The most recently captured character from SDL_TEXTINPUT
 };

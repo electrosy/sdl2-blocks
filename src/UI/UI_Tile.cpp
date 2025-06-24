@@ -8,14 +8,13 @@ typedef ley::Textures TextureManager;
 ley::UI_Tile::UI_Tile()
 :
 mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
-value{mPosPx.x, mPosPx.y, 0, 30},
-mHelpFont{1,SCREEN_HEIGHT-25,100,100}
+value{mPosPx.x, mPosPx.y, 0, 30}
 {
     background.x = mPosPx.x;
     background.y = mPosPx.y;
     background.w = UI_TILE_WIDTH;
+    // TODO this shouldn't be set based on the font.
     background.h = TTF_FontHeight(value.getTTFFont());
-    mHelpFont.setPos({1,SCREEN_HEIGHT-TTF_FontHeight(mHelpFont.getTTFFont())});
 }
 
 void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
@@ -40,8 +39,6 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
 
         value.render(r, d);
     }
-
-    mHelpFont.render(r, d);
 } 
 
 void ley::UI_Tile::update() {
@@ -78,12 +75,8 @@ void ley::UI_Tile::toggleFocus() {
     mHasFocus = !mHasFocus;
     if(mHasFocus) {
         SDL_StartTextInput();
-        // help message is based on focus
-        mHelpFont.updateMessage(getHelpMessage());
     }
     else {
-        // help message is based on focus
-        mHelpFont.updateMessage(getHelpMessage());
         SDL_StopTextInput();
     }
 }
@@ -160,8 +153,7 @@ std::string ley::UI_Tile::getHelpMessage() {
 void ley::UI_Tile::setHelpMessages(std::string focusHelp, std::string nonFocusHelp)  { 
     
     mFocusHelp = focusHelp;
-    mNonFocusHelp = nonFocusHelp;
-    mHelpFont.updateMessage(getHelpMessage());
+    mNonFocusHelp = nonFocusHelp;    
 }
 
 void ley::UI_Tile::handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) {
