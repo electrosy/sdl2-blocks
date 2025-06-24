@@ -204,7 +204,7 @@ void ley::UIMenu::previous(UIMenuItem item) {
         if(item == UIMenuItem::cell) {
 
             if(mWidth > 1) {
-                SDL_Log("col: %i, row: %i", column(), row());
+                //SDL_Log("col: %i, row: %i", column(), row());
                 //if we are at the first column in a row
                 if( column() <= 0 ) {
                     
@@ -224,7 +224,7 @@ void ley::UIMenu::previous(UIMenuItem item) {
                 currentIndex = oldCurrentIndex;
             }
 
-            SDL_Log("col: %i, row: %i", column(), row());
+            //SDL_Log("col: %i, row: %i", column(), row());
         }
     }
 }
@@ -264,7 +264,7 @@ void ley::UIMenu::next(UIMenuItem item) {
             }
         }
 
-        SDL_Log("col: %i, row: %i", column(), row());
+        //SDL_Log("col: %i, row: %i", column(), row());
     }
 }
 

@@ -59,15 +59,15 @@ public:
     void adjustCursor();
     void setCharSound(const std::function<void()> &func) override;
     void setBackspaceSound(const std::function<void()> &func) override;
-    std::string getHelpMessage() override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
     ley::Font* getHelpFontPtr() { return &mHelpFont; };
     std::string getRegEx() override { return mRegEx; };
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
-    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void setWidthByChar(int maxCharLength);
 
+    std::string getHelpMessage();
+    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
     ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
     ley::Font* getErrorFontPtr() { return &mErrorFont; };
     void setErrorMessage(std::string errorMessage);

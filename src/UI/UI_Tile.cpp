@@ -141,6 +141,7 @@ void ley::UI_Tile::setBackspaceSound(const std::function<void()> &func) {
     mBackspaceSound = func;
 }
 
+/*
 std::string ley::UI_Tile::getHelpMessage() {
     if (hasFocus()) {
         return mFocusHelp;
@@ -149,12 +150,15 @@ std::string ley::UI_Tile::getHelpMessage() {
         return mNonFocusHelp;
     }
 }
+*/
 
+/*
 void ley::UI_Tile::setHelpMessages(std::string focusHelp, std::string nonFocusHelp)  { 
     
     mFocusHelp = focusHelp;
     mNonFocusHelp = nonFocusHelp;    
 }
+*/
 
 void ley::UI_Tile::handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) {
 
