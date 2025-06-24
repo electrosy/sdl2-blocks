@@ -48,9 +48,6 @@ public:
     void render(SDL_Renderer* r, bool d) override;
     void update() override; //handles update part of the lifecycle.
     void processInput(std::string s) override;
-    std::string getTextBoxValue() override;
-    void setTextBoxValue(std::string s) override;
-    std::string* getTextBoxField() override;
     void toggleFocus() override;
     bool hasFocus() override {return mHasFocus;};
     void setPos(SDL_Point p) override;
@@ -66,6 +63,9 @@ public:
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void setWidthByChar(int maxCharLength);
 
+    std::string getTextBoxValue();
+    void setTextBoxValue(std::string s);
+    std::string* getTextBoxField();
     std::string getHelpMessage();
     void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
     ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };

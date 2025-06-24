@@ -3,13 +3,11 @@
 
 #include <SDL2/SDL.h>
 
-#include "../Font.h"
 #include "../../Input.h"
 #include "../Fader.h"
 #include "../../UIElement.h"
 #include "../../Textures.h"
 #include "../../inc/UI/UIWidget.h"
-
 
 #ifndef UI_TILE_H
 #define UI_TILE_H
@@ -31,13 +29,10 @@ private:
     SDL_Point mPosPx; //Position of UI_Tile field top/left.
     SDL_Rect background;
     ley::Fader mCursorFader;
-    Font value;
     bool visible = true;
     bool mHasFocus = false;
     std::function<void()> mEnterCharSound;
     std::function<void()> mBackspaceSound;
-//    std::string mFocusHelp;
-//    std::string mNonFocusHelp;
     std::string mRegEx;
     std::string mPreviousValue;
     
@@ -51,17 +46,12 @@ public:
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
-    std::string* getTextBoxField() override;
-    std::string getTextBoxValue() override;
-//    std::string getHelpMessage() override;
     std::string getRegEx() override { return mRegEx; };
     void setPos(SDL_Point p) override;
-    void setTextBoxValue(std::string s) override;
     void setCharSound(const std::function<void()> &func) override;
     void setBackspaceSound(const std::function<void()> &func) override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
-//void setHelpMessages(std::string focusHelp, std::string nonFocusHelp) override;
 
     void commit();
     std::string* getPreviousValuePtr() {return &mPreviousValue;};

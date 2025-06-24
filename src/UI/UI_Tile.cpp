@@ -7,14 +7,13 @@ typedef ley::Textures TextureManager;
 
 ley::UI_Tile::UI_Tile()
 :
-mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3},
-value{mPosPx.x, mPosPx.y, 0, 30}
+mPosPx{SCREEN_WCENTER - UI_TILE_WIDTH /2, SCREEN_HCENTER/3}
 {
     background.x = mPosPx.x;
     background.y = mPosPx.y;
-    background.w = UI_TILE_WIDTH;
+    background.w = BLOCKSIZE_PX;
     // TODO this shouldn't be set based on the font.
-    background.h = TTF_FontHeight(value.getTTFFont());
+    background.h = BLOCKSIZE_PX - 1;
 }
 
 void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
@@ -36,8 +35,6 @@ void ley::UI_Tile::render(SDL_Renderer * r, bool d) {
             SDL_SetRenderDrawColor(r, CWHITE.r, CWHITE.g, CWHITE.b, CWHITE.a);
             SDL_RenderDrawRect(r, &background);
         }
-
-        value.render(r, d);
     }
 } 
 
@@ -59,6 +56,7 @@ void ley::UI_Tile::processInput(std::string s) {
         return;
     }
 }
+/*
 std::string ley::UI_Tile::getTextBoxValue() {
     return value.getMessage();
 }
@@ -70,6 +68,7 @@ void ley::UI_Tile::setTextBoxValue(std::string s) {
 std::string* ley::UI_Tile::getTextBoxField() {
     return value.getMessagePtr();
 }
+*/
 
 void ley::UI_Tile::toggleFocus() {
     mHasFocus = !mHasFocus;
@@ -86,7 +85,6 @@ void ley::UI_Tile::setPos(SDL_Point p) {
     mPosPx = p;
     background.x = p.x;
     background.y = p.y;
-    value.setPos({p.x,p.y});
 }
 
 void ley::UI_Tile::setWidth(int width, int underlineWidth, int maxCharLength) { 
@@ -164,7 +162,6 @@ void ley::UI_Tile::handleFocusChange(UIWidget** activeUIElement, std::string* pr
 
     if(!hasFocus()){
         (*activeUIElement) = this;
-        (*previousValue) = getTextBoxValue();
     }
     else {
         activeUIElement = {};
