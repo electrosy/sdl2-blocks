@@ -13,7 +13,7 @@ const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.7.0.3"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.7.0.4"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Beta";
 const std::string APPLICATION_ENV = "Development";
@@ -108,7 +108,6 @@ void ley::Video::init() {
     createWindow();
     createRenderer();
     loadTextures();
-    loadSprites();
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
@@ -303,8 +302,6 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/btn/no-hot.png", "no-hot");
     TextureManager::Instance()->loadTexture("assets/graphic/btn/no-white.png", "no-white");
 
-    //Cat
-    TextureManager::Instance()->loadTexture("assets/cat-trans.png", "cat");
     //Game controls
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
@@ -319,16 +316,6 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/background/jazz/night-7593233_1280x720.jpg", "BG_WEST_07");
     TextureManager::Instance()->loadTexture("assets/background/jazz/starry-sky-2051448_1280x720.jpg", "BG_WEST_08");
     TextureManager::Instance()->loadTexture("assets/background/jazz/clouds-2517653_1280x720.jpg", "BG_WEST_09");
-}
-
-void ley::Video::loadSprites() {
-    catSprite = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 75, cat_frames, {0,{0,0,0,0}});
-    catSprite.setPos(25,650);
-    catSprite2 = ley::Sprite(TextureManager::Instance()->getTexture("cat"), 175, cat_frames, {0,{0,0,0,0}});
-    catSprite2.setPos(1150,650);
-
-    mRenderables.push_back(&catSprite);
-    mRenderables.push_back(&catSprite2);
 }
 
 void ley::Video::updateScores() {

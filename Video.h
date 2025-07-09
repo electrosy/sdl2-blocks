@@ -64,7 +64,6 @@ private:
     void init();
     
     void loadTextures();
-    void loadSprites();
 
     void setBackgroundTexture(); //Create and set sprite object for the background.
     void updateScores(); //Update the fonts for scores with new model data.
