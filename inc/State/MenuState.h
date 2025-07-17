@@ -32,7 +32,7 @@ private:
     static const std::string sMenuID;
 
     ley::Sprite mBackground;
-    ley::Sprite mCompanyLogo;
+//    ley::Sprite m3dBlocksPicture;
     ley::Sprite mAblockalypseLogo;
 
     RenderablesPtr mRenderables;

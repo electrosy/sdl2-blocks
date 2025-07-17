@@ -9,22 +9,19 @@ const std::string MenuState::sMenuID = "MENU";
 MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
     mVideoSystem = v;
     mGameModel = gm;
-    mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenu"), 0, {}, {1000,{0,0,0,0}});
+    mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenuclouds"), 0, {}, {1000,{0,0,0,0}});
 
     // TODO ablockalypse title pulses (gets brighter for a moment) every few moments to grab the players attention if they are just sitting in the main menu.
-    mCompanyLogo = ley::Sprite(TextureManager::Instance()->getTexture("itlogo"), 0, {}, {1000,{0,0,0,0}});
-    mCompanyLogo.scale(0.25);
-    mCompanyLogo.bottomRight();
 
-    mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo"), 0, {}, {1000,{0,0,0,0}});
-    mAblockalypseLogo.setPos(260,-75);
+    mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo-2025"), 0, {}, {1000,{0,0,0,0}});
+    mAblockalypseLogo.center();
+    mAblockalypseLogo.setPos(mAblockalypseLogo.getX(), -90);
 
-
-    mainUI.pushFont("start", {29,199,0,0}, mGameModel->getLanguageModel()->getWord("start",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("highscore", {29,282,0,0}, mGameModel->getLanguageModel()->getWord("high scores",0,false, capitalizationtype::capitalizeWords), mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("options", {29,365,0,0}, mGameModel->getLanguageModel()->getWord("options",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("exit", {29,451,0,0}, mGameModel->getLanguageModel()->getWord("exit",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
-    mainUI.pushFont("credits", {29,533,0,0}, mGameModel->getLanguageModel()->getWord("credits",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("start", {120,199,0,0}, mGameModel->getLanguageModel()->getWord("start",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("highscore", {120,282,0,0}, mGameModel->getLanguageModel()->getWord("high scores",0,false, capitalizationtype::capitalizeWords), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("options", {120,365,0,0}, mGameModel->getLanguageModel()->getWord("options",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("exit", {120,451,0,0}, mGameModel->getLanguageModel()->getWord("exit",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
+    mainUI.pushFont("credits", {120,533,0,0}, mGameModel->getLanguageModel()->getWord("credits",0,false, capitalizationtype::capitalizeFirst), mVideoSystem->getRenderer(), 50);
 
     mActiveUIElement = {};
 }
@@ -75,7 +72,7 @@ void MenuState::render() {
 
 void MenuState::loadRenderables() {
     mRenderables.push_back(&mBackground);
-    mRenderables.push_back(&mCompanyLogo);
+//    mRenderables.push_back(&m3dBlocksPicture);
     mRenderables.push_back(&mAblockalypseLogo);
 }
 

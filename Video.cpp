@@ -259,6 +259,8 @@ void ley::Video::clear() {
 void ley::Video::loadTextures() {
     TextureManager::Instance()->setRenderer(renderer);
     //Block pieces
+    // original
+    /*
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_gr_30x30.bmp", "d");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_bl_30x30.bmp", "e");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_or_30x30.bmp", "f");
@@ -266,11 +268,34 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_rd_30x30.bmp", "h");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_yl_30x30.bmp", "i");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/glass_cy_30x30.bmp", "j");
-    //Logos
-    TextureManager::Instance()->loadTexture("assets/graphic/AblockalypseLogo.png", "ablockalypse-logo");
+    */
+
+    // super-bright
+    /*
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/green-30x30.png", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/blue-30x30.png", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/orange-30x30.png", "f");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/purple-30x30.png", "g");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/red-30x30.png", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/yellow-30x30.png", "i");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/cyan-30x30.png", "j");
+    */
+
+    //glass2025-
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/green-glass2025-30x30.png", "d");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/blue-glass2025-30x30.png", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/orange-glass2025-30x30.png", "f");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/purple-glass2025-30x30.png", "g");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/red-glass2025-30x30.png", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/yellow-glass2025-30x30.png", "i");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/cyan-glass2025-30x30.png", "j");
+    
+    //Logos    
+    TextureManager::Instance()->loadTexture("assets/graphic/logo-slight-shadow-900x450.png", "ablockalypse-logo-2025");
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
+    TextureManager::Instance()->loadTexture("assets/background/background-1280x720-frame.png", "mainmenuclouds");
     //BumVideoSystemgh Scores
     TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
@@ -316,6 +341,9 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/background/jazz/night-7593233_1280x720.jpg", "BG_WEST_07");
     TextureManager::Instance()->loadTexture("assets/background/jazz/starry-sky-2051448_1280x720.jpg", "BG_WEST_08");
     TextureManager::Instance()->loadTexture("assets/background/jazz/clouds-2517653_1280x720.jpg", "BG_WEST_09");
+
+    //3d blocks
+    TextureManager::Instance()->loadTexture("assets/blocks-background-517x558.png", "3dblocks");
 }
 
 void ley::Video::updateScores() {
