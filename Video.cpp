@@ -296,7 +296,7 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/mainmenu.png", "mainmenu");
     TextureManager::Instance()->loadTexture("assets/background/background-1280x720-frame.png", "mainmenuclouds");
-    //BumVideoSystemgh Scores
+    //High Scores
     TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");
     TextureManager::Instance()->loadTexture("assets/highscores-hot-red.png", "highscores-hot-red");
