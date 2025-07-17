@@ -283,10 +283,10 @@ void ley::Video::loadTextures() {
 
     //glass2025-
     TextureManager::Instance()->loadTexture("assets/graphic/ph/green-glass2025-30x30.png", "d");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/blue-glass2025-30x30.png", "e");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/blue_a-glass2025-30x30.png", "e");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/orange-glass2025-30x30.png", "f");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/purple-glass2025-30x30.png", "g");
-    TextureManager::Instance()->loadTexture("assets/graphic/ph/red-glass2025-30x30.png", "h");
+    TextureManager::Instance()->loadTexture("assets/graphic/ph/red_a-glass2025-30x30.png", "h");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/yellow-glass2025-30x30.png", "i");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/cyan-glass2025-30x30.png", "j");
     
