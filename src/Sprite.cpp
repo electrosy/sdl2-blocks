@@ -7,7 +7,7 @@ Date: Feb/14/2020
 */
 #include <memory>
 
-#include "Sprite.h"
+#include "../inc/Sprite.h"
 
 ley::Sprite::Sprite()
 :

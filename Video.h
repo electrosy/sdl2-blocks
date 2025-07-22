@@ -12,7 +12,7 @@ Date: Feb/14/2020
 
 #include "./inc/GameModel.h"
 #include "Renderables.h"
-#include "Sprite.h"
+#include "./inc/Sprite.h"
 #include "Textures.h"
 #include "./inc/Font.h"
 #include "./inc/RectContainer.h"
