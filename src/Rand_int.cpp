@@ -8,7 +8,7 @@ Date: Nov/11/2020
 
 #include <SDL2/SDL.h>
 #include <chrono>
-#include "Rand_int.h"
+#include "../inc/Rand_int.h"
 /* RAII */
 ley::Rand_int::Rand_int (int low, int high) :
 gen(rd()),

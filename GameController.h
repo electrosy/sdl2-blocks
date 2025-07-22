@@ -12,7 +12,7 @@ Date: Feb/15/2020
 #include "Video.h"
 #include "./inc/GameModel.h"
 #include "Clock.h"
-#include "Block.h"
+#include "./inc/Block.h"
 #include "./inc/Font.h"
 #include "Timer.h"
 #include "HighScores.h"

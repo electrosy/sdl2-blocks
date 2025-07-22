@@ -9,7 +9,7 @@ Date: Mar/30/2024
 #define BOARD_H
 
 #include <array>
-#include "../Block.h"
+#include "Block.h"
 #include "../Renderable.h"
 #include "../Textures.h"
 #include "../inc/Command.h"

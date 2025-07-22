@@ -10,7 +10,7 @@ Date: Feb/15/2020
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
-#include "../Rand_int.h"
+#include "../inc/Rand_int.h"
 
 
 /* RAII */
