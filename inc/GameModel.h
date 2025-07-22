@@ -12,7 +12,7 @@ Date: Feb/15/2020
 #include <fstream>
 #include <sstream>
 
-#include "../Audio.h"
+#include "Audio.h"
 #include "../Block.h"
 #include "../Clock.h"
 #include "../Timer.h"

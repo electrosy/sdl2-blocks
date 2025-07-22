@@ -6,7 +6,7 @@ Purpose: see header.
 Date: Dec/2/2021
 */
 
-#include "Audio.h"
+#include "../inc/Audio.h"
 
 ley::Audio::Audio() :
 playlistNumber(0), playlistMax(9) {

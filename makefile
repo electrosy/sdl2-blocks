@@ -6,7 +6,7 @@ SRCDIR = ./src
 OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/Block.o $(OBJDIR)/src/GameModel.o \
        $(OBJDIR)/Clock.o $(OBJDIR)/Renderable.o $(OBJDIR)/Renderables.o $(OBJDIR)/GameController.o \
        $(OBJDIR)/Timer.o $(OBJDIR)/Textures.o $(OBJDIR)/src/Font.o $(OBJDIR)/Rand_int.o $(OBJDIR)/src/UI/UIElement.o $(OBJDIR)/src/UI/UIMenu.o \
-       $(OBJDIR)/HighScores.o $(OBJDIR)/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
+       $(OBJDIR)/HighScores.o $(OBJDIR)/src/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
        $(OBJDIR)/src/State/MenuState.o $(OBJDIR)/src/State/OptionMenuState.o $(OBJDIR)/src/State/HighScoresMenuState.o $(OBJDIR)/src/State/PlayState.o \
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \
        $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o $(OBJDIR)/src/State/LanguageOptionsState.o \
