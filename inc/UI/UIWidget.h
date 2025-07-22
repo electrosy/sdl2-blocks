@@ -1,7 +1,7 @@
 #include <regex>
 
 #include "../../Renderable.h"
-#include "../../UIElement.h"
+#include "UIElement.h"
 #include "../../Timer.h"
 
 #ifndef UIWIDGET_H

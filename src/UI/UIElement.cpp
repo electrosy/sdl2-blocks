@@ -5,7 +5,7 @@ Copyright (C) 2021 Steven Philley
 Purpose: see header.
 Date: Jul/17/2021
 */
-#include "UIElement.h"
+#include "../../inc/UI/UIElement.h"
 
 ley::UIElement::UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter) {
     mUIToggleFunc = toggle;

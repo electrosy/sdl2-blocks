@@ -4,9 +4,9 @@
 #include <SDL2/SDL.h>
 
 #include "./Font.h"
-#include "../Input.h"
+#include "../Input.h" // TODO circurlar Input.h has TextEntry and TextEntry also has Input
 #include "Fader.h"
-#include "../UIElement.h"
+#include "./UI/UIElement.h" // TODO this is also in TextEntry.h
 #include "./UI/UIWidget.h"
 
 
