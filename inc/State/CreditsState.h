@@ -2,8 +2,7 @@
 
 #include "../../Video.h"
 #include "../../inc/GameModel.h"
-#include "../../UIMenu.h"
-//#include "../../UIElement.h"
+#include "../UI/UIMenu.h"
 
 #ifndef CREDITSSTATE_H
 #define CREDITSSTATE_H

@@ -2,8 +2,7 @@
 
 #include "../../Video.h"
 #include "../../inc/GameModel.h"
-#include "../../UIMenu.h"
-//#include "../../UIElement.h"
+#include "../UI/UIMenu.h"
 
 #ifndef MENUSTATE_H
 #define MENUSTATE_H

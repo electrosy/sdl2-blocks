@@ -2,7 +2,7 @@
 
 #include "../../Video.h"
 #include "../../inc/GameModel.h"
-#include "../../UIMenu.h"
+#include "../UI/UIMenu.h"
 
 #ifndef LANGUAGEOPTIONSSTATE_H
 #define LANGUAGEOPTIONSSTATE_H

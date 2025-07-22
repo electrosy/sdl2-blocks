@@ -2,7 +2,7 @@
 
 #include "../../Video.h"
 #include "../../inc/GameModel.h"
-#include "../../UIMenu.h"
+#include "../UI/UIMenu.h"
 #include "../UI/UIElement.h" // TODO this is also in TextEntry
 
 #ifndef HIGHSCORESMENUSTATE_H

@@ -9,7 +9,6 @@ Date: Jul/17/2021
 #define UIELEMENT_H
 
 #include <functional>
-//#include <string>
 
 #include <SDL2/SDL.h>
 
