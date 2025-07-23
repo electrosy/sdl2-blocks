@@ -2,7 +2,6 @@
 
 namespace ley {
 
-//TextEntry* GameState::mActiveUIElement = {};
 UIWidget* GameState::mActiveUIElement = {};
 
 bool GameState::onPause() {

@@ -3,10 +3,10 @@ OBJDIR = ./build
 SRCDIR = ./src
 
 # OBJS defines files to compile as part of the project
-OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o \
+OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/src/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o \
        $(OBJDIR)/src/Clock.o $(OBJDIR)/src/gfx/Renderable.o $(OBJDIR)/src/gfx/Renderables.o $(OBJDIR)/GameController.o \
        $(OBJDIR)/src/Timer.o $(OBJDIR)/src/Textures.o $(OBJDIR)/src/gfx/Font.o $(OBJDIR)/src/Rand_int.o $(OBJDIR)/src/UI/UIElement.o $(OBJDIR)/src/UI/UIMenu.o \
-       $(OBJDIR)/HighScores.o $(OBJDIR)/src/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
+       $(OBJDIR)/src/HighScores.o $(OBJDIR)/src/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
        $(OBJDIR)/src/State/MenuState.o $(OBJDIR)/src/State/OptionMenuState.o $(OBJDIR)/src/State/HighScoresMenuState.o $(OBJDIR)/src/State/PlayState.o \
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \
        $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o $(OBJDIR)/src/State/LanguageOptionsState.o \

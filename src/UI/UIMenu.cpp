@@ -8,7 +8,7 @@ Date: Jul/17/2021
 #include <string>
 
 #include "../../inc/gfx/Video.h"
-#include "../../Input.h"
+#include "../../inc/Input.h"
 #include "../../inc/UI/UIMenu.h"
 #include "../../inc/Textures.h"
 

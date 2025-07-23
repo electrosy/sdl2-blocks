@@ -6,8 +6,8 @@ Purpose: see header.
 Date: Feb/14/2020
 */
 
-#include "Input.h"
-#include "./inc/gfx/Video.h"
+#include "../inc/Input.h"
+#include "../inc/gfx/Video.h"
 
 ley::InputPressed::InputPressed(Uint16 sdlKeymod, Uint16 delayTime, Uint16 repeatTime) 
 :

@@ -8,8 +8,8 @@ Date: Aug/16/2021
 
 #include <tuple>
 
-#include "./inc/gfx/Renderables.h"
-#include "./inc/gfx/Font.h"
+#include "./gfx/Renderables.h"
+#include "./gfx/Font.h"
 
 
 #ifndef HIGHSCORES_H

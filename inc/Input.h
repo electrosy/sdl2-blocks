@@ -18,8 +18,8 @@ Date: Feb/14/2020
 #include <SDL2/SDL.h>
 
 #include <functional>
-#include "./inc/TextEntry.h"
-#include "./inc/Command.h"
+#include "TextEntry.h"
+#include "Command.h"
 
 
 

@@ -12,8 +12,8 @@ Date: Aug/16/2021
 #include <map>
 #include <algorithm>
 #include <SDL2/SDL.h>
-#include "HighScores.h"
-#include "./inc/gfx/Font.h"
+#include "../inc/HighScores.h"
+#include "../inc/gfx/Font.h"
 
 
 ley::HighScores::HighScores() : clean(true) {

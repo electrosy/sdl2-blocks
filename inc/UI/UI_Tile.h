@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../../Input.h"
+#include "../Input.h"
 #include "../Fader.h"
 #include "../Textures.h"
 #include "../../inc/UI/UIWidget.h"

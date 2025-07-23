@@ -15,7 +15,7 @@ Date: Feb/15/2020
 #include "./inc/Block.h"
 #include "./inc/gfx/Font.h"
 #include "./inc/Timer.h"
-#include "HighScores.h"
+#include "./inc/HighScores.h"
 #include "inc/State/GameStateMachine.h"
 #include "inc/State/CreditsState.h"
 #include "inc/State/MenuState.h"

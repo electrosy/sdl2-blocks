@@ -17,8 +17,8 @@ const std::string APPLICATION_VER = "0.7.0.4"; //Major, Minor(Set of new feature
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Beta";
 const std::string APPLICATION_ENV = "Development";
-const std::string SDL_VERSION_COMP_LABEL = "SDL Compiled Version: ";
-const std::string SDL_VERSION_LINK_LABEL = "SDL Linked Version: ";
+const std::string SDL_VER_COMP_LBL = "SDL Compiled Version: ";
+const std::string SDL_VER_LINK_LBL = "SDL Linked Version: ";
 
 const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER + " " +  APPLICATION_PLATFORM + " " +  APPLICATION_REL_TYPE + " " + APPLICATION_ENV);
 
@@ -43,7 +43,6 @@ spriteBackgroundfadeout{Sprite()}
     SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "1");
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
     init();
-    
 }
 
 ley::Video::~Video() {
