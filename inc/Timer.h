@@ -12,7 +12,7 @@ Date: Feb/20/2020
 
 #include <SDL2/SDL.h>
 #include "ProgressBar.h"
-#include "../Renderable.h"
+#include "./gfx/Renderable.h"
 #include "Clock.h"
 
 

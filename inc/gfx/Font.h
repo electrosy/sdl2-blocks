@@ -9,7 +9,7 @@ Date: Jul/14/2020
 #define FONT_H
 #include <SDL2/SDL_ttf.h>
 
-#include "../Renderable.h"
+#include "Renderable.h"
 
 namespace ley {
 

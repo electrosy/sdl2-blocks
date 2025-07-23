@@ -15,7 +15,7 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Timer.h"
-#include "../Renderable.h"
+#include "./gfx/Renderable.h"
 
 namespace ley {
 

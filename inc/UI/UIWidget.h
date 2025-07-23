@@ -1,6 +1,6 @@
 #include <regex>
 
-#include "../../Renderable.h"
+#include "../gfx/Renderable.h"
 #include "UIElement.h"
 #include "../Timer.h"
 

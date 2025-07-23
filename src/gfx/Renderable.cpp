@@ -5,7 +5,7 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/17/2020
 */
-#include "Renderable.h"
+#include "../../inc/gfx/Renderable.h"
 
 /* RAII */
 ley::Renderable::Renderable() {

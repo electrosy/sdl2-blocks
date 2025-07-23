@@ -12,7 +12,7 @@ Date: Jul/17/2021
 
 #include <SDL2/SDL.h>
 
-#include "../Font.h"
+#include "../gfx/Font.h"
 
 namespace ley {
 

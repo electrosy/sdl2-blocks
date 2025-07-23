@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "./Font.h"
+#include "./gfx/Font.h"
 #include "../Input.h" // TODO circurlar Input.h has TextEntry and TextEntry also has Input
 #include "Fader.h"
 #include "./UI/UIElement.h" // TODO this is also in TextEntry.h
@@ -19,6 +19,7 @@ const auto TEXTENTRY_WIDTH = 731;
 constexpr auto UNDERLINE_WIDTH = 321;
 constexpr auto MAX_CHAR_LENGTH = 18;
 
+// TODO TextEntry goes into the UI folder
 class TextEntry : public UIWidget
 {
 

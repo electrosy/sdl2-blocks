@@ -5,7 +5,7 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Jul/14/2020
 */
-#include "../inc/Font.h"
+#include "../../inc/gfx/Font.h" 
 
 ley::Font::Font():
 mPointSize(DEFAULT_FONT_SIZE) {

@@ -14,7 +14,7 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "./inc/Screen.h"
+#include "../Screen.h"
 
 namespace ley {
 

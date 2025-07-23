@@ -11,10 +11,10 @@ Date: Feb/14/2020
 #include <SDL2/SDL.h>
 
 #include "../GameModel.h"
-#include "../../Renderables.h"
+#include "Renderables.h"
 #include "../Sprite.h"
 #include "../Textures.h"
-#include "../Font.h"
+#include "Font.h"
 #include "../RectContainer.h"
 #include "../TextEntry.h"
 
