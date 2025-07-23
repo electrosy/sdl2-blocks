@@ -9,7 +9,7 @@ Date: Feb/15/2020
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
-#include "Video.h"
+#include "./inc/gfx/Video.h"
 #include "./inc/GameModel.h"
 #include "./inc/Clock.h"
 #include "./inc/Block.h"

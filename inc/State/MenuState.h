@@ -1,6 +1,6 @@
 #include "GameState.h"
 
-#include "../../Video.h"
+#include "../gfx/Video.h"
 #include "../../inc/GameModel.h"
 #include "../UI/UIMenu.h"
 

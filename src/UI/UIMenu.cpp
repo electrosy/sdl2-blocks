@@ -7,10 +7,10 @@ Date: Jul/17/2021
 */
 #include <string>
 
-#include "../../Video.h"
+#include "../../inc/gfx/Video.h"
 #include "../../Input.h"
 #include "../../inc/UI/UIMenu.h"
-#include "../../Textures.h"
+#include "../../inc/Textures.h"
 
 typedef ley::Textures TextureManager;
 

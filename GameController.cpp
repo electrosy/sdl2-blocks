@@ -7,7 +7,7 @@ Date: Feb/18/2020
 */
 #include <SDL2/SDL.h>
 #include "GameController.h"
-#include "Textures.h"
+#include "./inc/Textures.h"
 #include "./inc/Block.h"
 #include <map>
 

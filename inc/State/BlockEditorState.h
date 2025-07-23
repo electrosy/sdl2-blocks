@@ -1,10 +1,10 @@
 #include <filesystem>
 
 #include "GameState.h"
-#include "../../Video.h"
+#include "../gfx/Video.h"
 #include "../../inc/GameModel.h"
 #include "../UI/UIMenu.h"
-#include "../../inc/UI/UI_Tile.h"
+#include "../UI/UI_Tile.h"
 #include "../../inc/Layout.h"
 
 #ifndef BLOCKEDITORSTATE_H

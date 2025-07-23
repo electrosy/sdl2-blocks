@@ -11,7 +11,7 @@ Date: Mar/30/2024
 #include <array>
 #include "Block.h"
 #include "../Renderable.h"
-#include "../Textures.h"
+#include "Textures.h"
 #include "../inc/Command.h"
 #include "../inc/Screen.h"
 

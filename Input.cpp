@@ -7,9 +7,9 @@ Date: Feb/14/2020
 */
 
 #include "Input.h"
-#include "Video.h"
+#include "./inc/gfx/Video.h"
 
-ley::InputPressed::InputPressed(Uint16 sdlKeymod, auto delayTime, auto repeatTime) 
+ley::InputPressed::InputPressed(Uint16 sdlKeymod, Uint16 delayTime, Uint16 repeatTime) 
 :
 mDelayTimer{delayTime, {0, 0, 0, 0}},
 mRepeatTimer{repeatTime, {0, 0, 0, 0}} {

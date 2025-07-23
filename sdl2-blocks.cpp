@@ -27,7 +27,7 @@ Notes: Intended to be built around the MVC philosophy.
 
 #include "GameController.h"
 #include "inc/GameModel.h"
-#include "Video.h"
+#include "inc/gfx/Video.h"
 
 enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model
 enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model

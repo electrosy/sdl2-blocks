@@ -7,7 +7,7 @@ Date: Feb/14/2020
 */
 #include <stdio.h>
 
-#include "Video.h"
+#include "../../inc/gfx/Video.h"
 
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
@@ -435,5 +435,3 @@ void ley::Video::renderGridLines() {
         SDL_RenderDrawLine(renderer, start2.x, start2.y, end2.x, end2.y);
     }
 }
-
-

@@ -3,9 +3,9 @@ OBJDIR = ./build
 SRCDIR = ./src
 
 # OBJS defines files to compile as part of the project
-OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/Video.o $(OBJDIR)/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o \
+OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o \
        $(OBJDIR)/src/Clock.o $(OBJDIR)/Renderable.o $(OBJDIR)/Renderables.o $(OBJDIR)/GameController.o \
-       $(OBJDIR)/src/Timer.o $(OBJDIR)/Textures.o $(OBJDIR)/src/Font.o $(OBJDIR)/src/Rand_int.o $(OBJDIR)/src/UI/UIElement.o $(OBJDIR)/src/UI/UIMenu.o \
+       $(OBJDIR)/src/Timer.o $(OBJDIR)/src/Textures.o $(OBJDIR)/src/Font.o $(OBJDIR)/src/Rand_int.o $(OBJDIR)/src/UI/UIElement.o $(OBJDIR)/src/UI/UIMenu.o \
        $(OBJDIR)/HighScores.o $(OBJDIR)/src/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
        $(OBJDIR)/src/State/MenuState.o $(OBJDIR)/src/State/OptionMenuState.o $(OBJDIR)/src/State/HighScoresMenuState.o $(OBJDIR)/src/State/PlayState.o \
        $(OBJDIR)/src/State/PauseState.o $(OBJDIR)/src/State/IntroState.o $(OBJDIR)/src/State/GameStateMachine.o \
@@ -43,7 +43,7 @@ else
 endif
 
 # Directories to create
-DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State $(OBJDIR)/src/UI
+DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State $(OBJDIR)/src/UI $(OBJDIR)/src/gfx
 
 # Default target
 all: $(DIRS) $(BUILD_CONFIG) $(OBJ_NAME)

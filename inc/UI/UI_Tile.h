@@ -5,7 +5,7 @@
 
 #include "../../Input.h"
 #include "../Fader.h"
-#include "../../Textures.h"
+#include "../Textures.h"
 #include "../../inc/UI/UIWidget.h"
 
 #ifndef UI_TILE_H
