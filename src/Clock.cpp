@@ -5,7 +5,7 @@ Copyright (C) 2020-2021 Steven Philley. All rights reserved.
 Purpose: see header.
 Date: Feb/16/2020
 */
-#include "Clock.h"
+#include "../inc/Clock.h"
 
 /* RAII */
 ley::Clock::Clock() 

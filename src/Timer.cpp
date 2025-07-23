@@ -5,7 +5,7 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/20/2020
 */
-#include "Timer.h"
+#include "../inc/Timer.h"
 
 /* RAII */
 ley::Timer::Timer() 

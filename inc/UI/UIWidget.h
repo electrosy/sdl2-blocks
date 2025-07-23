@@ -2,7 +2,7 @@
 
 #include "../../Renderable.h"
 #include "UIElement.h"
-#include "../../Timer.h"
+#include "../Timer.h"
 
 #ifndef UIWIDGET_H
 #define UIWIDGET_H

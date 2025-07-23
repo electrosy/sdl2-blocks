@@ -8,7 +8,7 @@ Date: Jan/29/2024
 #ifndef FADER_H
 #define FADER_H
 
-#include "../Timer.h"
+#include "Timer.h"
 
 namespace ley {
 

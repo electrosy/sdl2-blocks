@@ -11,8 +11,8 @@ Date: Feb/20/2020
 #define TIMER_H
 
 #include <SDL2/SDL.h>
-#include "./inc/ProgressBar.h"
-#include "Renderable.h"
+#include "ProgressBar.h"
+#include "../Renderable.h"
 #include "Clock.h"
 
 

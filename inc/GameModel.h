@@ -14,8 +14,8 @@ Date: Feb/15/2020
 
 #include "Audio.h"
 #include "Block.h"
-#include "../Clock.h"
-#include "../Timer.h"
+#include "Clock.h"
+#include "Timer.h"
 #include "../Input.h"
 #include "../HighScores.h"
 #include "../inc/Config.h"
