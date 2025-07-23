@@ -25,7 +25,7 @@ Notes: Intended to be built around the MVC philosophy.
 */
 #include <SDL2/SDL.h>
 
-#include "GameController.h"
+#include "inc/GameController.h"
 #include "inc/GameModel.h"
 #include "inc/gfx/Video.h"
 

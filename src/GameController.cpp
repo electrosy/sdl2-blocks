@@ -6,9 +6,9 @@ Purpose: see header.
 Date: Feb/18/2020
 */
 #include <SDL2/SDL.h>
-#include "GameController.h"
-#include "./inc/Textures.h"
-#include "./inc/Block.h"
+#include "../inc/GameController.h"
+#include "../inc/Textures.h"
+#include "../inc/Block.h"
 #include <map>
 
 typedef ley::Textures TextureManager;
