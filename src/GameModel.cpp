@@ -20,10 +20,10 @@ numLines(0),
 numLevel(1),
 gameRunning(true), 
 currentSpeed(1000.0f), 
-active(true), 
+mActive(true), 
 overlayOn(false),
 score(0),
-running(true),
+mProgramRunning(true),
 mDebugOnlyLine(false)
 {
     readBlockData();
@@ -32,8 +32,8 @@ mDebugOnlyLine(false)
     initGame();
 
     SDL_Log("ley::GameModel::ctor");
-    oldBlock.setH(activeBlock.getRect().h);
-    oldBlock.setW(activeBlock.getRect().w);
+    oldBlock.setH(mActiveBlock.getRect().h);
+    oldBlock.setW(mActiveBlock.getRect().w);
       
     mHighScores.read();
     
@@ -44,15 +44,14 @@ mDebugOnlyLine(false)
     // TODO add the board size to the mainconfig
     readConfigOther();
 
-    activeBlock.setBlockDataPtr(&mBlockMapData);
+    mActiveBlock.setBlockDataPtr(&mBlockMapData);
     
     mLanguageModel.loadLanguage();
 
 }
 
 // TODO rule of 3/5
-ley::GameModel::~GameModel() {
-    
+ley::GameModel::~GameModel() {   
     writeConfig();
 }
 
@@ -61,17 +60,16 @@ ley::Block ley::GameModel::getNextBlock() {
     return nextBlock;
 }
 bool ley::GameModel::programRunning() {
-    return running;
+    return mProgramRunning;
 }
 
 void ley::GameModel::stopProgram(bool stop) {
-    running = !stop;
+    mProgramRunning = !stop;
 }
 
 bool ley::GameModel::isGameRunning() {
     return gameRunning;
 }
-
 
 int ley::GameModel::getScore() {
     return score;
@@ -96,10 +94,10 @@ void ley::GameModel::addToScore(long p) {
 
 void ley::GameModel::debugResetActiveBlock() {
     
-    activeBlock = debugGetBlock();
-    oldBlock = activeBlock;
+    mActiveBlock = debugGetBlock();
+    oldBlock = mActiveBlock;
     oldBlock.setClear(true);
-    activeBlock.debugResetPos();
+    mActiveBlock.debugResetPos();
     oldBlock.debugResetPos();
 }
 
@@ -154,17 +152,17 @@ ley::Block ley::GameModel::getRandomBlock() {
 bool ley::GameModel::newBlock() {
     SDL_Log("New Block");
 
-    activeBlock = nextBlock;
-    oldBlock = activeBlock;
+    mActiveBlock = nextBlock;
+    oldBlock = mActiveBlock;
     oldBlock.setClear(true);
     nextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    if(!mBoard.canPut(activeBlock, ley::Command::up).first) {
+    if(!mBoard.canPut(mActiveBlock, ley::Command::up).first) {
         return false;
     }
     else {
-        mBoard.putBlock(activeBlock);
+        mBoard.putBlock(mActiveBlock);
         return true;
     }
    
@@ -188,7 +186,7 @@ bool ley::GameModel::rotateWithKick(bool r) {
         return result.first;
     }
     */
-    if(!activeBlock.getCanRotate()) {
+    if(!mActiveBlock.getCanRotate()) {
         return result.first;    
     }
 
@@ -206,14 +204,14 @@ bool ley::GameModel::rotateWithKick(bool r) {
             //assume left side
             //if kick is positive stay positive don't go back and forth between pos and neg.
             //If not rotateable do a wall kick to the left or right
-            if(activeBlock.getPosRectPtr()->x < boardWidth/2 && kick >= 0) {
+            if(mActiveBlock.getPosRectPtr()->x < boardWidth/2 && kick >= 0) {
                 kick += 1;
                 moveBlock(ley::Command::right);
                 SDL_Log("Kick right");
           
             }
             //assume right side
-            else if(activeBlock.getPosRectPtr()->x >= boardWidth/2 && kick <= 0) {
+            else if(mActiveBlock.getPosRectPtr()->x >= boardWidth/2 && kick <= 0) {
                 kick -= 1;
                 moveBlock(ley::Command::left);
                 SDL_Log("Kick left");
@@ -233,11 +231,11 @@ std::pair<bool, std::string> ley::GameModel::rotateBlock(bool r) { // TODO, mayb
     
     result = canRotate(r);
     if(result.first) {
-        activeBlock.rotate(r);
+        mActiveBlock.rotate(r);
         clearOldBlock();
         oldBlock.rotate(r);
         // new board
-        mBoard.putBlock(activeBlock);
+        mBoard.putBlock(mActiveBlock);
         result.first = true;
     }
 
@@ -248,9 +246,9 @@ std::pair<bool, std::string> ley::GameModel::canRotate(bool r) {
     //rotate the block if the game is not paused
     
     std::pair<bool, std::string> result = {false, ""};
-    if(!isPaused() && activeBlock.rotate(r)) {
-        result = mBoard.canPut(activeBlock, ley::Command::up);
-        activeBlock.rotate(!r); //rotate it back, because this 
+    if(!isPaused() && mActiveBlock.rotate(r)) {
+        result = mBoard.canPut(mActiveBlock, ley::Command::up);
+        mActiveBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
     }
     
@@ -401,7 +399,7 @@ void ley::GameModel::updateSpeed() {
 bool ley::GameModel::moveBlock(Command d) {
 
     // TODO, should we just not call moveBlock at all?
-    if(!active) {
+    if(!mActive) {
         return false; //don't do any moves while we are paused.
     }
 
@@ -410,15 +408,15 @@ bool ley::GameModel::moveBlock(Command d) {
     switch (d) {
         case Command::down :
             //new block
-            if (mBoard.canPut(activeBlock, Command::down).first) {
-                activeBlock.moveDown(); //move the active block down
+            if (mBoard.canPut(mActiveBlock, Command::down).first) {
+                mActiveBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
                 moved = true;
             } 
             else { 
                 // new board
-                mBoard.setBlock(activeBlock);
+                mBoard.setBlock(mActiveBlock);
 
                 audSystem.playSfx(ley::sfx::inplace);
                 int currentLevel = numLevel; //Store the current level for points calculation which should happen for current level
@@ -437,8 +435,8 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::left :            
             //new board
-            if (mBoard.canPut(activeBlock, Command::left).first) {
-                activeBlock.moveLeft();
+            if (mBoard.canPut(mActiveBlock, Command::left).first) {
+                mActiveBlock.moveLeft();
                 clearOldBlock();
                 oldBlock.moveLeft();
                 moved = true;
@@ -447,8 +445,8 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::right :
             //new board
-            if (mBoard.canPut(activeBlock, Command::right).first) {
-                activeBlock.moveRight();
+            if (mBoard.canPut(mActiveBlock, Command::right).first) {
+                mActiveBlock.moveRight();
                 clearOldBlock();
                 oldBlock.moveRight();
                 moved = true;
@@ -459,7 +457,7 @@ bool ley::GameModel::moveBlock(Command d) {
     }
 
     // new board
-    mBoard.putBlock(activeBlock);
+    mBoard.putBlock(mActiveBlock);
     
     updateSpeed();
 
@@ -511,31 +509,21 @@ void ley::GameModel::resetGame() {
     score = 0;
     mComboCount = 0;
 
-    activeBlock.reset();
-    oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
+//    activeBlock.reset();
+//    oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
 
     initGame();
-    /*
-    // Ensure that we have the latest block data if we start a new game right after mading modifications in the block editor.
-    SDL_Rect tempRect;
-    Block::setBlockDataFromFile(activeBlock.getType(), activeBlock.getBlockOrientation(), activeBlock.getBlockDataPtr(), false, &tempRect,{});
-    activeBlock.setH(tempRect.h);
-    activeBlock.setW(tempRect.w);
-    Block::setBlockDataFromFile(oldBlock.getType(), oldBlock.getBlockOrientation(), oldBlock.getBlockDataPtr(), true, &tempRect,{});
-    oldBlock.setH(tempRect.h);
-    oldBlock.setW(tempRect.w);
-    */
     newLevelToReport = true; //we always want to reset the game background when we restart the game.
     mNewHighScore = false;
     stopProgram(false);
 }
 bool ley::GameModel::isPaused() {
-    return !active;
+    return !mActive;
 }
 
 void ley::GameModel::pauseGame(bool pause) {
         
-        active = !pause;
+        mActive = !pause;
 }
 
 bool ley::GameModel::debugMode() {
@@ -585,7 +573,7 @@ void ley::GameModel::resizeBoard(int width, int height) {
 
     mBoard.setSize(width, height + BOARDSIZE_BUFFER);
     mPts_Line = mBoard.width() * (PTS_DROP * 2);
-    mBoard.putBlock(activeBlock);
+    mBoard.putBlock(mActiveBlock);
 }
 
 void ley::GameModel::loadKeyBindings() {
@@ -894,7 +882,7 @@ ley::BlockFileDataMapType* ley::GameModel::getFileDataPtr() {
 }
 
 void ley::GameModel::initGame() {
-    activeBlock = getRandomBlock();
-    oldBlock = {activeBlock.getRect().x,activeBlock.getRect().y,activeBlock.getType(),1};
+    mActiveBlock = getRandomBlock();
+    oldBlock = {mActiveBlock.getRect().x,mActiveBlock.getRect().y,mActiveBlock.getType(),1};
     nextBlock = getRandomBlock();
 }

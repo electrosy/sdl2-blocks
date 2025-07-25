@@ -1,6 +1,6 @@
 /*
 sdl2-blocks
-Copyright (C) 2020-2021 Steven Philley. All rights reserved.
+Copyright (C) 2020-2021,2025 Steven Philley. All rights reserved.
 
 Purpose: A fun game and Mini Game Framework.
 Date: Feb/15/2020
@@ -24,13 +24,9 @@ Notes: Intended to be built around the MVC philosophy.
         |-------|
 */
 #include <SDL2/SDL.h>
-
 #include "inc/GameController.h"
 #include "inc/GameModel.h"
 #include "inc/gfx/Video.h"
-
-enum class mainmenu {start,highscores,options,exit};  //TODO this probably goes in the game model
-enum class optionsmenu {debug,sound_volume,back};  //TODO this probably goes in the game model
 
 int main(int argc, char *argv[]) {
     ley::GameModel mainGameModel;

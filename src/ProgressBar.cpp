@@ -23,10 +23,9 @@ void ley::ProgressBar::adjustProgress(float elapsed, float total) {
 
 void ley::ProgressBar::render(SDL_Renderer* r, bool d) {
 
-  int alpha = SDL_ALPHA_OPAQUE;
-  
-  SDL_SetRenderDrawColor(r, 255, 255, 255, alpha);
+  // TODO Instead of solid red for the progress bar a more creative rainbow type faded colors could be used.
+  SDL_SetRenderDrawColor(r, 255, 255, 255, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawRect(r, &border);
-  SDL_SetRenderDrawColor(r, 255, 0, 0, alpha);
+  SDL_SetRenderDrawColor(r, 255, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRect(r, &progress);
 }

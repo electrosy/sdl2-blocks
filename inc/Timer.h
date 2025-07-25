@@ -15,41 +15,43 @@ Date: Feb/20/2020
 #include "./gfx/Renderable.h"
 #include "Clock.h"
 
-
-// TODO IMPORTANT - We really should remove the diplay sutff from the Timer and create a renderable timer.
-
 namespace ley {
 
+// TODO a timer should not be a renderable.
 class Timer : public Renderable {
 
 private:
-    bool sdlTimerReady;
-    ProgressBar progressBar;
-    float mili; //how many miliseconds this timer runs
-    ley::Clock clock;
-    bool expired; //expired flag that can get picked up.
+    bool mSDLTimerReady;
+    ProgressBar mProgressBar; // TODO rip the progress bar out of timer. a ProgressBar should have a timer.
+    float mMili; //how many miliseconds this timer runs
+    Clock mClock;
+    bool mExpired; //expired flag that can get picked up.
     bool mExpiredMessage = true; //is expired state pending to send.
-    bool active; //activly running, not paused.
+    bool mActive; //activly running, not paused.
 public:
+    /* RAII */
     Timer();
     Timer(int, SDL_Rect rect);
     ~Timer();
+    /* Operators */
     Timer& operator=(Timer other); //copy assignment
-    
-    void fill(SDL_Renderer * r);
-    void runFrame(bool = true, double = 0);
-    void reset();
-    bool hasExpired();
-    bool expiredMessage();
-    void setTime(float m); //change time
+    /* Accessors */
+    void setTime(float m);
     int getElapsed();
-    double pct(); //percent complete.
+    bool hasExpired();
     float getSpeed();
     bool isPaused();
     void pause(bool);
+    /* Functions */
     void render(SDL_Renderer* r, bool d);
-
+    void runFrame(bool = true, double = 0);
+    bool expiredMessage();
+    double pct(); //percent complete.
     void operator()(int, SDL_Rect rect);
+    void expire(); //force and experation of the timer
+    void reset();
+
+    
 };
 
 }

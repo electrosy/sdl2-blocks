@@ -12,24 +12,20 @@ Date: Nov/11/2020
 #include <iomanip>
 #include <random>
 
-// type of distribution
-namespace ley{
+namespace ley {
 
-	class Rand_int
-	{
-	
-	private:
-		std::random_device rd;
-		std::mt19937 gen;
-		std::uniform_int_distribution<> dis;
-		int last;
-	public:
-		Rand_int(int low, int high);
-		~Rand_int();
+class Rand_int {
 
-	    int operator()();
-	};
-
-/* Operators */
+private:
+	std::random_device rd;
+	std::mt19937 gen;
+	std::uniform_int_distribution<> dis;
+	int last;
+public:
+	/* RAII */
+	Rand_int(int low, int high);
+	/* Operators */
+	int operator()();
+};
 }
 #endif

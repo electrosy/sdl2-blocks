@@ -15,7 +15,6 @@ gen(rd()),
 dis{low,high} {
 
 	SDL_Log("Random device entropy %f", rd.entropy());
-
 	if(rd.entropy() == 0) {
 		// https://stackoverflow.com/questions/12469171/code-to-generate-random-numbers-in-c
 		std::chrono::time_point<std::chrono::system_clock>now {std::chrono::system_clock::now()};
@@ -29,17 +28,7 @@ dis{low,high} {
 		SDL_Log("std::chrono::duration_cast<ms>(epoch).count() + SDL_GetTicks() value: %d", seed);
 	}
 }
-
-ley::Rand_int::~Rand_int() {
-	
-}
-
-/* Accessors */
-
-/* Functions */
-
 /* Operators */
-
 int ley::Rand_int::operator()() {
 
 	int num = dis(gen);

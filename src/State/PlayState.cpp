@@ -10,12 +10,15 @@ mVideoSystem(v),
 mGameModel(gm),
 statusTimer(2000,{10,500,100,5}),
 fallTimer(1000,{}),
-mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20) {
+mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20),
+mLastHardDrop(100,{0,0,0,0}) {
 
     std::string statusString = mGameModel->getLanguageModel()->getWord("start game", 0, false, capitalizationtype::capitalizeWords);
     statusString += " - " + mGameModel->getLanguageModel()->getWord("press '?' for help", 0, false, capitalizationtype::capitalizeFirst);
     mStatusFont.updateMessage(statusString);
     mActiveUIElement = {};
+    mLastHardDrop.expire(); // We want the last hard drop to start out expired because hard drop hasen't been activated yet.
+    
 }
 
 void PlayState::update(ley::Command command) {
@@ -98,7 +101,10 @@ void PlayState::update(ley::Command command) {
             statusTimer.reset();
         break;
         case ley::Command::space :
-            mGameModel->quickDrop();
+            if(mLastHardDrop.hasExpired()) {
+                mGameModel->quickDrop();
+                mLastHardDrop.reset();
+            }
             fallTimer.reset();
         break;
         
@@ -109,6 +115,7 @@ void PlayState::update(ley::Command command) {
     /**** UPDATE ****/
     fallTimer.runFrame(false, mGameModel->speed());
     statusTimer.runFrame(false, 0.0);
+    mLastHardDrop.runFrame(false, 0.0);
     if(statusTimer.hasExpired()) {
         mStatusFont.updateMessage("");
     }

@@ -1,15 +1,14 @@
 /* 
 sdl2-blocks
-Copyright (C) 2020-2021 Steven Philley
+Copyright (C) 2020-2021,2025 Steven Philley
 
 Purpose: Controlls the flow of the game and moves the active 
          block when its time to.
-Date: Feb/15/2020
+Created: Feb/15/2020
 */
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
-#include "./gfx/Font.h"
 #include "./gfx/Video.h"
 #include "./GameModel.h"
 #include "Clock.h"

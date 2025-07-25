@@ -10,65 +10,64 @@ Date: Feb/20/2020
 /* RAII */
 ley::Timer::Timer() 
 : Renderable(),
-mili(1000), 
-active(true),
-expired(false),
-sdlTimerReady(true),
-progressBar({0,0,0,0}) {
+mMili(1000), 
+mActive(true),
+mExpired(false),
+mSDLTimerReady(true),
+mProgressBar({0,0,0,0}) {
 
     if(SDL_Init(SDL_INIT_TIMER) >= 0) {
         // if all good
     } else {
         printf("Can't Initialize SDL2 Timer");
-        sdlTimerReady = 0;
+        mSDLTimerReady = 0;
     }
 }
 
 ley::Timer::Timer(int m, SDL_Rect rect) 
 : Renderable(),
-mili(m),
-active(true), 
-expired(false), 
-sdlTimerReady(true),
-progressBar{rect} {
+mMili(m),
+mActive(true), 
+mExpired(false), 
+mSDLTimerReady(true),
+mProgressBar{rect} {
     
     if(SDL_Init(SDL_INIT_TIMER) >= 0) {
         // if all good
     } else {
         printf("Can't Initialize SDL2 Timer");
-        sdlTimerReady = 0;
+        mSDLTimerReady = 0;
     }
 }
 void ley::Timer::operator()(int i, SDL_Rect rect) {
-    mili = i;
-    progressBar(rect);
+    mMili = i;
+    mProgressBar(rect);
 }
 ley::Timer::~Timer() {
-    if(sdlTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
+    if(mSDLTimerReady && SDL_InitSubSystem(SDL_INIT_TIMER)) {
         SDL_QuitSubSystem(SDL_INIT_TIMER);
     }
 }
-
+/* Operators */
 //copy assignment operator
 ley::Timer& ley::Timer::operator=(ley::Timer other) {
 
-    sdlTimerReady = other.sdlTimerReady;
-    progressBar = other.progressBar;
-    mili = other.mili;
-    clock = other.clock;
-    expired = other.expired;
+    mSDLTimerReady = other.mSDLTimerReady;
+    mProgressBar = other.mProgressBar;
+    mMili = other.mMili;
+    mClock = other.mClock;
+    mExpired = other.mExpired;
     mExpiredMessage = other.mExpiredMessage;
-    active = other.active;
+    mActive = other.mActive;
 
     return *this;
 }
-
 
 /* Functions */
 void ley::Timer::reset() {
 
     if(!isPaused()) {
-        clock.reset();
+        mClock.reset();
     }
 
     mExpiredMessage = true;
@@ -76,28 +75,32 @@ void ley::Timer::reset() {
 
 void ley::Timer::runFrame(bool autoRestart, double newTime) {
 
-    if(!active) {
+    if(!mActive) {
         return; //timer is paused.
     }
 
-    if(mili != newTime && newTime != 0) {
-        mili = newTime;
+    if(mMili != newTime && newTime != 0) {
+        mMili = newTime;
     }
 
-    unsigned int miliFromStart = clock.miliSecondsFromStart();
-    if(miliFromStart > mili) {
-        expired = 1;
+    unsigned int miliFromStart = mClock.miliSecondsFromStart();
+    if(miliFromStart > mMili) {
+        mExpired = 1;
        if(autoRestart) { reset(); }
     }
     
-    progressBar.adjustProgress(miliFromStart, mili);
+    mProgressBar.adjustProgress(miliFromStart, mMili);
+}
+
+void ley::Timer::expire() {
+    
 }
 
 bool ley::Timer::hasExpired() {
     
     //TODO it doesn't appear that this works as a message pass because expired continually gets set back to true anyway.
-    if(expired) { 
-        expired = false;
+    if(mExpired) { 
+        mExpired = false;
         return true;
     } else {
         return false;
@@ -116,37 +119,39 @@ bool ley::Timer::expiredMessage() {
 }
 double ley::Timer::pct() {
     
-    if(getElapsed() > mili) {
+    if(getElapsed() > mMili) {
         return 1; //Never return more than 100%;
     }
-    else if(mili != 0) {
-        return getElapsed() / mili;
+    else if(mMili != 0) {
+        return getElapsed() / mMili;
     }
     else {
         return 1;
     }
 } 
+
+void ley::Timer::render(SDL_Renderer* r, bool d) {
+    mProgressBar.render(r, d);
+}
+
+/* Accessors */
 void ley::Timer::setTime(float m) {
-    mili = m;
+    mMili = m;
 }
 
 int ley::Timer::getElapsed() {
-    return clock.miliSecondsFromStart();
+    return mClock.miliSecondsFromStart();
 }
 
 float ley::Timer::getSpeed() {
-    return mili;
+    return mMili;
 }
 
 bool ley::Timer::isPaused() {
-    return !active;
+    return !mActive;
 }
 
 void ley::Timer::pause(bool paused) {
-    clock.pause(paused);
-    active = !paused;
-}
-
-void ley::Timer::render(SDL_Renderer* r, bool d) {
-    progressBar.render(r, d);
+    mClock.pause(paused);
+    mActive = !paused;
 }

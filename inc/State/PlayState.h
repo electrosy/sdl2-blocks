@@ -28,7 +28,7 @@ public:
     virtual std::string getStateID() const { return sPlayID; };
 
 private:
-
+    ley::Timer mLastHardDrop; //Time that has expired since last hard drop
     RenderablesPtr mRenderables;
     RenderablesPtr mDebugRenderables;
 

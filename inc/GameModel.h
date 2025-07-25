@@ -36,15 +36,12 @@ enum class StateChange { //TODO this can probably be called State
     blockeditor,
     none}; //particular states that the game can be in
 
-// TODO what is this PTS_LINE used for?
-//const auto PTS_LINE = BOARDSIZE_WIDTH * (PTS_DROP * 2); // x Level
-
 class GameModel {
 
 private:
     bool mDebugOnlyLine = false;    //use only the line block for testing purposes
     Board mBoard;
-    Block activeBlock;
+    Block mActiveBlock;
     Block oldBlock;
     Block nextBlock;
     bool overlayOn;
@@ -54,23 +51,12 @@ private:
     bool newLevelToReport{true};    //true if the level has changed but has not been passed along yet, start with true for game init
     long score;                     //the total score the this game (level*linesatonce)
     bool gameRunning;
-    bool active;                    //not paused // TODO this should be called paused and the checks should be reversed
+    bool mActive;                    //not paused // TODO this should be called paused and the checks should be reversed
+    bool mProgramRunning;                   //if true then the program is still runing and has not been asked to exit yet
     int mComboCount = 0;
-    void clearOldBlock();
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
     std::string mGuideGridOn = "purple";
-    std::vector<char> checkForLines(char start);
-    int firstLineAt(int);           //returns the first complete line from the bottom or -1 if there is no line
-    bool processLines(int &numLines); //returns true if any number of lines are removed.
-    void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
-    void shiftBoard(char, char);    //start line, number of lines
-    void fillTop(char);             //fill top of the board after the shift
-    ley::Block getRandomBlock();
-    ley::Block debugGetBlock();
-    void updateSpeed();             //check to see if the speed of the falldown block needs to change based on lines/score
-    bool running;                   //if true then the program is still runing and has not been asked to exit yet
-    int calcLevel();                //Calculate current level based on number of lines completed
     bool mDebugMode = false;        //allow debug commands
     ley::Audio audSystem;           //audio subsystem
     ley::StateChange mStateChange = ley::StateChange::none;
@@ -80,19 +66,31 @@ private:
     bool mNewHighScore = false;
     int mPts_Line;
     ley::Config mConfig;
+    ley::LanguageModel mLanguageModel;
+    std::string mWallKickOn = "on";
+    BlockFileDataMapType mBlockMapData;
+
+    int calcLevel();                //Calculate current level based on number of lines completed
+    void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
+    void clearOldBlock();
+    std::vector<char> checkForLines(char start);
+    int firstLineAt(int);           //returns the first complete line from the bottom or -1 if there is no line
+    bool processLines(int &numLines); //returns true if any number of lines are removed.
+    
+    void shiftBoard(char, char);    //start line, number of lines
+    void fillTop(char);             //fill top of the board after the shift
+    ley::Block getRandomBlock();
+    ley::Block debugGetBlock();
+    void updateSpeed();             //check to see if the speed of the falldown block needs to change based on lines/score
     void onLine(int numLines, int level); //Handler when a line is completed
     void onDrop();
     void loadKeyBindings();         //keyboard
     void loadButtonBindings();      //gamepad
-    ley::LanguageModel mLanguageModel;
-    std::string mWallKickOn = "on";
-    BlockFileDataMapType mBlockMapData;
     void logBlockData();
-
     /* we calculate if the block can rotate by checking to see if any orientation is different*/
     void addCanRotateToBlockData(); 
     void initGame();                // set up the blocks. clear and or initialize any other important values
-
+    
 public:
     GameModel();
     ~GameModel();
@@ -144,14 +142,13 @@ public:
     void readConfig();
     int getKeyDelay() {return mKeyDelay;};
     void setKeyDelay(int inKeyDelay) {mKeyDelay = inKeyDelay;};
-
     int getKeyRepeat() {return mKeyRepeat;};
     void setKeyRepeat(int inKeyRepeat) {mKeyRepeat = inKeyRepeat;};
     void readConfigOther();
     std::string getGuideGridOn() { return mGuideGridOn;};
     void setGuideGridOn(std::string inOn);
     bool rotateWithKick(bool r);
-    ley::Block getActiveBlock() { return activeBlock; };
+    ley::Block getActiveBlock() { return mActiveBlock; };
     std::string getWallKickOn() { return mWallKickOn; };
     void setWallKickOn(std::string on);
     BlockFileDataMapType* getFileDataPtr();
