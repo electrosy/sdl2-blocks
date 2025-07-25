@@ -18,7 +18,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mDelayLabelFont{31,150,10,20},
     mRepeatLabelFont{31,200,10,20},
     mGuideGridOnLabelFont{31,250,10,20},
-    mWallKickOnLabelFont{31,300,10,20}
+    mWallKickOnLabelFont{31,300,10,20},
+    mDropCoolDownLabelFont{31,350,10,20}
 
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
@@ -70,6 +71,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mWallKickOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
     mWallKickOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
 
+    mDropCoolDownTextEntry.setVisible(false);
+    mDropCoolDownTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mDropCoolDownTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mDropCoolDownTextEntry.setWidthByChar(3);
+    mDropCoolDownTextEntry.setPos({325,350});
+    mDropCoolDownTextEntry.setRegEx("^(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$");
+    mDropCoolDownTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst));
+    mDropCoolDownTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst), "");
+
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
@@ -98,10 +108,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mWallKickOnTextEntry.hasFocus();},
         [this](){ commitWallKickOn(); });
 
-    mOptionUI.pushFont("languageOptions", {29,350,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mOptionUI.pushFont("keyboardOptions", {29,400,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushUIElement(
+        [this](){mDropCoolDownTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousDropCoolDownValue);},
+        [this]()->bool{return mDropCoolDownTextEntry.hasFocus();},
+        [this](){ commitHardDropCoolDown(); });
+
+    mOptionUI.pushFont("languageOptions", {29,400,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,450,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     // TODO localization
-    mOptionUI.pushFont("blockEditor", {29,450,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("blockEditor", {29,500,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
 
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
@@ -114,6 +129,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     // TODO localization
     mWallKickOnLabelFont.updateMessage("Wall Kick");
+    mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -123,15 +139,15 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 5) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 6) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 6) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 7) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 7) {
+    if(command == ley::Command::enter && mOptionUI.getIndex() == 8) {
         mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
@@ -254,6 +270,25 @@ void OptionMenuState::commitWallKickOn() {
     }
 }
 
+void OptionMenuState::commitHardDropCoolDown() {
+    if ( std::regex_match(mDropCoolDownTextEntry.getTextBoxValue().c_str(), std::regex(mDropCoolDownTextEntry.getRegEx()) )) {
+        SDL_Log("Regex matched.");
+
+        mGameModel->setDropCoolDown(std::stoi(mDropCoolDownTextEntry.getTextBoxValue()));
+    }
+    else {
+        SDL_Log("Regex did not match: %s ", mDropCoolDownTextEntry.getTextBoxValue().c_str());
+        mDropCoolDownTextEntry.getErrorTimerPtr()->reset();
+        mDropCoolDownTextEntry.getErrorFontPtr()->setVisible(true);
+        // TODO can we put more of the text entry logic like previous value into the text entry its self?
+        mDropCoolDownTextEntry.setTextBoxValue(mPreviousDropCoolDownValue);
+    }
+
+    if(mDropCoolDownTextEntry.hasFocus()) {
+        mDropCoolDownTextEntry.toggleFocus();
+    }
+}
+
 void OptionMenuState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
@@ -275,6 +310,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mRepeatLabelFont);
     mRenderables.push_back(&mGuideGridOnLabelFont);
     mRenderables.push_back(&mWallKickOnLabelFont);
+    mRenderables.push_back(&mDropCoolDownLabelFont);
     
     //text entries
     mRenderables.push_back(&mBoardSizeTextEntry);
@@ -282,6 +318,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mKeyRepeatTextEntry);
     mRenderables.push_back(&mGuideGridOnTextEntry);
     mRenderables.push_back(&mWallKickOnTextEntry);
+    mRenderables.push_back(&mDropCoolDownTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
@@ -292,6 +329,7 @@ bool OptionMenuState::onEnter() {
     mKeyRepeatTextEntry.setVisible(true);
     mGuideGridOnTextEntry.setVisible(true);
     mWallKickOnTextEntry.setVisible(true);
+    mDropCoolDownTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -301,6 +339,8 @@ bool OptionMenuState::onEnter() {
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
     mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOn());
     mWallKickOnTextEntry.setTextBoxValue(  mGameModel->getWallKickOn() == "on" ? "on" : "off" );
+    mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
+
 
     positionOptionsLabels();
 
@@ -325,6 +365,7 @@ bool OptionMenuState::onExit() {
     commitKeyRepeat();
     commitGuideGridOn();
     commitWallKickOn();
+    commitHardDropCoolDown();
     
     mActiveUIElement = {};
 
@@ -397,6 +438,9 @@ void OptionMenuState::positionOptionsLabels() {
     labelPos = mWallKickOnLabelFont.getPos();
     mWallKickOnTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
+    TTF_SizeUTF8( mDropCoolDownLabelFont.getTTFFont(), mDropCoolDownLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mDropCoolDownLabelFont.getPos();
+    mDropCoolDownTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 }
 
 }

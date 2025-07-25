@@ -731,6 +731,7 @@ void ley::GameModel::writeConfig() {
   myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
   myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
   myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
+  myfile << "dropcooldown" << ',' << std::to_string(getDropCoolDown()) << std::endl;
   
   myfile.close();
 }
@@ -791,6 +792,10 @@ void ley::GameModel::readConfig() {
                         setWallKickOn("off");
                     }
 
+                }
+
+                if(key == "dropcooldown") {
+                    setDropCoolDown(stoi(value));
                 }
             }
         }

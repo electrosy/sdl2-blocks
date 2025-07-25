@@ -11,7 +11,7 @@ mGameModel(gm),
 statusTimer(2000,{10,500,100,5}),
 fallTimer(1000,{}),
 mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20),
-mLastHardDrop(100,{0,0,0,0}) {
+mLastHardDrop(gm->getDropCoolDown(),{0,0,0,0}) { 
 
     std::string statusString = mGameModel->getLanguageModel()->getWord("start game", 0, false, capitalizationtype::capitalizeWords);
     statusString += " - " + mGameModel->getLanguageModel()->getWord("press '?' for help", 0, false, capitalizationtype::capitalizeFirst);

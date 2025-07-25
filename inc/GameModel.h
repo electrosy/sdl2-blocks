@@ -24,6 +24,8 @@ Date: Feb/15/2020
 
 namespace ley {
 
+const Uint8 DROPCOOLDOWNMS_DEFAULT = 100;
+
 enum class StateChange { //TODO this can probably be called State
     play,
     options,
@@ -52,7 +54,7 @@ private:
     long score;                     //the total score the this game (level*linesatonce)
     bool gameRunning;
     bool mActive;                    //not paused // TODO this should be called paused and the checks should be reversed
-    bool mProgramRunning;                   //if true then the program is still runing and has not been asked to exit yet
+    bool mProgramRunning;            //if true then the program is still runing and has not been asked to exit yet
     int mComboCount = 0;
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
@@ -69,6 +71,7 @@ private:
     ley::LanguageModel mLanguageModel;
     std::string mWallKickOn = "on";
     BlockFileDataMapType mBlockMapData;
+    Uint8 mDropCoolDownMs = DROPCOOLDOWNMS_DEFAULT;
     int calcLevel();                //Calculate current level based on number of lines completed
     void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
     void clearOldBlock();
@@ -94,7 +97,7 @@ public:
     ~GameModel();
     Board* getBoard();
     void debugResetActiveBlock();
-    bool moveBlock(Command); //returns true for false if block actually moved
+    bool moveBlock(Command);        //returns true for false if block actually moved
     std::pair<bool, std::string> rotateBlock(bool);
     std::pair<bool, std::string> canRotate(bool); //false for counterclockwise and true for clockwise
     void overlayToggle();
@@ -111,14 +114,14 @@ public:
     double speed() { return currentSpeed; };
     void pauseGame(bool);
     bool isPaused();
-    bool programRunning(); //is the program running?
-    void stopProgram(bool); //sets the program to exit by setting running to false.
-    bool newLevel(); //retruns true if there is a new level to report.
+    bool programRunning();          //is the program running?
+    void stopProgram(bool);         //sets the program to exit by setting running to false.
+    bool newLevel();                //retruns true if there is a new level to report.
     ley::Audio* audio() { return &audSystem; };
     ley::StateChange currentStateChange() { return mStateChange; }; //TODO this can probably be called gotoState
     void stateChange(ley::StateChange state) { mStateChange = state; };
     ley::HighScores* highScores() { return &mHighScores; };
-    bool debugMode(); //get current debugCommands flag
+    bool debugMode();               //get current debugCommands flag
     void debugCommandsToggle();
     bool debugOnlyLine();
     void debugOnlyLineToggle();
@@ -149,7 +152,9 @@ public:
     std::string getWallKickOn() { return mWallKickOn; };
     void setWallKickOn(std::string on);
     BlockFileDataMapType* getFileDataPtr();
-    void readBlockData(); // read in the block data from file
+    void readBlockData();           // read in the block data from file
+    Uint8 getDropCoolDown() { return mDropCoolDownMs; };
+    void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
 };
 
 }

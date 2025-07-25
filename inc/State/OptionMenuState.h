@@ -23,12 +23,14 @@ private:
     ley::Font mRepeatLabelFont;
     ley::Font mGuideGridOnLabelFont;
     ley::Font mWallKickOnLabelFont;
+    ley::Font mDropCoolDownLabelFont;
     //text entries
     ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
     ley::TextEntry mKeyRepeatTextEntry;
     ley::TextEntry mGuideGridOnTextEntry;
     ley::TextEntry mWallKickOnTextEntry;
+    ley::TextEntry mDropCoolDownTextEntry;
 
     ley::Sprite mBackground;
     RenderablesPtr mRenderables;
@@ -40,6 +42,7 @@ private:
     std::string mPreviousKeyRepeatValue;
     std::string mPreviousGuideGridOnValue;
     std::string mPreviousWallKickOnValue;
+    std::string mPreviousDropCoolDownValue;
     void positionOptionsLabels();
     
 public:
@@ -60,6 +63,7 @@ public:
     void commitKeyRepeat();
     void commitGuideGridOn();
     void commitWallKickOn();
+    void commitHardDropCoolDown();
 
 };
 
