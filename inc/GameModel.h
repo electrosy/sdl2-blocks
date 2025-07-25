@@ -42,8 +42,8 @@ private:
     bool mDebugOnlyLine = false;    //use only the line block for testing purposes
     Board mBoard;
     Block mActiveBlock;
-    Block oldBlock;
-    Block nextBlock;
+    Block mOldBlock;
+    Block mNextBlock;
     bool overlayOn;
     double currentSpeed;            //how many miliseconds until the block falls down
     int numLines;                   //number of lines the player has successfully completed. (Lines)
@@ -69,14 +69,12 @@ private:
     ley::LanguageModel mLanguageModel;
     std::string mWallKickOn = "on";
     BlockFileDataMapType mBlockMapData;
-
     int calcLevel();                //Calculate current level based on number of lines completed
     void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
     void clearOldBlock();
     std::vector<char> checkForLines(char start);
     int firstLineAt(int);           //returns the first complete line from the bottom or -1 if there is no line
     bool processLines(int &numLines); //returns true if any number of lines are removed.
-    
     void shiftBoard(char, char);    //start line, number of lines
     void fillTop(char);             //fill top of the board after the shift
     ley::Block getRandomBlock();
@@ -102,7 +100,6 @@ public:
     void overlayToggle();
     bool isOverlayOn();
     bool newBlock();
-    void setBlock();
     int getScore();
     int getLevel();
     int getLines();

@@ -32,8 +32,8 @@ mDebugOnlyLine(false)
     initGame();
 
     SDL_Log("ley::GameModel::ctor");
-    oldBlock.setH(mActiveBlock.getRect().h);
-    oldBlock.setW(mActiveBlock.getRect().w);
+    mOldBlock.setH(mActiveBlock.getRect().h);
+    mOldBlock.setW(mActiveBlock.getRect().w);
       
     mHighScores.read();
     
@@ -57,7 +57,7 @@ ley::GameModel::~GameModel() {
 
 /* Accessors */
 ley::Block ley::GameModel::getNextBlock() {
-    return nextBlock;
+    return mNextBlock;
 }
 bool ley::GameModel::programRunning() {
     return mProgramRunning;
@@ -95,15 +95,15 @@ void ley::GameModel::addToScore(long p) {
 void ley::GameModel::debugResetActiveBlock() {
     
     mActiveBlock = debugGetBlock();
-    oldBlock = mActiveBlock;
-    oldBlock.setClear(true);
+    mOldBlock = mActiveBlock;
+    mOldBlock.setClear(true);
     mActiveBlock.debugResetPos();
-    oldBlock.debugResetPos();
+    mOldBlock.debugResetPos();
 }
 
 void ley::GameModel::clearOldBlock() {
     //new board
-    mBoard.putBlock(oldBlock);
+    mBoard.putBlock(mOldBlock);
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
@@ -152,10 +152,10 @@ ley::Block ley::GameModel::getRandomBlock() {
 bool ley::GameModel::newBlock() {
     SDL_Log("New Block");
 
-    mActiveBlock = nextBlock;
-    oldBlock = mActiveBlock;
-    oldBlock.setClear(true);
-    nextBlock = getRandomBlock();
+    mActiveBlock = mNextBlock;
+    mOldBlock = mActiveBlock;
+    mOldBlock.setClear(true);
+    mNextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
     if(!mBoard.canPut(mActiveBlock, ley::Command::up).first) {
@@ -233,7 +233,7 @@ std::pair<bool, std::string> ley::GameModel::rotateBlock(bool r) { // TODO, mayb
     if(result.first) {
         mActiveBlock.rotate(r);
         clearOldBlock();
-        oldBlock.rotate(r);
+        mOldBlock.rotate(r);
         // new board
         mBoard.putBlock(mActiveBlock);
         result.first = true;
@@ -411,7 +411,7 @@ bool ley::GameModel::moveBlock(Command d) {
             if (mBoard.canPut(mActiveBlock, Command::down).first) {
                 mActiveBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
-                oldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
+                mOldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
                 moved = true;
             } 
             else { 
@@ -438,7 +438,7 @@ bool ley::GameModel::moveBlock(Command d) {
             if (mBoard.canPut(mActiveBlock, Command::left).first) {
                 mActiveBlock.moveLeft();
                 clearOldBlock();
-                oldBlock.moveLeft();
+                mOldBlock.moveLeft();
                 moved = true;
             }
         break;
@@ -448,7 +448,7 @@ bool ley::GameModel::moveBlock(Command d) {
             if (mBoard.canPut(mActiveBlock, Command::right).first) {
                 mActiveBlock.moveRight();
                 clearOldBlock();
-                oldBlock.moveRight();
+                mOldBlock.moveRight();
                 moved = true;
             }
         break;
@@ -883,6 +883,6 @@ ley::BlockFileDataMapType* ley::GameModel::getFileDataPtr() {
 
 void ley::GameModel::initGame() {
     mActiveBlock = getRandomBlock();
-    oldBlock = {mActiveBlock.getRect().x,mActiveBlock.getRect().y,mActiveBlock.getType(),1};
-    nextBlock = getRandomBlock();
+    mOldBlock = {mActiveBlock.getRect().x,mActiveBlock.getRect().y,mActiveBlock.getType(),1};
+    mNextBlock = getRandomBlock();
 }
