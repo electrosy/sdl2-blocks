@@ -50,7 +50,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyRepeatTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
     mKeyRepeatTextEntry.setWidthByChar(2);
     mKeyRepeatTextEntry.setPos({325,200});
-        mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
+    mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
     mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
     mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
 
@@ -92,12 +92,12 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mOptionUI.pushUIElement(
         [this](){mKeyDelayTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyDelayValue);},
         [this]()->bool{return mKeyDelayTextEntry.hasFocus();},
-        [this](){commitKeyDelay();});
+        [this](){ commitKeyDelay(); });
 
     mOptionUI.pushUIElement(
         [this](){mKeyRepeatTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousKeyRepeatValue);},
         [this]()->bool{return mKeyRepeatTextEntry.hasFocus();},
-        [this](){commitKeyRepeat();});
+        [this](){ commitKeyRepeat(); });
 
     mOptionUI.pushUIElement(
         [this](){mGuideGridOnTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousGuideGridOnValue);},

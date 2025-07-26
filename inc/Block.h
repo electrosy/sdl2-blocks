@@ -82,26 +82,15 @@ protected:
 public:
     /* RAII */
     Block();
-    Block(unsigned int, unsigned int, BlockNameType, bool = 0); //x,y,type,clear
+    Block(unsigned int, unsigned int, BlockNameType, bool = 0); //boardwidth,y,type,clear
     Block(const Block& b); //copy constructor
     ~Block();
+    /* Operators */
+    void operator= (const Block &b);
+    /* Functions */
     static void loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr);
     static int bottomEdgeOfOrientation(BlockDataType* blockData);
     static int rightEdgeOfOrientation(BlockDataType* blockData);
-    /* Accessors */
-    SDL_Rect getRect() {return mRect;}; // TODO this should probably return a const
-    const BlockNameType getType() {return mType;};
-    const bool getClear() {return mClearFlag;};
-    void setClear(bool c);
-    void setH(unsigned int h) {mRect.h = h;};
-    void setW(unsigned int w) {mRect.w = w;};
-    void debugResetPos();
-    bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
-    std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
-
-    void operator= (const Block &b);
-    
-    /* Functions */
     BlockTexCode renderPart(unsigned int, unsigned int); // Return true or false depending on if the block would take up the x,y space
     void moveDown();
     void moveLeft();
@@ -117,6 +106,16 @@ public:
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};
     static bool canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
+    /* Accessors */
+    SDL_Rect getRect() {return mRect;}; // TODO this should probably return a const
+    const BlockNameType getType() {return mType;};
+    const bool getClear() {return mClearFlag;};
+    void setClear(bool c);
+    void setH(unsigned int h) {mRect.h = h;};
+    void setW(unsigned int w) {mRect.w = w;};
+    void debugResetPos();
+    bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
+    std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
     static void setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr);
     BlockDataType* getBlockDataPtr() {return &mBlockData;};
     unsigned int getBlockOrientation() {return mOrientation;};

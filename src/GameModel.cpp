@@ -26,14 +26,12 @@ score(0),
 mProgramRunning(true),
 mDebugOnlyLine(false)
 {
+    SDL_Log("ley::GameModel::ctor");
     readBlockData();
     ley::Block::setBlockDataPtr(&mBlockMapData);
     
     initGame();
-
-    SDL_Log("ley::GameModel::ctor");
-    mOldBlock.setH(mActiveBlock.getRect().h);
-    mOldBlock.setW(mActiveBlock.getRect().w);
+   
       
     mHighScores.read();
     
@@ -116,30 +114,30 @@ ley::Block ley::GameModel::getRandomBlock() {
     Uint8 yStartPos = 2;
 
     if(mDebugOnlyLine == true) { //debug return only line
-        return Block(4,2,BlockNameType::line,false);
+        return Block(mBoard.width(),2,BlockNameType::line,false);
     }
 
     switch(rand0to6()) {
         case 0 : 
-            a = Block(4,yStartPos,BlockNameType::tee,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::tee,false);
         break;
         case 1 :
-            a = Block(4,yStartPos,BlockNameType::rLee,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::rLee,false);
         break;
         case 2 : 
-            a = Block(4,yStartPos,BlockNameType::zee,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::zee,false);
         break;
         case 3 : 
-            a = Block(4,yStartPos,BlockNameType::mzee,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::mzee,false);
         break;
         case 4 : 
-            a = Block(4,yStartPos,BlockNameType::lLee,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::lLee,false);
         break;
         case 5 :
-            a = Block(4,yStartPos,BlockNameType::line,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::line,false);
         break;
         case 6 :
-            a = Block(4,yStartPos,BlockNameType::cube,false);
+            a = Block(mBoard.width(),yStartPos,BlockNameType::cube,false);
         break;
     }
 
@@ -888,6 +886,9 @@ ley::BlockFileDataMapType* ley::GameModel::getFileDataPtr() {
 
 void ley::GameModel::initGame() {
     mActiveBlock = getRandomBlock();
-    mOldBlock = {mActiveBlock.getRect().x,mActiveBlock.getRect().y,mActiveBlock.getType(),1};
+    mOldBlock = mActiveBlock;
+    mOldBlock.setClear(true);
+    //mOldBlock.setH(mActiveBlock.getRect().h);
+    //mOldBlock.setW(mActiveBlock.getRect().w);
     mNextBlock = getRandomBlock();
 }

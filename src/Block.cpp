@@ -12,10 +12,10 @@ ley::BlockFileDataMapType* ley::Block::mBlockDataPtr = nullptr;
 ley::Block::Block() {
 
 }
-ley::Block::Block(unsigned int x, unsigned int y, BlockNameType ty, bool c)
+ley::Block::Block(unsigned int boardWidth, unsigned int y, BlockNameType ty, bool c)
 : mType(ty), mClearFlag(c) {
     
-    mRect.x = x, mRect.y = y;
+    mRect.y = y;
     mOrientation = 0;
     if(mReadBlockFromFile) {
         setBlockDataFromFile(mType, mOrientation, &mBlockData, mClearFlag, &mRect, &mCanRotate);
@@ -23,6 +23,9 @@ ley::Block::Block(unsigned int x, unsigned int y, BlockNameType ty, bool c)
     else {
         setBlock(mType);
     }
+    
+    //Set the x position so that the block piece is placed into the center of the board width.
+    mRect.x = boardWidth/2 - width()/2;
 }
 
 ley::Block::Block(const Block& b) {
