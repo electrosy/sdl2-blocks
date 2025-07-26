@@ -1,3 +1,7 @@
+Add option for quick drop cool down
+
+0.7.0.4
+
 Removed the cats.
 Added new block textures.
 New Ablockalypse logo.

@@ -16,7 +16,7 @@ Date: Feb/14/2020
 #include "../Textures.h"
 #include "Font.h"
 #include "../RectContainer.h"
-#include "../TextEntry.h"
+#include "../UI/TextEntry.h"
 
 namespace ley {
 

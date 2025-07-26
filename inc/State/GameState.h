@@ -1,6 +1,6 @@
 #include "../Input.h"
 #include "../../inc/UI/UIWidget.h"
-#include "../TextEntry.h"
+#include "../UI/TextEntry.h"
 
 #include <string>
 #include <SDL2/SDL.h>

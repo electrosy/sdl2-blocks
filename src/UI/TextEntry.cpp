@@ -1,5 +1,5 @@
-#include "../inc/TextEntry.h"
-#include "../inc/Screen.h"
+#include "../../inc/UI/TextEntry.h"
+#include "../../inc/Screen.h"
 
 ley::TextEntry::TextEntry()
 :
@@ -166,20 +166,24 @@ void ley::TextEntry::onTextInput(const char* cstr) {
 }
 
 void ley::TextEntry::adjustCursor() {
+    
     std::pair<int, int> size = value.size();
     cursor.x = pos.x + size.first;
     cursor.y = pos.y + 2;
 }
 
 void ley::TextEntry::setCharSound(const std::function<void()> &func) {
+    
     mEnterCharSound = func;
 }
 
 void ley::TextEntry::setBackspaceSound(const std::function<void()> &func) {
+    
     mBackspaceSound = func;
 }
 
 std::string ley::TextEntry::getHelpMessage() {
+    
     if (hasFocus()) {
         return mFocusHelp;
     }
@@ -198,7 +202,6 @@ void ley::TextEntry::setHelpMessages(std::string focusHelp, std::string nonFocus
 void ley::TextEntry::setErrorMessage(std::string errorMessage) {
 
     mErrorFont.updateMessage(errorMessage);
-
 }
 
 void ley::TextEntry::handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) {
@@ -212,17 +215,26 @@ void ley::TextEntry::handleFocusChange(UIWidget** activeUIElement, std::string* 
     }
 
     toggleFocus();
+}
 
+bool ley::TextEntry::commit(std::string previousValue) {
 
-    /*
-    if(!mLocalTextEntry.hasFocus()){
-        mActiveUIElement = &mLocalTextEntry;
-        mPreviousOptionsValue = mLocalTextEntry.getTextBoxValue();
+    bool regexMatched;
+    if (std::regex_match(getTextBoxValue().c_str(), std::regex(getRegEx()) )) {
+        SDL_Log("Regex matched.");
+        regexMatched = true;
     }
     else {
-        mActiveUIElement = {};
+        SDL_Log("Regex did not match: %s ", getTextBoxValue().c_str());
+        getErrorTimerPtr()->reset();
+        getErrorFontPtr()->setVisible(true);
+        setTextBoxValue(previousValue);
+        regexMatched = false;
     }
 
-    mLocalTextEntry.toggleFocus();
-    */
+    if(hasFocus()) {
+        toggleFocus();
+    }
+
+    return regexMatched;
 }

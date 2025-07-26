@@ -18,7 +18,7 @@ Date: Feb/14/2020
 #include <SDL2/SDL.h>
 
 #include <functional>
-#include "TextEntry.h"
+#include "UI/TextEntry.h"
 #include "Command.h"
 
 

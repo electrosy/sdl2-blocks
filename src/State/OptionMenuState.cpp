@@ -11,6 +11,7 @@ namespace ley {
 const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
+
     mVideoSystem(v),
     mGameModel(gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
@@ -38,7 +39,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyDelayTextEntry.setVisible(false);
     mKeyDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mKeyDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyDelayTextEntry.setWidthByChar(5);
+    mKeyDelayTextEntry.setWidthByChar(3);
     mKeyDelayTextEntry.setPos({224,150});
     mKeyDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
     mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
@@ -47,9 +48,9 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mKeyRepeatTextEntry.setVisible(false);
     mKeyRepeatTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mKeyRepeatTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyRepeatTextEntry.setWidthByChar(5);
+    mKeyRepeatTextEntry.setWidthByChar(2);
     mKeyRepeatTextEntry.setPos({325,200});
-    mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
+        mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
     mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
     mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
 
@@ -65,7 +66,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mWallKickOnTextEntry.setVisible(false);
     mWallKickOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
     mWallKickOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mWallKickOnTextEntry.setWidthByChar(6);
+    mWallKickOnTextEntry.setWidthByChar(3);
     mWallKickOnTextEntry.setPos({325,300});
     mWallKickOnTextEntry.setRegEx("^(off|on)$");
     mWallKickOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
@@ -78,7 +79,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mDropCoolDownTextEntry.setPos({325,350});
     mDropCoolDownTextEntry.setRegEx("^(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$");
     mDropCoolDownTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst));
-    mDropCoolDownTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst), "");
+    mDropCoolDownTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst), "");
 
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
@@ -133,6 +134,7 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 }
 
 void OptionMenuState::update(ley::Command command) {
+
     switch (command) {
         case ley::Command::quit :
             mGameModel->stateChange(ley::StateChange::quitstate);
@@ -160,12 +162,9 @@ void OptionMenuState::update(ley::Command command) {
     mWallKickOnTextEntry.update();
 }
 
-// TODO moving the commit methods into the textEntries may make it easier to streamline the text entry fields.
-
 void OptionMenuState::commitBoardSize() {
 
     SDL_Log("OptionMenuState::commitUI()");
-    //TODO maybe this regex check should be contained within the TextEntry
     if ( std::regex_match(mBoardSizeTextEntry.getTextBoxValue().c_str(), std::regex(mBoardSizeTextEntry.getRegEx()) )) {
         SDL_Log("Regex matched.");
 
@@ -179,7 +178,6 @@ void OptionMenuState::commitBoardSize() {
         SDL_Log("Regex did not match: %s ", mBoardSizeTextEntry.getTextBoxValue().c_str());
         mBoardSizeTextEntry.getErrorTimerPtr()->reset();
         mBoardSizeTextEntry.getErrorFontPtr()->setVisible(true);
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
         mBoardSizeTextEntry.setTextBoxValue(mPreviousOptionsValue);
     }
 
@@ -191,105 +189,42 @@ void OptionMenuState::commitBoardSize() {
 }
 
 void OptionMenuState::commitKeyDelay() {
-    if ( std::regex_match(mKeyDelayTextEntry.getTextBoxValue().c_str(), std::regex(mKeyDelayTextEntry.getRegEx()) )) {
-        SDL_Log("Regex matched.");
 
-        mGameModel->setKeyDelay(atoi(mKeyDelayTextEntry.getTextBoxValue().c_str()));
-
-    }
-    else {
-        SDL_Log("Regex did not match: %s ", mKeyDelayTextEntry.getTextBoxValue().c_str());
-        mKeyDelayTextEntry.getErrorTimerPtr()->reset();
-        mKeyDelayTextEntry.getErrorFontPtr()->setVisible(true);
-        
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mKeyDelayTextEntry.setTextBoxValue(mPreviousKeyDelayValue);
-    }
-
-    if(mKeyDelayTextEntry.hasFocus()) {
-        mKeyDelayTextEntry.toggleFocus();
+    if(mKeyDelayTextEntry.commit(mPreviousKeyDelayValue)) {
+         mGameModel->setKeyDelay(atoi(mKeyDelayTextEntry.getTextBoxValue().c_str()));
     }
 }
 
 void OptionMenuState::commitKeyRepeat() {
 
-    if ( std::regex_match(mKeyRepeatTextEntry.getTextBoxValue().c_str(), std::regex(mKeyRepeatTextEntry.getRegEx()) )) {
-        SDL_Log("Regex matched.");
-
-        mGameModel->setKeyRepeat(atoi(mKeyRepeatTextEntry.getTextBoxValue().c_str()));
-
-    }
-    else {
-        SDL_Log("Regex did not match: %s ", mKeyRepeatTextEntry.getTextBoxValue().c_str());
-        mKeyRepeatTextEntry.getErrorTimerPtr()->reset();
-        mKeyRepeatTextEntry.getErrorFontPtr()->setVisible(true);
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mKeyRepeatTextEntry.setTextBoxValue(mPreviousKeyRepeatValue);
-    }
-
-    if(mKeyRepeatTextEntry.hasFocus()) {
-        mKeyRepeatTextEntry.toggleFocus();
+    if(mKeyRepeatTextEntry.commit(mPreviousKeyRepeatValue)) {
+         mGameModel->setKeyRepeat(atoi(mKeyRepeatTextEntry.getTextBoxValue().c_str()));
     }
 }
 
 void OptionMenuState::commitGuideGridOn() {
-    if ( std::regex_match(mGuideGridOnTextEntry.getTextBoxValue().c_str(), std::regex(mGuideGridOnTextEntry.getRegEx()) )) {
-        SDL_Log("Regex matched.");
 
-        mGameModel->setGuideGridOn(mGuideGridOnTextEntry.getTextBoxValue());
-    }
-    else {
-        SDL_Log("Regex did not match: %s ", mGuideGridOnTextEntry.getTextBoxValue().c_str());
-        mGuideGridOnTextEntry.getErrorTimerPtr()->reset();
-        mGuideGridOnTextEntry.getErrorFontPtr()->setVisible(true);
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mGuideGridOnTextEntry.setTextBoxValue(mPreviousGuideGridOnValue);
-    }
-
-    if(mGuideGridOnTextEntry.hasFocus()) {
-        mGuideGridOnTextEntry.toggleFocus();
+    if(mGuideGridOnTextEntry.commit(mPreviousGuideGridOnValue)) {
+         mGameModel->setGuideGridOn(mGuideGridOnTextEntry.getTextBoxValue()); 
     }
 }
 
 void OptionMenuState::commitWallKickOn() {
-    if ( std::regex_match(mWallKickOnTextEntry.getTextBoxValue().c_str(), std::regex(mWallKickOnTextEntry.getRegEx()) )) {
-        SDL_Log("Regex matched.");
 
-        mGameModel->setWallKickOn( mWallKickOnTextEntry.getTextBoxValue() == "on" ? "on" : "off" );
-    }
-    else {
-        SDL_Log("Regex did not match: %s ", mWallKickOnTextEntry.getTextBoxValue().c_str());
-        mWallKickOnTextEntry.getErrorTimerPtr()->reset();
-        mWallKickOnTextEntry.getErrorFontPtr()->setVisible(true);
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mWallKickOnTextEntry.setTextBoxValue(mPreviousWallKickOnValue);
-    }
-
-    if(mWallKickOnTextEntry.hasFocus()) {
-        mWallKickOnTextEntry.toggleFocus();
+    if(mWallKickOnTextEntry.commit(mPreviousWallKickOnValue)) {
+        mGameModel->setWallKickOn(mWallKickOnTextEntry.getTextBoxValue() == "on" ? "on" : "off" );
     }
 }
 
 void OptionMenuState::commitHardDropCoolDown() {
-    if ( std::regex_match(mDropCoolDownTextEntry.getTextBoxValue().c_str(), std::regex(mDropCoolDownTextEntry.getRegEx()) )) {
-        SDL_Log("Regex matched.");
 
+    if(mDropCoolDownTextEntry.commit(mPreviousDropCoolDownValue)) {
         mGameModel->setDropCoolDown(std::stoi(mDropCoolDownTextEntry.getTextBoxValue()));
-    }
-    else {
-        SDL_Log("Regex did not match: %s ", mDropCoolDownTextEntry.getTextBoxValue().c_str());
-        mDropCoolDownTextEntry.getErrorTimerPtr()->reset();
-        mDropCoolDownTextEntry.getErrorFontPtr()->setVisible(true);
-        // TODO can we put more of the text entry logic like previous value into the text entry its self?
-        mDropCoolDownTextEntry.setTextBoxValue(mPreviousDropCoolDownValue);
-    }
-
-    if(mDropCoolDownTextEntry.hasFocus()) {
-        mDropCoolDownTextEntry.toggleFocus();
     }
 }
 
 void OptionMenuState::render() {
+
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
 
     if(mGameModel->isOverlayOn()) {
@@ -398,12 +333,10 @@ void OptionMenuState::initTextEntryMessages() {
     mKeyDelayTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst), "");
 
     mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
-
     mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
-
     mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
-
     mWallKickOnLabelFont.updateMessage("Wall Kick");
+    mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
 }
 
 void OptionMenuState::positionOptionsLabels() {
@@ -416,7 +349,7 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8(mBoardSizeLabelFont.getTTFFont(), " ", &w, &h );
     int labelDataSpacing = w;
 
-    // TODO we need to generalize this code so that it can be more auto matic. Maybe put in a container of objects needing
+    // TODO we need to generalize this code so that it can be more automatic. Maybe put in a container of objects needing
     TTF_SizeUTF8( mBoardSizeLabelFont.getTTFFont(), mBoardSizeLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mBoardSizeLabelFont.getPos();
     mBoardSizeTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
@@ -424,7 +357,6 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mDelayLabelFont.getTTFFont(), mDelayLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mDelayLabelFont.getPos();
     mKeyDelayTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
-
 
     TTF_SizeUTF8( mRepeatLabelFont.getTTFFont(), mRepeatLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mRepeatLabelFont.getPos();

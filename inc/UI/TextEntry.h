@@ -3,11 +3,11 @@
 
 #include <SDL2/SDL.h>
 
-#include "./gfx/Font.h"
-#include "Input.h" // TODO circurlar Input.h has TextEntry and TextEntry also has Input
-#include "Fader.h"
-#include "./UI/UIElement.h" // TODO this is also in TextEntry.h
-#include "./UI/UIWidget.h"
+#include "../gfx/Font.h"
+#include "../Input.h" // TODO circurlar Input.h has TextEntry and TextEntry also has Input
+#include "../Fader.h"
+#include "UIElement.h" // TODO this is also in TextEntry.h
+#include "UIWidget.h"
 
 
 #ifndef TEXTENTRY_H
@@ -45,7 +45,9 @@ private:
     ley::Timer mErrorTimer;
     
 public:
+    /* RAII */
     TextEntry();
+    /* UIWidget overrides */
     void render(SDL_Renderer* r, bool d) override;
     void update() override; //handles update part of the lifecycle.
     void processInput(std::string s) override;
@@ -62,8 +64,10 @@ public:
     std::string getRegEx() override { return mRegEx; };
     void setRegEx(std::string regEx) override { mRegEx = regEx; };
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
+    /* Functions */
+    bool commit(std::string previousValue); // enter this value into the system
     void setWidthByChar(int maxCharLength);
-
+    /* Accessors */
     std::string getTextBoxValue();
     void setTextBoxValue(std::string s);
     std::string* getTextBoxField();
