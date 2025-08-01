@@ -660,14 +660,14 @@ void ley::GameModel::loadButtonBindings() {
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
 
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::enter});
 
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::cclockwise});
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::cclockwise});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_Y, ley::Command::up});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_UP, ley::Command::space});
 
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::clockwise});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_X, ley::Command::cclockwise});
 
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::enter});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_A, ley::Command::clockwise});
 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
 
