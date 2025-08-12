@@ -16,16 +16,16 @@ Date: Feb/15/2020
 /* RAII */
 ley::GameModel::GameModel()
 :
-numLines(0),
-numLevel(1),
-gameRunning(true), 
-currentSpeed(1000.0f), 
+mNumLines(0),
+mNumLevel(1),
+mGameRunning(true), 
+mCurrentSpeed(1000.0f), 
 mActive(true), 
-overlayOn(false),
-score(0),
+mOverLayOn(false),
+mScore(0),
 mProgramRunning(true),
-mDebugOnlyLine(false)
-{
+mDebugOnlyLine(false) {
+
     SDL_Log("ley::GameModel::ctor");
     readBlockData();
     ley::Block::setBlockDataPtr(&mBlockMapData);
@@ -66,19 +66,19 @@ void ley::GameModel::stopProgram(bool stop) {
 }
 
 bool ley::GameModel::isGameRunning() {
-    return gameRunning;
+    return mGameRunning;
 }
 
 int ley::GameModel::getScore() {
-    return score;
+    return mScore;
 }
 
 int ley::GameModel::getLines() {
-    return numLines;
+    return mNumLines;
 }
 
 int ley::GameModel::getLevel() {
-    return numLevel;
+    return mNumLevel;
 }
 
 ley::Board* ley::GameModel::getBoard() {
@@ -87,7 +87,7 @@ ley::Board* ley::GameModel::getBoard() {
 
 /* Functions */
 void ley::GameModel::addToScore(long p) {
-    score += p;
+    mScore += p;
 }
 
 void ley::GameModel::debugResetActiveBlock() {
@@ -254,12 +254,12 @@ std::pair<bool, std::string> ley::GameModel::canRotate(bool r) {
 }
 void ley::GameModel::clearAndRecordLine(int lineNum) {
 
-    ++numLines; //add to the score for each line
+    ++mNumLines; //add to the score for each line
     //simply fill the rows where there are lines with the empty space.
     //new board
     mBoard.fillLine(lineNum, std::make_pair(ley::BlockTexCode::O, false));
 
-    SDL_Log("Your Score is:%s" , std::to_string(numLines).c_str());
+    SDL_Log("Your Score is:%s" , std::to_string(mNumLines).c_str());
 }
 void ley::GameModel::shiftBoard(char start, char num) {
     //shift the board down start from the bottom right (backwards).
@@ -283,16 +283,16 @@ void ley::GameModel::fillTop(char num) {
 bool ley::GameModel::newLevel() {
     bool report = false;
     
-    if(newLevelToReport) {
+    if(mNewLevelToReport) {
         report = true;
-        newLevelToReport = false; //Flip back to false because we are going to pass along a true.
+        mNewLevelToReport = false; //Flip back to false because we are going to pass along a true.
     }
 
     return report;
 }
 
 int ley::GameModel::calcLevel() {
-    return (numLines / NEW_LVL_AT_LINES) + 1;
+    return (mNumLines / NEW_LVL_AT_LINES) + 1;
 }
 
 bool ley::GameModel::processLines(int &numLines) {
@@ -319,9 +319,9 @@ bool ley::GameModel::processLines(int &numLines) {
         fullLines.pop_back();
     }
 
-    if(numLevel != calcLevel()) {
-        numLevel = calcLevel();
-        newLevelToReport = true;
+    if(mNumLevel != calcLevel()) {
+        mNumLevel = calcLevel();
+        mNewLevelToReport = true;
     }
 
     return linesRemoved;
@@ -369,27 +369,27 @@ void ley::GameModel::updateSpeed() {
     // original https://www.desmos.com/calculator/7xuo8jryb9
     // percent  https://www.desmos.com/calculator/hivnmiyedk
 
-    switch(numLevel) {
+    switch(mNumLevel) {
         case 0 :
-        case 1 : currentSpeed = 1000;
+        case 1 : mCurrentSpeed = 1000;
             break;
-        case 2 : currentSpeed = 800; //-200 22.2222% 
+        case 2 : mCurrentSpeed = 800; //-200 22.2222% 
             break;
-        case 3 : currentSpeed = 624; // 24.7191%
+        case 3 : mCurrentSpeed = 624; // 24.7191%
             break;
-        case 4 : currentSpeed = 487; // 24.6624%
+        case 4 : mCurrentSpeed = 487; // 24.6624%
             break;
-        case 5 : currentSpeed = 380; // 24.6828%
+        case 5 : mCurrentSpeed = 380; // 24.6828%
             break;
-        case 6 : currentSpeed = 297; // 21.8421%
+        case 6 : mCurrentSpeed = 297; // 21.8421%
             break;
-        case 7 : currentSpeed = 232; // 24.5746%
+        case 7 : mCurrentSpeed = 232; // 24.5746%
             break;
-        case 8 : currentSpeed = 181; // 24.6973%
+        case 8 : mCurrentSpeed = 181; // 24.6973%
             break;
-        case 9 : currentSpeed = 142; // 24.148%
+        case 9 : mCurrentSpeed = 142; // 24.148%
             break;
-        case 10 : currentSpeed = 111; // 24.5059%
+        case 10 : mCurrentSpeed = 111; // 24.5059%
     }
 }
 
@@ -416,8 +416,8 @@ bool ley::GameModel::moveBlock(Command d) {
                 // new board
                 mBoard.setBlock(mActiveBlock);
 
-                audSystem.playSfx(ley::sfx::inplace);
-                int currentLevel = numLevel; //Store the current level for points calculation which should happen for current level
+                mAudioSystem.playSfx(ley::sfx::inplace);
+                int currentLevel = mNumLevel; //Store the current level for points calculation which should happen for current level
                 int turnLines = 0; //lines cleared for this single turn.
                 if(processLines(turnLines)) {
                     onLine(turnLines, currentLevel);
@@ -462,12 +462,12 @@ bool ley::GameModel::moveBlock(Command d) {
     return moved;
 }
 void ley::GameModel::onDrop() {
-    addToScore(PTS_DROP * numLevel);
+    addToScore(PTS_DROP * mNumLevel);
     mComboCount = 0;
 }
 /* Use the level that the player is on while the lines are made */
 void ley::GameModel::onLine(int lineCount, int level) {
-    audSystem.playSfx(ley::sfx::piecesfalling);
+    mAudioSystem.playSfx(ley::sfx::piecesfalling);
 
     int linesSameTime = 1;
 
@@ -486,32 +486,27 @@ void ley::GameModel::onLine(int lineCount, int level) {
     mComboCount++;
 }
 void ley::GameModel::overlayToggle() {
-    overlayOn = !overlayOn;
+    mOverLayOn = !mOverLayOn;
 }
 
 bool ley::GameModel::isOverlayOn() {
-    return overlayOn;
+    return mOverLayOn;
 }
 
 void ley::GameModel::setGameRunning(bool running) {
-    gameRunning = running;
+    mGameRunning = running;
 }
 
 void ley::GameModel::resetGame() {
     // new board
     mBoard.clear();
-
     setGameRunning(true);
-    numLines = 0;
-    numLevel = 1;
-    score = 0;
+    mNumLines = 0;
+    mNumLevel = 1;
+    mScore = 0;
     mComboCount = 0;
-
-//    activeBlock.reset();
-//    oldBlock.reset(); //this is the old position that gets cleaned up when the block moves, this needs to be reset to.
-
     initGame();
-    newLevelToReport = true; //we always want to reset the game background when we restart the game.
+    mNewLevelToReport = true; //we always want to reset the game background when we restart the game.
     mNewHighScore = false;
     stopProgram(false);
 }
@@ -888,7 +883,5 @@ void ley::GameModel::initGame() {
     mActiveBlock = getRandomBlock();
     mOldBlock = mActiveBlock;
     mOldBlock.setClear(true);
-    //mOldBlock.setH(mActiveBlock.getRect().h);
-    //mOldBlock.setW(mActiveBlock.getRect().w);
     mNextBlock = getRandomBlock();
 }
