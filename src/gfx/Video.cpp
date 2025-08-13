@@ -6,20 +6,17 @@ Purpose: see header.
 Date: Feb/14/2020
 */
 #include <stdio.h>
-
 #include "../../inc/gfx/Video.h"
 
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
-
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.7.0.5op"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.7.0.6"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Beta";
 const std::string APPLICATION_ENV = "Development";
 const std::string SDL_VER_COMP_LBL = "SDL Compiled Version: ";
 const std::string SDL_VER_LINK_LBL = "SDL Linked Version: ";
-
 const std::string APPLICATION_STRING = (APPLICATION_NAME + " " + APPLICATION_VER + " " +  APPLICATION_PLATFORM + " " +  APPLICATION_REL_TYPE + " " + APPLICATION_ENV);
 
 ley::Textures* ley::Textures::instance = nullptr;

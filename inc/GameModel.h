@@ -81,15 +81,14 @@ private:
     void shiftBoard(char, char);        //start line, number of lines
     void fillTop(char);                 //fill top of the board after the shift
     ley::Block getRandomBlock();
-    ley::Block debugGetBlock();
+    ley::Block debugGetBlock();         //returns a specific block
     void updateSpeed();                 //check to see if the speed of the falldown block needs to change based on lines/score
     void onLine(int numLines, int level); //Handler when a line is completed
     void onDrop();
     void loadKeyBindings();             //keyboard
     void loadButtonBindings();          //gamepad
     void logBlockData();
-    /* we calculate if the block can rotate by checking to see if any orientation is different*/
-    void addCanRotateToBlockData(); 
+    void addCanRotateToBlockData();     // we calculate if the block can rotate by checking to see if any orientation is different
     void initGame();                    // set up the blocks. clear and or initialize any other important values
     
 public:
@@ -155,6 +154,7 @@ public:
     void readBlockData();               // read in the block data from file
     Uint8 getDropCoolDown() { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
+    void readGamePadConfig(std::vector<std::pair<SDL_GameControllerButton, ley::Command>>* data);
 };
 
 }
