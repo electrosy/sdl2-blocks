@@ -67,7 +67,7 @@ void ley::GameController::runGameLoop() {
                         character = ley::Character::backspace;
                     break;
 
-                    case ley::Command::space :
+                    case ley::Command::drop :
                         character = ley::Character::space;
 
                     default :

@@ -37,7 +37,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     fonts.push_back(&font_objects[4]);
 
     font_objects[5] = {20, startY+=40, 400, 40};
-    font_objects[5].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::space, gm->getKeyBindingsPtr()));
+    font_objects[5].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::drop, gm->getKeyBindingsPtr()));
     fonts.push_back(&font_objects[5]);
 
     font_objects[6] = {20, startY+=40, 400, 40};
@@ -94,7 +94,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     fonts.push_back(&font_objects[17]);
 
     font_objects[18] = {500, colButton2Y += 40, 400, 40};
-    font_objects[18].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getPadInputString(",", ley::Command::space, gm->getButtonBindingsPtr()));
+    font_objects[18].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getPadInputString(",", ley::Command::drop, gm->getButtonBindingsPtr()));
     fonts.push_back(&font_objects[18]);
 
     font_objects[19] = {500, colButton2Y += 40, 400, 40};

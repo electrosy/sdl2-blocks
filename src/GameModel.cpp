@@ -360,6 +360,7 @@ void ley::GameModel::updateSpeed() {
     //a much more natural curve for speed increases.
     // original https://www.desmos.com/calculator/7xuo8jryb9
     // percent  https://www.desmos.com/calculator/hivnmiyedk
+    // 31 levels https://www.desmos.com/calculator/gvmkmief5c
 
     switch(mNumLevel) {
         case 0 :
@@ -382,6 +383,49 @@ void ley::GameModel::updateSpeed() {
         case 9 : mCurrentSpeed = 142; // 24.148%
             break;
         case 10 : mCurrentSpeed = 111; // 24.5059%
+            break;
+        case 11 : mCurrentSpeed = 100;
+            break;
+        case 12 : mCurrentSpeed = 90;
+            break;
+        case 13 : mCurrentSpeed = 80;
+            break;
+        case 14 : mCurrentSpeed = 70;
+            break;
+        case 15 : mCurrentSpeed = 60;
+            break;
+        case 16 : mCurrentSpeed = 50;
+            break;
+        case 17 : mCurrentSpeed = 45;
+            break;
+        case 18 : mCurrentSpeed = 40;
+            break;
+        case 19 : mCurrentSpeed = 35;
+            break;
+        case 20 : mCurrentSpeed = 30;
+            break;
+        case 21 : mCurrentSpeed = 25;
+            break;
+        case 22 : mCurrentSpeed = 23;
+            break;
+        case 23 : mCurrentSpeed = 21;
+            break;
+        case 24 : mCurrentSpeed = 19;
+            break;
+        case 25 : mCurrentSpeed = 17;
+            break;
+        case 26 : mCurrentSpeed = 15;
+            break;
+        case 27 : mCurrentSpeed = 14;
+            break;
+        case 28 : mCurrentSpeed = 13;
+            break;
+        case 29 : mCurrentSpeed = 12;
+            break;
+        case 30 : mCurrentSpeed = 11;
+            break;
+        case 31 : mCurrentSpeed = 10;
+            break;
     }
 }
 
@@ -613,7 +657,7 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
     mKeyBindings.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
     mKeyBindings.emplace(SDL_SCANCODE_B, std::make_pair(KMOD_NONE, ley::Command::previousSong));
-    mKeyBindings.emplace(SDL_SCANCODE_SPACE, std::make_pair(KMOD_NONE, ley::Command::space));
+    mKeyBindings.emplace(SDL_SCANCODE_SPACE, std::make_pair(KMOD_NONE, ley::Command::drop));
     mKeyBindings.emplace(SDL_SCANCODE_P, std::make_pair(KMOD_NONE, ley::Command::pause));
     mKeyBindings.emplace(SDL_SCANCODE_SLASH, std::make_pair(KMOD_NONE, ley::Command::pause));
     mKeyBindings.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
@@ -636,17 +680,16 @@ void ley::GameModel::loadKeyBindings() {
 
 void ley::GameModel::loadButtonBindings() {
 
-
     std::vector<std::pair<SDL_GameControllerButton, ley::Command>> buttonMappingData;
     readGamePadConfig(&buttonMappingData);
 
     for(std::pair<SDL_GameControllerButton, ley::Command> buttonMap : buttonMappingData) {
         mButtonBindings.insert({buttonMap.first,buttonMap.second});
-    }
+    }         
 
     /*
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
-    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right});
+    mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_RIGHT, ley::Command::right}); 
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_LEFT, ley::Command::left});
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_START, ley::Command::pause});
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_B, ley::Command::space});

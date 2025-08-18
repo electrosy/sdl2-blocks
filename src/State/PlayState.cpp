@@ -100,7 +100,7 @@ void PlayState::update(ley::Command command) {
             mStatusFont.updateMessage("Next song");
             statusTimer.reset();
         break;
-        case ley::Command::space :
+        case ley::Command::drop :
             if(mLastHardDrop.hasExpired()) {
                 mGameModel->quickDrop();
                 mLastHardDrop.reset();
