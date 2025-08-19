@@ -28,7 +28,7 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
 
 void MenuState::update(ley::Command command) {
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stopProgram(true);
         break;
     }

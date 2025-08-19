@@ -631,51 +631,57 @@ void ley::GameModel::resizeBoard(int width, int height) {
 }
 
 void ley::GameModel::loadKeyBindings() {
-    mKeyBindings.emplace(SDL_SCANCODE_GRAVE, std::make_pair(KMOD_NONE, ley::Command::console)); 
-    mKeyBindings.emplace(SDL_SCANCODE_F12, std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_NONE, ley::Command::left));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_ALT, ley::Command::shiftleft));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajleft));
-    mKeyBindings.emplace(SDL_SCANCODE_LEFT, std::make_pair(KMOD_CTRL, ley::Command::shiftallleft));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_NONE, ley::Command::right));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_ALT, ley::Command::shiftright));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajright));
-    mKeyBindings.emplace(SDL_SCANCODE_RIGHT, std::make_pair(KMOD_CTRL, ley::Command::shiftallright));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_NONE, ley::Command::down));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajdown));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_ALT, ley::Command::shiftdown));
-    mKeyBindings.emplace(SDL_SCANCODE_DOWN, std::make_pair(KMOD_CTRL, ley::Command::shiftalldown));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_ALT, ley::Command::shiftup));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_SHIFT, ley::Command::shiftmajup));
-    mKeyBindings.emplace(SDL_SCANCODE_UP, std::make_pair(KMOD_CTRL, ley::Command::shiftallup));
-    mKeyBindings.emplace(SDL_SCANCODE_E, std::make_pair(KMOD_NONE, ley::Command::cclockwise));
-    mKeyBindings.emplace(SDL_SCANCODE_R, std::make_pair(KMOD_NONE, ley::Command::clockwise));
-    mKeyBindings.emplace(SDL_SCANCODE_Q, std::make_pair(KMOD_NONE, ley::Command::quit));
-    mKeyBindings.emplace(SDL_SCANCODE_ESCAPE, std::make_pair(KMOD_NONE, ley::Command::quit));
-    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::UI_enter));
-    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
-    mKeyBindings.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
-    mKeyBindings.emplace(SDL_SCANCODE_B, std::make_pair(KMOD_NONE, ley::Command::previousSong));
-    mKeyBindings.emplace(SDL_SCANCODE_SPACE, std::make_pair(KMOD_NONE, ley::Command::drop));
-    mKeyBindings.emplace(SDL_SCANCODE_P, std::make_pair(KMOD_NONE, ley::Command::pause));
-    mKeyBindings.emplace(SDL_SCANCODE_SLASH, std::make_pair(KMOD_NONE, ley::Command::pause));
-    mKeyBindings.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
-    mKeyBindings.emplace(SDL_SCANCODE_MINUS, std::make_pair(KMOD_RSHIFT, ley::Command::decreaseTransparency));
-    mKeyBindings.emplace(SDL_SCANCODE_KP_MINUS, std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
-    mKeyBindings.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
-    mKeyBindings.emplace(SDL_SCANCODE_EQUALS, std::make_pair(KMOD_RSHIFT, ley::Command::increaseTransparency));
-    mKeyBindings.emplace(SDL_SCANCODE_KP_PLUS, std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
-    mKeyBindings.emplace(SDL_SCANCODE_BACKSPACE, std::make_pair(KMOD_NONE, ley::Command::backspace));
-    mKeyBindings.emplace(SDL_SCANCODE_TAB, std::make_pair(KMOD_NONE, ley::Command::tab));
-    mKeyBindings.emplace(SDL_SCANCODE_C, std::make_pair(KMOD_NONE, ley::Command::debugclear));
-    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
-    mKeyBindings.emplace(SDL_SCANCODE_D, std::make_pair(KMOD_NONE, ley::Command::debugtexture));
-    mKeyBindings.emplace(SDL_SCANCODE_F, std::make_pair(KMOD_NONE, ley::Command::debugfill));
-    mKeyBindings.emplace(SDL_SCANCODE_I, std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
-    mKeyBindings.emplace(SDL_SCANCODE_L, std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
-    mKeyBindings.emplace(SDL_SCANCODE_S, std::make_pair(KMOD_NONE, ley::Command::debugcolide));
-    mKeyBindings.emplace(SDL_SCANCODE_U, std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_GRAVE,"play"), std::make_pair(KMOD_NONE, ley::Command::console)); 
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_F12,"play"), std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"play"), std::make_pair(KMOD_NONE, ley::Command::left));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_left));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"play"), std::make_pair(KMOD_ALT, ley::Command::shiftleft));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"play"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajleft));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"play"), std::make_pair(KMOD_CTRL, ley::Command::shiftallleft));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"play"), std::make_pair(KMOD_NONE, ley::Command::right));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_right));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"play"), std::make_pair(KMOD_ALT, ley::Command::shiftright));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"play"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajright));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"play"), std::make_pair(KMOD_CTRL, ley::Command::shiftallright));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"play"), std::make_pair(KMOD_NONE, ley::Command::down));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_down));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"play"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajdown));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"play"), std::make_pair(KMOD_ALT, ley::Command::shiftdown));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"play"), std::make_pair(KMOD_CTRL, ley::Command::shiftalldown));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"play"), std::make_pair(KMOD_NONE, ley::Command::cclockwise));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_up));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"play"), std::make_pair(KMOD_ALT, ley::Command::shiftup));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"play"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajup));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"play"), std::make_pair(KMOD_CTRL, ley::Command::shiftallup));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_E,"play"), std::make_pair(KMOD_NONE, ley::Command::cclockwise));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_R,"play"), std::make_pair(KMOD_NONE, ley::Command::clockwise));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_Q,"play"), std::make_pair(KMOD_NONE, ley::Command::quit));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_ESCAPE,"play"), std::make_pair(KMOD_NONE, ley::Command::quit));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_ESCAPE,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_back));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_enter));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"play"), std::make_pair(KMOD_ALT, ley::Command::fullscreen));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_N,"play"), std::make_pair(KMOD_NONE, ley::Command::nextSong));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_B,"play"), std::make_pair(KMOD_NONE, ley::Command::previousSong));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_SPACE,"play"), std::make_pair(KMOD_NONE, ley::Command::drop));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_P,"play"), std::make_pair(KMOD_NONE, ley::Command::pause));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_SLASH,"play"), std::make_pair(KMOD_NONE, ley::Command::pause));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_MINUS,"play"), std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_MINUS,"play"), std::make_pair(KMOD_RSHIFT, ley::Command::decreaseTransparency));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_KP_MINUS,"play"), std::make_pair(KMOD_NONE, ley::Command::decreaseVolume));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_EQUALS,"play"), std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_EQUALS,"play"), std::make_pair(KMOD_RSHIFT, ley::Command::increaseTransparency));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_KP_PLUS,"play"), std::make_pair(KMOD_NONE, ley::Command::increaseVolume));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_BACKSPACE,"play"), std::make_pair(KMOD_NONE, ley::Command::backspace));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_BACKSPACE,"ui"), std::make_pair(KMOD_NONE, ley::Command::backspace));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_TAB,"play"), std::make_pair(KMOD_NONE, ley::Command::tab));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_C,"play"), std::make_pair(KMOD_NONE, ley::Command::debugclear));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"play"), std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"play"), std::make_pair(KMOD_NONE, ley::Command::debugtexture));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_F,"play"), std::make_pair(KMOD_NONE, ley::Command::debugfill));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_I,"play"), std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_L,"play"), std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_S,"play"), std::make_pair(KMOD_NONE, ley::Command::debugcolide));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_U,"play"), std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
 }
 
 void ley::GameModel::loadButtonBindings() {
@@ -743,7 +749,7 @@ std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Comman
             }
 
             // TODO can we do this without casting?
-            output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first);
+            output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first.first);
         }
     }
 

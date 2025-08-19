@@ -72,10 +72,10 @@ void HighScoresMenuState::UI_ToggleFocus() {
 
 void HighScoresMenuState::update(ley::Command command) {
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
-        case ley::Command::enter :
+        case ley::Command::UI_enter :
             commitUI();
         break;
     }

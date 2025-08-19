@@ -45,10 +45,10 @@ ley::Command ley::Input::lookupPadCommand(const std::pair<SDL_GameControllerButt
     return ley::Command::none;
 }
 
-ley::Command ley::Input::lookupKeyCommand(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings) {
+ley::Command ley::Input::lookupKeyCommand(const std::pair<SDL_Scancode, std::string> inputContext, Uint16 modifiers, KeyBindingsType* bindings) {
     
     // Get range of entries for this scancode
-    auto range = bindings->equal_range(scancode);
+    auto range = bindings->equal_range({inputContext.first,inputContext.second});
     
     // Iterate through all bindings for this key
     for (auto it = range.first; it != range.second; ++it) {
@@ -142,7 +142,7 @@ void ley::Input::pollEvents(
             //if the delay timer has expired and the repeat timer has expired
             if(keyPress->getDelayTimerPtr()->hasExpired() && keyPress->getRepeatTimerPtr()->hasExpired()) {
                 
-                ley::Command command = lookupKeyCommand( (SDL_Scancode)key, get_mod_bitmask(), inKeyboardBindings);
+                ley::Command command = lookupKeyCommand( {(SDL_Scancode)key,context}, get_mod_bitmask(), inKeyboardBindings);
                 //don't repeat the enter command.
                 if(command != ley::Command::enter) {
                     commandQueuePtr->push(command);
@@ -215,7 +215,7 @@ void ley::Input::pollEvents(
                             SDL_Log("Scancode D");
                         }
                             
-                        command = lookupKeyCommand(pressedKey, pressedModifiers, inKeyboardBindings);
+                        command = lookupKeyCommand({pressedKey,context}, pressedModifiers, inKeyboardBindings);
                         
                         if(command == ley::Command::fullscreen) {
                             fullscreen = !fullscreen;

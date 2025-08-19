@@ -136,20 +136,20 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 void OptionMenuState::update(ley::Command command) {
 
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 6) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 6) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 7) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 7) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    if(command == ley::Command::enter && mOptionUI.getIndex() == 8) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
         mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
@@ -278,7 +278,7 @@ bool OptionMenuState::onEnter() {
 
 
     positionOptionsLabels();
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }
@@ -288,7 +288,7 @@ bool OptionMenuState::onReEnter() {
 
     initTextEntryMessages();
     positionOptionsLabels();
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }
