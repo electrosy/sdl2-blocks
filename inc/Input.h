@@ -28,9 +28,16 @@ namespace ley {
 const auto KEY_DELAY_TIME_DEFAULT = 250;
 const auto KEY_REPEAT_TIME_DEFAULT = 35;
 
+/*
+typedef struct {
+    SDL_GameControllerButton button;
+    std::string context;
+} buttonMapContext;
+*/
+
 typedef std::map<Uint8, std::pair<ley::Timer, ley::Timer>> InputPressedType;
 typedef std::multimap<SDL_Scancode, std::pair<Uint16, ley::Command>> KeyBindingsType; //SDL_Scancode, <Modifers, Command>
-typedef std::map<SDL_GameControllerButton, ley::Command> PadBindingsType; //SDL_GameControllerButton, <Modifers, Command>
+typedef std::map<std::pair<SDL_GameControllerButton,std::string>, ley::Command> PadBindingsType; //SDL_GameControllerButton, <Modifers, Command>
 
 class InputPressed {
 
@@ -52,7 +59,7 @@ class Input {
 private:
 
     // TODO lookupCommand should be replaced with lookupCommand2 and renamed to lookupCommand.
-    ley::Command lookupPadCommand(const SDL_GameControllerButton scancode, PadBindingsType* bindings);
+    ley::Command lookupPadCommand(const std::pair<SDL_GameControllerButton, std::string> scancodeContext, PadBindingsType* bindings);
     ley::Command lookupKeyCommand(const SDL_Scancode scancode, Uint16 modifiers, KeyBindingsType* bindings);
     SDL_GameController *mControllerPtr = nullptr; //For the gamepad.
     std::map<Uint8, std::unique_ptr<InputPressed>> mKeysPressed; //keyboard

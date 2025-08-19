@@ -51,7 +51,10 @@ enum class Command {
     tab,
     backspace,
     fullscreen,
-    UI_up}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+    UI_up,
+    UI_down,
+    UI_left,
+    UI_right}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;
@@ -79,8 +82,7 @@ const std::unordered_map<std::string, ley::Command> STRINGTOCOMMAND = {
     {"clockwise", ley::Command::clockwise},
     {"enter", ley::Command::enter},
     {"quit", ley::Command::quit},
-    {"right", ley::Command::right},
-    {"UI_up", ley::Command::UI_up}
+    {"right", ley::Command::right}
 };
 
 const std::unordered_map<std::string, SDL_GameControllerButton> STRINGTOBUTTON = {

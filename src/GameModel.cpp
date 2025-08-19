@@ -600,7 +600,7 @@ void ley::GameModel::readGamePadConfig(std::vector<std::pair<SDL_GameControllerB
         {
             std::stringstream ss(line);
             
-            mButtonBindings.insert({SDL_CONTROLLER_BUTTON_BACK, ley::Command::quit});
+            mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"play"}, ley::Command::quit});
             std::string sButton, sCommand;
             std::getline(ss,sButton,',');
             std::getline(ss,sCommand,',');
@@ -684,8 +684,13 @@ void ley::GameModel::loadButtonBindings() {
     readGamePadConfig(&buttonMappingData);
 
     for(std::pair<SDL_GameControllerButton, ley::Command> buttonMap : buttonMappingData) {
-        mButtonBindings.insert({buttonMap.first,buttonMap.second});
-    }         
+        mButtonBindings.insert({{buttonMap.first,"play"},buttonMap.second});
+    }
+
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_UP,"ui"},ley::Command::UI_up});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_DOWN,"ui"},ley::Command::UI_down});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_LEFT,"ui"},ley::Command::UI_left});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_RIGHT,"ui"},ley::Command::UI_right});
 
     /*
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});
@@ -753,7 +758,7 @@ std::string ley::GameModel::getPadInputString(std::string seperator, ley::Comman
             }
             
             // TODO can we do this without casting?
-            output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first);
+            output += (std::string)SDL_GameControllerGetStringForButton((SDL_GameControllerButton)kv.first.first);
 
         }
     }

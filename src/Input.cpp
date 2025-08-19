@@ -36,10 +36,10 @@ ley::Input::~Input() {
     SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
 }
 
-ley::Command ley::Input::lookupPadCommand(const SDL_GameControllerButton scancode, PadBindingsType* bindings) {
+ley::Command ley::Input::lookupPadCommand(const std::pair<SDL_GameControllerButton, std::string> scancodeContext, PadBindingsType* bindings) {
 
-    if(bindings->find(scancode) != bindings->end() ) {
-        return bindings->at(scancode);
+    if(bindings->find(scancodeContext) != bindings->end() ) {
+        return bindings->at(scancodeContext);
     }
 
     return ley::Command::none;
@@ -157,7 +157,7 @@ void ley::Input::pollEvents(
             keyPress.second.runFrame(false); //the repeat timer.
 
             if(keyPress.first.hasExpired() && keyPress.second.hasExpired()) {
-                commandQueuePtr->push(lookupPadCommand((SDL_GameControllerButton)key, buttonBindings2));
+                commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)key,"play"}, buttonBindings2));
                 //reset the repeat timer
                 keyPress.second.reset();
             }
@@ -252,7 +252,7 @@ void ley::Input::pollEvents(
                         mButtonsPressed[buttonPressed].second.reset();
                     }
 
-                    commandQueuePtr->push(lookupPadCommand((SDL_GameControllerButton)buttonPressed, buttonBindings2));
+                    commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)buttonPressed, "play"}, buttonBindings2));
                 }
                 break;
 
