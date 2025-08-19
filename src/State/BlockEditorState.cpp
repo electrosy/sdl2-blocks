@@ -99,7 +99,7 @@ void BlockEditorState::update(ley::Command command) {
     }
 
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
             break;
 
@@ -194,14 +194,14 @@ bool BlockEditorState::onEnter() {
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         dynamic_cast<UIWidget*>( tile.get() )->setVisible(true);
     }
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
     
     return true;
 }
 
 bool BlockEditorState::onReEnter() {
     SDL_Log("ReEntering BlockEditorState");
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
     return true;
 }
 

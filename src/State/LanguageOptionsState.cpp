@@ -25,18 +25,18 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
 void LanguageOptionsState::update(ley::Command command) {
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
 
-    if(command == ley::Command::enter && mLanguageUI.getIndex() == 0) {
+    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 0) {
         mGameModel->getLanguageModel()->setLanguage("en");
         mGameModel->getLanguageModel()->loadLanguage();
         updateLanguageFont();
     }
 
-    if(command == ley::Command::enter && mLanguageUI.getIndex() == 1) {
+    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 1) {
         mGameModel->getLanguageModel()->setLanguage("es");
         mGameModel->getLanguageModel()->loadLanguage();
         updateLanguageFont();
@@ -64,14 +64,14 @@ bool LanguageOptionsState::onEnter() {
 
     SDL_Log("Entering LanguageOptionsState");
     loadRenderables();
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }
 
 bool LanguageOptionsState::onReEnter() {
     SDL_Log("ReEntering LanguageOptionsState");
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }

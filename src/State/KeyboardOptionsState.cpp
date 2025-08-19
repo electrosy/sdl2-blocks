@@ -110,7 +110,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
 void KeyboardOptionsState::update(ley::Command command) {
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
@@ -136,14 +136,14 @@ void KeyboardOptionsState::loadRenderables() {
 bool KeyboardOptionsState::onEnter() {
     SDL_Log("Entering KeyboardOptionsState");
     loadRenderables();
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }
 
 bool KeyboardOptionsState::onReEnter() {
     SDL_Log("ReEntering KeyboardOptionsState");
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
 
     return true;
 }
