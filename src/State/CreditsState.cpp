@@ -10,7 +10,6 @@ CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("credits"), 0, {}, {1000,{0,0,0,0}})),
-//    mCreditsPanel(ley::Sprite(TextureManager::Instance()->getTexture("credits-panel"), 0, {}, {0,{0,0,0,0}})),
     mNameFont{310,200,100,50},
     mMainRolesFont{310,235,100,50},
     mMusicByFont{645,200,100,50},
@@ -21,9 +20,6 @@ CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
     mSoundEffectsNamesFont{645,405,100,50},
     mAblockalypseUsesFont{310,370,100,50},
     mAblockalypseUsesNamesFont{310,405,100,50} {
-
-//    mCreditsPanel.center();
-
     mNameFont.updateMessage("Steven Philley");
     mMainRolesFont.setFontSize(14);
 
@@ -62,7 +58,7 @@ CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
 
 void CreditsState::update(ley::Command command) {
     switch (command) {
-        case ley::Command::quit :
+        case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
         break;
     }
@@ -97,14 +93,14 @@ void CreditsState::loadRenderables() {
 
 bool CreditsState::onEnter() {
     SDL_Log("Entering CreditsState");
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
     loadRenderables();
     return true;
 }
 
 bool CreditsState::onReEnter() {
     SDL_Log("ReEntering CreditsState");
-    mCurrentInputContext = "play";
+    mCurrentInputContext = "ui";
     return true;
 }
 
