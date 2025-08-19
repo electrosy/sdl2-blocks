@@ -144,7 +144,10 @@ void ley::Input::pollEvents(
                 
                 ley::Command command = lookupKeyCommand( {(SDL_Scancode)key,context}, get_mod_bitmask(), inKeyboardBindings);
                 //don't repeat the enter command.
-                if(command != ley::Command::enter) {
+                if(command != ley::Command::enter 
+                    && command != ley::Command::UI_back 
+                    && command != ley::Command::UI_enter
+                    && command != ley::Command::pause) {
                     commandQueuePtr->push(command);
                 }
                 //reset the repeat timer
@@ -158,7 +161,14 @@ void ley::Input::pollEvents(
             keyPress.second.runFrame(false); //the repeat timer.
 
             if(keyPress.first.hasExpired() && keyPress.second.hasExpired()) {
-                commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)key,context}, buttonBindings2));
+                ley::Command command = lookupPadCommand({(SDL_GameControllerButton)key,context}, buttonBindings2);
+
+                if(command != ley::Command::enter 
+                    && command != ley::Command::UI_back 
+                    && command != ley::Command::UI_enter
+                    && command != ley::Command::pause) {
+                    commandQueuePtr->push(command);
+                }
                 //reset the repeat timer
                 keyPress.second.reset();
             }
