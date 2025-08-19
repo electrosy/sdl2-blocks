@@ -94,4 +94,9 @@ void ley::GameStateMachine::commitUI() {
     }
 }
 
+GameState* ley::GameStateMachine::back() {
+    return mGameStates.back();
+}
+
+
 }

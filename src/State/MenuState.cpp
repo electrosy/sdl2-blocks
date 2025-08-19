@@ -33,25 +33,25 @@ void MenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::enter && mainUI.getIndex() == 0) {
+    if(command == ley::Command::UI_enter && mainUI.getIndex() == 0) {
         mGameModel->stateChange(ley::StateChange::play);
     }
 
-    if(command == ley::Command::enter && mainUI.getIndex() == 1) {
+    if(command == ley::Command::UI_enter && mainUI.getIndex() == 1) {
         mGameModel->stateChange(ley::StateChange::highscores);
     }
 
-    if(command == ley::Command::enter && mainUI.getIndex() == 2) {
+    if(command == ley::Command::UI_enter && mainUI.getIndex() == 2) {
         mGameModel->stateChange(ley::StateChange::options);
     }
 
-    if(command == ley::Command::enter && mainUI.getIndex() == 3) {
+    if(command == ley::Command::UI_enter && mainUI.getIndex() == 3) {
         mGameModel->stateChange(ley::StateChange::quitstate);
         mGameModel->setGameRunning(false);
         mGameModel->stopProgram(true);
     }
 
-    if(command == ley::Command::enter && mainUI.getIndex() == 4) {
+    if(command == ley::Command::UI_enter && mainUI.getIndex() == 4) {
         mGameModel->stateChange(ley::StateChange::credits);
     }
 
@@ -79,6 +79,8 @@ void MenuState::loadRenderables() {
 bool MenuState::onEnter() {
     SDL_Log("Entering MenuState");    
     loadRenderables();
+    mCurrentInputContext = "ui";
+
     return true;
 }
 
@@ -92,6 +94,7 @@ bool MenuState::onReEnter() {
     mainUI.getElementPtr("options")->setMessage(mGameModel->getLanguageModel()->getWord("options", 0, false, capitalizationtype::capitalizeFirst));
     mainUI.getElementPtr("exit")->setMessage(mGameModel->getLanguageModel()->getWord("exit", 0, false, capitalizationtype::capitalizeFirst));
     mainUI.getElementPtr("credits")->setMessage(mGameModel->getLanguageModel()->getWord("credits", 0, false, capitalizationtype::capitalizeFirst));
+    mCurrentInputContext = "ui";
 
     return true;
 }

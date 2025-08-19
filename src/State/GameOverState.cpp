@@ -43,11 +43,13 @@ void GameOverState::loadRenderables() {
 
 bool GameOverState::onEnter() {
     SDL_Log("Entering GameOverState");
+    mCurrentInputContext = "play";
     return true;
 }
 
 bool GameOverState::onReEnter() {
     SDL_Log("ReEntering GameOverState");
+    mCurrentInputContext = "play";
     return true;
 }
 

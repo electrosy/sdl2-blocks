@@ -173,6 +173,7 @@ bool PlayState::onEnter() {
         SDL_Log("Minimal Assets loaded!");
     #endif
 
+    mCurrentInputContext = "play";
 
     return true;
 }
@@ -182,6 +183,8 @@ bool PlayState::onReEnter() {
         fallTimer.pause(false);
     }
     SDL_Log("ReEntering PlayState");
+
+    mCurrentInputContext = "play";
 
     return true;
 }

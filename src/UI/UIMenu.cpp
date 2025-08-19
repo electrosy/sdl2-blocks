@@ -148,18 +148,18 @@ void ley::UIMenu::render(ley::Video* v) {
 void ley::UIMenu::runCommand(ley::Command command) {
     if(count() > 0) {
             
-        if(command == ley::Command::down || command == ley::Command::right) {
+        if(command == ley::Command::UI_down || command == ley::Command::UI_right) {
 
-            if(mWidth > 1 && command == ley::Command::down) {
+            if(mWidth > 1 && command == ley::Command::UI_down) {
                 next(ley::UIMenuItem::row);
             } else {
                 next(ley::UIMenuItem::cell);
             }
         }
         
-        if(command == ley::Command::cclockwise || command == ley::Command::up || command == ley::Command::left) {
+        if(command == ley::Command::UI_up || command == ley::Command::UI_left) {
             
-            if(mWidth > 1 && (command == ley::Command::up || command == ley::Command::cclockwise)) {
+            if(mWidth > 1 && (command == ley::Command::UI_up)) {
                 previous(ley::UIMenuItem::row);
             } else {
                 previous(ley::UIMenuItem::cell);

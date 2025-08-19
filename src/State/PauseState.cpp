@@ -57,11 +57,13 @@ void PauseState::loadRenderables() {
 bool PauseState::onEnter() {
     SDL_Log("Entering PauseState and loading renderables");
     loadRenderables();
+    mCurrentInputContext = "play";
     return true;
 }
 
 bool PauseState::onReEnter() {
     SDL_Log("ReEntering PauseState");
+    mCurrentInputContext = "play";
     return true;
 }
 

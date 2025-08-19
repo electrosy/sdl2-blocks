@@ -64,11 +64,15 @@ bool LanguageOptionsState::onEnter() {
 
     SDL_Log("Entering LanguageOptionsState");
     loadRenderables();
+    mCurrentInputContext = "play";
+
     return true;
 }
 
 bool LanguageOptionsState::onReEnter() {
     SDL_Log("ReEntering LanguageOptionsState");
+    mCurrentInputContext = "play";
+
     return true;
 }
 

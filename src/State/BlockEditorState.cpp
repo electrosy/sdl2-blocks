@@ -194,13 +194,14 @@ bool BlockEditorState::onEnter() {
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         dynamic_cast<UIWidget*>( tile.get() )->setVisible(true);
     }
-
+    mCurrentInputContext = "play";
     
     return true;
 }
 
 bool BlockEditorState::onReEnter() {
     SDL_Log("ReEntering BlockEditorState");
+    mCurrentInputContext = "play";
     return true;
 }
 

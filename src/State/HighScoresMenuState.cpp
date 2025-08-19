@@ -129,11 +129,15 @@ bool HighScoresMenuState::onEnter() {
     mGameModel->highScores()->setClean(true);
 
     loadRenderables();
+    mCurrentInputContext = "ui";
+
     return true;
 }
 
 bool HighScoresMenuState::onReEnter() {
     SDL_Log("ReEntering HighScoresMenuState");
+    mCurrentInputContext = "ui";
+
     return true;
 }
 

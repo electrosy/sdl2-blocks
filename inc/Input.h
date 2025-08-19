@@ -68,14 +68,15 @@ private:
 public:
     Input();
     ~Input();
-    void pollEvents(bool& fullscreen, 
+    void pollEvents(bool& fullscreen,
         PadBindingsType* buttonBindings2,
         KeyBindingsType* bindingsNewType, 
-        std::queue<ley::Command>* commandQueuePtr, 
-        ley::UIWidget* te, 
-        const std::function<void(ley::Command c)>& function, 
+        std::queue<ley::Command>* commandQueuePtr,
+        ley::UIWidget* te,
+        const std::function<void(ley::Command c)>& function,
         int keyDelay,
-        int keyRepeat);
+        int keyRepeat,
+        std::string context);
 };
 
 }

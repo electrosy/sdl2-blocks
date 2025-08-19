@@ -76,7 +76,8 @@ void ley::Input::pollEvents(
     ley::UIWidget* te,
     const std::function<void(ley::Command c)>& function,
     int inKeyDelay,
-    int inKeyRepeat) {
+    int inKeyRepeat,
+    std::string context) {
     
     
     SDL_Event event;
@@ -131,7 +132,7 @@ void ley::Input::pollEvents(
 
     };
 
-    auto check_timers = [this, commandQueuePtr, alt_mod, buttonBindings2, get_mod_bitmask, inKeyboardBindings]() {
+    auto check_timers = [this, commandQueuePtr, alt_mod, buttonBindings2, get_mod_bitmask, inKeyboardBindings, context]() {
      
         for(auto &[key, keyPress] : mKeysPressed) {
 
@@ -157,7 +158,7 @@ void ley::Input::pollEvents(
             keyPress.second.runFrame(false); //the repeat timer.
 
             if(keyPress.first.hasExpired() && keyPress.second.hasExpired()) {
-                commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)key,"play"}, buttonBindings2));
+                commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)key,context}, buttonBindings2));
                 //reset the repeat timer
                 keyPress.second.reset();
             }
@@ -198,7 +199,7 @@ void ley::Input::pollEvents(
                     }
 
                     if(!event.key.repeat) {
-                        //reset the timers if this key was previously not pressed 
+                        //reset the timers if this key was previously not pressed
                         if(mKeysPressed.find(pressedKey) == mKeysPressed.end()) {
 
                             //skip modifiers as we don't want to repeat modifier keys
@@ -252,7 +253,7 @@ void ley::Input::pollEvents(
                         mButtonsPressed[buttonPressed].second.reset();
                     }
 
-                    commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)buttonPressed, "play"}, buttonBindings2));
+                    commandQueuePtr->push(lookupPadCommand({(SDL_GameControllerButton)buttonPressed, context}, buttonBindings2));
                 }
                 break;
 

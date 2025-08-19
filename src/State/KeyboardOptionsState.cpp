@@ -136,11 +136,15 @@ void KeyboardOptionsState::loadRenderables() {
 bool KeyboardOptionsState::onEnter() {
     SDL_Log("Entering KeyboardOptionsState");
     loadRenderables();
+    mCurrentInputContext = "play";
+
     return true;
 }
 
 bool KeyboardOptionsState::onReEnter() {
     SDL_Log("ReEntering KeyboardOptionsState");
+    mCurrentInputContext = "play";
+
     return true;
 }
 

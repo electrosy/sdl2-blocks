@@ -278,6 +278,7 @@ bool OptionMenuState::onEnter() {
 
 
     positionOptionsLabels();
+    mCurrentInputContext = "play";
 
     return true;
 }
@@ -287,6 +288,7 @@ bool OptionMenuState::onReEnter() {
 
     initTextEntryMessages();
     positionOptionsLabels();
+    mCurrentInputContext = "play";
 
     return true;
 }

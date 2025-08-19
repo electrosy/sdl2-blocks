@@ -16,8 +16,8 @@ private:
 
 protected:
     bool done = false;
-    //static TextEntry* mActiveUIElement;
     static UIWidget* mActiveUIElement;
+    static std::string mCurrentInputContext;
     
 public:
     virtual void update(ley::Command command) = 0;
@@ -32,10 +32,9 @@ public:
     virtual void UI_ToggleFocus();
     virtual void commitUI();
     bool isDone(); // Returns true when everything in this state is finished.
-    
     virtual std::string getStateID() const = 0;
-
     virtual ~GameState() {SDL_Log("Gamestate dtor()");};
+    std::string currentInputContext();
 };
 
 }

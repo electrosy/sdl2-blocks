@@ -54,7 +54,9 @@ enum class Command {
     UI_up,
     UI_down,
     UI_left,
-    UI_right}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
+    UI_right,
+    UI_enter,
+    UI_back}; //these include directions and other inputs, this is overloaded maybe a couple enums would work better?
 
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;

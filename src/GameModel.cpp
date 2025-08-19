@@ -653,7 +653,7 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(SDL_SCANCODE_R, std::make_pair(KMOD_NONE, ley::Command::clockwise));
     mKeyBindings.emplace(SDL_SCANCODE_Q, std::make_pair(KMOD_NONE, ley::Command::quit));
     mKeyBindings.emplace(SDL_SCANCODE_ESCAPE, std::make_pair(KMOD_NONE, ley::Command::quit));
-    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::enter));
+    mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_NONE, ley::Command::UI_enter));
     mKeyBindings.emplace(SDL_SCANCODE_RETURN, std::make_pair(KMOD_ALT, ley::Command::fullscreen));
     mKeyBindings.emplace(SDL_SCANCODE_N, std::make_pair(KMOD_NONE, ley::Command::nextSong));
     mKeyBindings.emplace(SDL_SCANCODE_B, std::make_pair(KMOD_NONE, ley::Command::previousSong));
@@ -691,6 +691,10 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_DOWN,"ui"},ley::Command::UI_down});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_LEFT,"ui"},ley::Command::UI_left});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_RIGHT,"ui"},ley::Command::UI_right});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_X,"ui"},ley::Command::UI_enter});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_START,"ui"},ley::Command::UI_enter});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"ui"},ley::Command::UI_back});
+
 
     /*
     mButtonBindings.insert({SDL_CONTROLLER_BUTTON_DPAD_DOWN, ley::Command::down});

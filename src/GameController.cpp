@@ -75,9 +75,10 @@ void ley::GameController::runGameLoop() {
                     break;
                 }
                 mGameStateMachine.activeUIElement()->onKeyDown(character);
-            }
-            , mGm->getKeyDelay(),
-        mGm->getKeyRepeat());
+            }, 
+            mGm->getKeyDelay(),
+            mGm->getKeyRepeat(),
+            mGameStateMachine.back()->currentInputContext());
 
         ley::Command command = ley::Command::none;
         if(!mCommandQueue.empty()) {
@@ -164,7 +165,7 @@ void ley::GameController::processCommands(ley::Command command) {
 }
 void ley::GameController::processStates(ley::Command inCommand) {
     //Quit the introstate and goto the menu state.
-    if((inCommand == ley::Command::enter || mGameStateMachine.isStateDone())
+    if((inCommand == ley::Command::UI_enter || mGameStateMachine.isStateDone())
         && mGameStateMachine.getStateId() == "INTRO") {
         mGameStateMachine.changeState(new ley::MenuState(mVideoSystem, mGm));
     }

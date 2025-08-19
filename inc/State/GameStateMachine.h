@@ -21,6 +21,7 @@ public:
     ley::UIWidget* activeUIElement();
     void commitUI();
     void UI_ToggleFocus();
+    GameState* back();
 
 protected:
 

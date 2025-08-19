@@ -79,11 +79,15 @@ bool IntroState::onEnter() {
     SDL_Log("Entering IntroState");
     mLogo.resetFader();
     loadRenderables();
+    mCurrentInputContext = "ui";
+
     return true;
 }
 
 bool IntroState::onReEnter() {
     SDL_Log("ReEntering IntroState");
+    mCurrentInputContext = "ui";
+
     return true;
 }
 

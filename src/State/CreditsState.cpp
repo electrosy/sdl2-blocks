@@ -97,12 +97,14 @@ void CreditsState::loadRenderables() {
 
 bool CreditsState::onEnter() {
     SDL_Log("Entering CreditsState");
+    mCurrentInputContext = "play";
     loadRenderables();
     return true;
 }
 
 bool CreditsState::onReEnter() {
     SDL_Log("ReEntering CreditsState");
+    mCurrentInputContext = "play";
     return true;
 }
 
