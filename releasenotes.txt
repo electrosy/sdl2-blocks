@@ -1,4 +1,7 @@
-Add option for quick drop cool down
+Add option for quick drop cool down which prevents accidental drop.
+Can remap the gamepad buttons with a file (ui and keyboard comming soon).
+Fix issue with double esc or double enter when navigating screens.
+Add additional levels going up to 31 with a 10ms gravity.
 
 0.7.0.4
 
