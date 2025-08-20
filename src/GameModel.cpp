@@ -652,6 +652,7 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_enter));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"ui"), std::make_pair(KMOD_ALT, ley::Command::fullscreen));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_BACKSPACE,"ui"), std::make_pair(KMOD_NONE, ley::Command::backspace));
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"ui"), std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
 
 
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_GRAVE,"play"), std::make_pair(KMOD_NONE, ley::Command::console)); 
@@ -679,7 +680,6 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_BACKSPACE,"play"), std::make_pair(KMOD_NONE, ley::Command::backspace));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_TAB,"play"), std::make_pair(KMOD_NONE, ley::Command::tab));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_C,"play"), std::make_pair(KMOD_NONE, ley::Command::debugclear));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"play"), std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"play"), std::make_pair(KMOD_NONE, ley::Command::debugtexture));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_F,"play"), std::make_pair(KMOD_NONE, ley::Command::debugfill));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_I,"play"), std::make_pair(KMOD_NONE, ley::Command::debugnextlevel));
@@ -696,7 +696,7 @@ void ley::GameModel::loadButtonBindings() {
     for(std::pair<SDL_GameControllerButton, ley::Command> buttonMap : buttonMappingData) {
         mButtonBindings.insert({{buttonMap.first,"play"},buttonMap.second});
     }
-    
+
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_UP,"ui"},ley::Command::UI_up});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_DOWN,"ui"},ley::Command::UI_down});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_LEFT,"ui"},ley::Command::UI_left});
