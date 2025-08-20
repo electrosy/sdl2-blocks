@@ -16,11 +16,11 @@ BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
 
     // TODO localization
     //mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("block editor comming soon", 0, false, capitalizationtype::capitalizeWords));
-    mShiftControlsFont.updateMessage("Press \"alt + arrow\", \"shift + arrow\", \"ctrl + arrow\" to shift blocks");
+    mShiftControlsFont.updateMessage("Press \"alt + arrow\", \"shift + arrow\", \"ctrl + arrow\" to shift blocks.");
     mShiftControlsFont.setFontSize(EDITOR_FONT_SIZE);
     mShiftControlsFont.right(SCREEN_WIDTH);
     mShiftControlsFont.bottom(SCREEN_HEIGHT, 1);
-    mHelpTipFont.updateMessage("Press \"right ctrl + d\" to restore to default blocks");
+    mHelpTipFont.updateMessage("Press \"right ctrl + d\" to restore to default blocks. Press \"del\" or \"backspace\" to remove the tile.");
     mHelpTipFont.setFontSize(EDITOR_FONT_SIZE);
     mHelpTipFont.right(SCREEN_WIDTH);
     mHelpTipFont.bottom(SCREEN_HEIGHT, 2);
@@ -180,6 +180,7 @@ void BlockEditorState::loadRenderables() {
     mRenderables.push_back(&mHelpTipFont);
     mRenderables.push_back(&mShiftControlsFont);
     mRenderables.push_back(&mCurrentTileFont);
+    //mRenderables.push_back(&mHelpDelFont);
 
     for(const std::shared_ptr<UI_Tile> &tile : mTiles) {
         mRenderables.push_back( dynamic_cast<UIWidget*>( tile.get() ));
