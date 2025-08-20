@@ -64,7 +64,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     fonts.push_back(&font_objects[10]);
 
     font_objects[11] = {col2X, col2Y += 40, 400, 40};
-    font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::enter, gm->getKeyBindingsPtr()));
+    font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::UI_enter, gm->getKeyBindingsPtr()));
     fonts.push_back(&font_objects[11]);
 
     Uint16 colButtonY = 460;
@@ -98,7 +98,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     fonts.push_back(&font_objects[18]);
 
     font_objects[19] = {500, colButton2Y += 40, 400, 40};
-    font_objects[19].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getPadInputString(",", ley::Command::enter, gm->getButtonBindingsPtr()));
+    font_objects[19].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getPadInputString(",", ley::Command::UI_enter, gm->getButtonBindingsPtr()));
     fonts.push_back(&font_objects[19]);
 
     // TODO stop using an indexed array for this, its getting old and annoying.
