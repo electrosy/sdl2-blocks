@@ -90,6 +90,8 @@ private:
     void logBlockData();
     void addCanRotateToBlockData();     // we calculate if the block can rotate by checking to see if any orientation is different
     void initGame();                    // set up the blocks. clear and or initialize any other important values
+    void readGamePadConfig(std::vector<ControllerButtonRow>* data);
+    void readKeyboardConfig(std::vector<KeyBindingRow>* data);
     
 public:
     GameModel();
@@ -154,7 +156,7 @@ public:
     void readBlockData();               // read in the block data from file
     Uint8 getDropCoolDown() { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
-    void readGamePadConfig(std::vector<std::pair<SDL_GameControllerButton, ley::Command>>* data);
+
 };
 
 }

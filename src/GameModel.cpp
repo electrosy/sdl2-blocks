@@ -357,7 +357,7 @@ int ley::GameModel::firstLineAt(int start) {
 
 void ley::GameModel::updateSpeed() {
 
-    //a much more natural curve for speed increases.
+    // a much more natural curve for speed increases.
     // original https://www.desmos.com/calculator/7xuo8jryb9
     // percent  https://www.desmos.com/calculator/hivnmiyedk
     // 31 levels https://www.desmos.com/calculator/gvmkmief5c
@@ -590,7 +590,30 @@ void ley::GameModel::quickDrop() {
 
 }
 
-void ley::GameModel::readGamePadConfig(std::vector<std::pair<SDL_GameControllerButton, ley::Command>>* data) {
+void ley::GameModel::readKeyboardConfig(std::vector<KeyBindingRow>* data) {
+
+    std::ifstream inFile("keyboard-config.csv");
+    if (inFile.is_open())
+    {
+        std::string line;
+        while(std::getline(inFile,line))
+        {
+            std::stringstream ss(line);
+            
+            std::string sScanCode, sModifier, sCommand;
+            std::getline(ss,sScanCode,',');
+            std::getline(ss,sModifier,',');
+            std::getline(ss,sCommand);
+
+            SDL_Log((sScanCode + "," + sCommand + "," + sModifier).c_str());
+            if(!sScanCode.empty() && !sCommand.empty()) {
+               data->push_back(std::make_pair(STRINGTOSCANCODE.at(sScanCode), std::make_pair(STRINGTOKMOD.at(sModifier),STRINGTOCOMMAND.at(sCommand))));
+            }
+        }
+    }
+}
+
+void ley::GameModel::readGamePadConfig(std::vector<ControllerButtonRow>* data) {
 
     std::ifstream inFile("gamepad-config.csv");
     if (inFile.is_open())
@@ -600,15 +623,12 @@ void ley::GameModel::readGamePadConfig(std::vector<std::pair<SDL_GameControllerB
         {
             std::stringstream ss(line);
             
-            mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"play"}, ley::Command::quit});
             std::string sButton, sCommand;
             std::getline(ss,sButton,',');
             std::getline(ss,sCommand,',');
 
             SDL_Log( (sButton + "," + sCommand).c_str() );
-            if(!sButton.empty() && !sCommand.empty()) {
-                SDL_GameControllerButton testString = STRINGTOBUTTON.at(sButton);
-                ley::Command testCommand = STRINGTOCOMMAND.at(sCommand);
+            if(!sButton.empty() && !sCommand.empty()) { 
                 data->push_back(std::make_pair(STRINGTOBUTTON.at(sButton), STRINGTOCOMMAND.at(sCommand)));
             }
         }
@@ -655,8 +675,16 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DELETE,"ui"), std::make_pair(KMOD_NONE, ley::Command::backspace));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"ui"), std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
 
+    std::vector<KeyBindingRow> keyMappingData;
+    readKeyboardConfig(&keyMappingData);
 
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_GRAVE,"play"), std::make_pair(KMOD_NONE, ley::Command::console)); 
+    for(KeyBindingRow keyBindingRow : keyMappingData) {
+
+        mKeyBindings.insert({{keyBindingRow.first,"play"},{keyBindingRow.second.first,keyBindingRow.second.second}});
+    }
+
+/*
+    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_GRAVE,"play"), std::make_pair(KMOD_NONE, ley::Command::console));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_F12,"play"), std::make_pair(KMOD_NONE, ley::Command::debugkeystoggle));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"play"), std::make_pair(KMOD_NONE, ley::Command::left));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"play"), std::make_pair(KMOD_NONE, ley::Command::right));
@@ -687,6 +715,8 @@ void ley::GameModel::loadKeyBindings() {
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_L,"play"), std::make_pair(KMOD_NONE, ley::Command::debugonlyline));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_S,"play"), std::make_pair(KMOD_NONE, ley::Command::debugcolide));
     mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_U,"play"), std::make_pair(KMOD_NONE, ley::Command::debugprevlevel));
+*/
+
 }
 
 void ley::GameModel::loadButtonBindings() {
