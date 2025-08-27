@@ -44,7 +44,7 @@ public:
     Uint16 getModifiers() {return mModifiers;};
     ley::Timer* getDelayTimerPtr() { return &mDelayTimer;};
     ley::Timer* getRepeatTimerPtr() { return &mRepeatTimer;};
-    InputPressed(Uint16 sdlKeymod, Uint16 delayTime, Uint16 repeatTime); 
+    InputPressed(Uint16 sdlKeymod, Uint16 delayTime, Uint16 repeatTime);
 };
 
 class Input {

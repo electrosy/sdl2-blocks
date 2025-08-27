@@ -92,6 +92,9 @@ private:
     void initGame();                    // set up the blocks. clear and or initialize any other important values
     void readGamePadConfig(std::vector<ControllerButtonRow>* data);
     void readKeyboardConfig(std::vector<KeyBindingRow>* data);
+    void writeGamePadConfig();
+    void writeKeyboardConfig();
+
     
 public:
     GameModel();
