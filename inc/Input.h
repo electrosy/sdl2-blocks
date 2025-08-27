@@ -30,7 +30,7 @@ const auto KEY_REPEAT_TIME_DEFAULT = 35;
 
 typedef std::pair<SDL_GameControllerButton, ley::Command> ControllerButtonRow;
 typedef std::pair<SDL_Scancode, std::pair<SDL_Keymod,ley::Command>> KeyBindingRow;
-typedef std::multimap<std::pair<SDL_Scancode,std::string>, std::pair<Uint16, ley::Command>> KeyBindingsType; //SDL_Scancode,context, <Modifers, Command>
+typedef std::multimap<std::pair<SDL_Scancode,std::string>, std::pair<SDL_Keymod, ley::Command>> KeyBindingsType; //SDL_Scancode,context, <Modifers, Command>
 typedef std::map<std::pair<SDL_GameControllerButton,std::string>, ley::Command> PadBindingsType; //SDL_GameControllerButton,context, <Modifers, Command>
 
 class InputPressed {

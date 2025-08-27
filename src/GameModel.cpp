@@ -43,6 +43,8 @@ mDebugOnlyLine(false) {
 // TODO rule of 3/5
 ley::GameModel::~GameModel() {
     writeConfig();
+    writeKeyboardConfig();
+    writeGamePadConfig();
 }
 
 /* Accessors */
@@ -615,11 +617,14 @@ void ley::GameModel::readKeyboardConfig(std::vector<KeyBindingRow>* data) {
 void ley::GameModel::writeKeyboardConfig() {
     
     std::ofstream myfile;
-    myfile.open("keyboard-config-testwrite.csv");
+    myfile.open("keyboard-config.csv");
 
     for(const auto& binding : mKeyBindings) {
-         //myfile << SCANCODETOSTRING.at(binding.first.first) << "," << KMODTOSTRING.at(binding.second.first) << << std::endl;
-    
+        //write only commands the play context
+        if(binding.first.second != "play")
+            continue;
+
+        myfile << SCANCODETOSTRING.at(binding.first.first) << "," << KMODTOSTRING.at(binding.second.first) << "," << COMMANDTOSTRING.at(binding.second.second) << std::endl;
     }
 
     myfile.close();
@@ -648,7 +653,19 @@ void ley::GameModel::readGamePadConfig(std::vector<ControllerButtonRow>* data) {
 }
 
 void ley::GameModel::writeGamePadConfig() {
-    
+    std::ofstream myfile;
+    myfile.open("gamepad-config.csv");
+
+    for(const auto& binding : mButtonBindings) {
+        
+        //write only the play context
+        if(binding.first.second != "play")
+            continue;
+
+        myfile << BUTTONTOSTRING.at(binding.first.first) << "," << COMMANDTOSTRING.at(binding.second) << std::endl;
+    }
+
+    myfile.close();
 }
 
 void ley::GameModel::readConfigOther() {
@@ -700,8 +717,6 @@ void ley::GameModel::loadKeyBindings() {
     }
 }
 
-
-
 void ley::GameModel::loadButtonBindings() {
 
     std::vector<std::pair<SDL_GameControllerButton, ley::Command>> buttonMappingData;
@@ -723,7 +738,6 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"ui"},ley::Command::UI_back});
 
 }
-
 
 ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr() {
     return &mKeyBindings;
