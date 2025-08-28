@@ -19,7 +19,7 @@ private:
     std::vector<ley::UIElement> elements; // TODO elements should probably be in a map with label for key and UIElement for value.
     std::vector<ley::Font*> fontsUsed;
     int currentIndex;
-    bool hot; //indicates that this menu item is currently selected.
+    bool hot; //indicates that this menu item is currently selected. TODO this should be associated with the UIElement? Not the menu.
     ley::RenderablesPtr renderables;
     ley::Timer fader;
     ley::Fader mFader;

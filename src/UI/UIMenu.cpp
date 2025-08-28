@@ -51,6 +51,7 @@ int ley::UIMenu::count() {
 void ley::UIMenu::setHot(bool h) {
     hot = h;
 }
+
 SDL_Texture* ley::UIMenu::currentTex() {
     if(hot) {
         return elements.at(currentIndex).getTextureHot();

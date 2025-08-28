@@ -644,7 +644,7 @@ void ley::GameModel::readGamePadConfig(std::vector<ControllerButtonRow>* data) {
             std::getline(ss,sButton,',');
             std::getline(ss,sCommand,',');
 
-            SDL_Log( (sButton + "," + sCommand).c_str() );
+            SDL_Log((sButton + "," + sCommand).c_str());
             if(!sButton.empty() && !sCommand.empty()) { 
                 data->push_back(std::make_pair(STRINGTOBUTTON.at(sButton), STRINGTOCOMMAND.at(sCommand)));
             }
@@ -712,7 +712,6 @@ void ley::GameModel::loadKeyBindings() {
     readKeyboardConfig(&keyMappingData);
 
     for(KeyBindingRow keyBindingRow : keyMappingData) {
-
         mKeyBindings.insert({{keyBindingRow.first,"play"},{keyBindingRow.second.first,keyBindingRow.second.second}});
     }
 }
