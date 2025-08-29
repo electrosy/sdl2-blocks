@@ -31,7 +31,6 @@ private:
     ley::Font mBaseFont;
     ley::Font mHotFont;
     ley::Font mMainFont;
-    bool hot; //indicates that this menu item is currently selected.
     std::function<void()> mUIToggleFunc = {};
     std::function<bool()> mUIInFocus = {};
     std::function<void()> mCommitUI = {};
@@ -44,8 +43,6 @@ public:
     UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     ~UIElement();
 
-    void setActiveSelector(bool);
-    bool isActiveSelector();
     std::string getLabel();
     SDL_Rect getSource();
     SDL_Rect getDestination();
@@ -61,6 +58,8 @@ public:
     std::function<void()> getToggleFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};
     std::function<void()> getEnterFunction() {return mCommitUI;};
+    void setBaseColor(SDL_Color inColor);
+    void setMainColor(SDL_Color inColor);
     
 };
 

@@ -84,6 +84,7 @@ ley::Font& ley::Font::operator=(const ley::Font& other) {
 
 void ley::Font::setColor(SDL_Color c) {
     mColor = c;
+    mMessageTexture = {};
 }
 
 void ley::Font::updateMessage(std::string s) {

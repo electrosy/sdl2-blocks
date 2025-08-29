@@ -28,7 +28,17 @@ ley::UIMenu::~UIMenu() {
         fontPtr = nullptr;
     }
 }
+void ley::UIMenu::pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r) {
+    
+    int w = 0;
+    int h = 0;
+    TTF_SizeUTF8(inFont->getTTFFont() , inFont->getMessage().c_str(), &w, &h);
+    
+    SDL_Point pos = inFont->getPos();
+    pushFont(elementid, {pos.x,pos.y,w,h}, inFont->getMessage(), r, inFont->getFontSize());
+}
 
+// TODO this uses only the width and height from the SDL_Rect, switch to an SDL_Point or something.
 void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size) {
 
     UIElement temp(label, {0,0, dest.w, dest.h}, dest, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
@@ -80,7 +90,6 @@ void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
             // assume this is the font type and pre render the font if its empty.
             mElements[i].preRender(v->getRenderer());
         }
-        
     }
 }
 
@@ -118,10 +127,10 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
     SDL_SetTextureAlphaMod(hotTexture, mFader.alpha());
     SDL_RenderCopy(v->getRenderer(), hotTexture, &src_rect, &dest_rect);
 
-    mFader.runFrame(); // NOTE This actually goes in update, but this works for now.
+    mFader.runFrame(); // TODO this actually goes in update, but this works for now.
 }
 
-void ley::UIMenu::render(ley::Video* v) {
+void ley::UIMenu::render(ley::Video* v) { 
     renderBaseMenuItems(v);
     renderHotItem(v);
 
@@ -206,8 +215,6 @@ void ley::UIMenu::previous(UIMenuItem item) {
             if(mCurrentIndex < 0) {
                 mCurrentIndex = oldCurrentIndex;
             }
-
-            //SDL_Log("col: %i, row: %i", column(), row());
         }
     }
 }
@@ -246,8 +253,6 @@ void ley::UIMenu::next(UIMenuItem item) {
                 mCurrentIndex = oldCurrentIndex;
             }
         }
-
-        //SDL_Log("col: %i, row: %i", column(), row());
     }
 }
 

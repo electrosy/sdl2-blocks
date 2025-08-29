@@ -52,6 +52,8 @@ public:
     std::pair<int, int> size();
     void setColor(SDL_Color c);
     void setFontSize(int size);
+    int getFontSize() { return mPointSize; };
+    // TODO these position methods should probably go into renderable.
     void center();
     void bottom(int screenHeight, int linesFromBottom); //move the font to the bottom of the screen
     void left();

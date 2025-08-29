@@ -14,11 +14,11 @@ public:
     KeyboardOption(int x, int y, std::string label, std::string value);
     void render(SDL_Renderer * r, bool d);
     ley::Font* getLabelFontPtr() { return &mLabelFont; };
-    ley::TextEntry* getTextEntryValuePtr() { return &mValueTextEntry; };
+    ley::Font* getValueFontPtr() { return &mValueFont; };
 private:
     ley::Font mLabelFont;
-    ley::TextEntry mValueTextEntry;
-    SDL_Point mPos;    
+    ley::Font mValueFont;
+    SDL_Point mPos;
 };
 
 

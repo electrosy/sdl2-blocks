@@ -8,24 +8,19 @@ const std::string KeyboardOptionsState::sKeyboardOptionsID = "KEYBOARDOPTIONS";
 
 KeyboardOption::KeyboardOption(int x, int y, std::string label, std::string value) {
     mLabelFont.updateMessage(label);
+    mValueFont.updateMessage(value);
 
     int w = 0;
     int h = 0;
-
     mLabelFont.setPos({x,y});
-
     TTF_SizeUTF8(mLabelFont.getTTFFont(), label.c_str(), &w, &h);
-
-    mValueTextEntry.setPos({x + w + 5, y});
-
-    mValueTextEntry.setTextBoxValue(value);
-    mValueTextEntry.setErrorMessage("");
-    mValueTextEntry.setHelpMessages("","");
+    mValueFont.setPos({x + w + 5, y});
+    mLabelFont.setFontSize(24);
+    mValueFont.setFontSize(24);
 }
 
 void KeyboardOption::render(SDL_Renderer * r, bool d) {
     mLabelFont.render(r,d);
-    mValueTextEntry.render(r,d);
 }
 
 
@@ -45,26 +40,21 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     font_objects[0].updateMessage(mGameModel->getLanguageModel()->getWord("left", 17, false, capitalizationtype::capitalizeFirst)  + ": " + gm->getKeyInputString(",", ley::Command::left, gm->getKeyBindingsPtr()));
     mFonts.push_back(&font_objects[0]);
 
-    /*
     TTF_SizeUTF8(font_objects[0].getTTFFont(), font_objects[0].getMessage().c_str(), &w, &h);
-    mKeyBoardOptions.push_back({10,10,"testing","helping"});
-    mMainUI.pushUIElement(
-        [this](){mKeyBoardOptions.back().getTextEntryValuePtr()->handleFocusChange(&mActiveUIElement, mKeyBoardOptions.back().getLabelFontPtr()->getMessagePtr());},
-        [this]()->bool{return mKeyBoardOptions.back().getTextEntryValuePtr()->hasFocus();},
-        [this](){ if(mKeyBoardOptions.back().getTextEntryValuePtr()->hasFocus()) {mKeyBoardOptions.back().getTextEntryValuePtr()->toggleFocus();} });
-    */
+    mKeyBoardOptions.push_back({0,0,"testing","helping"});
+    mKeyBoardOptions.back().getValueFontPtr()->setColor(CWHITE);
+    mMainUI.pushFont("option1", mKeyBoardOptions.back().getValueFontPtr(), mVideoSystem->getRenderer());
+    mMainUI.getElementPtr("option1")->setBaseColor(CWHITE);
+    mMainUI.getElementPtr("option1")->setMainColor(CDARKTEAL);
 
     font_objects[1] = {20, startY+=40, 400, 40};
     font_objects[1].updateMessage(mGameModel->getLanguageModel()->getWord("right", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getKeyInputString(",", ley::Command::right, gm->getKeyBindingsPtr()));
     mFonts.push_back(&font_objects[1]);
 
-    /*
-    mKeyBoardOptions.push_back({10,50,"testing2","helping2"});
-     mMainUI.pushUIElement(
-        [this](){mKeyBoardOptions.back().getTextEntryValuePtr()->handleFocusChange(&mActiveUIElement, mKeyBoardOptions.back().getLabelFontPtr()->getMessagePtr());},
-        [this]()->bool{return mKeyBoardOptions.back().getTextEntryValuePtr()->hasFocus();},
-        [this](){ if(mKeyBoardOptions.back().getTextEntryValuePtr()->hasFocus()) {mKeyBoardOptions.back().getTextEntryValuePtr()->toggleFocus();} });
-    */
+    mKeyBoardOptions.push_back({0,120,"testing2","helping2"});
+    mMainUI.pushFont("option2", mKeyBoardOptions.back().getValueFontPtr(), mVideoSystem->getRenderer());
+    mMainUI.getElementPtr("option2")->setBaseColor(CWHITE);
+    mMainUI.getElementPtr("option2")->setMainColor(CDARKTEAL);
 
     font_objects[2] = {20, startY+=40, 400, 40};
     font_objects[2].updateMessage(mGameModel->getLanguageModel()->getWord("down", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getKeyInputString(",", ley::Command::down, gm->getKeyBindingsPtr()));
@@ -148,10 +138,7 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
 
     // TODO stop using an indexed array for this, its getting old and annoying.
-
     // NOTE: don't forget to update the array index in the .h file otherwise you will get a crash.
-
-    mActiveUIElement = {};
 }
 
 void KeyboardOptionsState::update(ley::Command command) {
@@ -167,13 +154,12 @@ void KeyboardOptionsState::update(ley::Command command) {
 void KeyboardOptionsState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), mGameModel->isOverlayOn());
 
-    for(ley::KeyboardOption& keyboardOption : mKeyBoardOptions) {
-        keyboardOption.render(mVideoSystem->getRenderer(), false);
-        
-    }
-
     if(mGameModel->isOverlayOn()) {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
+    }
+    
+    for(KeyboardOption keyboardOption : mKeyBoardOptions) {
+        keyboardOption.render(mVideoSystem->getRenderer(), false);
     }
 
     mMainUI.render(mVideoSystem);

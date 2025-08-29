@@ -65,6 +65,9 @@ jobs:
           cp blocks.csv dist/ # Copy blocks file
           cp blocks-default.csv dist/ # Copy blocks file
           cp gamepad-config.csv dist/ # Copy gamepad-config file
+          cp gamepad-config-default.csv dist/
+          cp keyboard-config.csv dist/
+          cp keyboard-config-default.csv dist/
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4

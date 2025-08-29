@@ -15,6 +15,7 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 
+    // TODO the x,y isn't used for the SDL_rect
     mLanguageUI.pushFont("englishLanguage", {29,200,218,63}, mGameModel->getLanguageModel()->getWord("english", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mLanguageUI.pushFont("spanishLanguage", {29,250,218,63}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 

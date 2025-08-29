@@ -16,7 +16,11 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
 }
 
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size)
-: label(l), source(sr), destination(dr), hot(false), mMessage(message) {
+: 
+label(l), 
+source(sr), 
+destination(dr), 
+mMessage(message) {
 
     mBaseFont = mHotFont = mMainFont = {destination.x, destination.y, destination.w, destination.h};
     mBaseFont.updateMessage(mMessage);
@@ -34,14 +38,6 @@ ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string m
 
 ley::UIElement::~UIElement() {
 
-}
-
-void ley::UIElement::setActiveSelector(bool h) {
-    hot = h;
-}
-
-bool ley::UIElement::isActiveSelector() {
-    return hot;
 }
 
 std::string ley::UIElement::getLabel() {
@@ -114,3 +110,10 @@ void ley::UIElement::setFontSize(int size) {
     mMainFont.setFontSize(size);
 }
 
+void ley::UIElement::setBaseColor(SDL_Color inColor) {
+    mBaseFont.setColor(inColor);
+}
+
+void ley::UIElement::setMainColor(SDL_Color inColor) {
+    mMainFont.setColor(inColor);
+}
