@@ -6,80 +6,86 @@ namespace ley {
 
 const std::string KeyboardOptionsState::sKeyboardOptionsID = "KEYBOARDOPTIONS";
 
-KeyboardOption::KeyboardOption(int x, int y, std::string label, std::string value) {
-    mLabelFont.updateMessage(label);
-    mValueFont.updateMessage(value);
-
-    int w = 0;
-    int h = 0;
-    mLabelFont.setPos({x,y});
-    TTF_SizeUTF8(mLabelFont.getTTFFont(), label.c_str(), &w, &h);
-    mValueFont.setPos({x + w + 5, y});
-    mLabelFont.setFontSize(24);
-    mValueFont.setFontSize(24);
-}
-
-void KeyboardOption::render(SDL_Renderer * r, bool d) {
-    mLabelFont.render(r,d);
-}
-
-
 KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     mVideoSystem(v),
     mGameModel(gm),
     mTitleFont{20,20,100,50},
     mButtonTitleFont{20,420,100,50} {
 
+    mMainUI.setWidth(2);
+
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("keyboard inputs", 0, false, capitalizationtype::capitalizeFirst));
     mButtonTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("gamepad inputs", 0, false, capitalizationtype::capitalizeFirst));
-    int w=0;
-    int h=0;
+    
+    std::vector<std::pair<std::string, ley::Command>> commandStrings;
+    commandStrings.push_back(std::make_pair("left", ley::Command::left));
+    commandStrings.push_back(std::make_pair("right", ley::Command::right));
+    commandStrings.push_back(std::make_pair("down", ley::Command::down));
+    commandStrings.push_back(std::make_pair("counter clockwise", ley::Command::cclockwise));
+    commandStrings.push_back(std::make_pair("clockwise", ley::Command::clockwise));
+    commandStrings.push_back(std::make_pair("quick drop", ley::Command::drop));
 
-    Uint16 startY = 100;
-    font_objects[0] = {20, startY, 400, 40};
-    font_objects[0].updateMessage(mGameModel->getLanguageModel()->getWord("left", 17, false, capitalizationtype::capitalizeFirst)  + ": " + gm->getKeyInputString(",", ley::Command::left, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[0]);
+    std::vector<std::pair<std::pair<std::string, ley::Command>,std::pair<std::string, ley::Command>>> commandStrings2;
+    commandStrings2.push_back(std::make_pair(std::make_pair("left", ley::Command::left),std::make_pair("Next Song", ley::Command::nextSong)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("right", ley::Command::right),std::make_pair("Pause Game", ley::Command::pause)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("down", ley::Command::down),std::make_pair("Decrease Volume", ley::Command::decreaseVolume)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("counter clockwise", ley::Command::cclockwise),std::make_pair("Increase Volume", ley::Command::increaseVolume)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("clockwise", ley::Command::clockwise),std::make_pair("Enter", ley::Command::UI_enter)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("quick drop", ley::Command::drop),std::make_pair("", ley::Command::none)));
 
-    TTF_SizeUTF8(font_objects[0].getTTFFont(), font_objects[0].getMessage().c_str(), &w, &h);
-    mKeyBoardOptions.push_back({0,0,"testing","helping"});
-    mKeyBoardOptions.back().getValueFontPtr()->setColor(CWHITE);
-    mMainUI.pushFont("option1", mKeyBoardOptions.back().getValueFontPtr(), mVideoSystem->getRenderer());
-    mMainUI.getElementPtr("option1")->setBaseColor(CWHITE);
-    mMainUI.getElementPtr("option1")->setMainColor(CDARKTEAL);
-
-    font_objects[1] = {20, startY+=40, 400, 40};
-    font_objects[1].updateMessage(mGameModel->getLanguageModel()->getWord("right", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getKeyInputString(",", ley::Command::right, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[1]);
-
-    mKeyBoardOptions.push_back({0,120,"testing2","helping2"});
-    mMainUI.pushFont("option2", mKeyBoardOptions.back().getValueFontPtr(), mVideoSystem->getRenderer());
-    mMainUI.getElementPtr("option2")->setBaseColor(CWHITE);
-    mMainUI.getElementPtr("option2")->setMainColor(CDARKTEAL);
-
-    font_objects[2] = {20, startY+=40, 400, 40};
-    font_objects[2].updateMessage(mGameModel->getLanguageModel()->getWord("down", 17, false, capitalizationtype::capitalizeFirst) + ": " + gm->getKeyInputString(",", ley::Command::down, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[2]);
-
-    font_objects[3] = {20, startY+=40, 400, 40};
-    font_objects[3].updateMessage(mGameModel->getLanguageModel()->getWord("counter clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::cclockwise, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[3]);
-
-    font_objects[4] = {20, startY+=40, 400, 40};
-    font_objects[4].updateMessage(mGameModel->getLanguageModel()->getWord("clockwise", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::clockwise, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[4]);
-
-    font_objects[5] = {20, startY+=40, 400, 40};
-    font_objects[5].updateMessage(mGameModel->getLanguageModel()->getWord("quick drop", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::drop, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[5]);
-
-    font_objects[6] = {20, startY+=40, 400, 40};
-    font_objects[6].updateMessage(mGameModel->getLanguageModel()->getWord("quit", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::quit, gm->getKeyBindingsPtr()));
-    mFonts.push_back(&font_objects[6]);
-
-
-    Uint16 col2Y = 100;
+    Uint16 startY = 60;
+    Uint16 col2Y = 60;
     Uint16 col2X = 575;
-    font_objects[7] = {col2X, col2Y, 400, 40};
+    for(const std::pair<std::pair<std::string, ley::Command>,std::pair<std::string, ley::Command>>& command : commandStrings2) {
+        startY+=40;
+        col2Y+= 40;
+
+        //create an item in left column
+        if(command.first.second != ley::Command::none) {
+            mLabelFonts.push_back({20, startY, 400, 40});
+            mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(command.first.first, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
+            mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), startY, 400, 40});
+            mValueFonts.back().updateMessage(gm->getKeyInputString(",", command.first.second, gm->getKeyBindingsPtr()));
+            mMainUI.pushFont(command.first.first, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(command.first.first)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(command.first.first)->setMainColor(CDARKTEAL);
+        }
+        else {
+            mMainUI.pushPlaceHolder();
+        }
+
+        if(command.second.second != ley::Command::none) {
+            //create an item in the right column
+            mLabelFonts.push_back({col2X, col2Y, 400, 40});
+            mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(command.second.first, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
+            mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), startY, 400, 40});
+            mValueFonts.back().updateMessage(gm->getKeyInputString(",", command.second.second, gm->getKeyBindingsPtr()));
+            mMainUI.pushFont(command.second.first, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(command.second.first)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(command.second.first)->setMainColor(CDARKTEAL);
+        }
+        else {
+            mMainUI.pushPlaceHolder();
+        }
+    }
+
+    /*
+
+    for(const std::pair<std::string, ley::Command>& command : commandStrings) {
+        mLabelFonts.push_back({20, startY+=40, 400, 40});
+        mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(command.first, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
+
+        mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), startY, 400, 40});
+        mValueFonts.back().updateMessage(gm->getKeyInputString(",", command.second, gm->getKeyBindingsPtr()));
+
+        mMainUI.pushFont(command.first, &mValueFonts.back(), mVideoSystem->getRenderer());
+        mMainUI.getElementPtr(command.first)->setBaseColor(CWHITE);
+        mMainUI.getElementPtr(command.first)->setMainColor(CDARKTEAL);
+    }
+    */
+
+    /*
+    font_objects[7] = {col2X, col2Y += 40, 400, 40};
     font_objects[7].updateMessage(mGameModel->getLanguageModel()->getWord("next song", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::nextSong, gm->getKeyBindingsPtr()));
     mFonts.push_back(&font_objects[7]);
 
@@ -98,6 +104,8 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     font_objects[11] = {col2X, col2Y += 40, 400, 40};
     font_objects[11].updateMessage(mGameModel->getLanguageModel()->getWord("enter", 17, false, capitalizationtype::capitalizeWords) + ": " + gm->getKeyInputString(",", ley::Command::UI_enter, gm->getKeyBindingsPtr()));
     mFonts.push_back(&font_objects[11]);
+    */
+
 
     Uint16 colButtonY = 460;
     font_objects[12] = {20, colButtonY += 40, 400, 40};
@@ -141,10 +149,24 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     // NOTE: don't forget to update the array index in the .h file otherwise you will get a crash.
 }
 
+/*
+** returns the pixel width value of the font.
+*/
+int KeyboardOptionsState::fontWidth(ley::Font* inFont) {
+    int w = 0;
+    int h = 0;
+
+    TTF_SizeUTF8(font_objects[19].getTTFFont(), inFont->getMessage().c_str(), &w, &h);
+
+    return w;
+}
+
 void KeyboardOptionsState::update(ley::Command command) {
     switch (command) {
         case ley::Command::UI_back :
             mGameModel->stateChange(ley::StateChange::quitstate);
+        case ley::Command::UI_enter :
+            SDL_Log("UI_Enter!!");
         break;
     }
 
@@ -157,11 +179,13 @@ void KeyboardOptionsState::render() {
     if(mGameModel->isOverlayOn()) {
         mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
     }
-    
+
+    /*
     for(KeyboardOption keyboardOption : mKeyBoardOptions) {
         keyboardOption.render(mVideoSystem->getRenderer(), false);
     }
-
+        */
+    
     mMainUI.render(mVideoSystem);
 }
 
@@ -172,6 +196,11 @@ void KeyboardOptionsState::loadRenderables() {
     for(auto font : mFonts) {
        mRenderables.push_back(font);
     }
+
+    for(auto &font : mLabelFonts) {
+        mRenderables.push_back(&font);
+    }
+
 }
 
 bool KeyboardOptionsState::onEnter() {

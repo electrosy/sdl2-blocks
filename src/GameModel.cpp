@@ -757,8 +757,7 @@ std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Comman
                 output += seperator + " ";
             }
 
-            // TODO can we do this without casting?
-            output += (std::string)SDL_GetScancodeName((SDL_Scancode)kv.first.first);
+            output += SDL_GetScancodeName(kv.first.first);
         }
     }
 

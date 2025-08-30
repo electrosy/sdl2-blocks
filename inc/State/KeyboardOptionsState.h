@@ -9,19 +9,6 @@
 
 namespace ley {
 
-class KeyboardOption : public ley::Renderable {
-public:
-    KeyboardOption(int x, int y, std::string label, std::string value);
-    void render(SDL_Renderer * r, bool d);
-    ley::Font* getLabelFontPtr() { return &mLabelFont; };
-    ley::Font* getValueFontPtr() { return &mValueFont; };
-private:
-    ley::Font mLabelFont;
-    ley::Font mValueFont;
-    SDL_Point mPos;
-};
-
-
 class KeyboardOptionsState : public ley::GameState {
 public:
 
@@ -47,10 +34,12 @@ private:
     ley::Font mButtonTitleFont;
     ley::Font font_objects[20]; //Fonts use to display the label and value for keyboard and gamepad mapping
     std::vector<ley::Font*> mFonts; //Pointers to all the fonts.
-    std::vector<ley::KeyboardOption> mKeyBoardOptions;
+    std::vector<ley::Font> mLabelFonts;
+    std::vector<ley::Font> mValueFonts;
     RenderablesPtr mRenderables;
     RenderablesPtr mDebugRenderables;
     ley::UIMenu mMainUI;
+    int fontWidth(ley::Font* inFont);
 };
 
 }

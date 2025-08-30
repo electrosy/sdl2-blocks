@@ -11,7 +11,6 @@ class Layout {
 
 
 private:
-    
 
     SDL_Rect mStartPoint; //start point plus width and height.
     Uint16 mMajorGridSize = 1; // major grid can be set to give a larger space every x cells.

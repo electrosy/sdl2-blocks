@@ -23,6 +23,8 @@ private:
     std::vector<ley::Font*> mFontsUsed;    
     ley::RenderablesPtr mRenderables;
     ley::Fader mFader;
+    bool isCurrentCellNull();
+    bool validNext(ley::UIMenuItem inMenuItem);
     
 
 protected:
@@ -43,6 +45,7 @@ public:
     void pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r);
     void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size);
     void pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
+    void pushPlaceHolder();
     int getIndex();
     void clear(); //clear out all the elements.
     int count();

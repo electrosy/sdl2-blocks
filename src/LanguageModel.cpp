@@ -64,6 +64,9 @@ std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string inpu
     return input;
 }
 
+/*
+** @left - when false the padding will be to the right otherwise it will be to the left.
+*/
 std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, capitalizationtype capType) {
 
     std::string string = mLanguageFields[field];

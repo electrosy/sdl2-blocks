@@ -28,6 +28,10 @@ ley::UIMenu::~UIMenu() {
         fontPtr = nullptr;
     }
 }
+void ley::UIMenu::pushPlaceHolder() {
+    mElements.push_back({});
+}
+
 void ley::UIMenu::pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r) {
     
     int w = 0;
@@ -137,6 +141,17 @@ void ley::UIMenu::render(ley::Video* v) {
     mRenderables.renderAll(v->getRenderer(), false);
 }
 
+/*
+** accounts for gaps
+*/
+bool ley::UIMenu::validNext(ley::UIMenuItem inMenuItem) {
+
+    next(inMenuItem);
+    while(isCurrentCellNull() && mCurrentIndex != mElements.size()-1) {
+        next(inMenuItem);
+    }
+}
+
 void ley::UIMenu::runCommand(ley::Command command) {
     if(count() > 0) {
             
@@ -158,6 +173,10 @@ void ley::UIMenu::runCommand(ley::Command command) {
             }
         }
     }
+}
+
+bool ley::UIMenu::isCurrentCellNull() {
+    return mElements.at(mCurrentIndex).getPlaceHolder();
 }
 
 int ley::UIMenu::row() {
