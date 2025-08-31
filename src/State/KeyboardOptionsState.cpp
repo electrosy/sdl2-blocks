@@ -27,9 +27,9 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
 
     std::vector<std::pair<std::pair<std::string, ley::Command>,std::pair<std::string, ley::Command>>> commandStrings2;
     commandStrings2.push_back(std::make_pair(std::make_pair("left", ley::Command::left),std::make_pair("Next Song", ley::Command::nextSong)));
-    commandStrings2.push_back(std::make_pair(std::make_pair("right", ley::Command::right),std::make_pair("Pause Game", ley::Command::pause)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("right", ley::Command::right),std::make_pair("Pause Game", ley::Command::none)));
     commandStrings2.push_back(std::make_pair(std::make_pair("down", ley::Command::down),std::make_pair("Decrease Volume", ley::Command::decreaseVolume)));
-    commandStrings2.push_back(std::make_pair(std::make_pair("counter clockwise", ley::Command::cclockwise),std::make_pair("Increase Volume", ley::Command::increaseVolume)));
+    commandStrings2.push_back(std::make_pair(std::make_pair("counter clockwise", ley::Command::none),std::make_pair("Increase Volume", ley::Command::increaseVolume)));
     commandStrings2.push_back(std::make_pair(std::make_pair("clockwise", ley::Command::clockwise),std::make_pair("Enter", ley::Command::UI_enter)));
     commandStrings2.push_back(std::make_pair(std::make_pair("quick drop", ley::Command::drop),std::make_pair("", ley::Command::none)));
 

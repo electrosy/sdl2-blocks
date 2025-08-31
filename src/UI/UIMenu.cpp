@@ -140,15 +140,122 @@ void ley::UIMenu::render(ley::Video* v) {
 
     mRenderables.renderAll(v->getRenderer(), false);
 }
+/*
+** The max valid cell on this particular row
+*/
+int ley::UIMenu::maxValidCellInRow() {
+    int savedIndex = mCurrentIndex;
+    int maxValidIndex = 0;
+
+    int col = columnAt(mCurrentIndex);
+
+    if(!isCurrentCellNull()) {
+        maxValidIndex = mCurrentIndex;
+    }
+
+    for(int i = col; i < mWidth; ++i) {
+        next(ley::UIMenuItem::cell);
+        if(!isCurrentCellNull()) {
+            maxValidIndex = mCurrentIndex;
+        }
+    }
+
+    mCurrentIndex = savedIndex;
+
+    return maxValidIndex;
+}
 
 /*
-** accounts for gaps
+** The min valid cell on this particular row
 */
-bool ley::UIMenu::validNext(ley::UIMenuItem inMenuItem) {
+int ley::UIMenu::minValidCellInRow() {
+    int savedIndex = mCurrentIndex;
+    int minValidIndex = mElements.size();
+
+    int col = columnAt(mCurrentIndex);
+
+    if(!isCurrentCellNull()) {
+        minValidIndex = mCurrentIndex;
+    }
+
+    for(int i = col; i > 0; --i) {
+        previous(ley::UIMenuItem::cell);
+        if(!isCurrentCellNull()) {
+            minValidIndex = mCurrentIndex;
+        }
+    }
+
+    mCurrentIndex = savedIndex;
+
+    return minValidIndex;
+}
+
+/*
+** Test for the max row in the current column that is not a placeholder value.
+*/
+int ley::UIMenu::maxValidRow() {
+    int savedIndex = mCurrentIndex;
+    int maxValidIndex = 0;
+
+    
+    if(!isCurrentCellNull()) {
+        maxValidIndex = mCurrentIndex;
+    }
+
+    for(int i = 0; i < mElements.size(); ++i) {
+        next(ley::UIMenuItem::row);
+        if(!isCurrentCellNull()) {
+            maxValidIndex = mCurrentIndex;
+        }
+    }
+
+    mCurrentIndex = savedIndex;
+    
+    return maxValidIndex;
+}
+
+/*
+** Test for the max row in the current column that is not a placeholder value.
+*/
+int ley::UIMenu::minValidRow() {
+    int savedIndex = mCurrentIndex;
+    int minValidIndex = mElements.size();
+
+    
+    if(!isCurrentCellNull()) {
+        minValidIndex = mCurrentIndex;
+    }
+
+    for(int i = mCurrentIndex; i > 0; --i) {
+        previous(ley::UIMenuItem::row);
+        if(!isCurrentCellNull()) {
+            minValidIndex = mCurrentIndex;
+        }
+    }
+
+    mCurrentIndex = savedIndex;
+    
+    return minValidIndex;
+}
+/*
+** Continues to move to next until a non placeholder is reached
+*/
+void ley::UIMenu::validNext(ley::UIMenuItem inMenuItem) {
 
     next(inMenuItem);
-    while(isCurrentCellNull() && mCurrentIndex != mElements.size()-1) {
+    while(mCurrentIndex != mElements.size()-1 && isCurrentCellNull()) {
         next(inMenuItem);
+    }
+}
+
+/*
+** Continues to move to the previous until a non placeholder is reached
+*/
+void ley::UIMenu::validPrevious(ley::UIMenuItem inMenuItem) {
+
+    previous(inMenuItem);
+    while(mCurrentIndex > 0 && isCurrentCellNull()) {
+        previous(inMenuItem);
     }
 }
 
@@ -158,18 +265,30 @@ void ley::UIMenu::runCommand(ley::Command command) {
         if(command == ley::Command::UI_down || command == ley::Command::UI_right) {
 
             if(mWidth > 1 && command == ley::Command::UI_down) {
-                next(ley::UIMenuItem::row);
+                if(mCurrentIndex < maxValidRow()) {
+                    validNext(ley::UIMenuItem::row);
+                }
             } else {
-                next(ley::UIMenuItem::cell);
+                if(mCurrentIndex < maxValidCellInRow()) {
+                    validNext(ley::UIMenuItem::cell);
+                }
             }
         }
         
         if(command == ley::Command::UI_up || command == ley::Command::UI_left) {
-            
             if(mWidth > 1 && (command == ley::Command::UI_up)) {
-                previous(ley::UIMenuItem::row);
+                if(mCurrentIndex > minValidRow()) {
+                    validPrevious(ley::UIMenuItem::row);
+                }
             } else {
-                previous(ley::UIMenuItem::cell);
+                if(mWidth > 1 && mCurrentIndex > minValidCellInRow()) {
+                    validPrevious(ley::UIMenuItem::cell);
+                }
+                else {
+                    if(mCurrentIndex > minValidCellInRow() || mWidth == 1) {
+                        validPrevious(ley::UIMenuItem::cell);
+                    }
+                }
             }
         }
     }

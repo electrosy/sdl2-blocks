@@ -24,7 +24,12 @@ private:
     ley::RenderablesPtr mRenderables;
     ley::Fader mFader;
     bool isCurrentCellNull();
-    bool validNext(ley::UIMenuItem inMenuItem);
+    void validNext(ley::UIMenuItem inMenuItem);
+    void validPrevious(ley::UIMenuItem inMenuItem);
+    int maxValidRow();
+    int minValidRow();
+    int maxValidCellInRow();
+    int minValidCellInRow();
     
 
 protected:
