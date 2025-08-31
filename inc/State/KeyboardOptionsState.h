@@ -29,11 +29,8 @@ private:
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sKeyboardOptionsID;
-
     ley::Font mTitleFont;
     ley::Font mButtonTitleFont;
-    ley::Font font_objects[20]; //Fonts use to display the label and value for keyboard and gamepad mapping
-    std::vector<ley::Font*> mFonts; //Pointers to all the fonts.
     std::vector<ley::Font> mLabelFonts;
     std::vector<ley::Font> mValueFonts;
     RenderablesPtr mRenderables;

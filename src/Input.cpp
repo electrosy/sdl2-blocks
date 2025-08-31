@@ -83,13 +83,6 @@ void ley::Input::pollEvents(
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
 
-    // TODO it would be cool if we could come up with some token language for 
-    // storing parens or and && so that we can do this key or that key or these 
-    // two keys or those two keys e.g. shitching full screen. for now multiple 
-    // or keys will have to suffice.
-
-
-
     // TODO clean this up as SDL_GetKeyboardState probably doesn't need to be called multiple times to get all the modifiers.
     auto ctrl_mod = [this]() -> bool  {
 
