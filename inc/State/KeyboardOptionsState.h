@@ -28,7 +28,10 @@ private:
 
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
+    bool mCaptureNewInput = false;
+    bool mAddMapping = false;
     static const std::string sKeyboardOptionsID;
+    ley::Font mDirectionsFont;
     ley::Font mTitleFont;
     ley::Font mButtonTitleFont;
     std::vector<ley::Font> mLabelFonts;
@@ -37,6 +40,11 @@ private:
     RenderablesPtr mDebugRenderables;
     ley::UIMenu mMainUI;
     int fontWidth(ley::Font* inFont);
+    void reassignKey(std::string keycode, bool addMapping);
+    void reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping);
+    std::vector<std::pair<SDL_Scancode, std::string>> findKeysByValue(const KeyBindingsType* bindings, const std::pair<SDL_Keymod, ley::Command>& targetValue);
+    std::vector<KeyBindingsType::const_iterator> findIteratorsByValue(const KeyBindingsType* bindings,const std::pair<SDL_Keymod, ley::Command>& targetValue);
+    void initalizeMenu();
 };
 
 }

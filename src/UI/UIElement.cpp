@@ -14,14 +14,14 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     mUIToggleFunc = toggle;
     mUIInFocus = focus;
     mCommitUI = enter;
-    source = {-1,-1,-1,-1};
+    mSource = {-1,-1,-1,-1};
     destination = {-1,-1,-1,-1};
 }
 
 ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size)
 : 
 label(l), 
-source(sr), 
+mSource(sr), 
 destination(dr), 
 mMessage(message) {
 
@@ -48,7 +48,7 @@ std::string ley::UIElement::getLabel() {
 }
 
 SDL_Rect ley::UIElement::getSource() {
-    return source;
+    return mSource;
 }
 
 SDL_Rect ley::UIElement::getDestination() {
@@ -97,10 +97,10 @@ void ley::UIElement::setDimensions() {
                      NULL, NULL,
                      &w, &h);
     
-    source.x = 0;
-    source.y = 0;
-    source.w = w;
-    source.h = h;
+    mSource.x = 0;
+    mSource.y = 0;
+    mSource.w = w;
+    mSource.h = h;
 
     destination.w = w;
     destination.h = h;

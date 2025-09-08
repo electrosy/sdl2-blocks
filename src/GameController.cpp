@@ -56,6 +56,7 @@ void ley::GameController::runGameLoop() {
         /**** PRESENT ****/
         mVideoSystem->present(); // output to the video system.
         
+        SDL_Scancode lastScancode;
         /**** GET INPUT ****/
         //pollEvents updates running and full screen flags
         mInputSystem.pollEvents(fs, mGm->getButtonBindingsPtr(), mGm->getKeyBindingsPtr(), &mCommandQueue, mGameStateMachine.activeUIElement(),
@@ -78,7 +79,9 @@ void ley::GameController::runGameLoop() {
             }, 
             mGm->getKeyDelay(),
             mGm->getKeyRepeat(),
-            mGameStateMachine.back()->currentInputContext());
+            mGameStateMachine.back()->currentInputContext(),
+            &lastScancode);
+        mGm->setLastScancode(lastScancode);
 
         ley::Command command = ley::Command::none;
         if(!mCommandQueue.empty()) {

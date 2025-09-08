@@ -77,7 +77,8 @@ void ley::Input::pollEvents(
     const std::function<void(ley::Command c)>& function,
     int inKeyDelay,
     int inKeyRepeat,
-    std::string context) {
+    std::string context,
+    SDL_Scancode* lastScancode) {
     
     
     SDL_Event event;
@@ -170,6 +171,7 @@ void ley::Input::pollEvents(
 
     while(SDL_PollEvent(&event))   {    //SDL_PollEvent calls pumpevents.
         SDL_Scancode pressedKey = event.key.keysym.scancode;
+        (*lastScancode) = pressedKey;
 
         switch (event.type)     {       
             

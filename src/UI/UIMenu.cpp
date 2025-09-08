@@ -64,7 +64,7 @@ ley::UIElement* ley::UIMenu::getCurrentElementPtr() {
     return &mElements[mCurrentIndex];
 }
 
-int ley::UIMenu::getElementId(std::string label) {
+int ley::UIMenu::getElementById(std::string label) {
     
     //Iterate through the elements and find the ID that matches the label.
     int index = -1;
@@ -413,5 +413,5 @@ void ley::UIMenu::clear() {
 
 ley::UIElement* ley::UIMenu::getElementPtr(std::string label) {
 
-    return &mElements.at(getElementId(label));
+    return &mElements.at(getElementById(label));
 }

@@ -46,7 +46,6 @@ private:
     ley::GameStateMachine mGameStateMachine;
     ley::Input mInputSystem; //create the input system object.
     std::queue<ley::Command> mCommandQueue;
-
     //Textures
     SDL_Texture *mBlockBits2Ptr = nullptr;
 

@@ -55,7 +55,7 @@ public:
     void clear(); //clear out all the elements.
     int count();
     void addRenderables(ley::RenderablesPtr);
-    int getElementId(std::string);
+    int getElementById(std::string);
     ley::UIElement* getElementPtr(std::string label); //Get elementPtr from label
     ley::UIElement* getCurrentElementPtr();
     void renderBaseMenuItems(ley::Video* v);

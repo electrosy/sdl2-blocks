@@ -26,7 +26,7 @@ private:
 
     std::string label;
     std::string mMessage;
-    SDL_Rect source;
+    SDL_Rect mSource;
     SDL_Rect destination;
     ley::Font mBaseFont;
     ley::Font mHotFont;

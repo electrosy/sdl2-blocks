@@ -94,6 +94,7 @@ private:
     void readKeyboardConfig(std::vector<KeyBindingRow>* data);
     void writeGamePadConfig();
     void writeKeyboardConfig();
+    SDL_Scancode mLastScancode;
 
     
 public:
@@ -159,6 +160,8 @@ public:
     void readBlockData();               // read in the block data from file
     Uint8 getDropCoolDown() { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
+    SDL_Scancode getLastScancode() { return mLastScancode; };
+    void setLastScancode(SDL_Scancode sdlScancode) { mLastScancode = sdlScancode; };
 
 };
 

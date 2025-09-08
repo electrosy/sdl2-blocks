@@ -54,7 +54,8 @@ enum class Command {
     UI_left,
     UI_right,
     UI_enter,
-    UI_back};
+    UI_back,
+    UI_add};
 
 typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> down;

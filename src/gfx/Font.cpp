@@ -125,6 +125,10 @@ void ley::Font::preRender(SDL_Renderer* r)
 
 void ley::Font::render(SDL_Renderer * r, bool d) {
 
+    if(!isVisible()) {
+        return;
+    }
+
     preRender(r);
     
     // TODO this query texture should probably go in the setpos method and be called only when the position changes.
