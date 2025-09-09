@@ -17,10 +17,10 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     mMainUI.setWidth(2);
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("keyboard inputs", 0, false, capitalizationtype::capitalizeFirst));
     mButtonTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("gamepad inputs", 0, false, capitalizationtype::capitalizeFirst));
-    mDirectionsFont.updateMessage("Enter the button for this command");
+    mDirectionsFont.updateMessage("Press enter over a command to replace it and press keypad plus to add an additional button for it.");
     mDirectionsFont.bottom(SCREEN_HEIGHT, 1);
     mDirectionsFont.left();
-    mDirectionsFont.setVisible(false);
+    mDirectionsFont.setVisible(true);
 
     initalizeMenu();
 }
@@ -87,13 +87,55 @@ void KeyboardOptionsState::initalizeMenu() {
         }
     }
 
+
+    inputObjects.clear();
+    inputObjects.push_back({"B_left", "left", ley::Command::left , "B_cclockwise", "Counter Clockwise", ley::Command::cclockwise});
+    inputObjects.push_back({"K_right", "right", ley::Command::right , "B_clockwise", "Clockwise", ley::Command::clockwise});
+    inputObjects.push_back({"B_down", "down", ley::Command::down , "B_drop", "Quick Drop", ley::Command::drop});
+    inputObjects.push_back({"B_quit", "quit", ley::Command::quit, "B_enter", "Enter", ley::Command::UI_enter});
+
+    /*
     std::vector<std::pair<std::pair<std::string, ley::Command>,std::pair<std::string, ley::Command>>> buttonStrings2;
-    buttonStrings2.push_back(std::make_pair(std::make_pair("left", ley::Command::left),std::make_pair("Counter clockwise", ley::Command::cclockwise)));
-    buttonStrings2.push_back(std::make_pair(std::make_pair("right", ley::Command::right),std::make_pair("Clockwise", ley::Command::clockwise)));
-    buttonStrings2.push_back(std::make_pair(std::make_pair("down", ley::Command::down),std::make_pair("quick drop", ley::Command::drop)));
-    buttonStrings2.push_back(std::make_pair(std::make_pair("quit", ley::Command::quit),std::make_pair("Enter", ley::Command::UI_enter)));
+    buttonStrings2.push_back(std::make_pair(std::make_pair("B_left", ley::Command::left),std::make_pair("B_cclockwise", ley::Command::cclockwise)));
+    buttonStrings2.push_back(std::make_pair(std::make_pair("B_right", ley::Command::right),std::make_pair("B_clockwise", ley::Command::clockwise)));
+    buttonStrings2.push_back(std::make_pair(std::make_pair("B_down", ley::Command::down),std::make_pair("B_drop", ley::Command::drop)));
+    buttonStrings2.push_back(std::make_pair(std::make_pair("B_quit", ley::Command::quit),std::make_pair("B_enter", ley::Command::UI_enter)));
+    */
     
     Uint16 colButtonY = 460;
+    for(const inputOptionsObject& inputObject : inputObjects) {
+        colButtonY+=40;
+
+        //create an item in left column
+        if(inputObject.l_command != ley::Command::none) {
+            mLabelFonts.push_back({20, colButtonY, 400, 40});
+            mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(inputObject.l_label, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
+            mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), colButtonY, 400, 40});
+            mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.l_command, mGameModel->getButtonBindingsPtr()));
+            mMainUI.pushFont(inputObject.l_label, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(inputObject.l_label)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(inputObject.l_label)->setMainColor(CDARKTEAL);
+        }
+        else {
+            mMainUI.pushPlaceHolder();
+        }
+
+        //create an item in the right column
+        if(inputObject.r_command != ley::Command::none) {
+            mLabelFonts.push_back({500, colButtonY, 400, 40});
+            mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(inputObject.r_label, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
+            mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), colButtonY, 400, 40});
+            mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.r_command, mGameModel->getButtonBindingsPtr()));
+            mMainUI.pushFont(inputObject.r_label, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(inputObject.r_label)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(inputObject.r_label)->setMainColor(CDARKTEAL);
+        }
+        else {
+            mMainUI.pushPlaceHolder();
+        }
+    }
+
+    /*
     for(const std::pair<std::pair<std::string, ley::Command>,std::pair<std::string, ley::Command>>& command : buttonStrings2) {
         colButtonY+=40;
 
@@ -125,6 +167,7 @@ void KeyboardOptionsState::initalizeMenu() {
             mMainUI.pushPlaceHolder();
         }
     }
+        */
 }
 
 int KeyboardOptionsState::fontWidth(ley::Font* inFont) {
@@ -147,22 +190,26 @@ void KeyboardOptionsState::update(ley::Command command) {
                 mAddMapping = true;
             case ley::Command::UI_enter :
                 SDL_Log("UI_Enter!!");
-                mDirectionsFont.setVisible(true);
+                mDirectionsFont.updateMessage("Press the button for this command");
                 SDL_Log(std::to_string(mGameModel->getLastScancode()).c_str());
                 mCaptureNewInput = true;
                 SDL_Log("Menu element Id: %s", mMainUI.getCurrentElementPtr()->getLabel().c_str());
                 mGameModel->waitForKeyDown();
+                mGameModel->waitForButtonPress();
             break;
         }
 
         mMainUI.runCommand(command);
     }
 
-    if(mCaptureNewInput && mGameModel->waitForKeyDown()) {
+    bool waitForKeyDown = mGameModel->waitForKeyDown();
+    bool waitForButtonPress = mGameModel->waitForButtonPress();
 
-        mDirectionsFont.setVisible(false);
+    if(mCaptureNewInput && (waitForKeyDown || waitForButtonPress)) {
+
+        mDirectionsFont.updateMessage("Press enter to replace command. Press keypad plus to add key");
         mCaptureNewInput = false;
-        reassignKey(mMainUI.getCurrentElementPtr()->getLabel().c_str(), mAddMapping);
+        reassignKeyButton(mMainUI.getCurrentElementPtr()->getLabel().c_str(), mAddMapping);
         mAddMapping = false;
         initalizeMenu();
     }
@@ -170,7 +217,7 @@ void KeyboardOptionsState::update(ley::Command command) {
     return;
 }
 
-void KeyboardOptionsState::reassignKey(std::string keycode, bool addMapping) {
+void KeyboardOptionsState::reassignKeyButton(std::string keycode, bool addMapping) {
     std::string delimiter = "_";
     size_t delimiter_pos = keycode.find(delimiter);
 
@@ -196,9 +243,25 @@ void KeyboardOptionsState::reassignKey(std::string keycode, bool addMapping) {
     }
     // Button input
     else if (prefix == "B") {
+        reassignButton(STRINGTOCOMMAND.at(suffix), mGameModel->getLastButton(), addMapping);
         SDL_Log("Button reassign: %s", suffix.c_str());
     }
 }
+std::vector<PadBindingsType::const_iterator> KeyboardOptionsState::findButtonIteratorsByValue(
+    const PadBindingsType* bindings,
+    const ley::Command& targetValue) {
+    
+    std::vector<PadBindingsType::const_iterator> matchingRows;
+
+    for (auto it = bindings->begin(); it != bindings->end(); ++it) {
+        if (it->second == targetValue) {   
+            matchingRows.push_back(it);
+        }
+    }
+
+    return matchingRows;
+}
+
 std::vector<KeyBindingsType::const_iterator> KeyboardOptionsState::findIteratorsByValue(
     const KeyBindingsType* bindings,
     const std::pair<SDL_Keymod, ley::Command>& targetValue) {
@@ -227,6 +290,36 @@ std::vector<std::pair<SDL_Scancode, std::string>> KeyboardOptionsState::findKeys
     }
 
     return matchingKeys;
+}
+
+void KeyboardOptionsState::reassignButton(ley::Command command, SDL_GameControllerButton button, bool addMapping) {
+
+    //Only delete if we are not adding.
+    if(!addMapping) {
+        for(PadBindingsType::const_iterator it : findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command)) {
+            mGameModel->getButtonBindingsPtr()->erase(it);
+        }
+    }
+
+    bool exists = false;
+    if(findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command).size() == 0) {
+
+         // TODO context is hard coded as play so we can not update UI commands.
+         mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button,"play"), command);
+    }
+    else {
+        for(PadBindingsType::const_iterator it : findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command)) {
+            if(it->first.first == button) {
+                exists = true;
+                break;
+            }
+        }
+
+        if(!exists) {
+            mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button,"play"), command);
+        }
+    }
+    
 }
 
 void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping) {

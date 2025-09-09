@@ -71,7 +71,8 @@ public:
         int keyRepeat,
         std::string context,
         SDL_Scancode* lastScancode,
-        const std::function<void(bool inKeyDown)>& functionKeyDown);
+        const std::function<void(bool inKeyDown)>& functionKeyDown,
+        const std::function<void(bool inKeyDown)>& functionButtonPress);
 };
 
 }

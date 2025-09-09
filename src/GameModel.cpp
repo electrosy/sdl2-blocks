@@ -970,3 +970,17 @@ bool ley::GameModel::waitForKeyDown() {
     
     return mKeyDownEvent;
 }
+
+bool ley::GameModel::waitForButtonPress() {
+    
+    if(!mWaitForButtonPress) {
+        mWaitForButtonPress = true;
+        mButtonPressEvent = false;
+    }
+
+    if(mButtonPressEvent) {
+        mWaitForButtonPress = false;
+    }
+    
+    return mButtonPressEvent;
+}

@@ -40,10 +40,12 @@ private:
     RenderablesPtr mDebugRenderables;
     ley::UIMenu mMainUI;
     int fontWidth(ley::Font* inFont);
-    void reassignKey(std::string keycode, bool addMapping);
+    void reassignKeyButton(std::string keycode, bool addMapping);
     void reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping);
+    void reassignButton(ley::Command command, SDL_GameControllerButton button, bool addMapping);
     std::vector<std::pair<SDL_Scancode, std::string>> findKeysByValue(const KeyBindingsType* bindings, const std::pair<SDL_Keymod, ley::Command>& targetValue);
     std::vector<KeyBindingsType::const_iterator> findIteratorsByValue(const KeyBindingsType* bindings,const std::pair<SDL_Keymod, ley::Command>& targetValue);
+    std::vector<PadBindingsType::const_iterator> findButtonIteratorsByValue(const PadBindingsType* bindings,const ley::Command& targetValue);
     void initalizeMenu();
 };
 

@@ -79,7 +79,8 @@ void ley::Input::pollEvents(
     int inKeyRepeat,
     std::string context,
     SDL_Scancode* lastScancode,
-    const std::function<void(bool inKeyDown)>& functionKeyDown) {
+    const std::function<void(bool inKeyDown)>& functionKeyDown,
+    const std::function<void(bool inKeyDown)>& functionButtonPress) {
     
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
@@ -250,6 +251,7 @@ void ley::Input::pollEvents(
 
             case SDL_CONTROLLERBUTTONDOWN :
                 {
+
                     Uint8 buttonPressed = event.cbutton.button;
 
                     if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {

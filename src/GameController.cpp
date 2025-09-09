@@ -84,6 +84,9 @@ void ley::GameController::runGameLoop() {
             
             [this](bool inKeyDown) {
                 mGm->setKeyDownEvent(inKeyDown);
+            },
+            [this](bool inButtonDown) {
+                mGm->setButtonPressEvent(inButtonDown);
             });
 
         mGm->setLastScancode(lastScancode);

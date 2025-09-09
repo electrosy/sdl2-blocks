@@ -10,6 +10,8 @@
 
 namespace ley {
 
+// TODO I thought that states where an extension of the controller, but they have no access to the controller only the model, why is this?
+
 class GameState {
 
 private:

@@ -95,8 +95,11 @@ private:
     void writeGamePadConfig();
     void writeKeyboardConfig();
     SDL_Scancode mLastScancode;
+    SDL_GameControllerButton mLastButtoncode;
     bool mWaitForKeydown = false;
     bool mKeyDownEvent = false;
+    bool mWaitForButtonPress = false;
+    bool mButtonPressEvent = false;
 
 public:
     GameModel();
@@ -162,9 +165,12 @@ public:
     Uint8 getDropCoolDown() { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
     SDL_Scancode getLastScancode() { return mLastScancode; };
+    SDL_GameControllerButton getLastButton() { return mLastButtoncode; };
     void setLastScancode(SDL_Scancode sdlScancode) { mLastScancode = sdlScancode; };
     bool waitForKeyDown(); //returns true when a new keydown event has been made but the message hasen't been picked up yet.
+    bool waitForButtonPress();
     void setKeyDownEvent(bool in) { mKeyDownEvent = in; };
+    void setButtonPressEvent(bool in) { mButtonPressEvent = in; };
 
 };
 
