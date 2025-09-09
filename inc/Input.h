@@ -22,7 +22,6 @@ Date: Feb/14/2020
 #include "Command.h"
 
 
-
 namespace ley {
 
 const auto KEY_DELAY_TIME_DEFAULT = 250;
@@ -71,7 +70,8 @@ public:
         int keyDelay,
         int keyRepeat,
         std::string context,
-        SDL_Scancode* lastScancode);
+        SDL_Scancode* lastScancode,
+        const std::function<void(bool inKeyDown)>& functionKeyDown);
 };
 
 }

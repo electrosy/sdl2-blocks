@@ -78,8 +78,8 @@ void ley::Input::pollEvents(
     int inKeyDelay,
     int inKeyRepeat,
     std::string context,
-    SDL_Scancode* lastScancode) {
-    
+    SDL_Scancode* lastScancode,
+    const std::function<void(bool inKeyDown)>& functionKeyDown) {
     
     SDL_Event event;
     ley::Command command = ley::Command::none; //direction for this frame;
@@ -197,6 +197,7 @@ void ley::Input::pollEvents(
                 break;
             case SDL_KEYDOWN:
                 {
+                    functionKeyDown(true);
                     Uint16 pressedModifiers = event.key.keysym.mod;
                     //If letter and UI element is active use only UI element code and not keydown code
                     if(te && (pressedKey >= SDL_SCANCODE_A && pressedKey <= SDL_SCANCODE_Z) && !(pressedModifiers & (KMOD_ALT | KMOD_CTRL | KMOD_SHIFT)) ) {

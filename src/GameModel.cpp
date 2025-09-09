@@ -956,3 +956,17 @@ void ley::GameModel::initGame() {
     mOldBlock.setClear(true);
     mNextBlock = getRandomBlock();
 }
+
+bool ley::GameModel::waitForKeyDown() {
+    
+    if(!mWaitForKeydown) {
+        mWaitForKeydown = true;
+        mKeyDownEvent = false;
+    }
+
+    if(mKeyDownEvent) {
+        mWaitForKeydown = false;
+    }
+    
+    return mKeyDownEvent;
+}

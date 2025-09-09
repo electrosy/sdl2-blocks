@@ -80,7 +80,12 @@ void ley::GameController::runGameLoop() {
             mGm->getKeyDelay(),
             mGm->getKeyRepeat(),
             mGameStateMachine.back()->currentInputContext(),
-            &lastScancode);
+            &lastScancode,
+            
+            [this](bool inKeyDown) {
+                mGm->setKeyDownEvent(inKeyDown);
+            });
+
         mGm->setLastScancode(lastScancode);
 
         ley::Command command = ley::Command::none;

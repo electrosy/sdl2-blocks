@@ -50,7 +50,8 @@ void KeyboardOptionsState::initalizeMenu() {
     inputObjects.push_back({"K_right", "right", ley::Command::right , "K_pause", "Pause Game", ley::Command::pause});
     inputObjects.push_back({"K_down", "down", ley::Command::down , "K_decreaseVolume", "Decrease Volume", ley::Command::decreaseVolume});
     inputObjects.push_back({"K_cclockwise", "counter clockwise", ley::Command::cclockwise, "K_increaseVolume", "Increase Volume", ley::Command::increaseVolume});
-    inputObjects.push_back({"K_clockwise", "clockwise", ley::Command::clockwise, "K_drop", "quick drop", ley::Command::drop});
+    inputObjects.push_back({"K_clockwise", "clockwise", ley::Command::clockwise, "K_enter", "enter", ley::Command::UI_enter});
+    inputObjects.push_back({"K_drop", "quick drop", ley::Command::drop, "", "", ley::Command::none});
 
     Uint16 startY = 60;
     Uint16 col2Y = 60;
@@ -137,28 +138,27 @@ int KeyboardOptionsState::fontWidth(ley::Font* inFont) {
 
 void KeyboardOptionsState::update(ley::Command command) {
 
-    switch (command) {
-        case ley::Command::UI_back :
-            mGameModel->stateChange(ley::StateChange::quitstate);
-        break;
-        case ley::Command::UI_add :
-            mAddMapping = true;
-        case ley::Command::UI_enter :
-            SDL_Log("UI_Enter!!");
-            mDirectionsFont.setVisible(true);
-            SDL_Log(std::to_string(mGameModel->getLastScancode()).c_str());
-            mCaptureNewInput = true;
-            SDL_Log("Menu element Id: %s", mMainUI.getCurrentElementPtr()->getLabel().c_str());
-        break;
-    }
-
     if(!mCaptureNewInput) {
+        switch (command) {
+            case ley::Command::UI_back :
+                mGameModel->stateChange(ley::StateChange::quitstate);
+            break;
+            case ley::Command::UI_add :
+                mAddMapping = true;
+            case ley::Command::UI_enter :
+                SDL_Log("UI_Enter!!");
+                mDirectionsFont.setVisible(true);
+                SDL_Log(std::to_string(mGameModel->getLastScancode()).c_str());
+                mCaptureNewInput = true;
+                SDL_Log("Menu element Id: %s", mMainUI.getCurrentElementPtr()->getLabel().c_str());
+                mGameModel->waitForKeyDown();
+            break;
+        }
+
         mMainUI.runCommand(command);
     }
 
-    if((mGameModel->getLastScancode() != SDL_SCANCODE_RETURN
-        && mGameModel->getLastScancode() != SDL_SCANCODE_KP_PLUS)
-        && mCaptureNewInput) {
+    if(mCaptureNewInput && mGameModel->waitForKeyDown()) {
 
         mDirectionsFont.setVisible(false);
         mCaptureNewInput = false;
@@ -166,6 +166,8 @@ void KeyboardOptionsState::update(ley::Command command) {
         mAddMapping = false;
         initalizeMenu();
     }
+
+    return;
 }
 
 void KeyboardOptionsState::reassignKey(std::string keycode, bool addMapping) {
@@ -229,9 +231,6 @@ std::vector<std::pair<SDL_Scancode, std::string>> KeyboardOptionsState::findKeys
 
 void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping) {
 
-    KeyBindingsType keyBinding;
-    KeyBindingValue keyBindingValue;
-
     //Only delete if we are not adding.
     if(!addMapping) {
         for(KeyBindingsType::const_iterator it : findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command})) {
@@ -242,7 +241,9 @@ void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode s
 
     bool exists = false;
     if(findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command}).size() == 0) {
-        mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode,"play"), std::make_pair(KMOD_NONE, command));
+
+         // TODO context is hard coded as play so we can not update UI commands.
+         mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode,"play"), std::make_pair(KMOD_NONE, command));
     }
     else {
         for(KeyBindingsType::const_iterator it : findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command})) {
