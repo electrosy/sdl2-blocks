@@ -277,7 +277,7 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
 }
 
 
-bool ley::Block::canRotate(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr) {
+bool ley::Block::hasMoreThanOneOrientation(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr) {
 
     return (*inBlockDataFileMapPtr)[blockCharName + "*"] == "yes" ? true : false;
 }
@@ -297,7 +297,7 @@ void ley::Block::setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inB
             inRectPtr->h = bottomEdgeOfOrientation(inBlockPtr);
             inRectPtr->w = rightEdgeOfOrientation(inBlockPtr);
             if(inCanRotatePtr) {
-                (*inCanRotatePtr) = canRotate(blocksToLoad[t], mBlockDataPtr);
+                (*inCanRotatePtr) = hasMoreThanOneOrientation(blocksToLoad[t], mBlockDataPtr);
             }
 
     //This is for the clear block.

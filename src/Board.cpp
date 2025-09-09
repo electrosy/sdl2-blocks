@@ -132,7 +132,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
                }
            }
         break;
-        // TODO will rotation actually work for all cases??
+        // TODO will this rotation case actually cover all the other cases as well?
         case Command::up : //this is a rotation
             for(int i = 0; i < block.w; ++i) {
                for(int j = 0; j < block.h; ++j) {
