@@ -51,7 +51,7 @@ void KeyboardOptionsState::initalizeMenu() {
     inputObjects.push_back({"K_down", "down", ley::Command::down , "K_decreaseVolume", "Decrease Volume", ley::Command::decreaseVolume});
     inputObjects.push_back({"K_cclockwise", "counter clockwise", ley::Command::cclockwise, "K_increaseVolume", "Increase Volume", ley::Command::increaseVolume});
     inputObjects.push_back({"K_clockwise", "clockwise", ley::Command::clockwise, "K_enter", "enter", ley::Command::UI_enter});
-    inputObjects.push_back({"K_drop", "quick drop", ley::Command::drop, "", "", ley::Command::none});
+    inputObjects.push_back({"K_drop", "quick drop", ley::Command::drop, "K_quit", "Quit", ley::Command::quit});
 
     Uint16 startY = 60;
     Uint16 col2Y = 60;

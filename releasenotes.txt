@@ -1,3 +1,8 @@
+Add UI elements to allow the player to remap the keyboard and gamepad in the input options screen.
+
+
+0.7.0.6
+
 Add option for quick drop cool down which prevents accidental drop.
 Can remap the gamepad buttons with a file (ui and keyboard comming soon).
 Fix issue with double esc or double enter when navigating screens.

@@ -737,6 +737,7 @@ void ley::GameModel::loadButtonBindings() {
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_X,"ui"},ley::Command::UI_enter});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_START,"ui"},ley::Command::UI_enter});
     mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"ui"},ley::Command::UI_back});
+    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,"ui"},ley::Command::UI_add});
 
 }
 
