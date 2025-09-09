@@ -90,7 +90,7 @@ void KeyboardOptionsState::initalizeMenu() {
 
     inputObjects.clear();
     inputObjects.push_back({"B_left", "left", ley::Command::left , "B_cclockwise", "Counter Clockwise", ley::Command::cclockwise});
-    inputObjects.push_back({"K_right", "right", ley::Command::right , "B_clockwise", "Clockwise", ley::Command::clockwise});
+    inputObjects.push_back({"B_right", "right", ley::Command::right , "B_clockwise", "Clockwise", ley::Command::clockwise});
     inputObjects.push_back({"B_down", "down", ley::Command::down , "B_drop", "Quick Drop", ley::Command::drop});
     inputObjects.push_back({"B_quit", "quit", ley::Command::quit, "B_enter", "Enter", ley::Command::UI_enter});
 
@@ -112,9 +112,9 @@ void KeyboardOptionsState::initalizeMenu() {
             mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(inputObject.l_label, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
             mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), colButtonY, 400, 40});
             mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.l_command, mGameModel->getButtonBindingsPtr()));
-            mMainUI.pushFont(inputObject.l_label, &mValueFonts.back(), mVideoSystem->getRenderer());
-            mMainUI.getElementPtr(inputObject.l_label)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.l_label)->setMainColor(CDARKTEAL);
+            mMainUI.pushFont(inputObject.l_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(inputObject.l_elementId)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(inputObject.l_elementId)->setMainColor(CDARKTEAL);
         }
         else {
             mMainUI.pushPlaceHolder();
@@ -126,9 +126,9 @@ void KeyboardOptionsState::initalizeMenu() {
             mLabelFonts.back().updateMessage(mGameModel->getLanguageModel()->getWord(inputObject.r_label, 17, false, capitalizationtype::capitalizeFirst)  + ": ");
             mValueFonts.push_back({mLabelFonts.back().getPos().x + fontWidth(&mLabelFonts.back()), colButtonY, 400, 40});
             mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.r_command, mGameModel->getButtonBindingsPtr()));
-            mMainUI.pushFont(inputObject.r_label, &mValueFonts.back(), mVideoSystem->getRenderer());
-            mMainUI.getElementPtr(inputObject.r_label)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.r_label)->setMainColor(CDARKTEAL);
+            mMainUI.pushFont(inputObject.r_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
+            mMainUI.getElementPtr(inputObject.r_elementId)->setBaseColor(CWHITE);
+            mMainUI.getElementPtr(inputObject.r_elementId)->setMainColor(CDARKTEAL);
         }
         else {
             mMainUI.pushPlaceHolder();
@@ -320,6 +320,7 @@ void KeyboardOptionsState::reassignButton(ley::Command command, SDL_GameControll
         }
     }
     
+    return;
 }
 
 void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping) {

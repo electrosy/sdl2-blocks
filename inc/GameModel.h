@@ -167,6 +167,7 @@ public:
     SDL_Scancode getLastScancode() { return mLastScancode; };
     SDL_GameControllerButton getLastButton() { return mLastButtoncode; };
     void setLastScancode(SDL_Scancode sdlScancode) { mLastScancode = sdlScancode; };
+    void setLastButton(SDL_GameControllerButton sdlbuttoncode) { mLastButtoncode = sdlbuttoncode; };
     bool waitForKeyDown(); //returns true when a new keydown event has been made but the message hasen't been picked up yet.
     bool waitForButtonPress();
     void setKeyDownEvent(bool in) { mKeyDownEvent = in; };
