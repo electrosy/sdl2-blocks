@@ -47,7 +47,7 @@ void PlayState::update(ley::Command command) {
         case ley::Command::clockwise :
              {
                 bool rotated = false;
-                if(mGameModel->getWallKickOn() == "off") {
+                if(mGameModel->getWallKickOn() == "on") {
                     rotated = mGameModel->rotateWithKick(true);
                 }
                 else {

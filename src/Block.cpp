@@ -272,7 +272,7 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
             }
         }
     }
-
+    
     return -1;
 }
 

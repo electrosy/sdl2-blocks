@@ -1,5 +1,5 @@
 Add UI elements to allow the player to remap the keyboard and gamepad in the input options screen.
-
+Fix an issue where when wall kick was enabled it would only work for counter clockwise.
 
 0.7.0.6
 
