@@ -27,7 +27,7 @@ enum class Color {red,blue,green,orange,yellow,violet,indigo,white};
 class Renderable {
 
 private:
-    bool visible;
+    bool mVisible;
     
 protected:
   

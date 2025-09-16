@@ -36,9 +36,9 @@ private:
     ley::Font mStatusFont;
 
     //Timers
-    ley::Timer fallTimer; //Time to force the blockdown
+    ley::Timer mFallTimer; //Time to force the blockdown
 
-    ley::Timer statusTimer;
+    ley::Timer mStatusTimer;
     ley::Video * mVideoSystem;
     ley::GameModel * mGameModel;
     static const std::string sPlayID;

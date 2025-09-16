@@ -8,8 +8,8 @@ PlayState::PlayState(ley::Video * v, ley::GameModel * gm)
 :
 mVideoSystem(v),
 mGameModel(gm),
-statusTimer(2000,{10,500,100,5}),
-fallTimer(1000,{}),
+mStatusTimer(2000,{10,500,100,5}),
+mFallTimer(1000,{}),
 mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20),
 mLastHardDrop(gm->getDropCoolDown(),{0,0,0,0}) { 
 
@@ -26,7 +26,7 @@ void PlayState::update(ley::Command command) {
     switch (command) {
         case ley::Command::pause :
             mGameModel->pauseGame(!mGameModel->isPaused());
-            fallTimer.pause(!fallTimer.isPaused());
+            mFallTimer.pause(!mFallTimer.isPaused());
         break;
         case ley::Command::cclockwise :
             {
@@ -64,7 +64,7 @@ void PlayState::update(ley::Command command) {
                 mGameModel->audio()->playSfx(ley::sfx::squeek);
             }
 
-            fallTimer.reset();
+            mFallTimer.reset();
         break;
         case ley::Command::left :
             if(mGameModel->moveBlock(ley::Command::left)) {
@@ -90,22 +90,22 @@ void PlayState::update(ley::Command command) {
         break;
         case ley::Command::decreaseVolume :
             mStatusFont.updateMessage(mGameModel->getLanguageModel()->getWord("volume down", 0, false, capitalizationtype::capitalizeFirst));
-            statusTimer.reset();
+            mStatusTimer.reset();
         break;
         case ley::Command::increaseVolume :
             mStatusFont.updateMessage(mGameModel->getLanguageModel()->getWord("volume up", 0, false, capitalizationtype::capitalizeFirst));
-            statusTimer.reset();
+            mStatusTimer.reset();
         break;
         case ley::Command::nextSong :
             mStatusFont.updateMessage("Next song");
-            statusTimer.reset();
+            mStatusTimer.reset();
         break;
         case ley::Command::drop :
             if(mLastHardDrop.hasExpired()) {
                 mGameModel->quickDrop();
                 mLastHardDrop.reset();
             }
-            fallTimer.reset();
+            mFallTimer.reset();
         break;
         
         defaut:
@@ -113,17 +113,17 @@ void PlayState::update(ley::Command command) {
     }
 
     /**** UPDATE ****/
-    fallTimer.runFrame(false, mGameModel->speed());
-    statusTimer.runFrame(false, 0.0);
+    mFallTimer.runFrame(false, mGameModel->speed());
+    mStatusTimer.runFrame(false, 0.0);
     mLastHardDrop.runFrame(false, 0.0);
-    if(statusTimer.hasExpired()) {
+    if(mStatusTimer.hasExpired()) {
         mStatusFont.updateMessage("");
     }
 
     //Check to see if we need to move the block down.
-    if(fallTimer.hasExpired()) {
+    if(mFallTimer.hasExpired()) {
         mGameModel->moveBlock(ley::Command::down);
-        fallTimer.reset();
+        mFallTimer.reset();
         mGameModel->audio()->playSfx(ley::sfx::falldown);
     }
 
@@ -141,9 +141,9 @@ void PlayState::render() {
 void PlayState::loadRenderables() {
     
     mRenderables.push_back(&mStatusFont);
-    mRenderables.push_back(&fallTimer);
+    mRenderables.push_back(&mFallTimer);
 
-    mDebugRenderables.push_back(&statusTimer);
+    mDebugRenderables.push_back(&mStatusTimer);
 }
 
 bool PlayState::onEnter() {
@@ -165,7 +165,8 @@ bool PlayState::onEnter() {
 
     //make sure the falltimer width reflects the correct boardsize.
     SDL_Log("Resizing the falltimer.");
-    fallTimer(1000,{mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
+    mFallTimer(1000,{mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
+    mFallTimer.setVisible(mGameModel->getShowProgressBar());
 
     #ifdef FULL_ASSETS
         SDL_Log("Full Assets loaded!");
@@ -179,8 +180,8 @@ bool PlayState::onEnter() {
 }
 
 bool PlayState::onReEnter() {
-    if(fallTimer.isPaused()) {
-        fallTimer.pause(false);
+    if(mFallTimer.isPaused()) {
+        mFallTimer.pause(false);
     }
     SDL_Log("ReEntering PlayState");
 
@@ -204,12 +205,12 @@ bool PlayState::onPause() {
 }
 
 void PlayState::resetGame() {
-    fallTimer.reset();
+    mFallTimer.reset();
 
     //unpause game if it is already paused.
     if(mGameModel->isPaused()) {
         mGameModel->pauseGame(false);
-        fallTimer.pause(false);
+        mFallTimer.pause(false);
     }
 
     mGameModel->resetGame();

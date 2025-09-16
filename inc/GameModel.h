@@ -42,6 +42,7 @@ class GameModel {
 
 private:
     bool mDebugOnlyLine = false;        //use only the line block for testing purposes
+    bool mShowProgressBar = false;
     Board mBoard;
     Block mActiveBlock;
     Block mOldBlock;
@@ -172,6 +173,8 @@ public:
     bool waitForButtonPress();
     void setKeyDownEvent(bool in) { mKeyDownEvent = in; };
     void setButtonPressEvent(bool in) { mButtonPressEvent = in; };
+    void setShowProgressBar(bool inShow) { mShowProgressBar = inShow; };
+    bool getShowProgressBar() { return mShowProgressBar; };
 
 };
 

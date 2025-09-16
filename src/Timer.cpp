@@ -131,7 +131,9 @@ double ley::Timer::pct() {
 } 
 
 void ley::Timer::render(SDL_Renderer* r, bool d) {
-    mProgressBar.render(r, d);
+    if(Renderable::isVisible()) {
+        mProgressBar.render(r, d);
+    }
 }
 
 /* Accessors */

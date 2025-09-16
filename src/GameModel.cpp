@@ -286,6 +286,7 @@ bool ley::GameModel::newLevel() {
 }
 
 int ley::GameModel::calcLevel() {
+    // TODO also need to account for the starting level option.
     return (mNumLines / NEW_LVL_AT_LINES) + 1;
 }
 
@@ -797,6 +798,8 @@ void ley::GameModel::writeConfig() {
   myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
   myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
   myfile << "dropcooldown" << ',' << std::to_string(getDropCoolDown()) << std::endl;
+  myfile << "showprogressbar" << ',' << (getShowProgressBar() == true ? "on" : "off") << std::endl;
+  myfile << "startinglevel" << ',' << "-1" << std::endl;
   
   myfile.close();
 }
@@ -861,6 +864,10 @@ void ley::GameModel::readConfig() {
 
                 if(key == "dropcooldown") {
                     setDropCoolDown(stoi(value));
+                }
+
+                if(key == "showprogressbar") {
+                    setShowProgressBar( value == "on" ? true : false);
                 }
             }
         }

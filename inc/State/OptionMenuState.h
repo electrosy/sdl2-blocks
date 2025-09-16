@@ -24,6 +24,7 @@ private:
     ley::Font mGuideGridOnLabelFont;
     ley::Font mWallKickOnLabelFont;
     ley::Font mDropCoolDownLabelFont;
+    ley::Font mShowProgressBarLabelFont;
     //text entries
     ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
@@ -31,6 +32,7 @@ private:
     ley::TextEntry mGuideGridOnTextEntry;
     ley::TextEntry mWallKickOnTextEntry;
     ley::TextEntry mDropCoolDownTextEntry;
+    ley::TextEntry mShowProgressBarTextEntry;
 
     ley::Sprite mBackground;
     RenderablesPtr mRenderables;
@@ -43,6 +45,7 @@ private:
     std::string mPreviousGuideGridOnValue;
     std::string mPreviousWallKickOnValue;
     std::string mPreviousDropCoolDownValue;
+    std::string mPreviousShowProgressBarValue;
     void positionOptionsLabels();
     
 public:
@@ -64,6 +67,7 @@ public:
     void commitGuideGridOn();
     void commitWallKickOn();
     void commitHardDropCoolDown();
+    void commitShowProgressBar();
 
 };
 

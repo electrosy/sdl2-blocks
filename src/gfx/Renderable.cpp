@@ -9,7 +9,7 @@ Date: Feb/17/2020
 
 /* RAII */
 ley::Renderable::Renderable() {
-   visible=true;
+   mVisible=true;
 }
 
 ley::Renderable::~Renderable() {
@@ -17,11 +17,11 @@ ley::Renderable::~Renderable() {
 }
 /* Accessors */
 void ley::Renderable::setVisible(bool v) {
-   visible = v;
+   mVisible = v;
 }
 
 bool ley::Renderable::isVisible() {
-   return visible;
+   return mVisible;
 }
 
 /* Functions */

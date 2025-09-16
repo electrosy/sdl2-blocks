@@ -20,7 +20,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mRepeatLabelFont{31,200,10,20},
     mGuideGridOnLabelFont{31,250,10,20},
     mWallKickOnLabelFont{31,300,10,20},
-    mDropCoolDownLabelFont{31,350,10,20}
+    mDropCoolDownLabelFont{31,350,10,20},
+    mShowProgressBarLabelFont{31,400,10,20}
 
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
@@ -81,6 +82,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mDropCoolDownTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst));
     mDropCoolDownTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst), "");
 
+    mShowProgressBarTextEntry.setVisible(false);
+    mShowProgressBarTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mShowProgressBarTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mShowProgressBarTextEntry.setWidthByChar(3);
+    mShowProgressBarTextEntry.setPos({325,400});
+    mShowProgressBarTextEntry.setRegEx("^(off|on)$");
+    mShowProgressBarTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
+    mShowProgressBarTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
+
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
@@ -114,23 +124,17 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mDropCoolDownTextEntry.hasFocus();},
         [this](){ commitHardDropCoolDown(); });
 
-    mOptionUI.pushFont("languageOptions", {29,400,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mOptionUI.pushFont("keyboardOptions", {29,450,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushUIElement(
+        [this](){mShowProgressBarTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousShowProgressBarValue);},
+        [this]()->bool{return mShowProgressBarTextEntry.hasFocus();},
+        [this](){ commitShowProgressBar(); });
+
+    mOptionUI.pushFont("languageOptions", {29,500,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,550,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     // TODO localization
-    mOptionUI.pushFont("blockEditor", {29,500,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("blockEditor", {29,600,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 
 
-    mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
-    mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
-    
-    // TODO localization
-    mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
-    
-    mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
-
-    // TODO localization
-    mWallKickOnLabelFont.updateMessage("Wall Kick");
-    mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -141,15 +145,16 @@ void OptionMenuState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 6) {
+    //  TODO maybe you can provide the menuObject with a function pointer to the function that needs to be called so this isn't hard coded.
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 7) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 7) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 9) {
         mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
@@ -160,6 +165,8 @@ void OptionMenuState::update(ley::Command command) {
     mKeyRepeatTextEntry.update();
     mGuideGridOnTextEntry.update();
     mWallKickOnTextEntry.update();
+    mDropCoolDownTextEntry.update();
+    mShowProgressBarTextEntry.update();
 }
 
 void OptionMenuState::commitBoardSize() {
@@ -223,6 +230,13 @@ void OptionMenuState::commitHardDropCoolDown() {
     }
 }
 
+void OptionMenuState::commitShowProgressBar() {
+
+    if(mShowProgressBarTextEntry.commit(mPreviousShowProgressBarValue)) {
+        mGameModel->setShowProgressBar(mShowProgressBarTextEntry.getTextBoxValue() == "on" ? true : false );
+    }
+}
+
 void OptionMenuState::render() {
 
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
@@ -246,6 +260,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mGuideGridOnLabelFont);
     mRenderables.push_back(&mWallKickOnLabelFont);
     mRenderables.push_back(&mDropCoolDownLabelFont);
+    mRenderables.push_back(&mShowProgressBarLabelFont);
     
     //text entries
     mRenderables.push_back(&mBoardSizeTextEntry);
@@ -254,6 +269,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mGuideGridOnTextEntry);
     mRenderables.push_back(&mWallKickOnTextEntry);
     mRenderables.push_back(&mDropCoolDownTextEntry);
+    mRenderables.push_back(&mShowProgressBarTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
@@ -265,6 +281,7 @@ bool OptionMenuState::onEnter() {
     mGuideGridOnTextEntry.setVisible(true);
     mWallKickOnTextEntry.setVisible(true);
     mDropCoolDownTextEntry.setVisible(true);
+    mShowProgressBarTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -275,8 +292,9 @@ bool OptionMenuState::onEnter() {
     mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOn());
     mWallKickOnTextEntry.setTextBoxValue(  mGameModel->getWallKickOn() == "on" ? "on" : "off" );
     mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
+    mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() == true ? "on" : "off" );
 
-
+    initTextEntryMessages();
     positionOptionsLabels();
     mCurrentInputContext = "ui";
 
@@ -303,6 +321,7 @@ bool OptionMenuState::onExit() {
     commitGuideGridOn();
     commitWallKickOn();
     commitHardDropCoolDown();
+    commitShowProgressBar();
     
     mActiveUIElement = {};
 
@@ -339,6 +358,7 @@ void OptionMenuState::initTextEntryMessages() {
     mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
     mWallKickOnLabelFont.updateMessage("Wall Kick");
     mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
+    mShowProgressBarLabelFont.updateMessage("Show progress bar");
 }
 
 void OptionMenuState::positionOptionsLabels() {
@@ -375,6 +395,10 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mDropCoolDownLabelFont.getTTFFont(), mDropCoolDownLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mDropCoolDownLabelFont.getPos();
     mDropCoolDownTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+
+    TTF_SizeUTF8( mShowProgressBarLabelFont.getTTFFont(), mShowProgressBarLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mShowProgressBarLabelFont.getPos();
+    mShowProgressBarTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 }
 
 }
