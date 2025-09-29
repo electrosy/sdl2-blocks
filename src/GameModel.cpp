@@ -17,7 +17,8 @@ Date: Feb/15/2020
 ley::GameModel::GameModel()
 :
 mNumLines(0),
-mNumLevel(1),
+mStartLevel(1),
+mNumLevel(mStartLevel),
 mGameRunning(true), 
 mCurrentSpeed(1000.0f), 
 mActive(true), 
@@ -799,7 +800,7 @@ void ley::GameModel::writeConfig() {
   myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
   myfile << "dropcooldown" << ',' << std::to_string(getDropCoolDown()) << std::endl;
   myfile << "showprogressbar" << ',' << (getShowProgressBar() == true ? "on" : "off") << std::endl;
-  myfile << "startinglevel" << ',' << "-1" << std::endl;
+  myfile << "startlevel" << ',' << getStartLevel() << std::endl;
   
   myfile.close();
 }
@@ -866,8 +867,13 @@ void ley::GameModel::readConfig() {
                     setDropCoolDown(stoi(value));
                 }
 
+
                 if(key == "showprogressbar") {
                     setShowProgressBar( value == "on" ? true : false);
+                }
+                
+                if(key == "startlevel") {
+                    setStartLevel(std::stoi(value));
                 }
             }
         }

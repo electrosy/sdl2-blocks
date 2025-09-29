@@ -21,7 +21,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mGuideGridOnLabelFont{31,250,10,20},
     mWallKickOnLabelFont{31,300,10,20},
     mDropCoolDownLabelFont{31,350,10,20},
-    mShowProgressBarLabelFont{31,400,10,20}
+    mShowProgressBarLabelFont{31,400,10,20},
+    mStartLevelLabelFont{31,450,10,20}
 
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
@@ -91,6 +92,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mShowProgressBarTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
     mShowProgressBarTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
 
+    mStartLevelTextEntry.setVisible(false);
+    mStartLevelTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mStartLevelTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mStartLevelTextEntry.setWidthByChar(2);
+    mStartLevelTextEntry.setPos({237,450});
+    mStartLevelTextEntry.setRegEx("^(1[0-9]|2[0-9]|[1-9])$");
+    mStartLevelTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst));
+    mStartLevelTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst), "");
+
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
@@ -129,12 +139,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mShowProgressBarTextEntry.hasFocus();},
         [this](){ commitShowProgressBar(); });
 
+    mOptionUI.pushUIElement(
+        [this](){mStartLevelTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousStartLevelValue);},
+        [this]()->bool{return mStartLevelTextEntry.hasFocus();},
+        [this](){ commitStartLevel(); });
+
     mOptionUI.pushFont("languageOptions", {29,500,218,63}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,550,218,63}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     // TODO localization
     mOptionUI.pushFont("blockEditor", {29,600,218,63}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-
-
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -146,15 +159,15 @@ void OptionMenuState::update(ley::Command command) {
     }
 
     //  TODO maybe you can provide the menuObject with a function pointer to the function that needs to be called so this isn't hard coded.
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 7) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 9) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 9) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 10) {
         mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
@@ -167,6 +180,7 @@ void OptionMenuState::update(ley::Command command) {
     mWallKickOnTextEntry.update();
     mDropCoolDownTextEntry.update();
     mShowProgressBarTextEntry.update();
+    mStartLevelTextEntry.update();
 }
 
 void OptionMenuState::commitBoardSize() {
@@ -237,6 +251,14 @@ void OptionMenuState::commitShowProgressBar() {
     }
 }
 
+void OptionMenuState::commitStartLevel() {
+
+
+    if(mStartLevelTextEntry.commit(mPreviousStartLevelValue)) {
+        mGameModel->setStartLevel(std::atoi(mStartLevelTextEntry.getTextBoxValue().c_str()));
+    }
+}
+
 void OptionMenuState::render() {
 
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);
@@ -261,6 +283,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mWallKickOnLabelFont);
     mRenderables.push_back(&mDropCoolDownLabelFont);
     mRenderables.push_back(&mShowProgressBarLabelFont);
+    mRenderables.push_back(&mStartLevelLabelFont);
     
     //text entries
     mRenderables.push_back(&mBoardSizeTextEntry);
@@ -270,6 +293,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mWallKickOnTextEntry);
     mRenderables.push_back(&mDropCoolDownTextEntry);
     mRenderables.push_back(&mShowProgressBarTextEntry);
+    mRenderables.push_back(&mStartLevelTextEntry);
 }
 
 bool OptionMenuState::onEnter() {
@@ -282,6 +306,7 @@ bool OptionMenuState::onEnter() {
     mWallKickOnTextEntry.setVisible(true);
     mDropCoolDownTextEntry.setVisible(true);
     mShowProgressBarTextEntry.setVisible(true);
+    mStartLevelTextEntry.setVisible(true);
 
     loadRenderables();
 
@@ -293,6 +318,7 @@ bool OptionMenuState::onEnter() {
     mWallKickOnTextEntry.setTextBoxValue(  mGameModel->getWallKickOn() == "on" ? "on" : "off" );
     mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
     mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() == true ? "on" : "off" );
+    mStartLevelTextEntry.setTextBoxValue( std::to_string(mGameModel->getStartLevel()) );
 
     initTextEntryMessages();
     positionOptionsLabels();
@@ -322,6 +348,7 @@ bool OptionMenuState::onExit() {
     commitWallKickOn();
     commitHardDropCoolDown();
     commitShowProgressBar();
+    commitStartLevel();
     
     mActiveUIElement = {};
 
@@ -359,6 +386,7 @@ void OptionMenuState::initTextEntryMessages() {
     mWallKickOnLabelFont.updateMessage("Wall Kick");
     mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
     mShowProgressBarLabelFont.updateMessage("Show progress bar");
+    mStartLevelLabelFont.updateMessage("Start level");
 }
 
 void OptionMenuState::positionOptionsLabels() {

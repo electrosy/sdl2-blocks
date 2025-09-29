@@ -25,6 +25,7 @@ private:
     ley::Font mWallKickOnLabelFont;
     ley::Font mDropCoolDownLabelFont;
     ley::Font mShowProgressBarLabelFont;
+    ley::Font mStartLevelLabelFont;
     //text entries
     ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
@@ -33,6 +34,7 @@ private:
     ley::TextEntry mWallKickOnTextEntry;
     ley::TextEntry mDropCoolDownTextEntry;
     ley::TextEntry mShowProgressBarTextEntry;
+    ley::TextEntry mStartLevelTextEntry;
 
     ley::Sprite mBackground;
     RenderablesPtr mRenderables;
@@ -46,6 +48,7 @@ private:
     std::string mPreviousWallKickOnValue;
     std::string mPreviousDropCoolDownValue;
     std::string mPreviousShowProgressBarValue;
+    std::string mPreviousStartLevelValue;
     void positionOptionsLabels();
     
 public:
@@ -68,6 +71,7 @@ public:
     void commitWallKickOn();
     void commitHardDropCoolDown();
     void commitShowProgressBar();
+    void commitStartLevel();
 
 };
 

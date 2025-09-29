@@ -56,6 +56,7 @@ private:
     double mCurrentSpeed;               //how many miliseconds until the block falls down
     int mNumLines;                      //number of lines the player has successfully completed. (Lines)
     int mNumLevel;                      //the current level we are on. A combination of lines. Aprox. 10 lines per level. (Level)
+    int mStartLevel;                    //The start level that is set in the options menu.
     long mScore;                        //the total score the this game (level*linesatonce)
     int mComboCount = 0;
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
@@ -175,6 +176,9 @@ public:
     void setButtonPressEvent(bool in) { mButtonPressEvent = in; };
     void setShowProgressBar(bool inShow) { mShowProgressBar = inShow; };
     bool getShowProgressBar() { return mShowProgressBar; };
+    int getStartLevel() const { return mStartLevel; }
+    // Inline setter method
+    void setStartLevel(int startLevel) { mStartLevel = startLevel; }
 
 };
 
