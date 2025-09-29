@@ -24,8 +24,8 @@ Date: Feb/14/2020
 
 namespace ley {
 
-const auto KEY_DELAY_TIME_DEFAULT = 250;
-const auto KEY_REPEAT_TIME_DEFAULT = 35;
+const auto KEY_DELAY_TIME_DEFAULT = 180;
+const auto KEY_REPEAT_TIME_DEFAULT = 45;
 
 typedef std::pair<SDL_GameControllerButton, ley::Command> ControllerButtonRow;
 typedef std::pair<SDL_Scancode, std::pair<SDL_Keymod,ley::Command>> KeyBindingRow;
