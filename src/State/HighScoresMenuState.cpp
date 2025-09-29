@@ -48,7 +48,7 @@ void HighScoresMenuState::commitUI() {
 
     if(mGameModel->newHighScore()) {
         SDL_Log("You entered it with high score!!!");
-        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mLocalTextEntry.getTextBoxValue(), mGameModel->getLevel(), mGameModel->getLines());
+        mGameModel->highScores()->setHighScore(mGameModel->getScore(), mLocalTextEntry.getTextBoxValue(), mGameModel->calcLevel(), mGameModel->getLines());
         mGameModel->newHighScore(false);
         mGameModel->audio()->playSfx(ley::sfx::piecesfalling);
     }
@@ -120,7 +120,7 @@ bool HighScoresMenuState::onEnter() {
 
     mGameModel->highScores()->read();
     if(mGameModel->newHighScore()) {
-        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, mFontsHighScores, {mGameModel->getScore(),{"",mGameModel->getLevel(),mGameModel->getLines()}}, newHighRow);
+        mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, mFontsHighScores, {mGameModel->getScore(),{"",mGameModel->calcLevel(),mGameModel->getLines()}}, newHighRow);
     }
     else {
         mGameModel->highScores()->renderScoreFonts(&highScoreRenderables, mFontsHighScores, {0,{"",0,0}}, -1);

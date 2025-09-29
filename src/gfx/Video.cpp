@@ -193,8 +193,8 @@ void ley::Video::setBackgroundTexture() {
 
     if(gm->newLevel()) {
         std::string background_level;
-        if(gm->getLevel() <= 9) {
-            background_level = "BG_WEST_0" + std::to_string(gm->getLevel()); //background based on current level.
+        if(gm->calcLevel() <= 9) {
+            background_level = "BG_WEST_0" + std::to_string(gm->calcLevel()); //background based on current level.
         } else {
             background_level = "BG_WEST_09";
         }
@@ -217,7 +217,7 @@ void ley::Video::render() {
 
     //Render background
     if(renderbg) {
-        setBackgroundTexture();
+        setBackgroundTexture(); // TODO this need to go where the value actually changes so it can be called only when the level changes.
         spriteBackground.render(renderer, gm->isOverlayOn());
         spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
     }
@@ -344,7 +344,7 @@ void ley::Video::loadTextures() {
 
 void ley::Video::updateScores() {
     fontLines.updateMessage(gm->getLanguageModel()->getWord("lines", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getLines())));
-    fontLvl.updateMessage(gm->getLanguageModel()->getWord("level", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getLevel())));
+    fontLvl.updateMessage(gm->getLanguageModel()->getWord("level", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->calcLevel())));
     fontScore.updateMessage(gm->getLanguageModel()->getWord("score", 8, true, capitalizationtype::capitalizeFirst) + std::to_string(int(gm->getScore())));
     mFontCombo.updateMessage(gm->getLanguageModel()->getWord("combo", 13, false, capitalizationtype::capitalizeFirst) + " " + std::to_string(int(gm->comboCount())));
 }

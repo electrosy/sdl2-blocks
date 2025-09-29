@@ -39,6 +39,11 @@ mDebugOnlyLine(false) {
     readConfigOther();
     mActiveBlock.setBlockDataPtr(&mBlockMapData);
     mLanguageModel.loadLanguage();
+    mStartLevel = calcLevel();
+
+    if(mStartLevel > mNumLevel) {
+        mNumLevel = mStartLevel;
+    }
 }
 
 // TODO rule of 3/5
@@ -70,10 +75,6 @@ int ley::GameModel::getScore() {
 
 int ley::GameModel::getLines() {
     return mNumLines;
-}
-
-int ley::GameModel::getLevel() {
-    return mNumLevel;
 }
 
 ley::Board* ley::GameModel::getBoard() {
@@ -288,7 +289,8 @@ bool ley::GameModel::newLevel() {
 
 int ley::GameModel::calcLevel() {
     // TODO also need to account for the starting level option.
-    return (mNumLines / NEW_LVL_AT_LINES) + 1;
+    int naturalLevel = (mNumLines / NEW_LVL_AT_LINES) + 1;
+    return naturalLevel > mStartLevel ? naturalLevel : mStartLevel;
 }
 
 bool ley::GameModel::processLines(int &numLines) {
@@ -316,7 +318,7 @@ bool ley::GameModel::processLines(int &numLines) {
     }
 
     if(mNumLevel != calcLevel()) {
-        mNumLevel = calcLevel();
+        mNumLevel = calcLevel(); //TODO do we need to call calcLevel twice?
         mNewLevelToReport = true;
     }
 
@@ -366,7 +368,7 @@ void ley::GameModel::updateSpeed() {
     // percent  https://www.desmos.com/calculator/hivnmiyedk
     // 31 levels https://www.desmos.com/calculator/gvmkmief5c
 
-    switch(mNumLevel) {
+    switch(calcLevel()) {
         case 0 :
         case 1 : mCurrentSpeed = 1000;
             break;

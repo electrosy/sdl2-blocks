@@ -74,7 +74,6 @@ private:
     std::string mWallKickOn = "on";
     BlockFileDataMapType mBlockMapData;
     Uint8 mDropCoolDownMs = DROPCOOLDOWNMS_DEFAULT;
-    int calcLevel();                    //Calculate current level based on number of lines completed
     void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
     void clearOldBlock();
     std::vector<char> checkForLines(char start);
@@ -115,7 +114,6 @@ public:
     bool isOverlayOn();
     bool newBlock();
     int getScore();
-    int getLevel();
     int getLines();
     void addToScore(long);
     bool isGameRunning();
@@ -179,6 +177,7 @@ public:
     int getStartLevel() const { return mStartLevel; }
     // Inline setter method
     void setStartLevel(int startLevel) { mStartLevel = startLevel; }
+    int calcLevel();                    //Calculate current level based on number of lines completed
 
 };
 

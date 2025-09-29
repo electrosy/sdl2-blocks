@@ -283,7 +283,7 @@ void ley::GameController::processStates(ley::Command inCommand) {
 }
 void ley::GameController::setHighScores(ley::HighScores* hs) {
     //push on the new high score
-    hs->setHighScore(mGm->getScore(), "Steve", mGm->getLevel(), mGm->getLines());
+    hs->setHighScore(mGm->getScore(), "Steve", mGm->calcLevel(), mGm->getLines());
 }
 
 void ley::GameController::runCleanUp() {
