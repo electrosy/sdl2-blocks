@@ -84,7 +84,7 @@ jobs:
           copy gamepad-config.csv dist\
           copy gamepad-config-default.csv dist\
           copy keyboard-config.csv dist\
-          copy keyboard-config-default dist\
+          copy keyboard-config-default.csv dist\
           xcopy assets dist\assets\ /E /H /C /I
           # Core SDL2 and related DLLs
           copy "vcpkg\installed\x64-mingw-dynamic\bin\SDL2.dll" dist\
