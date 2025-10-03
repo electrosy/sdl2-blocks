@@ -27,6 +27,18 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
     // TODO Clean up setHelpMessage and setErrorMessage methods as they should all be in the init function.
+
+    // Add all text entries to the container for easy iteration
+    mTextEntries = {
+        &mBoardSizeTextEntry,
+        &mKeyDelayTextEntry,
+        &mKeyRepeatTextEntry,
+        &mGuideGridOnTextEntry,
+        &mWallKickOnTextEntry,
+        &mDropCoolDownTextEntry,
+        &mShowProgressBarTextEntry,
+        &mStartLevelTextEntry
+    };
     initTextEntry(
         mBoardSizeTextEntry,
         false,
@@ -196,14 +208,9 @@ void OptionMenuState::update(ley::Command command) {
 
     mOptionUI.runCommand(command);
 
-    mBoardSizeTextEntry.update();
-    mKeyDelayTextEntry.update();
-    mKeyRepeatTextEntry.update();
-    mGuideGridOnTextEntry.update();
-    mWallKickOnTextEntry.update();
-    mDropCoolDownTextEntry.update();
-    mShowProgressBarTextEntry.update();
-    mStartLevelTextEntry.update();
+    for (auto* entry : mTextEntries) {
+        entry->update();
+    }
 }
 
 void OptionMenuState::commitBoardSize() {
@@ -309,14 +316,9 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mStartLevelLabelFont);
     
     //text entries
-    mRenderables.push_back(&mBoardSizeTextEntry);
-    mRenderables.push_back(&mKeyDelayTextEntry);
-    mRenderables.push_back(&mKeyRepeatTextEntry);
-    mRenderables.push_back(&mGuideGridOnTextEntry);
-    mRenderables.push_back(&mWallKickOnTextEntry);
-    mRenderables.push_back(&mDropCoolDownTextEntry);
-    mRenderables.push_back(&mShowProgressBarTextEntry);
-    mRenderables.push_back(&mStartLevelTextEntry);
+    for (auto* entry : mTextEntries) {
+        mRenderables.push_back(entry);
+    }
 }
 
 bool OptionMenuState::onEnter() {

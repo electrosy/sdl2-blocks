@@ -35,6 +35,7 @@ private:
     ley::TextEntry mDropCoolDownTextEntry;
     ley::TextEntry mShowProgressBarTextEntry;
     ley::TextEntry mStartLevelTextEntry;
+    std::vector<ley::TextEntry*> mTextEntries;
 
     ley::Sprite mBackground;
     RenderablesPtr mRenderables;
