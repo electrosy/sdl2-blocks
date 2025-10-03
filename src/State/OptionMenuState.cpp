@@ -45,6 +45,17 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         { OptionType::FontLabel, "Block Editor", {29,600}, {0,0}, 0, "", "", "" }
     };
 
+    // Dynamically create TextEntry objects for each TextEntry option
+    for (auto& cfg : mOptionConfigs) {
+        if (cfg.type == OptionType::TextEntry) {
+            cfg.textEntry = new ley::TextEntry();
+            initTextEntry(*cfg.textEntry, false,
+                [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+                [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+                cfg.entryWidth, cfg.entryPos, cfg.regex, cfg.errorMsg, cfg.helpMsg);
+        }
+    }
+
     // Add all text entries to the container for easy iteration
     mTextEntries = {
         &mBoardSizeTextEntry,
