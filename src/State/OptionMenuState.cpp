@@ -324,14 +324,9 @@ void OptionMenuState::loadRenderables() {
 bool OptionMenuState::onEnter() {
     SDL_Log("Entering OptionMenuState");
 
-    mBoardSizeTextEntry.setVisible(true);
-    mKeyDelayTextEntry.setVisible(true);
-    mKeyRepeatTextEntry.setVisible(true);
-    mGuideGridOnTextEntry.setVisible(true);
-    mWallKickOnTextEntry.setVisible(true);
-    mDropCoolDownTextEntry.setVisible(true);
-    mShowProgressBarTextEntry.setVisible(true);
-    mStartLevelTextEntry.setVisible(true);
+    for (auto* entry : mTextEntries) {
+        entry->setVisible(true);
+    }
 
     loadRenderables();
 
