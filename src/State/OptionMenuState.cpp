@@ -1,7 +1,7 @@
 #include "../../inc/State/OptionMenuState.h"
 
 #include <fstream>
-#include <sstream>
+#include <sstream> 
 #include <regex>
 
 typedef ley::Textures TextureManager;
@@ -27,6 +27,23 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
     // TODO Clean up setHelpMessage and setErrorMessage methods as they should all be in the init function.
+
+    // Example data-driven option configs for OptionMenuState
+    mOptionConfigs = {
+        // TextEntry options
+        { OptionType::TextEntry, "Board Size", {31,100}, {224,100}, 5, "\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b", "Must be two numbers separated by an 'x' between 8x8 and 25x22", "Enter a number between 8x8 and 25x22, e.g. 10x20" },
+        { OptionType::TextEntry, "Input Delay", {31,150}, {224,150}, 3, "^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$", "Must be a number between 50 and 300", "Enter a number between 50 and 300" },
+        { OptionType::TextEntry, "Input Repeat Rate", {31,200}, {325,200}, 2, "^(15|1[6-9]|[2-7][0-9]|80)$", "Must be a number between 15 and 80", "Enter a number between 15 and 80" },
+        { OptionType::TextEntry, "Guide Grid On", {31,250}, {325,250}, 6, "^(off|red|green|yellow|cyan|purple)$", "Must be one of: off, red, green, yellow, cyan, purple", "Enter one of: off, red, green, yellow, cyan, purple" },
+        { OptionType::TextEntry, "Wall Kick On", {31,300}, {325,300}, 3, "^(off|on)$", "Must be one of: off, on", "Enter one of: off, on" },
+        { OptionType::TextEntry, "Drop Cool Down", {31,350}, {325,350}, 3, "^(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$", "Must be a number between 0 and 250", "Enter a number between 0 and 250" },
+        { OptionType::TextEntry, "Show Progress Bar", {31,400}, {325,400}, 3, "^(off|on)$", "Must be one of: off, on", "Enter one of: off, on" },
+        { OptionType::TextEntry, "Start Level", {31,450}, {237,450}, 2, "^(1[0-9]|2[0-9]|[1-9])$", "Must be a number between 1 and 29", "Enter a number between 1 and 29" },
+        // FontLabel options
+        { OptionType::FontLabel, "Language Options", {29,500}, {0,0}, 0, "", "", "" },
+        { OptionType::FontLabel, "Keyboard Options", {29,550}, {0,0}, 0, "", "", "" },
+        { OptionType::FontLabel, "Block Editor", {29,600}, {0,0}, 0, "", "", "" }
+    };
 
     // Add all text entries to the container for easy iteration
     mTextEntries = {
