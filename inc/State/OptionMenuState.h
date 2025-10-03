@@ -72,6 +72,18 @@ public:
     void commitHardDropCoolDown();
     void commitShowProgressBar();
     void commitStartLevel();
+    void initStartLevelTextEntry();
+    void initTextEntry(
+        ley::TextEntry& entry,
+        bool visible,
+        std::function<void()> charSound,
+        std::function<void()> backspaceSound,
+        int width,
+        SDL_Point pos,
+        const std::string& regex,
+        const std::string& errorMsg,
+        const std::string& helpMsg
+    );
 
 };
 

@@ -27,79 +27,92 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
     // TODO Clean up setHelpMessage and setErrorMessage methods as they should all be in the init function.
-    mBoardSizeTextEntry.setVisible(false);
-    mBoardSizeTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mBoardSizeTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mBoardSizeTextEntry.setWidthByChar(5);
-    mBoardSizeTextEntry.setRegEx("\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b");
-    mBoardSizeTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
+    initTextEntry(
+        mBoardSizeTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        5,
+        {224,100},
+        "\\b(?:[8-9]|1\\d|2[0-5])x(?:[8-9]|1\\d|2[0-2])\\b",
+        mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
         + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
-        , "");
-    mBoardSizeTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
-    mBoardSizeTextEntry.setPos({224,100});
+    );
 
-    mKeyDelayTextEntry.setVisible(false);
-    mKeyDelayTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mKeyDelayTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyDelayTextEntry.setWidthByChar(3);
-    mKeyDelayTextEntry.setPos({224,150});
-    mKeyDelayTextEntry.setRegEx("^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$");
-    mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
-    mKeyDelayTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mKeyDelayTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        3,
+        {224,150},
+        "^(50|[5-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$",
+        mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mKeyRepeatTextEntry.setVisible(false);
-    mKeyRepeatTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mKeyRepeatTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mKeyRepeatTextEntry.setWidthByChar(2);
-    mKeyRepeatTextEntry.setPos({325,200});
-    mKeyRepeatTextEntry.setRegEx("^(15|1[6-9]|[2-7][0-9]|80)$");
-    mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
-    mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mKeyRepeatTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        2,
+        {325,200},
+        "^(15|1[6-9]|[2-7][0-9]|80)$",
+        mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mGuideGridOnTextEntry.setVisible(false);
-    mGuideGridOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mGuideGridOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mGuideGridOnTextEntry.setWidthByChar(6);
-    mGuideGridOnTextEntry.setPos({325,250});
-    mGuideGridOnTextEntry.setRegEx("^(off|red|green|yellow|cyan|purple)$");
-    mGuideGridOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst));
-    mGuideGridOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mGuideGridOnTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        6,
+        {325,250},
+        "^(off|red|green|yellow|cyan|purple)$",
+        mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mWallKickOnTextEntry.setVisible(false);
-    mWallKickOnTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mWallKickOnTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mWallKickOnTextEntry.setWidthByChar(3);
-    mWallKickOnTextEntry.setPos({325,300});
-    mWallKickOnTextEntry.setRegEx("^(off|on)$");
-    mWallKickOnTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
-    mWallKickOnTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mWallKickOnTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        3,
+        {325,300},
+        "^(off|on)$",
+        mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mDropCoolDownTextEntry.setVisible(false);
-    mDropCoolDownTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mDropCoolDownTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mDropCoolDownTextEntry.setWidthByChar(3);
-    mDropCoolDownTextEntry.setPos({325,350});
-    mDropCoolDownTextEntry.setRegEx("^(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$");
-    mDropCoolDownTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst));
-    mDropCoolDownTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mDropCoolDownTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        3,
+        {325,350},
+        "^(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|250)$",
+        mGameModel->getLanguageModel()->getWord("must be a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter a number between 0 and 250", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mShowProgressBarTextEntry.setVisible(false);
-    mShowProgressBarTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mShowProgressBarTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mShowProgressBarTextEntry.setWidthByChar(3);
-    mShowProgressBarTextEntry.setPos({325,400});
-    mShowProgressBarTextEntry.setRegEx("^(off|on)$");
-    mShowProgressBarTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst));
-    mShowProgressBarTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst), "");
+    initTextEntry(
+        mShowProgressBarTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        3,
+        {325,400},
+        "^(off|on)$",
+        mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
-    mStartLevelTextEntry.setVisible(false);
-    mStartLevelTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mStartLevelTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mStartLevelTextEntry.setWidthByChar(2);
-    mStartLevelTextEntry.setPos({237,450});
-    mStartLevelTextEntry.setRegEx("^(1[0-9]|2[0-9]|[1-9])$");
-    mStartLevelTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst));
-    mStartLevelTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst), "");
+    initStartLevelTextEntry();
 
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
@@ -361,6 +374,27 @@ bool OptionMenuState::onPause() {
     return true;
 }
 
+void OptionMenuState::initTextEntry(
+    ley::TextEntry& entry,
+    bool visible,
+    std::function<void()> charSound,
+    std::function<void()> backspaceSound,
+    int width,
+    SDL_Point pos,
+    const std::string& regex,
+    const std::string& errorMsg,
+    const std::string& helpMsg
+) {
+    entry.setVisible(visible);
+    entry.setCharSound(charSound);
+    entry.setBackspaceSound(backspaceSound);
+    entry.setWidthByChar(width);
+    entry.setPos(pos);
+    entry.setRegEx(regex);
+    entry.setErrorMessage(errorMsg);
+    entry.setHelpMessages(helpMsg, "");
+}
+
 void OptionMenuState::initTextEntryMessages() {
 
     mOptionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
@@ -427,6 +461,17 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mShowProgressBarLabelFont.getTTFFont(), mShowProgressBarLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mShowProgressBarLabelFont.getPos();
     mShowProgressBarTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+}
+
+void OptionMenuState::initStartLevelTextEntry() {
+    mStartLevelTextEntry.setVisible(false);
+    mStartLevelTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
+    mStartLevelTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
+    mStartLevelTextEntry.setWidthByChar(2);
+    mStartLevelTextEntry.setPos({237,450});
+    mStartLevelTextEntry.setRegEx("^(1[0-9]|2[0-9]|[1-9])$");
+    mStartLevelTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst));
+    mStartLevelTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst), "");
 }
 
 }
