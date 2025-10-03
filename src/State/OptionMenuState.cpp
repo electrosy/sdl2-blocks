@@ -112,7 +112,17 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst)
     );
 
-    initStartLevelTextEntry();
+    initTextEntry(
+        mStartLevelTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        2,
+        {237,450},
+        "^(1[0-9]|2[0-9]|[1-9])$",
+        mGameModel->getLanguageModel()->getWord("must be a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst)
+    );
 
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
@@ -461,17 +471,6 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mShowProgressBarLabelFont.getTTFFont(), mShowProgressBarLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mShowProgressBarLabelFont.getPos();
     mShowProgressBarTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
-}
-
-void OptionMenuState::initStartLevelTextEntry() {
-    mStartLevelTextEntry.setVisible(false);
-    mStartLevelTextEntry.setCharSound([this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);});
-    mStartLevelTextEntry.setBackspaceSound([this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);});
-    mStartLevelTextEntry.setWidthByChar(2);
-    mStartLevelTextEntry.setPos({237,450});
-    mStartLevelTextEntry.setRegEx("^(1[0-9]|2[0-9]|[1-9])$");
-    mStartLevelTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst));
-    mStartLevelTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst), "");
 }
 
 }
