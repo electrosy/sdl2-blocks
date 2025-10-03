@@ -8,8 +8,29 @@
 #define OPTIONMENUSTATE_H
 
 namespace ley {
+    // Option type for data-driven options
+    enum class OptionType {
+        TextEntry,
+        FontLabel
+    };
+
+    // Data-driven option configuration struct
+    struct OptionConfig {
+        OptionType type;
+        std::string labelText;
+        SDL_Point labelPos;
+        SDL_Point entryPos;
+        int entryWidth;
+        std::string regex;
+        std::string errorMsg;
+        std::string helpMsg;
+        ley::Font* labelFont = nullptr;
+        ley::TextEntry* textEntry = nullptr;
+    };
 
 class OptionMenuState : public ley::GameState {
+    // Data-driven container for all option menu configs
+    std::vector<OptionConfig> mOptionConfigs;
 
 private:
 
