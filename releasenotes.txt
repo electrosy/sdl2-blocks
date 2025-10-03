@@ -1,6 +1,9 @@
+0.7.1
+
 Add UI elements to allow the player to remap the keyboard and gamepad in the input options screen.
 Add an option to start on a specific level.
 Fix an issue where when wall kick was enabled it would only work for counter clockwise.
+Add an option to allow the player to choose the start level.
 
 0.7.0.6
 
