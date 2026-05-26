@@ -21,7 +21,7 @@ private:
 
 public:
     LanguageModel();
-    std::string getLanguage() { return mCurrentLanguage; };
+    std::string getLanguage() const { return mCurrentLanguage; };
     std::string getLanguageString();
     std::string getLanguageText(std::string language, std::string field);
     void setLanguage(std::string language) { mCurrentLanguage = language; };

@@ -8,8 +8,7 @@ namespace ley {
 const std::string BlockEditorState::sBlockEditorID = "BLOCKEDITOR";
 
 BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mTitleFont{0,0,100,50},
     mHelpTipFont{1000,690,100,50},
     mShiftControlsFont{1000,690,100,50} {
@@ -155,12 +154,7 @@ void BlockEditorState::update(ley::Command command) {
 }
 
 void BlockEditorState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     //render the highlight rects.
     for(std::pair<const std::string, std::pair<bool, SDL_Rect>>& rect_pair : mBlocksKeyRects) {
         const std::string& key = rect_pair.first; // Key (std::string)
@@ -217,11 +211,6 @@ bool BlockEditorState::onExit() {
     return true;
 }
 
-bool BlockEditorState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 void BlockEditorState::updateBlockEditorFonts() {
 

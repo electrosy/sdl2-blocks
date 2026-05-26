@@ -10,7 +10,11 @@ Date: Feb/15/2020
 
 #include <array>
 #include <fstream>
+#include <functional>
+#include <set>
 #include <sstream>
+#include <string>
+#include <unordered_map>
 
 #include "Audio.h"
 #include "Block.h"
@@ -26,7 +30,7 @@ namespace ley {
 
 const Uint8 DROPCOOLDOWNMS_DEFAULT = 100;
 
-enum class StateChange { //TODO this can probably be called State
+enum class StateChange {
     play,
     options,
     quitstate,
@@ -36,7 +40,33 @@ enum class StateChange { //TODO this can probably be called State
     keyboardoptions,
     languageoptions,
     blockeditor,
-    none}; //particular states that the game can be in
+    none};
+
+enum class GridGuide { off, red, green, yellow, cyan, purple };
+
+inline GridGuide stringToGridGuide(const std::string& s) {
+    static const std::unordered_map<std::string, GridGuide> table = {
+        {"off",    GridGuide::off},
+        {"red",    GridGuide::red},
+        {"green",  GridGuide::green},
+        {"yellow", GridGuide::yellow},
+        {"cyan",   GridGuide::cyan},
+        {"purple", GridGuide::purple},
+    };
+    auto it = table.find(s);
+    return it != table.end() ? it->second : GridGuide::off;
+}
+
+inline std::string gridGuideToString(GridGuide g) {
+    switch (g) {
+        case GridGuide::red:    return "red";
+        case GridGuide::green:  return "green";
+        case GridGuide::yellow: return "yellow";
+        case GridGuide::cyan:   return "cyan";
+        case GridGuide::purple: return "purple";
+        default:                return "off";
+    }
+}
 
 class GameModel {
 
@@ -49,7 +79,7 @@ private:
     Block mNextBlock;
     bool mOverLayOn;
     bool mGameRunning;
-    bool mActive;                       //not paused // TODO this should be called paused and the checks should be reversed
+    bool mPaused;                       //true when the game is paused
     bool mProgramRunning;               //if true then the program is still runing and has not been asked to exit yet
     bool mNewLevelToReport{true};       //true if the level has changed but has not been passed along yet, start with true for game init
     bool mDebugMode = false;            //allow debug commands
@@ -61,7 +91,7 @@ private:
     int mComboCount = 0;
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
-    std::string mGuideGridOn = "purple";
+    GridGuide mGuideGrid = GridGuide::purple;
     ley::Audio mAudioSystem;            //audio subsystem
     ley::StateChange mStateChange = ley::StateChange::none;
     KeyBindingsType mKeyBindings;       // Keyboard bindings
@@ -71,7 +101,7 @@ private:
     int mPts_Line;
     ley::Config mConfig;
     ley::LanguageModel mLanguageModel;
-    std::string mWallKickOn = "on";
+    bool mWallKickOn = true;
     BlockFileDataMapType mBlockMapData;
     Uint8 mDropCoolDownMs = DROPCOOLDOWNMS_DEFAULT;
     void clearAndRecordLine(/*int, int*/ int lineNum); //clear the completed lines and keep track of the score
@@ -86,15 +116,11 @@ private:
     void updateSpeed();                 //check to see if the speed of the falldown block needs to change based on lines/score
     void onLine(int numLines, int level); //Handler when a line is completed
     void onDrop();
-    void loadKeyBindings();             //keyboard
-    void loadButtonBindings();          //gamepad
-    void logBlockData();
-    void addCanRotateToBlockData();     // we calculate if the block can rotate by checking to see if any orientation is different
     void initGame();                    // set up the blocks. clear and or initialize any other important values
-    void readGamePadConfig(std::vector<ControllerButtonRow>* data);
-    void readKeyboardConfig(std::vector<KeyBindingRow>* data);
-    void writeGamePadConfig();
-    void writeKeyboardConfig();
+    void loadKeyBindings();             // populate mKeyBindings from hardcoded UI bindings + CSV
+    void loadButtonBindings();          // populate mButtonBindings from hardcoded UI bindings + CSV
+    void addCanRotateToBlockData();     // calculate if each block has multiple distinct orientations
+    void logBlockData();                // debug: dump mBlockMapData to stdout
     SDL_Scancode mLastScancode;
     SDL_GameControllerButton mLastButtoncode;
     bool mWaitForKeydown = false;
@@ -127,7 +153,7 @@ public:
     void stopProgram(bool);             //sets the program to exit by setting running to false.
     bool newLevel();                    //retruns true if there is a new level to report.
     ley::Audio* audio() { return &mAudioSystem; };
-    ley::StateChange currentStateChange() { return mStateChange; }; //TODO this can probably be called gotoState
+    ley::StateChange currentStateChange() { return mStateChange; };
     void stateChange(ley::StateChange state) { mStateChange = state; };
     ley::HighScores* highScores() { return &mHighScores; };
     bool debugMode();                   //get current debugCommands flag
@@ -147,22 +173,22 @@ public:
     static std::string getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings);
     static std::string getPadInputString(std::string seperator, ley::Command command, PadBindingsType* bindings);
     ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };
-    void writeConfig();
-    void readConfig();
-    int getKeyDelay() {return mKeyDelay;};
+    const ley::LanguageModel* getLanguageModel() const { return &mLanguageModel; };
+    int getKeyDelay() const {return mKeyDelay;};
     void setKeyDelay(int inKeyDelay) {mKeyDelay = inKeyDelay;};
-    int getKeyRepeat() {return mKeyRepeat;};
+    int getKeyRepeat() const {return mKeyRepeat;};
     void setKeyRepeat(int inKeyRepeat) {mKeyRepeat = inKeyRepeat;};
     void readConfigOther();
-    std::string getGuideGridOn() { return mGuideGridOn;};
-    void setGuideGridOn(std::string inOn);
+    void readBlockData();               // reload block data from file (also used by BlockEditorState)
+    GridGuide getGuideGridOn() const { return mGuideGrid; };
+    std::string getGuideGridOnString() const { return gridGuideToString(mGuideGrid); };
+    void setGuideGridOn(const std::string& inOn);
     bool rotateWithKick(bool r);
     ley::Block getActiveBlock() { return mActiveBlock; };
-    std::string getWallKickOn() { return mWallKickOn; };
-    void setWallKickOn(std::string on);
+    bool getWallKickOn() const { return mWallKickOn; };
+    void setWallKickOn(bool on);
     BlockFileDataMapType* getFileDataPtr();
-    void readBlockData();               // read in the block data from file
-    Uint8 getDropCoolDown() { return mDropCoolDownMs; };
+    Uint8 getDropCoolDown() const { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
     SDL_Scancode getLastScancode() { return mLastScancode; };
     SDL_GameControllerButton getLastButton() { return mLastButtoncode; };
@@ -173,9 +199,8 @@ public:
     void setKeyDownEvent(bool in) { mKeyDownEvent = in; };
     void setButtonPressEvent(bool in) { mButtonPressEvent = in; };
     void setShowProgressBar(bool inShow) { mShowProgressBar = inShow; };
-    bool getShowProgressBar() { return mShowProgressBar; };
+    bool getShowProgressBar() const { return mShowProgressBar; };
     int getStartLevel() const { return mStartLevel; }
-    // Inline setter method
     void setStartLevel(int startLevel) { mStartLevel = startLevel; }
     int calcLevel();                    //Calculate current level based on number of lines completed
 

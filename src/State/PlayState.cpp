@@ -6,8 +6,7 @@ const std::string PlayState::sPlayID = "PLAY";
 
 PlayState::PlayState(ley::Video * v, ley::GameModel * gm)
 :
-mVideoSystem(v),
-mGameModel(gm),
+BaseState(v, gm),
 mStatusTimer(2000,{10,500,100,5}),
 mFallTimer(1000,{}),
 mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20),
@@ -31,7 +30,7 @@ void PlayState::update(ley::Command command) {
         case ley::Command::cclockwise :
             {
                 bool rotated = false;
-                if(mGameModel->getWallKickOn() == "on") {
+                if(mGameModel->getWallKickOn()) {
                     rotated = mGameModel->rotateWithKick(false);
                 }
                 else {
@@ -47,7 +46,7 @@ void PlayState::update(ley::Command command) {
         case ley::Command::clockwise :
              {
                 bool rotated = false;
-                if(mGameModel->getWallKickOn() == "on") {
+                if(mGameModel->getWallKickOn()) {
                     rotated = mGameModel->rotateWithKick(true);
                 }
                 else {
@@ -190,19 +189,6 @@ bool PlayState::onReEnter() {
     return true;
 }
 
-bool PlayState::onExit() {    
-    SDL_Log("Exiting Playstate");
-
-    mGameModel->audio()->fadeOutMusic();
-    
-    return true;
-}
-
-bool PlayState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 void PlayState::resetGame() {
     mFallTimer.reset();

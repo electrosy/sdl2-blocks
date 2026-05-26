@@ -160,7 +160,9 @@ void ley::Sprite::render(SDL_Renderer * r, bool d) {
         alpha = 255*fader.pct();
     }
     SDL_SetTextureAlphaMod(texture, alpha);
-    SDL_RenderCopy(r, texture, &frames[frameIndex], &dest_rect);
+    // frames is empty for full-texture sprites; nullptr tells SDL to use the whole texture.
+    const SDL_Rect* srcRect = frames.empty() ? nullptr : &frames[frameIndex];
+    SDL_RenderCopy(r, texture, srcRect, &dest_rect);
 
     if(!startFader) {
         //Start the fader on the first render call

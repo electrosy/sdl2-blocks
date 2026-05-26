@@ -1,8 +1,6 @@
 #include <filesystem>
 
-#include "GameState.h"
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
+#include "BaseState.h"
 #include "../UI/UIMenu.h"
 #include "../UI/UI_Tile.h"
 #include "../../inc/Layout.h"
@@ -12,21 +10,17 @@
 
 namespace ley {
 
-class BlockEditorState : public ley::GameState {
+class BlockEditorState : public ley::BaseState {
 
 Uint8 EDITOR_FONT_SIZE = 16;
 
 private:
-    Video * mVideoSystem;
-    GameModel * mGameModel;
     static const std::string sBlockEditorID;
     Font mTitleFont;
     Font mHelpTipFont;
     Font mCurrentTileFont;
     Font mShiftControlsFont;
     UIMenu mBlockUIMenu;
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
     Layout mLayout;
     Layout mKeyLayout;
     std::vector<ley::Sprite> mBlockKeySprites;
@@ -58,10 +52,9 @@ public:
 
     virtual void update(ley::Command command);
     virtual void render();
+    virtual bool onExit()  override;
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
     virtual void loadRenderables();
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);

@@ -1,7 +1,5 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 #include "../UI/UIMenu.h"
 
 #ifndef CREDITSSTATE_H
@@ -9,7 +7,7 @@
 
 namespace ley {
 
-class CreditsState : public ley::GameState {
+class CreditsState : public ley::BaseState {
 public:
 
     CreditsState(ley::Video * v, ley::GameModel * gm);
@@ -18,23 +16,17 @@ public:
     virtual void loadRenderables();
 
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
 
     virtual std::string getStateID() const { return sCreditsID; }
 
 private:
 
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
     static const std::string sCreditsID;
 
     ley::Sprite mBackground;
 //    ley::Sprite mCreditsPanel;
 
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
 
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu optionUI;

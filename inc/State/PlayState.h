@@ -1,7 +1,5 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
@@ -11,7 +9,7 @@ auto constexpr STATUSMESSAGE_POS_Y_PX = 10;
 
 namespace ley {
 
-class PlayState : public ley::GameState {
+class PlayState : public ley::BaseState {
 
 public:
 
@@ -21,16 +19,12 @@ public:
     virtual void loadRenderables();
 
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
 
     virtual std::string getStateID() const { return sPlayID; };
 
 private:
     ley::Timer mLastHardDrop; //Time that has expired since last hard drop
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
 
     //Font
     ley::Font mStatusFont;
@@ -39,8 +33,6 @@ private:
     ley::Timer mFallTimer; //Time to force the blockdown
 
     ley::Timer mStatusTimer;
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
     static const std::string sPlayID;
 
     void resetGame();

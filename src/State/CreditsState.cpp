@@ -7,8 +7,7 @@ namespace ley {
 const std::string CreditsState::sCreditsID = "CREDITS";
 
 CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("credits"), 0, {}, {1000,{0,0,0,0}})),
     mNameFont{310,200,100,50},
     mMainRolesFont{310,235,100,50},
@@ -67,12 +66,7 @@ void CreditsState::update(ley::Command command) {
 }
 
 void CreditsState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     optionUI.render(mVideoSystem);
 }
 
@@ -104,15 +98,5 @@ bool CreditsState::onReEnter() {
     return true;
 }
 
-bool CreditsState::onExit() {
-    SDL_Log("Exiting CreditsState");
-    return true;
-}
-
-bool CreditsState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 }

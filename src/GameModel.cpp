@@ -6,10 +6,13 @@ Purpose: see header.
 Date: Feb/15/2020
 */
 #include <array>
+#include <functional>
 #include <iostream>
+#include <set>
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
+#include "../inc/ConfigIO.h"
 #include "../inc/Rand_int.h"
 
 
@@ -21,7 +24,7 @@ mStartLevel(1),
 mNumLevel(mStartLevel),
 mGameRunning(true), 
 mCurrentSpeed(1000.0f), 
-mActive(true), 
+mPaused(false), 
 mOverLayOn(false),
 mScore(0),
 mProgramRunning(true),
@@ -34,8 +37,7 @@ mDebugOnlyLine(false) {
     mHighScores.read();
     loadKeyBindings();
     loadButtonBindings();
-    readConfig();
-    // TODO add the board size to the mainconfig
+    ConfigIO::readMainConfig(this);
     readConfigOther();
     mActiveBlock.setBlockDataPtr(&mBlockMapData);
     mLanguageModel.loadLanguage();
@@ -46,11 +48,10 @@ mDebugOnlyLine(false) {
     }
 }
 
-// TODO rule of 3/5
 ley::GameModel::~GameModel() {
-    writeConfig();
-    writeKeyboardConfig();
-    writeGamePadConfig();
+    ConfigIO::writeMainConfig(this);
+    ConfigIO::writeKeyboardBindings(mKeyBindings);
+    ConfigIO::writeGamepadBindings(mButtonBindings);
 }
 
 /* Accessors */
@@ -363,83 +364,53 @@ int ley::GameModel::firstLineAt(int start) {
 
 void ley::GameModel::updateSpeed() {
 
-    // a much more natural curve for speed increases.
-    // original https://www.desmos.com/calculator/7xuo8jryb9
-    // percent  https://www.desmos.com/calculator/hivnmiyedk
-    // 31 levels https://www.desmos.com/calculator/gvmkmief5c
+    // Speed curve based on level — see https://www.desmos.com/calculator/gvmkmief5c
+    static constexpr std::array<double, 32> SPEED_TABLE = {
+        1000, // 0
+        1000, // 1
+         800, // 2  -200  (22.2%)
+         624, // 3        (24.7%)
+         487, // 4        (24.7%)
+         380, // 5        (24.7%)
+         297, // 6        (21.8%)
+         232, // 7        (24.6%)
+         181, // 8        (24.7%)
+         142, // 9        (24.1%)
+         111, // 10       (24.5%)
+         100, // 11
+          90, // 12
+          80, // 13
+          70, // 14
+          60, // 15
+          50, // 16
+          45, // 17
+          40, // 18
+          35, // 19
+          30, // 20
+          25, // 21
+          23, // 22
+          21, // 23
+          19, // 24
+          17, // 25
+          15, // 26
+          14, // 27
+          13, // 28
+          12, // 29
+          11, // 30
+          10  // 31
+    };
 
-    switch(calcLevel()) {
-        case 0 :
-        case 1 : mCurrentSpeed = 1000;
-            break;
-        case 2 : mCurrentSpeed = 800; //-200 22.2222% 
-            break;
-        case 3 : mCurrentSpeed = 624; // 24.7191%
-            break;
-        case 4 : mCurrentSpeed = 487; // 24.6624%
-            break;
-        case 5 : mCurrentSpeed = 380; // 24.6828%
-            break;
-        case 6 : mCurrentSpeed = 297; // 21.8421%
-            break;
-        case 7 : mCurrentSpeed = 232; // 24.5746%
-            break;
-        case 8 : mCurrentSpeed = 181; // 24.6973%
-            break;
-        case 9 : mCurrentSpeed = 142; // 24.148%
-            break;
-        case 10 : mCurrentSpeed = 111; // 24.5059%
-            break;
-        case 11 : mCurrentSpeed = 100;
-            break;
-        case 12 : mCurrentSpeed = 90;
-            break;
-        case 13 : mCurrentSpeed = 80;
-            break;
-        case 14 : mCurrentSpeed = 70;
-            break;
-        case 15 : mCurrentSpeed = 60;
-            break;
-        case 16 : mCurrentSpeed = 50;
-            break;
-        case 17 : mCurrentSpeed = 45;
-            break;
-        case 18 : mCurrentSpeed = 40;
-            break;
-        case 19 : mCurrentSpeed = 35;
-            break;
-        case 20 : mCurrentSpeed = 30;
-            break;
-        case 21 : mCurrentSpeed = 25;
-            break;
-        case 22 : mCurrentSpeed = 23;
-            break;
-        case 23 : mCurrentSpeed = 21;
-            break;
-        case 24 : mCurrentSpeed = 19;
-            break;
-        case 25 : mCurrentSpeed = 17;
-            break;
-        case 26 : mCurrentSpeed = 15;
-            break;
-        case 27 : mCurrentSpeed = 14;
-            break;
-        case 28 : mCurrentSpeed = 13;
-            break;
-        case 29 : mCurrentSpeed = 12;
-            break;
-        case 30 : mCurrentSpeed = 11;
-            break;
-        case 31 : mCurrentSpeed = 10;
-            break;
+    const int level = calcLevel();
+    if (level >= 0 && level < static_cast<int>(SPEED_TABLE.size())) {
+        mCurrentSpeed = SPEED_TABLE[level];
     }
+    // Beyond level 31 the speed stays at 10ms (already set at level 31)
 }
 
 //TODO this function should probably go in the controller
 bool ley::GameModel::moveBlock(Command d) {
 
-    // TODO, should we just not call moveBlock at all?
-    if(!mActive) {
+    if(mPaused) {
         return false; //don't do any moves while we are paused.
     }
 
@@ -553,12 +524,11 @@ void ley::GameModel::resetGame() {
     stopProgram(false);
 }
 bool ley::GameModel::isPaused() {
-    return !mActive;
+    return mPaused;
 }
 
 void ley::GameModel::pauseGame(bool pause) {
-        
-        mActive = !pause;
+    mPaused = pause;
 }
 
 bool ley::GameModel::debugMode() {
@@ -595,82 +565,6 @@ void ley::GameModel::quickDrop() {
     }
 }
 
-void ley::GameModel::readKeyboardConfig(std::vector<KeyBindingRow>* data) {
-
-    std::ifstream inFile("keyboard-config.csv");
-    if (inFile.is_open())
-    {
-        std::string line;
-        while(std::getline(inFile,line))
-        {
-            std::stringstream ss(line);
-            
-            std::string sScanCode, sModifier, sCommand;
-            std::getline(ss,sScanCode,',');
-            std::getline(ss,sModifier,',');
-            std::getline(ss,sCommand);
-
-            SDL_Log((sScanCode + "," + sCommand + "," + sModifier).c_str());
-            if(!sScanCode.empty() && !sCommand.empty()) {
-               data->push_back(std::make_pair(STRINGTOSCANCODE.at(sScanCode), std::make_pair(STRINGTOKMOD.at(sModifier),STRINGTOCOMMAND.at(sCommand))));
-            }
-        }
-    }
-}
-
-void ley::GameModel::writeKeyboardConfig() {
-    
-    std::ofstream myfile;
-    myfile.open("keyboard-config.csv");
-
-    for(const auto& binding : mKeyBindings) {
-        //write only commands the play context
-        if(binding.first.second != "play")
-            continue;
-
-        myfile << SCANCODETOSTRING.at(binding.first.first) << "," << KMODTOSTRING.at(binding.second.first) << "," << COMMANDTOSTRING.at(binding.second.second) << std::endl;
-    }
-
-    myfile.close();
-}
-
-void ley::GameModel::readGamePadConfig(std::vector<ControllerButtonRow>* data) {
-
-    std::ifstream inFile("gamepad-config.csv");
-    if (inFile.is_open())
-    {
-        std::string line;
-        while(std::getline(inFile,line))
-        {
-            std::stringstream ss(line);
-            
-            std::string sButton, sCommand;
-            std::getline(ss,sButton,',');
-            std::getline(ss,sCommand,',');
-
-            SDL_Log((sButton + "," + sCommand).c_str());
-            if(!sButton.empty() && !sCommand.empty()) { 
-                data->push_back(std::make_pair(STRINGTOBUTTON.at(sButton), STRINGTOCOMMAND.at(sCommand)));
-            }
-        }
-    }
-}
-
-void ley::GameModel::writeGamePadConfig() {
-    std::ofstream myfile;
-    myfile.open("gamepad-config.csv");
-
-    for(const auto& binding : mButtonBindings) {
-        
-        //write only the play context
-        if(binding.first.second != "play")
-            continue;
-
-        myfile << BUTTONTOSTRING.at(binding.first.first) << "," << COMMANDTOSTRING.at(binding.second) << std::endl;
-    }
-
-    myfile.close();
-}
 
 void ley::GameModel::readConfigOther() {
     mConfig.read();
@@ -715,7 +609,7 @@ void ley::GameModel::loadKeyBindings() {
     
 
     std::vector<KeyBindingRow> keyMappingData;
-    readKeyboardConfig(&keyMappingData);
+    ConfigIO::readKeyboardBindings(&keyMappingData);
 
     for(KeyBindingRow keyBindingRow : keyMappingData) {
         mKeyBindings.insert({{keyBindingRow.first,"play"},{keyBindingRow.second.first,keyBindingRow.second.second}});
@@ -725,7 +619,7 @@ void ley::GameModel::loadKeyBindings() {
 void ley::GameModel::loadButtonBindings() {
 
     std::vector<std::pair<SDL_GameControllerButton, ley::Command>> buttonMappingData;
-    readGamePadConfig(&buttonMappingData);
+    ConfigIO::readGamepadBindings(&buttonMappingData);
 
     for(std::pair<SDL_GameControllerButton, ley::Command> buttonMap : buttonMappingData) {
         mButtonBindings.insert({{buttonMap.first,"play"},buttonMap.second});
@@ -791,160 +685,45 @@ std::string ley::GameModel::getPadInputString(std::string seperator, ley::Comman
     return output;
 }
 
-void ley::GameModel::writeConfig() {
-  std::ofstream myfile;
-  myfile.open("mainconfig.csv");
 
-  myfile << "language" << ',' << getLanguageModel()->getLanguage() << std::endl;
-  myfile << "keydelay" << ',' << getKeyDelay() << std::endl;
-  myfile << "keyrepeat" << ',' << getKeyRepeat() << std::endl;
-  myfile << "guidegridon" << ',' << getGuideGridOn() << std::endl;
-  myfile << "wallkickon" << ',' << getWallKickOn() << std::endl;
-  myfile << "dropcooldown" << ',' << std::to_string(getDropCoolDown()) << std::endl;
-  myfile << "showprogressbar" << ',' << (getShowProgressBar() == true ? "on" : "off") << std::endl;
-  myfile << "startlevel" << ',' << getStartLevel() << std::endl;
-  
-  myfile.close();
+void ley::GameModel::setGuideGridOn(const std::string& inOn) {
+    mGuideGrid = stringToGridGuide(inOn);
 }
 
-void ley::GameModel::readConfig() {
-    
-    std::string key;
-    std::string value;
-
-    std::ifstream inFile("mainconfig.csv");
-    if (inFile.is_open())
-    {
-        std::string line;
-        while( std::getline(inFile,line) )
-        {
-            std::stringstream ss(line);
-            
-            std::getline(ss,key,',');
-            std::getline(ss,value,',');
-
-            if(!value.empty() && !key.empty()) {
-
-                if(key == "language") {
-                    getLanguageModel()->setLanguage(value);
-                }
-
-                if(key == "keydelay") {
-                    setKeyDelay(stoi(value));
-                }
-
-                if(key == "keyrepeat") {
-                    setKeyRepeat(stoi(value));
-                }
-
-                if(key == "guidegridon") {
-                    if(value == "cyan") {
-                        setGuideGridOn("cyan");
-                    }
-                    if(value == "off") {
-                        setGuideGridOn("off");
-                    }
-                    if(value == "red") {
-                        setGuideGridOn("red");
-                    }
-                    if(value == "green") {
-                        setGuideGridOn("green");
-                    }
-                    if(value == "yellow") {
-                        setGuideGridOn("yellow");
-                    }
-                }    
-                
-                if(key == "wallkickon") {
-                    if(value == "on") {
-                        setWallKickOn("on");
-                    }
-                    else if(value == "off") {
-                        setWallKickOn("off");
-                    }
-
-                }
-
-                if(key == "dropcooldown") {
-                    setDropCoolDown(stoi(value));
-                }
-
-
-                if(key == "showprogressbar") {
-                    setShowProgressBar( value == "on" ? true : false);
-                }
-                
-                if(key == "startlevel") {
-                    setStartLevel(std::stoi(value));
-                }
-            }
-        }
-    }
-}
-
-void ley::GameModel::setGuideGridOn(std::string inOn) {
-    mGuideGridOn = inOn;
-}
-
-void ley::GameModel::setWallKickOn(std::string on) {
+void ley::GameModel::setWallKickOn(bool on) {
     mWallKickOn = on;
 }
 
+
 void ley::GameModel::readBlockData() {
-    SDL_Log("ley::GameModel::readBlockData()");
-    std::string key = "";
-    std::string value = "";
-
-    mBlockMapData.clear();
-
-    std::ifstream inFile("blocks.csv");
-    if (inFile.is_open())
-    {
-        std::string line;
-        while( std::getline(inFile,line))
-        {
-            if (line.empty()) continue;
-            std::stringstream ss(line);
-            
-            std::getline(ss,key,',');
-            std::getline(ss,value,',');
-
-            if(!value.empty() && !key.empty()) {
-                // TODO sanatize values
-                mBlockMapData.emplace(key,value);
-            }
-        }
-    }
-
-    inFile.close();
-
+    // Delegate file I/O to ConfigIO, then run in-memory processing steps.
+    ConfigIO::readBlockData(&mBlockMapData);
     addCanRotateToBlockData();
     logBlockData();
 }
 
 void ley::GameModel::addCanRotateToBlockData() {
 
-    std::vector<std::string> blocksToCheck;
-    blocksToCheck.push_back("a");
-    blocksToCheck.push_back("b");
-    blocksToCheck.push_back("c");
-    blocksToCheck.push_back("d");
-    blocksToCheck.push_back("e");
-    blocksToCheck.push_back("f");
-    blocksToCheck.push_back("g");
+    // Derive the set of block identifiers from the existing map keys.
+    // Keys follow the pattern "<letter>-<orientation>-<index>"; we extract the letter prefix.
+    std::set<std::string> blockLetters;
+    for (const auto& pair : mBlockMapData) {
+        const auto dashPos = pair.first.find('-');
+        if (dashPos != std::string::npos && dashPos > 0) {
+            blockLetters.insert(pair.first.substr(0, dashPos));
+        }
+    }
 
-    for(std::string str : blocksToCheck) {
+    for (const std::string& str : blockLetters) {
         
         for(int i = 0; i < BLOCK_SIZE; ++i) {
             
             if( mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
              || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
              || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
-             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
             ) {
-
                 mBlockMapData[str + "-*"] = "yes";
-                i = BLOCK_SIZE; //were done with this for loop go to the next block.
+                i = BLOCK_SIZE; // done with this block, move to next
             }
             else {
                 mBlockMapData[str + "-*"] = "no";

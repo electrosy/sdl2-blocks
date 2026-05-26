@@ -46,7 +46,7 @@ void ley::GameController::runGameLoop() {
             || mGameStateMachine.getStateId() == "GAMEOVER") {
             
             mVideoSystem->render();
-            renderNextBlock();
+            mVideoSystem->renderNextBlock();
             //new board
             mGm->getNewBoard()->render(mRen, false);
         }
@@ -289,53 +289,6 @@ void ley::GameController::setHighScores(ley::HighScores* hs) {
 void ley::GameController::runCleanUp() {
     mGm->resetGame();
     fadeMusic();
-}
-SDL_Point ley::GameController::centerRectInPx(SDL_Rect outer, SDL_Rect inner) {
-    
-    int x = 0;
-    int y = 0;
-
-    x = (outer.w/2) - (inner.w/2);
-    y = (outer.h/2) - (inner.h/2);
-    
-    return {x,y};
-}
-void ley::GameController::renderNextBlock() {
-
-    int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX; //SDL_QueryTexture(t, NULL, NULL, &w, &h);
-
-    SDL_Rect start_rect;
-    start_rect.x = 0;
-    start_rect.y = 0;
-    start_rect.h = h;
-    start_rect.w = w;
-
-    ley::Block nextBlock = mGm->getNextBlock();
-
-    SDL_Point pos = centerRectInPx({mGm->getBoard()->nextBoxPosXPx(), NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
-                                            {nextBlock.getRect().x, nextBlock.getRect().y, nextBlock.width()*BLOCKSIZE_PX, nextBlock.height()*BLOCKSIZE_PX});
-
-    SDL_Rect next_dest_rect;
-    next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.x  - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
-    next_dest_rect.y = NEXTBOX_POS_Y_PX + pos.y - (nextBlock.getTopGap() * BLOCKSIZE_PX);
-    next_dest_rect.h = h;
-    next_dest_rect.w = w;
-    
-    for (auto row : nextBlock.getBlockParts())
-    {
-        for (auto column : row)
-        {
-            if (column != BlockTexCode::O)
-            {
-                //TODO - all rendering should be done in the View(Video.cpp)
-                SDL_RenderCopy(mRen, TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)), 
-                    &start_rect, &next_dest_rect);
-            }
-            next_dest_rect.x = next_dest_rect.x + w;
-        }
-        next_dest_rect.x = mGm->getBoard()->nextBoxPosXPx() + pos.x - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
-        next_dest_rect.y = next_dest_rect.y + h;
-    }
 }
 
 void ley::GameController::fadeMusic() { 

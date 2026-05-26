@@ -1,36 +1,27 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 
 #ifndef PAUSESTATE_H
 #define PAUSESTATE_H
 
 namespace ley {
 
-class PauseState : public ley::GameState {
+class PauseState : public ley::BaseState {
 
 public:
 
     PauseState(ley::Video * v, ley::GameModel * gm);
     virtual void update(ley::Command command);
-    virtual void render();
     virtual void loadRenderables();
 
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
 
     virtual std::string getStateID() const { return sPauseID; }
 
 private:
 
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
 
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
     static const std::string sPauseID;
 
     ley::Sprite controlsSprite;

@@ -11,8 +11,7 @@ const std::string DIRECTIONS2 = "Press the button for this command";
 
 
 KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mTitleFont{20,20,100,50},
     mButtonTitleFont{20,420,100,50},
     mDirectionsFont{20,420,100,50} {
@@ -357,10 +356,5 @@ bool KeyboardOptionsState::onExit() {
     return true;
 }
 
-bool KeyboardOptionsState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 }

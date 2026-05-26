@@ -8,8 +8,7 @@ namespace ley {
 const std::string LanguageOptionsState::sLanguageOptionsID = "LANGUAGEOPTIONS";
 
 LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mTitleFont{20,20,100,50},
     mCurrentLanguageFont{20,70,100,50} {
 
@@ -47,12 +46,7 @@ void LanguageOptionsState::update(ley::Command command) {
 }
 
 void LanguageOptionsState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     mLanguageUI.render(mVideoSystem);
 }
 
@@ -77,16 +71,6 @@ bool LanguageOptionsState::onReEnter() {
     return true;
 }
 
-bool LanguageOptionsState::onExit() {
-    SDL_Log("Exiting LanguageOptionsState");
-    return true;
-}
-
-bool LanguageOptionsState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 void LanguageOptionsState::updateLanguageFont() {
     

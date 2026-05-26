@@ -8,8 +8,7 @@ const std::string PauseState::sPauseID = "PAUSE";
 
 PauseState::PauseState(ley::Video * v, ley::GameModel * gm)
 :
-mVideoSystem(v),
-mGameModel(gm),
+BaseState(v, gm),
 controlsSprite{TextureManager::Instance()->getTexture("game-controls"), 0, {}, {0,{0,0,0,0}}} {
 
    controlsSprite.center();
@@ -23,13 +22,10 @@ void PauseState::update(ley::Command command) {
             mGameModel->pauseGame(!mGameModel->isPaused());
         break;
         case ley::Command::debugcolide :
-            //new board
             mGameModel->getBoard()->debugOutput(true);
         break;
         case ley::Command::debugtexture :
-            //new board
             mGameModel->getBoard()->debugOutput(true);
-            
         break;
         case ley::Command::quit :
         break;
@@ -37,20 +33,10 @@ void PauseState::update(ley::Command command) {
         break;
     }
 
-    /**** UPDATE ****/
     mGameModel->audio()->playPlaylist();
 }
 
-void PauseState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-}
-
 void PauseState::loadRenderables() {
-    
     mRenderables.push_back(&controlsSprite);
 }
 
@@ -67,14 +53,4 @@ bool PauseState::onReEnter() {
     return true;
 }
 
-bool PauseState::onExit() {    
-    SDL_Log("Exiting Pausestate");
-    return true;
-}
-
-bool PauseState::onPause() {
-    GameState::onPause();
-    return true;
-}
-
-}
+} // namespace ley

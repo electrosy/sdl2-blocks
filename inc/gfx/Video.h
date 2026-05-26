@@ -97,6 +97,7 @@ public:
     void renderTopLayer();
     void render(); //Render additional bits.
     void renderSprites();
+    void renderNextBlock();
     void present(); //Present the rendered items to the user.
     void clear(); //Clear the backbuffer.
     void addRenderable(bool layer, ley::Renderable * r); //layer == true then debug renderable.
@@ -104,6 +105,9 @@ public:
     void videoResizeBoard();
     void increaseTransparency();
     void decreaseTransparency();
+
+private:
+    SDL_Point centerRectInPx(SDL_Rect outer, SDL_Rect inner);
 };
 
 }

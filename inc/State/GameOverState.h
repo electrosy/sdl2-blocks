@@ -1,7 +1,5 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 
 #ifndef GAMEOVERSTATE_H
 #define GAMEOVERSTATE_H
@@ -9,7 +7,7 @@
 
 namespace ley {
 
-class GameOverState : public ley::GameState {
+class GameOverState : public ley::BaseState {
 
 public:
     GameOverState(ley::Video * v, ley::GameModel * gm);
@@ -18,9 +16,7 @@ public:
     virtual void loadRenderables();
 
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
 
     virtual std::string getStateID() const { return sGameOverStateID; }
 
@@ -30,11 +26,7 @@ private:
 
     ley::Font fontGameOver; //Game over font
 
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
 
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
 };
 
 }

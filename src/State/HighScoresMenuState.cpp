@@ -16,8 +16,7 @@ const auto ROW_SPACING = 30;
 const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("highscores"), 0, {}, {1000,{0,0,0,0}})),
     mNameFont{ROW_START_X,ROW_START_Y+30,100,50},
     mLevelFont{ROW_START_X+330,ROW_START_Y+30,100,50},
@@ -88,12 +87,7 @@ void HighScoresMenuState::update(ley::Command command) {
 }
 
 void HighScoresMenuState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     highscoresmenu.render(mVideoSystem);
 }
 
@@ -155,10 +149,5 @@ bool HighScoresMenuState::onExit() {
     return true;
 }
 
-bool HighScoresMenuState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 }

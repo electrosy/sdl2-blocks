@@ -6,8 +6,7 @@ const std::string GameOverState::sGameOverStateID = "GAMEOVER";
 
 GameOverState::GameOverState(ley::Video * v, ley::GameModel * gm)
 : 
-mVideoSystem(v),
-mGameModel(gm),
+BaseState(v, gm),
 fontGameOver{255, 190, 100, 35} {
 
     fontGameOver.updateMessage(gm->getLanguageModel()->getWord("game over", 0, false, capitalizationtype::capitalizeWords) + "!!!");
@@ -28,12 +27,7 @@ void GameOverState::update(ley::Command command) {
 }
 
 void GameOverState::render() {
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     fontGameOver.render(mVideoSystem->getRenderer(), false);
 }
 
@@ -53,15 +47,5 @@ bool GameOverState::onReEnter() {
     return true;
 }
 
-bool GameOverState::onExit() {
-    SDL_Log("Exiting GameOverState");
-    return true;
-}
-
-bool GameOverState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 }

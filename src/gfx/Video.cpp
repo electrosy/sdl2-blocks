@@ -6,6 +6,7 @@ Purpose: see header.
 Date: Feb/14/2020
 */
 #include <stdio.h>
+#include <unordered_map>
 #include "../../inc/gfx/Video.h"
 
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
@@ -222,7 +223,7 @@ void ley::Video::render() {
         spriteBackgroundfadeout.render(renderer, gm->isOverlayOn());
     }
 
-    if(gm->getGuideGridOn() != "off") {
+    if(gm->getGuideGridOn() != GridGuide::off) {
         renderGridLines();
     }
 
@@ -365,39 +366,19 @@ void ley::Video::decreaseTransparency() {
 
 void ley::Video::renderGridLines() {
 
-    //Render grid lines
-    // TODO these colors need to go up into the constants.
-    SDL_Color red {245, 96, 66, 100};
-    SDL_Color cyan {64, 230, 205, 100};
-    SDL_Color green {37, 50, 232, 100};
-    SDL_Color purple {229, 232, 30, 100};
-    SDL_Color yellow {222, 30, 232, 100};
-    SDL_Color currentColor;
+    static const std::unordered_map<GridGuide, SDL_Color> COLOR_MAP = {
+        {GridGuide::red,    {245,  96,  66, 100}},
+        {GridGuide::cyan,   { 64, 230, 205, 100}},
+        {GridGuide::green,  { 37,  50, 232, 100}},
+        {GridGuide::purple, {229, 232,  30, 100}},
+        {GridGuide::yellow, {222,  30, 232, 100}},
+    };
 
+    auto it = COLOR_MAP.find(gm->getGuideGridOn());
+    if (it == COLOR_MAP.end()) return; // GridGuide::off or unknown
 
-    //TODO use a map here for the lookup.
-    
-    if(gm->getGuideGridOn() == "red") {
-        currentColor = red;
-    }
-
-    if(gm->getGuideGridOn() == "green") {
-        currentColor = green;
-    }
-
-    if(gm->getGuideGridOn() == "yellow") {
-        currentColor = yellow;
-    }
-
-    if(gm->getGuideGridOn() == "cyan") {
-        currentColor = cyan;
-    }
-
-    if(gm->getGuideGridOn() == "purple") {
-        currentColor = purple;
-    }
-
-    SDL_SetRenderDrawColor(renderer, currentColor.r, currentColor.b, currentColor.g, currentColor.a);
+    const SDL_Color& c = it->second;
+    SDL_SetRenderDrawColor(renderer, c.r, c.b, c.g, c.a);
 
     SDL_RenderDrawLine(renderer, 10, 10, 20, 20);
 
@@ -429,5 +410,42 @@ void ley::Video::renderGridLines() {
 
         SDL_RenderDrawLine(renderer, start1.x, start1.y, end1.x, end1.y);
         SDL_RenderDrawLine(renderer, start2.x, start2.y, end2.x, end2.y);
+    }
+}
+SDL_Point ley::Video::centerRectInPx(SDL_Rect outer, SDL_Rect inner) {
+    return { (outer.w / 2) - (inner.w / 2),
+             (outer.h / 2) - (inner.h / 2) };
+}
+
+void ley::Video::renderNextBlock() {
+
+    const int w = BLOCKSIZE_PX, h = BLOCKSIZE_PX;
+
+    SDL_Rect start_rect { 0, 0, w, h };
+
+    ley::Block nextBlock = gm->getNextBlock();
+
+    SDL_Point pos = centerRectInPx(
+        {gm->getBoard()->nextBoxPosXPx(), NEXTBOX_POS_Y_PX, NEXTBOX_SIZE_PX, NEXTBOX_SIZE_PX},
+        {nextBlock.getRect().x, nextBlock.getRect().y,
+         nextBlock.width() * BLOCKSIZE_PX, nextBlock.height() * BLOCKSIZE_PX});
+
+    SDL_Rect dest_rect {
+        gm->getBoard()->nextBoxPosXPx() + pos.x - (nextBlock.getLeftGap() * BLOCKSIZE_PX),
+        NEXTBOX_POS_Y_PX              + pos.y - (nextBlock.getTopGap()  * BLOCKSIZE_PX),
+        w, h
+    };
+
+    for (auto row : nextBlock.getBlockParts()) {
+        for (auto column : row) {
+            if (column != BlockTexCode::O) {
+                SDL_RenderCopy(renderer,
+                    TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)),
+                    &start_rect, &dest_rect);
+            }
+            dest_rect.x += w;
+        }
+        dest_rect.x  = gm->getBoard()->nextBoxPosXPx() + pos.x - (nextBlock.getLeftGap() * BLOCKSIZE_PX);
+        dest_rect.y += h;
     }
 }

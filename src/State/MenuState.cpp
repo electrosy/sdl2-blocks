@@ -6,9 +6,8 @@ namespace ley {
 
 const std::string MenuState::sMenuID = "MENU";
 
-MenuState::MenuState(ley::Video * v, ley::GameModel * gm) {
-    mVideoSystem = v;
-    mGameModel = gm;
+MenuState::MenuState(ley::Video * v, ley::GameModel * gm)
+: BaseState(v, gm) {
     mBackground = ley::Sprite(TextureManager::Instance()->getTexture("mainmenuclouds"), 0, {}, {1000,{0,0,0,0}});
 
     // TODO ablockalypse title pulses (gets brighter for a moment) every few moments to grab the players attention if they are just sitting in the main menu.
@@ -99,16 +98,5 @@ bool MenuState::onReEnter() {
     return true;
 }
 
-bool MenuState::onExit() {
-    SDL_Log("Exiting Menustate");
-    mGameModel->audio()->fadeOutMusic();
-    return true;
-}
-
-bool MenuState::onPause() {
-    GameState::onPause();
-
-    return true;
-}
 
 }

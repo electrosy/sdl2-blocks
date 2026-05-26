@@ -1,7 +1,5 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 #include "../UI/UIMenu.h"
 
 #ifndef OPTIONMENUSTATE_H
@@ -28,14 +26,12 @@ namespace ley {
         ley::TextEntry* textEntry = nullptr;
     };
 
-class OptionMenuState : public ley::GameState {
+class OptionMenuState : public ley::BaseState {
     // Data-driven container for all option menu configs
     std::vector<OptionConfig> mOptionConfigs;
 
 private:
 
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
     static const std::string sOptionMenuID;
     
     //labels
@@ -59,8 +55,6 @@ private:
     std::vector<ley::TextEntry*> mTextEntries;
 
     ley::Sprite mBackground;
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
     int optionItem; //Store the option selected from the options menu.
     ley::UIMenu mOptionUI;
     std::string mPreviousOptionsValue;
@@ -79,10 +73,9 @@ public:
     virtual void update(ley::Command command);
     virtual void render();
     virtual void loadRenderables();
+    virtual bool onExit()  override;
     virtual bool onEnter() override;
-    virtual bool onExit() override;
     virtual bool onReEnter() override;
-    virtual bool onPause() override;
     virtual std::string getStateID() const { return sOptionMenuID; }
     
     void initTextEntryMessages();

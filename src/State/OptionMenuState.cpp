@@ -12,8 +12,7 @@ const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
-    mVideoSystem(v),
-    mGameModel(gm),
+    BaseState(v, gm),
     mBackground(ley::Sprite(TextureManager::Instance()->getTexture("optionsmenu"), 0, {}, {1000,{0,0,0,0}})),
     mBoardSizeLabelFont{31,100,10,20},
     mDelayLabelFont{31,150,10,20},
@@ -291,7 +290,7 @@ void OptionMenuState::commitGuideGridOn() {
 void OptionMenuState::commitWallKickOn() {
 
     if(mWallKickOnTextEntry.commit(mPreviousWallKickOnValue)) {
-        mGameModel->setWallKickOn(mWallKickOnTextEntry.getTextBoxValue() == "on" ? "on" : "off" );
+        mGameModel->setWallKickOn(mWallKickOnTextEntry.getTextBoxValue() == "on");
     }
 }
 
@@ -318,13 +317,7 @@ void OptionMenuState::commitStartLevel() {
 }
 
 void OptionMenuState::render() {
-
-    mRenderables.renderAll(mVideoSystem->getRenderer(), false);
-
-    if(mGameModel->isOverlayOn()) {
-        mDebugRenderables.renderAll(mVideoSystem->getRenderer(), false);
-    }
-
+    BaseState::render();
     mOptionUI.render(mVideoSystem);
 }
 
@@ -362,8 +355,8 @@ bool OptionMenuState::onEnter() {
     mBoardSizeTextEntry.setTextBoxValue(std::to_string(mGameModel->getBoard()->width() ) + "x" + std::to_string(boardHeightTotal));
     mKeyDelayTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyDelay()));
     mKeyRepeatTextEntry.setTextBoxValue(std::to_string(mGameModel->getKeyRepeat()));
-    mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOn());
-    mWallKickOnTextEntry.setTextBoxValue(  mGameModel->getWallKickOn() == "on" ? "on" : "off" );
+    mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOnString());
+    mWallKickOnTextEntry.setTextBoxValue(mGameModel->getWallKickOn() ? "on" : "off");
     mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
     mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() == true ? "on" : "off" );
     mStartLevelTextEntry.setTextBoxValue( std::to_string(mGameModel->getStartLevel()) );
@@ -403,11 +396,6 @@ bool OptionMenuState::onExit() {
     return true;
 }
 
-bool OptionMenuState::onPause() {
-    GameState::onPause();
-    
-    return true;
-}
 
 void OptionMenuState::initTextEntry(
     ley::TextEntry& entry,

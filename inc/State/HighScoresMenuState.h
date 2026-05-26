@@ -1,7 +1,5 @@
-#include "GameState.h"
+#include "BaseState.h"
 
-#include "../gfx/Video.h"
-#include "../../inc/GameModel.h"
 #include "../UI/UIMenu.h"
 #include "../UI/UIElement.h" // TODO this is also in TextEntry
 
@@ -10,7 +8,7 @@
 
 namespace ley {
 
-class HighScoresMenuState : public ley::GameState {
+class HighScoresMenuState : public ley::BaseState {
 public:
 
     HighScoresMenuState(ley::Video * v, ley::GameModel * gm);
@@ -18,17 +16,14 @@ public:
     virtual void render();
     virtual void loadRenderables();
 
+    virtual bool onExit()  override;
     virtual bool onEnter();
-    virtual bool onExit();
     virtual bool onReEnter();
-    virtual bool onPause();
 
     virtual std::string getStateID() const { return sHighScoresMenuID; }
 
 private:
 
-    ley::Video * mVideoSystem;
-    ley::GameModel * mGameModel;
     static const std::string sHighScoresMenuID;
     ley::TextEntry mLocalTextEntry;
     ley::Sprite mBackground;
@@ -38,8 +33,6 @@ private:
     ley::Font mScoreFont;
     ley::Font mHighScoresTitleFont;
 
-    RenderablesPtr mRenderables;
-    RenderablesPtr mDebugRenderables;
 
     int optionItem; //Store the option selected from the options menu.
 
