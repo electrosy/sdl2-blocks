@@ -7,6 +7,42 @@ Date: Feb/15/2020
 */
 #include "../inc/Block.h"
 
+namespace ley {
+
+const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
+    std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
+    std::make_pair (BlockTexCode::b, "b"),
+    std::make_pair (BlockTexCode::c, "c"),
+    std::make_pair (BlockTexCode::d, "d"),
+    std::make_pair (BlockTexCode::e, "e"),
+    std::make_pair (BlockTexCode::f, "f"),
+    std::make_pair (BlockTexCode::g, "g"),
+    std::make_pair (BlockTexCode::h, "h"),
+    std::make_pair (BlockTexCode::i, "i"),
+    std::make_pair (BlockTexCode::j, "j"),
+    std::make_pair (BlockTexCode::k, "k"),
+    std::make_pair (BlockTexCode::l, "l"),
+    std::make_pair (BlockTexCode::O, "O"), // empty texture block part
+};
+
+const std::map<std::string, BlockTexCode> CHAR_TEXCODE {
+    std::make_pair ("a", BlockTexCode::a), // 12 texture possibilities
+    std::make_pair ("b", BlockTexCode::b),
+    std::make_pair ("c", BlockTexCode::c),
+    std::make_pair ("d", BlockTexCode::d),
+    std::make_pair ("e", BlockTexCode::e),
+    std::make_pair ("f", BlockTexCode::f),
+    std::make_pair ("g", BlockTexCode::g),
+    std::make_pair ("h", BlockTexCode::h),
+    std::make_pair ("i", BlockTexCode::i),
+    std::make_pair ("j", BlockTexCode::j),
+    std::make_pair ("k", BlockTexCode::k),
+    std::make_pair ("l", BlockTexCode::l),
+    std::make_pair ("O", BlockTexCode::O), // empty texture block part
+};
+
+} // namespace ley
+
 ley::BlockFileDataMapType* ley::Block::mBlockDataPtr = nullptr;
 /* RAII */
 ley::Block::Block() {

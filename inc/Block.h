@@ -16,13 +16,13 @@ Date: Feb/15/2020
 
 #include "Rand_int.h"
 
-const auto BLOCK_START_X = 4;
-const auto BLOCK_START_Y = 0;
-const int BLOCK_SIZE = 5; //Maximum size of the block width and height.
-const Uint8 MAX_ORIENTATIONS = 4;
-const Uint8 NUM_DIFFERENT_BLOCKS = 7;
-
 namespace ley {
+
+const auto BLOCK_START_X       = 4;
+const auto BLOCK_START_Y       = 0;
+const int  BLOCK_SIZE          = 5; // Maximum size of the block width and height.
+const Uint8 MAX_ORIENTATIONS   = 4;
+const Uint8 NUM_DIFFERENT_BLOCKS = 7;
 
 enum class BlockNameType {cube,tee,rLee,zee,mzee,lLee,line,empty};
 // the letter 'O' means empty and is the default. Capital 'Z' means don't clear part if clear block.
@@ -32,37 +32,9 @@ typedef std::map<std::string, std::string> BlockFileDataMapType;
 typedef std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
 typedef std::pair<ley::BlockTexCode, bool> BoardCellType;
 
-const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
-    std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
-    std::make_pair (BlockTexCode::b, "b"), //
-    std::make_pair (BlockTexCode::c, "c"), //
-    std::make_pair (BlockTexCode::d, "d"), //
-    std::make_pair (BlockTexCode::e, "e"), //
-    std::make_pair (BlockTexCode::f, "f"), //
-    std::make_pair (BlockTexCode::g, "g"), //
-    std::make_pair (BlockTexCode::h, "h"), //
-    std::make_pair (BlockTexCode::i, "i"), //
-    std::make_pair (BlockTexCode::j, "j"), //
-    std::make_pair (BlockTexCode::k, "k"), //
-    std::make_pair (BlockTexCode::l, "l"), //
-    std::make_pair (BlockTexCode::O, "O"), //This is the empty texture blockpart.
-  };
-
-const std::map<std::string, BlockTexCode> CHAR_TEXCODE {
-    std::make_pair ("a", BlockTexCode::a), // 12 texture possibilities
-    std::make_pair ("b", BlockTexCode::b), //
-    std::make_pair ("c", BlockTexCode::c), //
-    std::make_pair ("d", BlockTexCode::d), //
-    std::make_pair ("e" ,BlockTexCode::e), //
-    std::make_pair ("f" ,BlockTexCode::f), //
-    std::make_pair ("g" ,BlockTexCode::g), //
-    std::make_pair ("h" ,BlockTexCode::h), //
-    std::make_pair ("i" ,BlockTexCode::i), //
-    std::make_pair ("j" ,BlockTexCode::j), //
-    std::make_pair ("k" ,BlockTexCode::k), //
-    std::make_pair ("l" ,BlockTexCode::l), //
-    std::make_pair ("O" ,BlockTexCode::O), //This is the empty texture blockpart.
-  };
+// Lookup tables declared here; defined once in Block.cpp.
+extern const std::map<BlockTexCode, std::string> TEXCODE_CHAR;
+extern const std::map<std::string, BlockTexCode> CHAR_TEXCODE;
 
 class Block {
 
@@ -126,5 +98,5 @@ public:
     unsigned int getBlockOrientation() {return mOrientation;};
 };
 
-} 
+} // namespace ley
 #endif
