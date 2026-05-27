@@ -1,4 +1,5 @@
 #include "../../inc/State/BlockEditorState.h"
+#include "../../inc/ConfigIO.h"
  
 
 typedef ley::Textures TextureManager;
@@ -265,32 +266,17 @@ void BlockEditorState::loadBlocksKey() {
 
 void BlockEditorState::loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr) {
     SDL_Rect rect;
-    char o = '0';
     bool canRotate;
-    BlockNameType blockType = BlockNameType::cube;
-
-    std::vector<BlockNameType> blocksToLoad;
-
-    blocksToLoad.push_back(BlockNameType::cube);
-    blocksToLoad.push_back(BlockNameType::tee);
-    blocksToLoad.push_back(BlockNameType::rLee);
-    blocksToLoad.push_back(BlockNameType::zee);
-    blocksToLoad.push_back(BlockNameType::mzee);
-    blocksToLoad.push_back(BlockNameType::lLee);
-    blocksToLoad.push_back(BlockNameType::line);
-
 
     int blockTypeIndex = 0;
-    for(BlockNameType blockType : blocksToLoad) {
-
-        for(int i = 0; i < 4; ++i) {
-            Block::setBlockDataFromFile(blockType,i,blockDataTypePtr, false, &rect, &canRotate);
-            transferBlockToTiles(blockTypeIndex,i,blockDataTypePtr);
+    for(int i = 0; i < NUM_DIFFERENT_BLOCKS; ++i) {
+        BlockNameType blockType = static_cast<BlockNameType>(i);
+        for(int o = 0; o < MAX_ORIENTATIONS; ++o) {
+            Block::setBlockDataFromFile(blockType, o, blockDataTypePtr, false, &rect, &canRotate);
+            transferBlockToTiles(blockTypeIndex, o, blockDataTypePtr);
         }
-
         ++blockTypeIndex;
     }
-    
 }
 
 void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataType* inBlockPtr) {
@@ -330,42 +316,28 @@ void BlockEditorState::WriteTileDataToFile() {
     Uint16 layoutMajorSize = mLayout.getMajorGridSize();
     std::vector<std::string> rowDataVector;
 
-    std::vector<std::string> blockNamesToSave;
-    blockNamesToSave.push_back("a-");
-    blockNamesToSave.push_back("b-");
-    blockNamesToSave.push_back("c-");
-    blockNamesToSave.push_back("d-");
-    blockNamesToSave.push_back("e-");
-    blockNamesToSave.push_back("f-");
-    blockNamesToSave.push_back("g-");
-
     if(layoutMajorSize == 0) {
         SDL_Log("BlockEditorState::WriteTileDataToFile() - layoutMajorSize was 0");
         return;
     }
 
-    std::string rowData;
-    int numBlocks = layoutSize.x / layoutMajorSize;
+    int numBlocks       = layoutSize.x / layoutMajorSize;
     int numOrientations = layoutSize.y / layoutMajorSize;
+
     for(int i = 0; i < numBlocks; ++i) { // each block
+        // Derive prefix from block index: cube="a-", tee="b-", etc.
+        std::string blockPrefix = std::string(1, static_cast<char>('a' + i)) + "-";
+
         for(int j = 0; j < numOrientations; ++j) { // each orientation
-            rowData = blockNamesToSave[i] + std::to_string(j) + "-";
-            GetMajorTileRows(i,j, rowData, true, &rowDataVector);
-            if( !(i==numBlocks-1&&j==numOrientations-1)) { //not the very last line
-                rowDataVector.push_back(""); // add an empty line
+            std::string rowData = blockPrefix + std::to_string(j) + "-";
+            GetMajorTileRows(i, j, rowData, true, &rowDataVector);
+            if(!(i == numBlocks - 1 && j == numOrientations - 1)) {
+                rowDataVector.push_back(""); // blank line between blocks
             }
         }
     }
 
-    std::ofstream myfile;
-    myfile.open("blocks.csv");
-    
-    for(std::string row : rowDataVector) {
-        SDL_Log("RowData: %s", row.c_str());
-        myfile << row.c_str() << std::endl;
-    }
-
-    myfile.close();
+    ConfigIO::writeBlockData(rowDataVector);
 }
 
 void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr) {
@@ -514,90 +486,16 @@ SDL_Point BlockEditorState::getMajorTileFromMinor(SDL_Point minor) {
 }
 
 void BlockEditorState::restoreBlocksDefaultFile() {
- 
-    if(!copyFile2("blocks-default.csv", "blocks.csv")) {
-        SDL_Log("Error loading blocks file");
+
+    if(!ConfigIO::restoreDefaultBlocks()) {
+        SDL_Log("BlockEditorState: failed to restore default blocks file");
     }
     mGameModel->readBlockData();
     loadFromBlockDataPtr(mGameModel->getFileDataPtr(), &mBlockData);
 }
-bool BlockEditorState::copyFile2(const std::string& source, const std::string& destination) {
-    std::filesystem::path srcPath = std::filesystem::absolute(source);
-    std::filesystem::path destPath = std::filesystem::absolute(destination);
-
-    SDL_Log("Current directory: %s", std::filesystem::current_path().string().c_str());
-    SDL_Log("Copying from %s to %s", srcPath.string().c_str(), destPath.string().c_str());
-
-    // Check if source exists
-    if (!std::filesystem::exists(srcPath)) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Source file does not exist: %s", srcPath.string().c_str());
-        return false;
-    }
-
-    // Check if destination is a directory
-    if (std::filesystem::exists(destPath) && std::filesystem::is_directory(destPath)) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Destination is a directory: %s", destPath.string().c_str());
-        return false;
-    }
-
-    // Check if destination directory exists
-    std::filesystem::path destDir = destPath.parent_path();
-    if (!destDir.empty() && !std::filesystem::exists(destDir)) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Destination directory does not exist: %s", destDir.string().c_str());
-        return false;
-    }
-
-    // Check and set permissions if destination exists
-    if (std::filesystem::exists(destPath)) {
-        SDL_Log("Destination file exists: %s", destPath.string().c_str());
-        std::filesystem::perms perms = std::filesystem::status(destPath).permissions();
-        if ((perms & std::filesystem::perms::owner_write) == std::filesystem::perms::none) {
-            SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Destination file is read-only: %s", destPath.string().c_str());
-            std::error_code permEc;
-            std::filesystem::permissions(destPath, perms | std::filesystem::perms::owner_write, 
-                                        std::filesystem::perm_options::replace, permEc);
-            if (permEc) {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to set write permissions: %s (code: %d)",
-                             permEc.message().c_str(), permEc.value());
-                return false;
-            }
-        }
-
-        // Workaround: Remove destination file to avoid overwrite issues
-        std::error_code removeEc;
-        std::filesystem::remove(destPath, removeEc);
-        if (removeEc) {
-            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to remove existing destination: %s (code: %d)",
-                         removeEc.message().c_str(), removeEc.value());
-            return false;
-        }
-        SDL_Log("Removed existing destination file: %s", destPath.string().c_str());
-    }
-
-    std::error_code ec;
-    std::filesystem::copy(srcPath, destPath, std::filesystem::copy_options::overwrite_existing, ec);
-    if (ec) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "File copy failed: %s (code: %d, category: %s)",
-                     ec.message().c_str(), ec.value(), ec.category().name());
-        return false;
-    }
-
-    SDL_Log("Copy succeeded.");
-    return true;
-}
-
-bool BlockEditorState::copyFile(const std::string& source, const std::string& destination) {
-    std::error_code ec;
-    std::filesystem::copy(source, destination, 
-                         std::filesystem::copy_options::overwrite_existing, ec);
-    if(ec) {
-        SDL_Log("Files read error: %s . Value: %d", ec.message().c_str(), ec.value());
-    }
-    return !ec; // Return true if no error
-}
 
 void BlockEditorState::setSelectedTextureChar() {
-    mSelectedTextureChar = mTiles[0]->getLastChar(); //pull the last char from the tiles widgets
+    mSelectedTextureChar = mTiles[0]->getLastChar();
 }
 
 }

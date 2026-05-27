@@ -40,6 +40,8 @@ public:
 
     // Block shape data
     static void readBlockData(BlockFileDataMapType* out);
+    static void writeBlockData(const std::vector<std::string>& rows);
+    static bool restoreDefaultBlocks(); // copies blocks-default.csv → blocks.csv
 
     // Board dimensions from config.csv
     struct BoardSize { int width; int height; };

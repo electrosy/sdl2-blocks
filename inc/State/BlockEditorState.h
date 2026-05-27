@@ -1,5 +1,3 @@
-#include <filesystem>
-
 #include "BaseState.h"
 #include "../UI/UIMenu.h"
 #include "../UI/UI_Tile.h"
@@ -42,8 +40,6 @@ private:
     void rowDataLeft(std::vector<std::string>* rowData);
     SDL_Point getMajorTileFromMinor(SDL_Point minor); //returns the major tiles based on the minor x,y.
     void restoreBlocksDefaultFile();
-    bool copyFile(const std::string& source, const std::string& destination);
-    bool copyFile2(const std::string& source, const std::string& destination);
     void setSelectedTextureChar();
 
 public:

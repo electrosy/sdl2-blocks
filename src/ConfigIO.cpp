@@ -5,6 +5,7 @@ Copyright (C) 2020-2025 Steven Philley
 Purpose: see header.
 */
 #include <fstream>
+#include <filesystem>
 #include <functional>
 #include <sstream>
 #include <unordered_map>
@@ -176,4 +177,67 @@ ley::ConfigIO::BoardSize ley::ConfigIO::readBoardSize() {
 
     SDL_Log("ConfigIO::readBoardSize() → %d x %d", result.width, result.height);
     return result;
+}
+
+/* ── Block data write ───────────────────────────────────────────────────── */
+
+void ley::ConfigIO::writeBlockData(const std::vector<std::string>& rows) {
+
+    std::ofstream f("blocks.csv");
+    for (const std::string& row : rows) {
+        SDL_Log("ConfigIO::writeBlockData row: %s", row.c_str());
+        f << row << '\n';
+    }
+}
+
+/* ── Restore default blocks ─────────────────────────────────────────────── */
+
+bool ley::ConfigIO::restoreDefaultBlocks() {
+
+    namespace fs = std::filesystem;
+
+    fs::path src  = fs::absolute("blocks-default.csv");
+    fs::path dest = fs::absolute("blocks.csv");
+
+    SDL_Log("ConfigIO::restoreDefaultBlocks: %s → %s",
+            src.string().c_str(), dest.string().c_str());
+
+    if (!fs::exists(src)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                     "Source file does not exist: %s", src.string().c_str());
+        return false;
+    }
+
+    // Ensure dest is writable if it already exists
+    if (fs::exists(dest)) {
+        std::error_code permEc;
+        fs::permissions(dest,
+                        fs::status(dest).permissions() | fs::perms::owner_write,
+                        fs::perm_options::replace, permEc);
+        if (permEc) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                         "Cannot set write permissions on dest: %s",
+                         permEc.message().c_str());
+            return false;
+        }
+
+        std::error_code rmEc;
+        fs::remove(dest, rmEc);
+        if (rmEc) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                         "Cannot remove existing dest: %s", rmEc.message().c_str());
+            return false;
+        }
+    }
+
+    std::error_code ec;
+    fs::copy(src, dest, fs::copy_options::overwrite_existing, ec);
+    if (ec) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                     "File copy failed: %s (code %d)", ec.message().c_str(), ec.value());
+        return false;
+    }
+
+    SDL_Log("ConfigIO::restoreDefaultBlocks: copy succeeded.");
+    return true;
 }
