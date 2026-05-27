@@ -11,8 +11,8 @@ Date: Feb/14/2020
 
 ley::InputPressed::InputPressed(Uint16 sdlKeymod, Uint16 delayTime, Uint16 repeatTime) 
 :
-mDelayTimer{delayTime, {0, 0, 0, 0}},
-mRepeatTimer{repeatTime, {0, 0, 0, 0}} {
+mDelayTimer{delayTime},
+mRepeatTimer{repeatTime} {
 
 
 }
@@ -257,7 +257,7 @@ void ley::Input::pollEvents(
                     (*lastButtonDown) = (SDL_GameControllerButton)event.cbutton.button;
 
                     if(mButtonsPressed.find(buttonPressed) == mButtonsPressed.end()) {
-                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(inKeyDelay, {0, 0, 0, 0}), ley::Timer(inKeyRepeat, {0, 0, 0, 0}))});
+                        mButtonsPressed.insert({buttonPressed, std::make_pair(ley::Timer(inKeyDelay), ley::Timer(inKeyRepeat))});
 
                         mButtonsPressed[buttonPressed].first.reset();
                         mButtonsPressed[buttonPressed].second.reset();

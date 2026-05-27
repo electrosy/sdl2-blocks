@@ -40,6 +40,10 @@ public:
 
     // Block shape data
     static void readBlockData(BlockFileDataMapType* out);
+
+    // Board dimensions from config.csv
+    struct BoardSize { int width; int height; };
+    static BoardSize readBoardSize();
 };
 
 } // namespace ley

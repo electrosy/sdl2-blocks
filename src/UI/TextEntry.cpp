@@ -7,7 +7,7 @@ pos{SCREEN_WCENTER - TEXTENTRY_WIDTH/2, SCREEN_HCENTER/3},
 value{pos.x, pos.y, 0, 30},
 cursor{pos.x, pos.y, 2, 25},
 mUnderLine{pos.x, pos.y, UNDERLINE_WIDTH, 1},
-mErrorTimer{2500, {0,0,0,0}},
+mErrorTimer{2500},
 mHelpFont{20,600,100,100}
 {
     background.x = pos.x;

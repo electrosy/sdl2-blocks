@@ -7,10 +7,12 @@ const std::string PlayState::sPlayID = "PLAY";
 PlayState::PlayState(ley::Video * v, ley::GameModel * gm)
 :
 BaseState(v, gm),
-mStatusTimer(2000,{10,500,100,5}),
-mFallTimer(1000,{}),
+mStatusTimer(2000),
+mFallTimer(1000),
+mFallProgressBar({0,0,0,0}, &mFallTimer),
+mStatusProgressBar({10,500,100,5}, &mStatusTimer),
 mStatusFont(STATUSMESSAGE_POS_X_PX, STATUSMESSAGE_POS_Y_PX, 100, 20),
-mLastHardDrop(gm->getDropCoolDown(),{0,0,0,0}) { 
+mLastHardDrop(gm->getDropCoolDown()) { 
 
     std::string statusString = mGameModel->getLanguageModel()->getWord("start game", 0, false, capitalizationtype::capitalizeWords);
     statusString += " - " + mGameModel->getLanguageModel()->getWord("press '?' for help", 0, false, capitalizationtype::capitalizeFirst);
@@ -140,9 +142,9 @@ void PlayState::render() {
 void PlayState::loadRenderables() {
     
     mRenderables.push_back(&mStatusFont);
-    mRenderables.push_back(&mFallTimer);
+    mRenderables.push_back(&mFallProgressBar);
 
-    mDebugRenderables.push_back(&mStatusTimer);
+    mDebugRenderables.push_back(&mStatusProgressBar);
 }
 
 bool PlayState::onEnter() {
@@ -163,9 +165,10 @@ bool PlayState::onEnter() {
     mVideoSystem->videoResizeBoard();
 
     //make sure the falltimer width reflects the correct boardsize.
-    SDL_Log("Resizing the falltimer.");
-    mFallTimer(1000,{mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
-    mFallTimer.setVisible(mGameModel->getShowProgressBar());
+    SDL_Log("Resizing the fall progress bar.");
+    mFallTimer(1000);
+    mFallProgressBar({mGameModel->getBoard()->boardPosXPx()-1,BOARD_POS_Y_PX+mGameModel->getBoard()->heightpx()-(BOARDSIZE_BUFFER*BLOCKSIZE_PX)+1,mGameModel->getBoard()->widthpx()+2,2});
+    mFallProgressBar.setVisible(mGameModel->getShowProgressBar());
 
     #ifdef FULL_ASSETS
         SDL_Log("Full Assets loaded!");

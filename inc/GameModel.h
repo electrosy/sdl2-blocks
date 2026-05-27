@@ -22,7 +22,6 @@ Date: Feb/15/2020
 #include "Timer.h"
 #include "Input.h"
 #include "HighScores.h"
-#include "../inc/Config.h"
 #include "../inc/Board.h"
 #include "../inc/LanguageModel.h"
 
@@ -99,7 +98,6 @@ private:
     ley::HighScores mHighScores;
     bool mNewHighScore = false;
     int mPts_Line;
-    ley::Config mConfig;
     ley::LanguageModel mLanguageModel;
     bool mWallKickOn = true;
     BlockFileDataMapType mBlockMapData;

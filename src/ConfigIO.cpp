@@ -13,6 +13,7 @@ Purpose: see header.
 
 #include "../inc/ConfigIO.h"
 #include "../inc/GameModel.h"
+#include "../inc/Config.h"
 
 /* ── Main config ────────────────────────────────────────────────────────── */
 
@@ -146,4 +147,33 @@ void ley::ConfigIO::readBlockData(ley::BlockFileDataMapType* out) {
             out->emplace(key, value);
         }
     }
+}
+
+/* ── Board size (config.csv) ────────────────────────────────────────────── */
+
+ley::ConfigIO::BoardSize ley::ConfigIO::readBoardSize() {
+
+    BoardSize result{BOARDWIDTH_DEFAULT, BOARDHEIGHT_DEFAULT};
+
+    std::ifstream inFile("config.csv");
+    if (inFile.is_open()) {
+        std::string line;
+        while (std::getline(inFile, line)) {
+            std::stringstream ss(line);
+            std::string sWidth, sHeight;
+            std::getline(ss, sWidth,  'x');
+            std::getline(ss, sHeight, 'x');
+            if (!sWidth.empty())  result.width  = std::stoi(sWidth);
+            if (!sHeight.empty()) result.height = std::stoi(sHeight);
+        }
+    }
+
+    if (result.width  == 0) result.width  = BOARDWIDTH_DEFAULT;
+    if (result.height == 0) result.height = BOARDHEIGHT_DEFAULT;
+
+    if (result.width  > BOARDWIDTH_MAX  || result.width  < BOARDWIDTH_MIN)  result.width  = BOARDWIDTH_DEFAULT;
+    if (result.height > BOARDHEIGHT_MAX || result.height < BOARDHEIGHT_MIN) result.height = BOARDHEIGHT_DEFAULT;
+
+    SDL_Log("ConfigIO::readBoardSize() → %d x %d", result.width, result.height);
+    return result;
 }

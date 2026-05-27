@@ -13,6 +13,7 @@ Date: Feb/15/2020
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
 #include "../inc/ConfigIO.h"
+#include "../inc/Config.h"  // BOARDHEIGHT_MIN, BOARDWIDTH_MIN etc.
 #include "../inc/Rand_int.h"
 
 
@@ -567,10 +568,9 @@ void ley::GameModel::quickDrop() {
 
 
 void ley::GameModel::readConfigOther() {
-    mConfig.read();
-
-    if(mConfig.height() >= BOARDHEIGHT_MIN and mConfig.width() >= BOARDWIDTH_MIN) {
-        resizeBoard(mConfig.width(), mConfig.height());
+    auto bs = ConfigIO::readBoardSize();
+    if(bs.height >= BOARDHEIGHT_MIN && bs.width >= BOARDWIDTH_MIN) {
+        resizeBoard(bs.width, bs.height);
     }
 }
 

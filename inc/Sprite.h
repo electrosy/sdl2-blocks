@@ -15,6 +15,7 @@ Date: Feb/17/2020
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Timer.h"
+#include "ProgressBar.h"
 #include "./gfx/Renderable.h"
 
 namespace ley {
@@ -25,6 +26,7 @@ private:
     std::pair<unsigned int,unsigned int> pos;
     unsigned int animSpeed;
     Timer fader;
+    ProgressBar mFaderBar; // debug: shows fader progress as a bar
     bool startFader = false;
     char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
     double mScale = 1; //scale texture using percent

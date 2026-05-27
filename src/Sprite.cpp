@@ -12,7 +12,8 @@ Date: Feb/14/2020
 ley::Sprite::Sprite()
 :
 Renderable(),
-fader(1000,{0,0,0,0}),
+fader(1000),
+mFaderBar({0,0,0,0}, &fader),
 texture{nullptr} {
     SDL_Log("Sprite() called");
 }
@@ -22,7 +23,8 @@ ley::Sprite::Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v, st
 Renderable(),
 animSpeed(s),
 texture(t),
-fader{f.first,f.second} {
+fader{f.first},
+mFaderBar{f.second, &fader} {
 
     SDL_Log("Sprite(SDL_Texture * t, unsigned int s, std::vector<SDL_Rect> v) called");
 
@@ -42,17 +44,15 @@ fader{f.first,f.second} {
 
     SDL_Log("Finished Querying Texture");
 
-    bool multiframe = false;
-    
     fader.pause(true); //start paused and resume on the first render
     if(v.size() > 0) {
-        fader(f.first,{v.at(0)}); // fader is a Timer
+        mFaderBar({v.at(0)}); // update bar rect to match first frame
     }
     else {
-        fader(f.first,{0,0,mWidth,mHeight});
+        mFaderBar({0, 0, mWidth, mHeight});
     }
 
-    multiframe = v.size() > 1;
+    bool multiframe = v.size() > 1;
     
     SDL_Rect source_rect;
     dest_rect.y = source_rect.y = 0;
@@ -78,19 +78,15 @@ fader{f.first,f.second} {
 }
 
 ley::Sprite::~Sprite() {
-
     SDL_Log("Sprite::~Sprite() dtor called");
 }
 
 /* Accessors */
 void ley::Sprite::center() {
     SDL_Rect tempRect;
-    //Query for width and heigh of texture.
-
     tempRect.x = SCREEN_WCENTER - (mWidth*mScale / 2);
     tempRect.y = SCREEN_HCENTER - (mHeight*mScale / 2);
-
-    setPos(tempRect.x,tempRect.y);
+    setPos(tempRect.x, tempRect.y);
 }
 
 void ley::Sprite::bottomLeft() {
@@ -108,11 +104,13 @@ void ley::Sprite::scale(double s) {
 void ley::Sprite::setPos(unsigned int x, unsigned int y) {
     pos.first = x; pos.second = y;
 }
+
 void ley::Sprite::resetFader() {
     startFader = false;
     fader.reset();
     fader.pause(true);
 }
+
 void ley::Sprite::holdFader() {
     mFaderControl = 2;
 }
@@ -122,7 +120,6 @@ void ley::Sprite::reverseFader() {
 }
 
 bool ley::Sprite::faderFinished() {
-
     return fader.hasExpired();
 }
 
@@ -172,9 +169,9 @@ void ley::Sprite::render(SDL_Renderer * r, bool d) {
 
     fader.runFrame(false, 0.0);
     
-    if(d) {    
-        //If debug also render the fader timer.
-        fader.render(r, d);
+    if(d) {
+        // In debug mode, show the fader progress bar
+        mFaderBar.render(r, d);
     }
 }
 

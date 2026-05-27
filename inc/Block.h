@@ -76,6 +76,11 @@ private:
     BlockDataType mBlockData;
     void setBlock(BlockNameType,int = 0);
 
+    // Gap cache — recalculated once whenever mBlockData changes
+    Uint8 mCachedLeftGap = 0;
+    Uint8 mCachedTopGap  = 0;
+    void recalcGaps();
+
 protected:
     static BlockFileDataMapType* mBlockDataPtr;
 
@@ -100,8 +105,8 @@ public:
     int heightAtWidth(int width); //return the number of blocks high at a particular x location
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
-    Uint8 getLeftGap();
-    Uint8 getTopGap();
+    Uint8 getLeftGap() const;
+    Uint8 getTopGap()  const;
     SDL_Rect* getPosRectPtr() { return &mRect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
     bool getCanRotate(){ return mCanRotate;};

@@ -1,4 +1,5 @@
 #include "BaseState.h"
+#include "../../inc/ProgressBar.h"
 
 
 #ifndef PLAYSTATE_H
@@ -30,9 +31,12 @@ private:
     ley::Font mStatusFont;
 
     //Timers
-    ley::Timer mFallTimer; //Time to force the blockdown
-
+    ley::Timer mFallTimer;   //Time to force the block down
     ley::Timer mStatusTimer;
+
+    //Progress bars driven by the timers above
+    ley::ProgressBar mFallProgressBar;   // rendered in the game view
+    ley::ProgressBar mStatusProgressBar; // rendered in debug overlay
     static const std::string sPlayID;
 
     void resetGame();

@@ -23,6 +23,7 @@ ley::Block::Block(unsigned int boardWidth, unsigned int y, BlockNameType ty, boo
     else {
         setBlock(mType);
     }
+    recalcGaps();
     
     //Set the x position so that the block piece is placed into the center of the board width.
     mRect.x = boardWidth/2 - width()/2;
@@ -40,6 +41,7 @@ ley::Block::Block(const Block& b) {
     else {
         setBlock(b.mType);
     }
+    recalcGaps();
 }
 
 void ley::Block::operator=(const Block& b) {
@@ -53,6 +55,7 @@ void ley::Block::operator=(const Block& b) {
     else {
         setBlock(b.mType);
     }
+    recalcGaps();
 
 }
 
@@ -74,6 +77,7 @@ void ley::Block::setClear(bool c) {
     else {
         setBlock(mType);
     }
+    recalcGaps();
 }
 
 void ley::Block::reset() {
@@ -132,6 +136,7 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     else {
         setBlock(mType,this->mOrientation);
     }
+    recalcGaps();
 
     if(!getCanRotate()) {
         return false;
@@ -534,43 +539,39 @@ void ley::Block::setBlock(BlockNameType t, int o) {
         mBlockData[3].fill(BlockTexCode::O);
         mBlockData[4].fill(BlockTexCode::O);
     }
+
+    recalcGaps();
 }
 
-Uint8 ley::Block::getLeftGap() {
-    //Iterate through the entire block to discover the left gap.
-    Uint8 smallestGap = mBlockData[0].size(); //Assume that the block is square and we will start with the width of the block based on the first row
-    for(int i = 0; i < mBlockData.size(); ++i) {
+// Recalculate and cache both gap values. Called after any mBlockData mutation.
+void ley::Block::recalcGaps() {
 
+    // Left gap: smallest number of leading-empty columns across all rows that contain a tile
+    Uint8 smallestGap = static_cast<Uint8>(mBlockData[0].size());
+    for(int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
         Uint8 rowGap = 0;
-        for(int j = 0; j < mBlockData[i].size(); ++j) {
-
-            if(mBlockData[i][j] != ley::BlockTexCode::O) {
-                break;
-            }
-            else {
-                rowGap++;
-            }
+        for(int j = 0; j < static_cast<int>(mBlockData[i].size()); ++j) {
+            if(mBlockData[i][j] != ley::BlockTexCode::O) break;
+            else ++rowGap;
         }
-
-        //We want the largest gap that has a texture in it, if there is a row that has all gaps then we don't count that one.
-        if(rowGap < smallestGap && rowGap < mBlockData[i].size()) {
-            
+        // Only count rows that actually contain a tile
+        if(rowGap < smallestGap && rowGap < static_cast<Uint8>(mBlockData[i].size())) {
             smallestGap = rowGap;
         }
     }
+    mCachedLeftGap = smallestGap;
 
-    return smallestGap;
-}
-
-// This will let us know how many gap rows are on top of the block.
-Uint8 ley::Block::getTopGap() {
-    //How many full rows on top do not have a texture.
-    for(int i = 0; i < mBlockData.size(); ++i) {
-        for(int j = 0; j < mBlockData[i].size(); ++j) {
+    // Top gap: number of fully-empty rows at the top
+    mCachedTopGap = static_cast<Uint8>(mBlockData.size()); // default: all rows empty
+    for(int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
+        for(int j = 0; j < static_cast<int>(mBlockData[i].size()); ++j) {
             if(mBlockData[i][j] != ley::BlockTexCode::O) {
-                return i;
+                mCachedTopGap = static_cast<Uint8>(i);
+                return;
             }
         }
     }
-    return mBlockData.size();
 }
+
+Uint8 ley::Block::getLeftGap() const { return mCachedLeftGap; }
+Uint8 ley::Block::getTopGap()  const { return mCachedTopGap;  }

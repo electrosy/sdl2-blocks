@@ -10,7 +10,7 @@ Date: Jan/29/2024
 
 ley::Fader::Fader()
 :
-mFader(1000,{0,0,0,0}) {
+mFader(1000) {
     mFader.reset();
 }
 
