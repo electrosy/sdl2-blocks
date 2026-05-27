@@ -112,7 +112,7 @@ public:
     bool getCanRotate(){ return mCanRotate;};
     static bool hasMoreThanOneOrientation(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
     /* Accessors */
-    SDL_Rect getRect() {return mRect;}; // TODO this should probably return a const
+    SDL_Rect getRect() const {return mRect;};
     const BlockNameType getType() {return mType;};
     const bool getClear() {return mClearFlag;};
     void setClear(bool c);

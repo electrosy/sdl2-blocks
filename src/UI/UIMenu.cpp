@@ -34,19 +34,14 @@ void ley::UIMenu::pushPlaceHolder() {
 
 void ley::UIMenu::pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r) {
     
-    int w = 0;
-    int h = 0;
-    TTF_SizeUTF8(inFont->getTTFFont() , inFont->getMessage().c_str(), &w, &h);
-    
     SDL_Point pos = inFont->getPos();
-    pushFont(elementid, {pos.x,pos.y,w,h}, inFont->getMessage(), r, inFont->getFontSize());
+    pushFont(elementid, pos, inFont->getMessage(), r, inFont->getFontSize());
 }
 
-// TODO this uses only the width and height from the SDL_Rect, switch to an SDL_Point or something.
-void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size) {
+void ley::UIMenu::pushFont(std::string label, SDL_Point pos, const std::string s, SDL_Renderer* r, int size) {
 
-    UIElement temp(label, {0,0, dest.w, dest.h}, dest, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
-    temp.preRender(r);
+    UIElement temp(label, {0,0,0,0}, {pos.x, pos.y, 0, 0}, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
+    temp.preRender(r); // preRender calls setDimensions() which fills in w/h from the texture
     mLabelIndex[label] = static_cast<int>(mElements.size());
     mElements.push_back(temp);
 }

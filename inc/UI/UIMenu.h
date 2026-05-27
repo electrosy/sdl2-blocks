@@ -51,7 +51,7 @@ public:
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
     void pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r);
-    void pushFont(std::string label, const SDL_Rect dest, const std::string s, SDL_Renderer* r, int size);
+    void pushFont(std::string label, SDL_Point pos, const std::string s, SDL_Renderer* r, int size);
     void pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     void pushPlaceHolder();
     int getIndex();

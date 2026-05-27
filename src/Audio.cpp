@@ -123,13 +123,30 @@ playlistNumber(0), playlistMax(9) {
 
 ley::Audio::~Audio() {
     
+    // Free all music tracks
+    for (Mix_Music* m : mMusicList) {
+        Mix_FreeMusic(m);
+    }
+    Mix_FreeMusic(musIntro);
+    Mix_FreeMusic(musMainMenu);
+    Mix_FreeMusic(musMelJazz1);
+    Mix_FreeMusic(musMelJazz2);
+    Mix_FreeMusic(musMelJazz3);
+
+    // Free all sound effects
+    Mix_FreeChunk(sfxSwoosh);
+    Mix_FreeChunk(sfxPause);
+    Mix_FreeChunk(sfxUnPause);
+    Mix_FreeChunk(sfxSqueek);
+    Mix_FreeChunk(sfxPiecesFalling);
+    Mix_FreeChunk(sfxInPlace);
+    Mix_FreeChunk(sfxFallDown);
+
     while(Mix_Init(0)) {
         Mix_Quit();
     }
 
     Mix_CloseAudio();
-
-    //TODO Mix_FreeMusic & MixFreeChunk???
 
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
