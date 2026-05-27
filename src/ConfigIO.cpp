@@ -241,3 +241,57 @@ bool ley::ConfigIO::restoreDefaultBlocks() {
     SDL_Log("ConfigIO::restoreDefaultBlocks: copy succeeded.");
     return true;
 }
+
+/* ── UI context default bindings ────────────────────────────────────────── */
+// These are always-on hardcoded bindings for the "ui" context (menus,
+// overlays, block editor). Play-context bindings come from CSV via
+// readKeyboardBindings / readGamepadBindings.
+
+void ley::ConfigIO::applyUiKeyDefaults(KeyBindingsType* out) {
+    // Each entry: { scancode, modifier, command }
+    static const struct { SDL_Scancode sc; SDL_Keymod mod; Command cmd; } TABLE[] = {
+        { SDL_SCANCODE_LEFT,      KMOD_NONE,  Command::UI_left        },
+        { SDL_SCANCODE_LEFT,      KMOD_ALT,   Command::shiftleft      },
+        { SDL_SCANCODE_LEFT,      KMOD_SHIFT, Command::shiftmajleft   },
+        { SDL_SCANCODE_LEFT,      KMOD_CTRL,  Command::shiftallleft   },
+        { SDL_SCANCODE_RIGHT,     KMOD_NONE,  Command::UI_right       },
+        { SDL_SCANCODE_RIGHT,     KMOD_ALT,   Command::shiftright     },
+        { SDL_SCANCODE_RIGHT,     KMOD_SHIFT, Command::shiftmajright  },
+        { SDL_SCANCODE_RIGHT,     KMOD_CTRL,  Command::shiftallright  },
+        { SDL_SCANCODE_DOWN,      KMOD_NONE,  Command::UI_down        },
+        { SDL_SCANCODE_DOWN,      KMOD_SHIFT, Command::shiftmajdown   },
+        { SDL_SCANCODE_DOWN,      KMOD_ALT,   Command::shiftdown      },
+        { SDL_SCANCODE_DOWN,      KMOD_CTRL,  Command::shiftalldown   },
+        { SDL_SCANCODE_UP,        KMOD_NONE,  Command::UI_up          },
+        { SDL_SCANCODE_UP,        KMOD_ALT,   Command::shiftup        },
+        { SDL_SCANCODE_UP,        KMOD_SHIFT, Command::shiftmajup     },
+        { SDL_SCANCODE_UP,        KMOD_CTRL,  Command::shiftallup     },
+        { SDL_SCANCODE_ESCAPE,    KMOD_NONE,  Command::UI_back        },
+        { SDL_SCANCODE_RETURN,    KMOD_NONE,  Command::UI_enter       },
+        { SDL_SCANCODE_RETURN,    KMOD_ALT,   Command::fullscreen     },
+        { SDL_SCANCODE_BACKSPACE, KMOD_NONE,  Command::backspace      },
+        { SDL_SCANCODE_DELETE,    KMOD_NONE,  Command::backspace      },
+        { SDL_SCANCODE_D,         KMOD_RCTRL, Command::restoredefault },
+        { SDL_SCANCODE_KP_PLUS,   KMOD_NONE,  Command::UI_add         },
+    };
+    for (const auto& e : TABLE)
+        out->emplace(std::make_pair(e.sc, "ui"), std::make_pair(e.mod, e.cmd));
+}
+
+void ley::ConfigIO::applyUiButtonDefaults(PadBindingsType* out) {
+    static const struct { SDL_GameControllerButton btn; Command cmd; } TABLE[] = {
+        { SDL_CONTROLLER_BUTTON_DPAD_UP,       Command::UI_up    },
+        { SDL_CONTROLLER_BUTTON_DPAD_DOWN,     Command::UI_down  },
+        { SDL_CONTROLLER_BUTTON_DPAD_LEFT,     Command::UI_left  },
+        { SDL_CONTROLLER_BUTTON_DPAD_RIGHT,    Command::UI_right },
+        { SDL_CONTROLLER_BUTTON_A,             Command::UI_enter },
+        { SDL_CONTROLLER_BUTTON_B,             Command::UI_enter },
+        { SDL_CONTROLLER_BUTTON_Y,             Command::UI_enter },
+        { SDL_CONTROLLER_BUTTON_X,             Command::UI_enter },
+        { SDL_CONTROLLER_BUTTON_START,         Command::UI_enter },
+        { SDL_CONTROLLER_BUTTON_BACK,          Command::UI_back  },
+        { SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, Command::UI_add   },
+    };
+    for (const auto& e : TABLE)
+        out->insert({{e.btn, "ui"}, e.cmd});
+}

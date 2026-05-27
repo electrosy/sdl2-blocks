@@ -41,10 +41,14 @@ public:
     // Keyboard bindings
     static void readKeyboardBindings(std::vector<KeyBindingRow>* out);
     static void writeKeyboardBindings(const KeyBindingsType& bindings);
+    // Hardcoded "ui" context defaults — always-on regardless of user config
+    static void applyUiKeyDefaults(KeyBindingsType* out);
 
     // Gamepad bindings
     static void readGamepadBindings(std::vector<ControllerButtonRow>* out);
     static void writeGamepadBindings(const PadBindingsType& bindings);
+    // Hardcoded "ui" context defaults — always-on regardless of user config
+    static void applyUiButtonDefaults(PadBindingsType* out);
 
     // Block shape data
     static void readBlockData(BlockFileDataMapType* out);

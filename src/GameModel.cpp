@@ -106,40 +106,21 @@ ley::Block ley::GameModel::debugGetBlock() {
 }
 
 ley::Block ley::GameModel::getRandomBlock() {
-    Block a;
-    ley::Rand_int rand0to6(0,6); //random number generator
-    Uint8 yStartPos = 2;
 
-    if(mDebugOnlyLine == true) { //debug return only line
-        return Block(mBoard.width(),2,BlockNameType::line,false);
-    }
+    static constexpr BlockNameType BLOCK_TYPES[] = {
+        BlockNameType::tee,  BlockNameType::rLee, BlockNameType::zee,
+        BlockNameType::mzee, BlockNameType::lLee, BlockNameType::line,
+        BlockNameType::cube,
+    };
 
-    switch(rand0to6()) {
-        case 0 : 
-            a = Block(mBoard.width(),yStartPos,BlockNameType::tee,false);
-        break;
-        case 1 :
-            a = Block(mBoard.width(),yStartPos,BlockNameType::rLee,false);
-        break;
-        case 2 : 
-            a = Block(mBoard.width(),yStartPos,BlockNameType::zee,false);
-        break;
-        case 3 : 
-            a = Block(mBoard.width(),yStartPos,BlockNameType::mzee,false);
-        break;
-        case 4 : 
-            a = Block(mBoard.width(),yStartPos,BlockNameType::lLee,false);
-        break;
-        case 5 :
-            a = Block(mBoard.width(),yStartPos,BlockNameType::line,false);
-        break;
-        case 6 :
-            a = Block(mBoard.width(),yStartPos,BlockNameType::cube,false);
-        break;
-    }
+    if (mDebugOnlyLine)
+        return Block(mBoard.width(), 2, BlockNameType::line, false);
 
-    //set the position so the bottom of the block will appear at the top of the board regardless of block size or shape
-    a.getPosRectPtr()->y = a.getPosRectPtr()->y - a.getPosRectPtr()->h;
+    Rand_int rand0to6(0, 6);
+    Block a(mBoard.width(), 2, BLOCK_TYPES[rand0to6()], false);
+
+    // Position so the bottom of the block appears at the top of the board
+    a.getPosRectPtr()->y -= a.getPosRectPtr()->h;
 
     return a;
 }
@@ -582,61 +563,21 @@ void ley::GameModel::resizeBoard(int width, int height) {
 }
 
 void ley::GameModel::loadKeyBindings() {
-
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_left));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"ui"), std::make_pair(KMOD_ALT, ley::Command::shiftleft));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"ui"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajleft));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_LEFT,"ui"), std::make_pair(KMOD_CTRL, ley::Command::shiftallleft));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_right));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"ui"), std::make_pair(KMOD_ALT, ley::Command::shiftright));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"ui"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajright));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RIGHT,"ui"), std::make_pair(KMOD_CTRL, ley::Command::shiftallright));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_down));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"ui"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajdown));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"ui"), std::make_pair(KMOD_ALT, ley::Command::shiftdown));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DOWN,"ui"), std::make_pair(KMOD_CTRL, ley::Command::shiftalldown));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_up));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"ui"), std::make_pair(KMOD_ALT, ley::Command::shiftup));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"ui"), std::make_pair(KMOD_SHIFT, ley::Command::shiftmajup));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_UP,"ui"), std::make_pair(KMOD_CTRL, ley::Command::shiftallup));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_ESCAPE,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_back));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_enter));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_RETURN,"ui"), std::make_pair(KMOD_ALT, ley::Command::fullscreen));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_BACKSPACE,"ui"), std::make_pair(KMOD_NONE, ley::Command::backspace));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_DELETE,"ui"), std::make_pair(KMOD_NONE, ley::Command::backspace));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_D,"ui"), std::make_pair(KMOD_RCTRL, ley::Command::restoredefault));
-    mKeyBindings.emplace(std::make_pair(SDL_SCANCODE_KP_PLUS,"ui"), std::make_pair(KMOD_NONE, ley::Command::UI_add));
-    
+    ConfigIO::applyUiKeyDefaults(&mKeyBindings);
 
     std::vector<KeyBindingRow> keyMappingData;
     ConfigIO::readKeyboardBindings(&keyMappingData);
-
-    for(KeyBindingRow keyBindingRow : keyMappingData) {
-        mKeyBindings.insert({{keyBindingRow.first,"play"},{keyBindingRow.second.first,keyBindingRow.second.second}});
-    }
+    for (const KeyBindingRow& row : keyMappingData)
+        mKeyBindings.insert({{row.first, "play"}, {row.second.first, row.second.second}});
 }
 
 void ley::GameModel::loadButtonBindings() {
+    ConfigIO::applyUiButtonDefaults(&mButtonBindings);
 
-    std::vector<std::pair<SDL_GameControllerButton, ley::Command>> buttonMappingData;
+    std::vector<ControllerButtonRow> buttonMappingData;
     ConfigIO::readGamepadBindings(&buttonMappingData);
-
-    for(std::pair<SDL_GameControllerButton, ley::Command> buttonMap : buttonMappingData) {
-        mButtonBindings.insert({{buttonMap.first,"play"},buttonMap.second});
-    }
-
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_UP,"ui"},ley::Command::UI_up});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_DOWN,"ui"},ley::Command::UI_down});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_LEFT,"ui"},ley::Command::UI_left});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_DPAD_RIGHT,"ui"},ley::Command::UI_right});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_A,"ui"},ley::Command::UI_enter});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_B,"ui"},ley::Command::UI_enter});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_Y,"ui"},ley::Command::UI_enter});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_X,"ui"},ley::Command::UI_enter});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_START,"ui"},ley::Command::UI_enter});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_BACK,"ui"},ley::Command::UI_back});
-    mButtonBindings.insert({{SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,"ui"},ley::Command::UI_add});
-
+    for (const ControllerButtonRow& row : buttonMappingData)
+        mButtonBindings.insert({{row.first, "play"}, row.second});
 }
 
 ley::KeyBindingsType* ley::GameModel::getKeyBindingsPtr() {
@@ -704,31 +645,25 @@ void ley::GameModel::readBlockData() {
 
 void ley::GameModel::addCanRotateToBlockData() {
 
-    // Derive the set of block identifiers from the existing map keys.
-    // Keys follow the pattern "<letter>-<orientation>-<index>"; we extract the letter prefix.
+    // Extract single-letter block prefixes from keys like "a-0-3"
     std::set<std::string> blockLetters;
-    for (const auto& pair : mBlockMapData) {
-        const auto dashPos = pair.first.find('-');
-        if (dashPos != std::string::npos && dashPos > 0) {
-            blockLetters.insert(pair.first.substr(0, dashPos));
-        }
+    for (const auto& [key, val] : mBlockMapData) {
+        const auto dash = key.find('-');
+        if (dash != std::string::npos && dash > 0)
+            blockLetters.insert(key.substr(0, dash));
     }
 
-    for (const std::string& str : blockLetters) {
-        
-        for(int i = 0; i < BLOCK_SIZE; ++i) {
-            
-            if( mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(1) + "-" + std::to_string(i)]
-             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(2) + "-" + std::to_string(i)]
-             || mBlockMapData[str + "-" + std::to_string(0) + "-" + std::to_string(i)] != mBlockMapData[str + "-" + std::to_string(3) + "-" + std::to_string(i)]
-            ) {
-                mBlockMapData[str + "-*"] = "yes";
-                i = BLOCK_SIZE; // done with this block, move to next
-            }
-            else {
-                mBlockMapData[str + "-*"] = "no";
+    for (const std::string& prefix : blockLetters) {
+        bool canRotate = false;
+        for (int row = 0; row < BLOCK_SIZE && !canRotate; ++row) {
+            const std::string base = prefix + "-0-" + std::to_string(row);
+            for (int orient = 1; orient <= 3 && !canRotate; ++orient) {
+                const std::string key = prefix + "-" + std::to_string(orient) + "-" + std::to_string(row);
+                if (mBlockMapData[base] != mBlockMapData[key])
+                    canRotate = true;
             }
         }
+        mBlockMapData[prefix + "-*"] = canRotate ? "yes" : "no";
     }
 }
 
