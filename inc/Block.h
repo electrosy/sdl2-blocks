@@ -48,9 +48,11 @@ private:
     BlockDataType mBlockData;
     void setBlock(BlockNameType,int = 0);
 
-    // Gap cache — recalculated once whenever mBlockData changes
+    // Dimension/gap cache — recalculated once whenever mBlockData changes
     Uint8 mCachedLeftGap = 0;
     Uint8 mCachedTopGap  = 0;
+    int   mCachedWidth   = 0;
+    int   mCachedHeight  = 0;
     void recalcGaps();
 
 protected:
@@ -72,8 +74,8 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
-    int height(); // return the actual height of the block
-    int width(); // return the actual width of the block
+    int height() const; // return the actual height of the block
+    int width()  const; // return the actual width of the block
     int heightAtWidth(int width); //return the number of blocks high at a particular x location
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
