@@ -26,11 +26,6 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     initalizeMenu();
 }
 
-/*
-** returns the pixel width value of the font.
-*/
-//TODO this method needs to go into font or somewhere as a static
-
 void KeyboardOptionsState::initalizeMenu() {
 
     mMainUI.clear();

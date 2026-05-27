@@ -4,9 +4,6 @@
 
 typedef ley::Textures TextureManager;
 
-//TODO it may make sense to create a BaseState that can have the common code for all states.
-//     each of the states have a lot of code that is repeated.
-
 namespace ley {
 
 const auto ROW_START_Y = 150;

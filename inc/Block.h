@@ -79,6 +79,8 @@ private:
     // Gap cache — recalculated once whenever mBlockData changes
     Uint8 mCachedLeftGap = 0;
     Uint8 mCachedTopGap  = 0;
+    int   mCachedHeight  = 0;
+    int   mCachedWidth   = 0;
     void recalcGaps();
 
 protected:
