@@ -3,11 +3,8 @@
 # Usage: ./ship-it.sh [optional-label]
 # Example: ./ship-it.sh may-27-2026
 # Produces: ../ablockalypse-may-27-2026-a.zip (or -b, -c, etc. if prior ones exist)
-
 set -e
-
 LABEL=${1:-$(date +%b-%d-%Y | tr '[:upper:]' '[:lower:]')}
-
 # Find the next available letter suffix
 for i in {a..z}; do
     OUTPUT="../ablockalypse-${LABEL}-${i}.zip"
@@ -15,14 +12,12 @@ for i in {a..z}; do
         break
     fi
 done
-
 zip -r "$OUTPUT" . \
   --exclude ".git/*" \
   --exclude "build/*" \
+  --exclude "assets/*" \
   --exclude "*.o" \
-  --exclude "*.d" \
-  --exclude "ship-it.sh"
-
+  --exclude "*.d"
 # ── Strip ELF executables ────────────────────────────────────────────────────
 # zip --exclude can't filter by file content, so we post-process.
 # Extract each file, check with `file`, remove any ELF binary from the zip.
@@ -40,5 +35,4 @@ zipinfo -1 "$OUTPUT" | while IFS= read -r entry; do
     fi
 done
 rm -rf "$TMPDIR"
-
 echo "✓ Created: $OUTPUT"

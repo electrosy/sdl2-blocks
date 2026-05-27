@@ -12,7 +12,7 @@ OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/src/Input.o $
        $(OBJDIR)/src/State/GameOverState.o $(OBJDIR)/src/State/CreditsState.o $(OBJDIR)/src/State/KeyboardOptionsState.o $(OBJDIR)/src/State/LanguageOptionsState.o \
        $(OBJDIR)/src/UI/TextEntry.o $(OBJDIR)/src/Fader.o $(OBJDIR)/src/Board.o $(OBJDIR)/src/LanguageModel.o \
        $(OBJDIR)/src/State/BlockEditorState.o $(OBJDIR)/src/UI/UI_Tile.o $(OBJDIR)/src/Layout.o $(OBJDIR)/src/UI/UIWidget.o \
-       $(OBJDIR)/src/ConfigIO.o $(OBJDIR)/src/State/BaseState.o
+       $(OBJDIR)/src/ConfigIO.o $(OBJDIR)/src/State/BaseState.o $(OBJDIR)/src/Command.o
 
 # OBJ_NAME name of executable
 OBJ_NAME = sdl2-blocks

@@ -15,6 +15,7 @@ public:
     virtual void loadRenderables();
 
     virtual bool onEnter();
+    virtual bool onExit();
     virtual bool resume();
 
     virtual StateID getStateID() const { return StateID::Pause; }
