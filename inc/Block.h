@@ -95,8 +95,6 @@ public:
     void moveRight();
     int height() const; // return the actual height of the block (cached)
     int width()  const; // return the actual width of the block (cached)
-    int heightAtWidth(int width); //return the number of blocks high at a particular x location
-    int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
     Uint8 getLeftGap() const;
     Uint8 getTopGap()  const;

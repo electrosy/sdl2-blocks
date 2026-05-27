@@ -174,29 +174,7 @@ int ley::Block::width() const {
     return mCachedWidth;
 }
 
-//return width for this height value.
-int ley::Block::widthAtHeight(int height) {
-    auto widthAtY = 0;
-    for(auto k=0; k<mRect.w; ++k) {
-        ley::BlockTexCode partCheck = renderPart(k,height);
-        if(partCheck != ley::BlockTexCode::O) {
-            widthAtY++;
-        }
-    }
-    return widthAtY;
-}
 
-//return height for this width value.
-int ley::Block::heightAtWidth(int width) {
-    auto heightAtX = 0;
-    for(auto k=0; k<mRect.h; ++k) {
-        ley::BlockTexCode partCheck = renderPart(width,k);
-        if(partCheck != ley::BlockTexCode::O) {
-            heightAtX++;
-        }
-    }
-    return heightAtX;
-}
 void ley::Block::setBlockDataPtr(BlockFileDataMapType* blockDataPtr) {
     mBlockDataPtr = blockDataPtr;
 }
@@ -555,7 +533,11 @@ void ley::Block::recalcGaps() {
         int h = 0, gap = 0;
         bool counting = false;
         for (int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
-            if (widthAtHeight(i) > 0) {
+            bool rowOccupied = false;
+            for (int k = 0; k < static_cast<int>(mBlockData[i].size()); ++k) {
+                if (mBlockData[i][k] != ley::BlockTexCode::O) { rowOccupied = true; break; }
+            }
+            if (rowOccupied) {
                 h += 1 + gap;
                 gap = 0;
                 counting = true;
@@ -571,7 +553,11 @@ void ley::Block::recalcGaps() {
         int w = 0, gap = 0;
         bool counting = false;
         for (int i = 0; i < static_cast<int>(mBlockData[0].size()); ++i) {
-            if (heightAtWidth(i) > 0) {
+            bool colOccupied = false;
+            for (int k = 0; k < static_cast<int>(mBlockData.size()); ++k) {
+                if (mBlockData[k][i] != ley::BlockTexCode::O) { colOccupied = true; break; }
+            }
+            if (colOccupied) {
                 w += 1 + gap;
                 gap = 0;
                 counting = true;
