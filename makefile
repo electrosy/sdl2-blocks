@@ -3,7 +3,7 @@ OBJDIR = ./build
 SRCDIR = ./src
 
 # OBJS defines files to compile as part of the project
-OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/src/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o \
+OBJS = $(OBJDIR)/sdl2-blocks.o $(OBJDIR)/src/gfx/Video.o $(OBJDIR)/src/Input.o $(OBJDIR)/src/Sprite.o $(OBJDIR)/src/Block.o $(OBJDIR)/src/GameModel.o $(OBJDIR)/src/GameModel_setup.o \
        $(OBJDIR)/src/Clock.o $(OBJDIR)/src/gfx/Renderable.o $(OBJDIR)/src/gfx/Renderables.o $(OBJDIR)/src/GameController.o \
        $(OBJDIR)/src/Timer.o $(OBJDIR)/src/Textures.o $(OBJDIR)/src/gfx/Font.o $(OBJDIR)/src/Rand_int.o $(OBJDIR)/src/UI/UIElement.o $(OBJDIR)/src/UI/UIMenu.o \
        $(OBJDIR)/src/HighScores.o $(OBJDIR)/src/Audio.o $(OBJDIR)/src/RectContainer.o $(OBJDIR)/src/ProgressBar.o $(OBJDIR)/src/State/GameState.o \
