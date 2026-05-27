@@ -11,7 +11,10 @@
 
 namespace ley {
 
-// TODO I thought that states where an extension of the controller, but they have no access to the controller only the model, why is this?
+// Design note: states only hold a GameModel* (not a GameController*) by design.
+// GameController owns the state machine and dispatches Commands to the active state;
+// states read/mutate model data and signal intent via GameModel::stateChange().
+// This keeps the state hierarchy decoupled from the controller.
 
 class GameState {
 

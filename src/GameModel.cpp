@@ -318,9 +318,8 @@ bool ley::GameModel::processLines(int &numLines) {
         fullLines.pop_back();
     }
 
-    const int newLevel = calcLevel();
-    if(mNumLevel != newLevel) {
-        mNumLevel = newLevel;
+    if(mNumLevel != calcLevel()) {
+        mNumLevel = calcLevel(); //TODO do we need to call calcLevel twice?
         mNewLevelToReport = true;
     }
 

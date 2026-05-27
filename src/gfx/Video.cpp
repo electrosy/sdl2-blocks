@@ -119,6 +119,8 @@ void ley::Video::init() {
     mRenderables.push_back(&fontScore);
     mRenderables.push_back(&mFontCombo);
 
+    updateScores(); //TODO the model should call this
+
     //RectContainer
     firstRectContainer(renderer);
     mRenderables.push_back(&firstRectContainer);
@@ -232,7 +234,7 @@ void ley::Video::render() {
                                    // seconds_from_start, so there is no chance of a memory overrun
 }
 void ley::Video::renderSprites() {
-    updateScores();
+    updateScores(); // TODO the controller should call this only when the scores are updated.
     mRenderables.renderAll(renderer, gm->isOverlayOn());
     if(gm->isOverlayOn()) {
         mDebugRenderables.renderAll(renderer, false);
@@ -326,6 +328,7 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
     //Backgrounds.
+// TODO not used remove  --  TextureManager::Instance()->loadTexture("assets/background/jazz/heaven-5114501_1280", "BG_WEST_00");
     TextureManager::Instance()->loadTexture("assets/background/jazz/bridge-7504605_1280x720.jpg", "BG_WEST_01");
     TextureManager::Instance()->loadTexture("assets/background/jazz/sea-7707983_1280x720.jpg", "BG_WEST_02");
     TextureManager::Instance()->loadTexture("assets/background/jazz/heaven-5114501_1280x720.jpg", "BG_WEST_03");

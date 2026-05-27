@@ -145,9 +145,47 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     return true;
 }
 
-int ley::Block::height() { return mCachedHeight; }
+// TODO this should be called only once when the block is created.
+int ley::Block::height() {
+    
+    int height = 0;
+    int gap = 0; // count gaps and add them at the end if there is a block at the end.
+    bool countgap = false;
+    for(auto i = 0; i < mRect.h; ++i) {
+        if(widthAtHeight(i) > 0) {
+            height++;
+            height += gap;
+            gap = 0;
+            countgap = true;
+        }
+        else if (countgap) {
+            gap++;
+        }
+    }
 
-int ley::Block::width()  { return mCachedWidth;  }
+    return height;
+}
+
+// TODO this should be called only once when the block is created.
+int ley::Block::width() {
+
+    int width = 0;
+    int gap = 0; // count gaps and add them at the end if there is a block at the end.
+    bool countgap = false;
+    for(auto i = 0; i < mRect.w; ++i) {
+        if(heightAtWidth(i) > 0) {
+            width++;
+            width += gap;
+            gap = 0;
+            countgap = true;
+        }
+        else if (countgap) {
+            gap++;
+        }
+    }
+
+    return width;
+}
 
 //return width for this height value.
 int ley::Block::widthAtHeight(int height) {
@@ -526,44 +564,11 @@ void ley::Block::recalcGaps() {
     // Top gap: number of fully-empty rows at the top
     mCachedTopGap = static_cast<Uint8>(mBlockData.size()); // default: all rows empty
     for(int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
-        bool found = false;
         for(int j = 0; j < static_cast<int>(mBlockData[i].size()); ++j) {
             if(mBlockData[i][j] != ley::BlockTexCode::O) {
                 mCachedTopGap = static_cast<Uint8>(i);
-                found = true;
-                break;
+                return;
             }
-        }
-        if (found) break;
-    }
-
-    // Cached height: number of occupied rows, counting interior gaps
-    mCachedHeight = 0;
-    {
-        int gap = 0;
-        bool counting = false;
-        for (int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
-            bool rowOccupied = false;
-            for (int j = 0; j < static_cast<int>(mBlockData[i].size()); ++j) {
-                if (mBlockData[i][j] != ley::BlockTexCode::O) { rowOccupied = true; break; }
-            }
-            if (rowOccupied) { mCachedHeight += 1 + gap; gap = 0; counting = true; }
-            else if (counting) { ++gap; }
-        }
-    }
-
-    // Cached width: number of occupied columns, counting interior gaps
-    mCachedWidth = 0;
-    {
-        int gap = 0;
-        bool counting = false;
-        for (int j = 0; j < static_cast<int>(mBlockData[0].size()); ++j) {
-            bool colOccupied = false;
-            for (int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
-                if (mBlockData[i][j] != ley::BlockTexCode::O) { colOccupied = true; break; }
-            }
-            if (colOccupied) { mCachedWidth += 1 + gap; gap = 0; counting = true; }
-            else if (counting) { ++gap; }
         }
     }
 }

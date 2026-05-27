@@ -1,12 +1,10 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <string>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_gamecontroller.h>
 
 namespace ley {
 
@@ -76,22 +74,16 @@ typedef struct {
     std::pair<ley::Command, std::vector<Uint8>> quit;
 } ButtonBindings;
 
-extern const std::unordered_map<ley::Command, std::string> COMMANDTOSTRING;
-
-extern const std::unordered_map<std::string, ley::Command> STRINGTOCOMMAND;
-
+// Lookup tables declared here; defined once in Command.cpp.
+extern const std::unordered_map<ley::Command, std::string>          COMMANDTOSTRING;
+extern const std::unordered_map<std::string,  ley::Command>          STRINGTOCOMMAND;
 extern const std::unordered_map<SDL_GameControllerButton, std::string> BUTTONTOSTRING;
+extern const std::unordered_map<std::string,  SDL_GameControllerButton> STRINGTOBUTTON;
+extern const std::unordered_map<std::string,  SDL_Keymod>             STRINGTOKMOD;
+extern const std::unordered_map<SDL_Keymod,   std::string>            KMODTOSTRING;
+extern const std::unordered_map<SDL_Scancode, std::string>            SCANCODETOSTRING;
+extern const std::unordered_map<std::string,  SDL_Scancode>           STRINGTOSCANCODE;
 
-extern const std::unordered_map<std::string, SDL_GameControllerButton> STRINGTOBUTTON;
-
-extern const std::unordered_map<std::string, SDL_Keymod> STRINGTOKMOD;
-
-extern const std::unordered_map<SDL_Keymod, std::string> KMODTOSTRING;
-
-extern const std::unordered_map<SDL_Scancode, std::string> SCANCODETOSTRING;
-
-extern const std::unordered_map<std::string, SDL_Scancode> STRINGTOSCANCODE;
-
-};
+} // namespace ley
 
 #endif

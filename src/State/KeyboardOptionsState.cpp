@@ -26,6 +26,11 @@ KeyboardOptionsState::KeyboardOptionsState(ley::Video * v, ley::GameModel * gm):
     initalizeMenu();
 }
 
+/*
+** returns the pixel width value of the font.
+*/
+//TODO this method needs to go into font or somewhere as a static
+
 void KeyboardOptionsState::initalizeMenu() {
 
     mMainUI.clear();
@@ -247,65 +252,72 @@ std::vector<std::pair<SDL_Scancode, std::string>> KeyboardOptionsState::findKeys
 
 void KeyboardOptionsState::reassignButton(ley::Command command, SDL_GameControllerButton button, bool addMapping) {
 
-    //Only delete if we are not adding.
-    if(!addMapping) {
-        for(PadBindingsType::const_iterator it : findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command)) {
+    // Capture the context from the existing binding before any erase.
+    // Fall back to "play" if the command has no binding yet.
+    // Note: "ui"-context bindings are not persisted by writeGamepadBindings (they are
+    // hardcoded at startup), so a rebound ui command survives the session only.
+    std::string context = "play";
+    auto existing = findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command);
+    if (!existing.empty()) {
+        context = existing.front()->first.second;
+    }
+
+    if (!addMapping) {
+        for (PadBindingsType::const_iterator it : existing) {
             mGameModel->getButtonBindingsPtr()->erase(it);
         }
+        // After clearing all bindings for this command, add the new one.
+        mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button, context), command);
+        return;
     }
 
+    // addMapping: keep existing bindings; only add if this button isn't already mapped.
     bool exists = false;
-    if(findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command).size() == 0) {
-
-         // TODO context is hard coded as play so we can not update UI commands.
-         mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button,"play"), command);
-    }
-    else {
-        for(PadBindingsType::const_iterator it : findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command)) {
-            if(it->first.first == button) {
-                exists = true;
-                break;
-            }
-        }
-
-        if(!exists) {
-            mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button,"play"), command);
+    for (PadBindingsType::const_iterator it : findButtonIteratorsByValue(mGameModel->getButtonBindingsPtr(), command)) {
+        if (it->first.first == button) {
+            exists = true;
+            break;
         }
     }
-    
-    return;
+    if (!exists) {
+        mGameModel->getButtonBindingsPtr()->emplace(std::make_pair(button, context), command);
+    }
 }
 
 void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping) {
 
-    //Only delete if we are not adding.
-    if(!addMapping) {
-        for(KeyBindingsType::const_iterator it : findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command})) {
+    const KeyBindingValue target = {KMOD_NONE, command};
+
+    // Capture the context from the existing binding before any erase.
+    // Fall back to "play" if the command has no binding yet.
+    // Note: "ui"-context bindings are not persisted by writeKeyboardBindings (they are
+    // hardcoded at startup), so a rebound ui command survives the session only.
+    std::string context = "play";
+    auto existing = findIteratorsByValue(mGameModel->getKeyBindingsPtr(), target);
+    if (!existing.empty()) {
+        context = existing.front()->first.second;
+    }
+
+    if (!addMapping) {
+        for (KeyBindingsType::const_iterator it : existing) {
             mGameModel->getKeyBindingsPtr()->erase(it);
         }
+        // After clearing all bindings for this command, add the new one.
+        mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode, context), target);
+        return;
     }
 
-
+    // addMapping: keep existing bindings; only add if this scancode isn't already mapped.
     bool exists = false;
-    if(findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command}).size() == 0) {
-
-         // TODO context is hard coded as play so we can not update UI commands.
-         mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode,"play"), std::make_pair(KMOD_NONE, command));
-    }
-    else {
-        for(KeyBindingsType::const_iterator it : findIteratorsByValue(mGameModel->getKeyBindingsPtr(), {KMOD_NONE, command})) {
-            if(it->first.first == scancode) {
-                exists = true;
-                break;
-            }
-        }
-
-        if(!exists) {
-            mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode,"play"), std::make_pair(KMOD_NONE, command));
+    for (KeyBindingsType::const_iterator it : findIteratorsByValue(mGameModel->getKeyBindingsPtr(), target)) {
+        if (it->first.first == scancode) {
+            exists = true;
+            break;
         }
     }
-
-    
+    if (!exists) {
+        mGameModel->getKeyBindingsPtr()->emplace(std::make_pair(scancode, context), target);
+    }
 }
 
 void KeyboardOptionsState::render() {
