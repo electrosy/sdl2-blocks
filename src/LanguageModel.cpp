@@ -39,7 +39,7 @@ void ley::LanguageModel::loadLanguageData(std::string language) {
         }
     }
 }
-std::string ley::LanguageModel::capitalizeFirstLetter(std::string input) {
+std::string ley::LanguageModel::capitalizeFirstLetter(std::string input) const {
 
     //capitalize the first letter
     if(input.size() > 0) {
@@ -49,7 +49,7 @@ std::string ley::LanguageModel::capitalizeFirstLetter(std::string input) {
     return input;
 }
 
-std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string input) {
+std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string input) const {
     
     input = capitalizeFirstLetter(input);
     
@@ -67,9 +67,10 @@ std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string inpu
 /*
 ** @left - when false the padding will be to the right otherwise it will be to the left.
 */
-std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, capitalizationtype capType) {
+std::string ley::LanguageModel::getWord(const std::string& field, int pad, bool left, capitalizationtype capType) const {
 
-    std::string string = mLanguageFields[field];
+    auto it = mLanguageFields.find(field);
+    std::string string = (it != mLanguageFields.end()) ? it->second : "";
 
     if(string.empty()) {
         //We didn't find a match so just use the passed in field
@@ -87,7 +88,7 @@ std::string ley::LanguageModel::getWord(std::string field, int pad, bool left, c
     return padTo(string, ' ', pad, left);
 }
 
-std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size, bool left) {
+std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size, bool left) const {
     
     //return early if the pad become a negative number.
 
@@ -113,7 +114,7 @@ std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned 
     return  input;
 }
 
-std::string ley::LanguageModel::getLanguageString() {   
+std::string ley::LanguageModel::getLanguageString() const {   
     std::string language;
 
     if(mCurrentLanguage == "es") {

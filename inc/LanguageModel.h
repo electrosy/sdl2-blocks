@@ -22,15 +22,14 @@ private:
 public:
     LanguageModel();
     std::string getLanguage() const { return mCurrentLanguage; };
-    std::string getLanguageString();
-    std::string getLanguageText(std::string language, std::string field);
+    std::string getLanguageString() const;
     void setLanguage(std::string language) { mCurrentLanguage = language; };
     void loadLanguageData(std::string language);
     void loadLanguage();
-    std::string getWord(std::string field, int pad, bool left, capitalizationtype capType);
-    std::string padTo(std::string input, char padChar, unsigned long size, bool left);
-    std::string capitalizeFirstLeterOfEveryWord(std::string input);
-    std::string capitalizeFirstLetter(std::string input);
+    std::string getWord(const std::string& field, int pad, bool left, capitalizationtype capType) const;
+    std::string padTo(std::string input, char padChar, unsigned long size, bool left) const;
+    std::string capitalizeFirstLeterOfEveryWord(std::string input) const;
+    std::string capitalizeFirstLetter(std::string input) const;
 
 };
     
