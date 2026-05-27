@@ -17,7 +17,7 @@ public:
 
     virtual bool onExit()  override;
     virtual bool onEnter();
-    virtual bool onReEnter();
+    virtual bool resume();
 
     virtual std::string getStateID() const { return sKeyboardOptionsID; }
 

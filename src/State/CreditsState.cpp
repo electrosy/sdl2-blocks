@@ -92,7 +92,7 @@ bool CreditsState::onEnter() {
     return true;
 }
 
-bool CreditsState::onReEnter() {
+bool CreditsState::resume() {
     SDL_Log("ReEntering CreditsState");
     mCurrentInputContext = "ui";
     return true;

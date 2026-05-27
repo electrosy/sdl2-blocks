@@ -14,7 +14,7 @@ Purpose: see header.
 
 #include "../inc/ConfigIO.h"
 #include "../inc/GameModel.h"
-#include "../inc/Config.h"
+// Board-size constants are now in ConfigIO.h
 
 /* ── Main config ────────────────────────────────────────────────────────── */
 

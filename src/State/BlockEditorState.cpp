@@ -195,7 +195,7 @@ bool BlockEditorState::onEnter() {
     return true;
 }
 
-bool BlockEditorState::onReEnter() {
+bool BlockEditorState::resume() {
     SDL_Log("ReEntering BlockEditorState");
     mCurrentInputContext = "ui";
     return true;

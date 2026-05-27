@@ -75,7 +75,7 @@ public:
     virtual void loadRenderables();
     virtual bool onExit()  override;
     virtual bool onEnter() override;
-    virtual bool onReEnter() override;
+    virtual bool resume() override;
     virtual std::string getStateID() const { return sOptionMenuID; }
     
     void initTextEntryMessages();

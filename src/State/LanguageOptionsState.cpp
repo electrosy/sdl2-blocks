@@ -64,7 +64,7 @@ bool LanguageOptionsState::onEnter() {
     return true;
 }
 
-bool LanguageOptionsState::onReEnter() {
+bool LanguageOptionsState::resume() {
     SDL_Log("ReEntering LanguageOptionsState");
     mCurrentInputContext = "ui";
 

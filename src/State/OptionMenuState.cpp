@@ -368,7 +368,7 @@ bool OptionMenuState::onEnter() {
     return true;
 }
 
-bool OptionMenuState::onReEnter() {
+bool OptionMenuState::resume() {
     SDL_Log("ReEntering OptionMenuState");
 
     initTextEntryMessages();

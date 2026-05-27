@@ -63,7 +63,7 @@ bool IntroState::onEnter() {
     return true;
 }
 
-bool IntroState::onReEnter() {
+bool IntroState::resume() {
     SDL_Log("ReEntering IntroState");
     mCurrentInputContext = "ui";
     return true;

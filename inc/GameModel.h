@@ -129,6 +129,8 @@ private:
 public:
     GameModel();
     ~GameModel();
+    GameModel(const GameModel&)            = delete; // singleton-style; never copied
+    GameModel& operator=(const GameModel&) = delete;
     Board* getBoard();
     void debugResetActiveBlock();
     bool moveBlock(Command);            //returns true for false if block actually moved

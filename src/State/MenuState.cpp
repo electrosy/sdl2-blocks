@@ -83,7 +83,7 @@ bool MenuState::onEnter() {
     return true;
 }
 
-bool MenuState::onReEnter() {
+bool MenuState::resume() {
     SDL_Log("ReEntering MenuState");
     mBackground.resetFader(); //Reset the fader for this sprite so it will fade in again.
     mAblockalypseLogo.resetFader();

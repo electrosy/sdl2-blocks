@@ -41,7 +41,7 @@ bool GameOverState::onEnter() {
     return true;
 }
 
-bool GameOverState::onReEnter() {
+bool GameOverState::resume() {
     SDL_Log("ReEntering GameOverState");
     mCurrentInputContext = "play";
     return true;

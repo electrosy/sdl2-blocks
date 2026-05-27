@@ -181,7 +181,7 @@ bool PlayState::onEnter() {
     return true;
 }
 
-bool PlayState::onReEnter() {
+bool PlayState::resume() {
     if(mFallTimer.isPaused()) {
         mFallTimer.pause(false);
     }

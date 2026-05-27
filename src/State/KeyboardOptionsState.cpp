@@ -342,7 +342,7 @@ bool KeyboardOptionsState::onEnter() {
     return true;
 }
 
-bool KeyboardOptionsState::onReEnter() {
+bool KeyboardOptionsState::resume() {
     SDL_Log("ReEntering KeyboardOptionsState");
     mCurrentInputContext = "ui";
 

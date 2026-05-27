@@ -20,6 +20,14 @@ Files managed:
 
 namespace ley {
 
+// Board dimension constants (formerly in Config.h)
+constexpr auto BOARDWIDTH_DEFAULT  = 10;
+constexpr auto BOARDHEIGHT_DEFAULT = 20;
+constexpr auto BOARDHEIGHT_MIN     =  8;
+constexpr auto BOARDWIDTH_MIN      =  8;
+constexpr auto BOARDWIDTH_MAX      = 25;
+constexpr auto BOARDHEIGHT_MAX     = 22;
+
 class GameModel; // forward declaration — full header included in ConfigIO.cpp
 
 class ConfigIO {

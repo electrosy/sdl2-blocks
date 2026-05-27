@@ -47,7 +47,7 @@ bool PauseState::onEnter() {
     return true;
 }
 
-bool PauseState::onReEnter() {
+bool PauseState::resume() {
     SDL_Log("ReEntering PauseState");
     mCurrentInputContext = "play";
     return true;

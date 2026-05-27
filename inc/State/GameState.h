@@ -28,7 +28,7 @@ public:
     
     virtual bool onEnter() = 0; //when the state is pushed on
     virtual bool onExit() = 0; //when the state is poped off
-    virtual bool onReEnter() = 0; //rentering the state after the previous was popped off. //TODO this should probably be called resume
+    virtual bool resume() = 0; // called when the state below this one becomes active again (the state on top was popped)
     virtual bool onPause() = 0; //When another state is pushed on after this one.
     ley::UIWidget* activeUIelement();
     virtual void UI_ToggleFocus();

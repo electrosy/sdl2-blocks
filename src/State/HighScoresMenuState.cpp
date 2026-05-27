@@ -128,7 +128,7 @@ bool HighScoresMenuState::onEnter() {
     return true;
 }
 
-bool HighScoresMenuState::onReEnter() {
+bool HighScoresMenuState::resume() {
     SDL_Log("ReEntering HighScoresMenuState");
     mCurrentInputContext = "ui";
 

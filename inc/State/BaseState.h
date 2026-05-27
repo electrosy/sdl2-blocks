@@ -42,7 +42,7 @@ public:
     virtual void update(ley::Command command) override = 0;
     virtual void loadRenderables()           override = 0;
     virtual bool onEnter()                   override = 0;
-    virtual bool onReEnter()                 override = 0;
+    virtual bool resume()                 override = 0;
     virtual std::string getStateID() const   override = 0;
 };
 

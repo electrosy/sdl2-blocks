@@ -22,9 +22,9 @@ void ley::GameStateMachine::popState() {
         }
     }
 
-    //If there is another state remaining in the state call the onReEnter()
+    //If there is another state remaining in the stack, call resume()
     if(!mGameStates.empty()) {
-        mGameStates.back()->onReEnter();
+        mGameStates.back()->resume();
     }
 }
 

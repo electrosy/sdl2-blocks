@@ -50,7 +50,7 @@ public:
     virtual void render();
     virtual bool onExit()  override;
     virtual bool onEnter();
-    virtual bool onReEnter();
+    virtual bool resume();
     virtual void loadRenderables();
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);

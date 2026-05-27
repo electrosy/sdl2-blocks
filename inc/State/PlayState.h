@@ -20,7 +20,7 @@ public:
     virtual void loadRenderables();
 
     virtual bool onEnter();
-    virtual bool onReEnter();
+    virtual bool resume();
 
     virtual std::string getStateID() const { return sPlayID; };
 
