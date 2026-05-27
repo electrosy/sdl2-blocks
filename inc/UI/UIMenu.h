@@ -8,6 +8,8 @@ Date: Jul/17/2021
 #ifndef UIMENU_H
 #define UIMENU_H
 
+#include <unordered_map>
+
 namespace ley {
 
 enum class UIMenuItem {cell,row};
@@ -19,7 +21,8 @@ private:
     int mCurrentIndex;
     char mFaderControl = 0; //0 = fade in, 1 = fade out, 2 = hold //Run fade in reverse from in to out instead of out to in.
     int mWidth = 1; //1 is single dimensional. If width is more than one then the menu is created as a grid and down will jump down to the next row. ;)
-    std::vector<ley::UIElement> mElements; // TODO elements should probably be in a map with label for key and UIElement for value.
+    std::vector<ley::UIElement> mElements;
+    std::unordered_map<std::string, int> mLabelIndex; // label → index in mElements for O(1) lookup
     std::vector<ley::Font*> mFontsUsed;    
     ley::RenderablesPtr mRenderables;
     ley::Fader mFader;

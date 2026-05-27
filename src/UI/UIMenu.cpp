@@ -47,6 +47,7 @@ void ley::UIMenu::pushFont(std::string label, const SDL_Rect dest, const std::st
 
     UIElement temp(label, {0,0, dest.w, dest.h}, dest, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     temp.preRender(r);
+    mLabelIndex[label] = static_cast<int>(mElements.size());
     mElements.push_back(temp);
 }
 
@@ -65,15 +66,8 @@ ley::UIElement* ley::UIMenu::getCurrentElementPtr() {
 }
 
 int ley::UIMenu::getElementById(std::string label) {
-    
-    //Iterate through the elements and find the ID that matches the label.
-    int index = -1;
-    for(int i = 0; i < mElements.size(); ++i) {
-        if (mElements[i].getLabel() == label) {
-            index = i;
-        }
-    }
-    return index;
+    auto it = mLabelIndex.find(label);
+    return (it != mLabelIndex.end()) ? it->second : -1;
 }
 void ley::UIMenu::addRenderables(ley::RenderablesPtr r) {
     mRenderables = r;
@@ -408,6 +402,7 @@ int ley::UIMenu::getIndex() {
 
 void ley::UIMenu::clear() {
     mElements.clear();
+    mLabelIndex.clear();
     mCurrentIndex = 0;
 }
 
