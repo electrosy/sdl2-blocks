@@ -8,6 +8,27 @@ Date: Feb/15/2020
 #include "../inc/Block.h"
 
 ley::BlockFileDataMapType* ley::Block::mBlockDataPtr = nullptr;
+
+namespace ley {
+
+// Single authoritative definitions — declared extern in Block.h.
+const std::unordered_map<BlockTexCode, std::string> TEXCODE_CHAR {
+    {BlockTexCode::a, "a"}, {BlockTexCode::b, "b"}, {BlockTexCode::c, "c"},
+    {BlockTexCode::d, "d"}, {BlockTexCode::e, "e"}, {BlockTexCode::f, "f"},
+    {BlockTexCode::g, "g"}, {BlockTexCode::h, "h"}, {BlockTexCode::i, "i"},
+    {BlockTexCode::j, "j"}, {BlockTexCode::k, "k"}, {BlockTexCode::l, "l"},
+    {BlockTexCode::O, "O"},
+};
+
+const std::unordered_map<std::string, BlockTexCode> CHAR_TEXCODE {
+    {"a", BlockTexCode::a}, {"b", BlockTexCode::b}, {"c", BlockTexCode::c},
+    {"d", BlockTexCode::d}, {"e", BlockTexCode::e}, {"f", BlockTexCode::f},
+    {"g", BlockTexCode::g}, {"h", BlockTexCode::h}, {"i", BlockTexCode::i},
+    {"j", BlockTexCode::j}, {"k", BlockTexCode::k}, {"l", BlockTexCode::l},
+    {"O", BlockTexCode::O},
+};
+
+} // namespace ley
 /* RAII */
 ley::Block::Block() {
 
@@ -145,46 +166,12 @@ bool ley::Block::rotate(bool direction) { //false for counterclockwise, true for
     return true;
 }
 
-// TODO this should be called only once when the block is created.
-int ley::Block::height() {
-    
-    int height = 0;
-    int gap = 0; // count gaps and add them at the end if there is a block at the end.
-    bool countgap = false;
-    for(auto i = 0; i < mRect.h; ++i) {
-        if(widthAtHeight(i) > 0) {
-            height++;
-            height += gap;
-            gap = 0;
-            countgap = true;
-        }
-        else if (countgap) {
-            gap++;
-        }
-    }
-
-    return height;
+int ley::Block::height() const {
+    return mCachedHeight;
 }
 
-// TODO this should be called only once when the block is created.
-int ley::Block::width() {
-
-    int width = 0;
-    int gap = 0; // count gaps and add them at the end if there is a block at the end.
-    bool countgap = false;
-    for(auto i = 0; i < mRect.w; ++i) {
-        if(heightAtWidth(i) > 0) {
-            width++;
-            width += gap;
-            gap = 0;
-            countgap = true;
-        }
-        else if (countgap) {
-            gap++;
-        }
-    }
-
-    return width;
+int ley::Block::width() const {
+    return mCachedWidth;
 }
 
 //return width for this height value.
@@ -216,26 +203,18 @@ void ley::Block::setBlockDataPtr(BlockFileDataMapType* blockDataPtr) {
 
 void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr) {
 
-    auto blockTexCodeFromString = [](char str_code) -> ley::BlockTexCode  {
-
-        std::map<char, ley::BlockTexCode> strTexCodeMap;
-
-        strTexCodeMap.emplace('O', ley::BlockTexCode::O);
-        strTexCodeMap.emplace('a', ley::BlockTexCode::a);
-        strTexCodeMap.emplace('b', ley::BlockTexCode::b);
-        strTexCodeMap.emplace('c', ley::BlockTexCode::c);
-        strTexCodeMap.emplace('d', ley::BlockTexCode::d);
-        strTexCodeMap.emplace('e', ley::BlockTexCode::e);
-        strTexCodeMap.emplace('f', ley::BlockTexCode::f);
-        strTexCodeMap.emplace('g', ley::BlockTexCode::g);
-        strTexCodeMap.emplace('h', ley::BlockTexCode::h);
-        strTexCodeMap.emplace('i', ley::BlockTexCode::i);
-        strTexCodeMap.emplace('j', ley::BlockTexCode::j);
-        strTexCodeMap.emplace('k', ley::BlockTexCode::k);
-        strTexCodeMap.emplace('l', ley::BlockTexCode::l);
-        strTexCodeMap.emplace('Z', ley::BlockTexCode::Z);
-
-        return strTexCodeMap[str_code];
+    auto blockTexCodeFromString = [](char str_code) -> ley::BlockTexCode {
+        static const std::unordered_map<char, ley::BlockTexCode> strTexCodeMap {
+            {'O', ley::BlockTexCode::O}, {'a', ley::BlockTexCode::a},
+            {'b', ley::BlockTexCode::b}, {'c', ley::BlockTexCode::c},
+            {'d', ley::BlockTexCode::d}, {'e', ley::BlockTexCode::e},
+            {'f', ley::BlockTexCode::f}, {'g', ley::BlockTexCode::g},
+            {'h', ley::BlockTexCode::h}, {'i', ley::BlockTexCode::i},
+            {'j', ley::BlockTexCode::j}, {'k', ley::BlockTexCode::k},
+            {'l', ley::BlockTexCode::l}, {'Z', ley::BlockTexCode::Z},
+        };
+        auto it = strTexCodeMap.find(str_code);
+        return it != strTexCodeMap.end() ? it->second : ley::BlockTexCode::O;
     };
 
     // TODO BLOCK_SIZE is assumed to be square, maybe we should define a height and width.
@@ -289,20 +268,18 @@ bool ley::Block::hasMoreThanOneOrientation(std::string blockCharName, BlockFileD
 
 void ley::Block::setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr) {
 
-    std::map<BlockNameType, std::string> blocksToLoad;
-    blocksToLoad.emplace(BlockNameType::cube, "a-");
-    blocksToLoad.emplace(BlockNameType::tee, "b-");
-    blocksToLoad.emplace(BlockNameType::rLee, "c-");
-    blocksToLoad.emplace(BlockNameType::zee, "d-");
-    blocksToLoad.emplace(BlockNameType::mzee, "e-");
-    blocksToLoad.emplace(BlockNameType::lLee, "f-");
-    blocksToLoad.emplace(BlockNameType::line, "g-");
+    static const std::unordered_map<BlockNameType, std::string> blocksToLoad {
+        {BlockNameType::cube, "a-"}, {BlockNameType::tee,  "b-"},
+        {BlockNameType::rLee, "c-"}, {BlockNameType::zee,  "d-"},
+        {BlockNameType::mzee, "e-"}, {BlockNameType::lLee, "f-"},
+        {BlockNameType::line, "g-"},
+    };
 
-    loadSingleOrientation(blocksToLoad[t] + std::to_string(o) + "-", inBlockPtr, mBlockDataPtr);
+    loadSingleOrientation(blocksToLoad.at(t) + std::to_string(o) + "-", inBlockPtr, mBlockDataPtr);
             inRectPtr->h = bottomEdgeOfOrientation(inBlockPtr);
             inRectPtr->w = rightEdgeOfOrientation(inBlockPtr);
             if(inCanRotatePtr) {
-                (*inCanRotatePtr) = hasMoreThanOneOrientation(blocksToLoad[t], mBlockDataPtr);
+                (*inCanRotatePtr) = hasMoreThanOneOrientation(blocksToLoad.at(t), mBlockDataPtr);
             }
 
     //This is for the clear block.
@@ -543,7 +520,7 @@ void ley::Block::setBlock(BlockNameType t, int o) {
     recalcGaps();
 }
 
-// Recalculate and cache both gap values. Called after any mBlockData mutation.
+// Recalculate and cache all geometry values. Called after any mBlockData mutation.
 void ley::Block::recalcGaps() {
 
     // Left gap: smallest number of leading-empty columns across all rows that contain a tile
@@ -567,9 +544,42 @@ void ley::Block::recalcGaps() {
         for(int j = 0; j < static_cast<int>(mBlockData[i].size()); ++j) {
             if(mBlockData[i][j] != ley::BlockTexCode::O) {
                 mCachedTopGap = static_cast<Uint8>(i);
-                return;
+                goto top_gap_done; // break out of both loops
             }
         }
+    }
+    top_gap_done:;
+
+    // Height: number of rows from first to last tile, including interior gaps
+    {
+        int h = 0, gap = 0;
+        bool counting = false;
+        for (int i = 0; i < static_cast<int>(mBlockData.size()); ++i) {
+            if (widthAtHeight(i) > 0) {
+                h += 1 + gap;
+                gap = 0;
+                counting = true;
+            } else if (counting) {
+                ++gap;
+            }
+        }
+        mCachedHeight = h;
+    }
+
+    // Width: number of columns from first to last tile, including interior gaps
+    {
+        int w = 0, gap = 0;
+        bool counting = false;
+        for (int i = 0; i < static_cast<int>(mBlockData[0].size()); ++i) {
+            if (heightAtWidth(i) > 0) {
+                w += 1 + gap;
+                gap = 0;
+                counting = true;
+            } else if (counting) {
+                ++gap;
+            }
+        }
+        mCachedWidth = w;
     }
 }
 

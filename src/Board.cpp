@@ -84,79 +84,63 @@ void ley::Board::clear() {
 
 std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
 
-    SDL_Rect block = b.getRect();
-    // TODO these 4 nested loops can probably be combined into one as there are only minor differences.
-    //Iterate through the block and check and see if the board is empty where we need to put a block part.
-    //Check if there is already a block along the edge of the existing block.
-    switch (d) {
-        case Command::down : 
-           for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
-                    
-                    bool renderPart = b.renderPart(i, j) != BlockTexCode::O; // part to render
-                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i, block.y + j + 1);
-                    bool boardPart = block.y + j + 1 >= mHeight
-                                        || (boardAt ? boardAt->second : false); //the space is already occupied
-                    if(renderPart && boardPart) {
-                            return {false, "test"}; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        case Command::right : 
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
-                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i + 1, block.y + j);
-                    bool boardPart = ((block.x + 1) + i) > (mWidth - 1) || (boardAt ? boardAt->second : false);
-                                    
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
-                           return {false, "test"}; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        case Command::left :
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) { 
-                    std::pair<ley::BlockTexCode, bool>* boardAt = at((block.x - 1) + i, block.y + j);
-                    bool boardPart = ((block.x - 1) + i) < 0
-                                     || (boardAt ? boardAt->second : false);
-                                    
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart == true)//the space is already occupied
-                    ) {
-                            return {false, "test"}; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        // TODO will this rotation case actually cover all the other cases as well?
-        case Command::up : //this is a rotation
-            for(int i = 0; i < block.w; ++i) {
-               for(int j = 0; j < block.h; ++j) {
-                    //if there is a block piece to put,then check to see if it can be put.
-                    bool boardBottomPart =  //board empty.
-                                    // TODO this logic is weird, why mHeight and mHeight -1?
-                                    block.y + j > mHeight - 1 || block.y + j > mHeight; //below the board
-                    bool boardPart = block.x + i > mWidth - 1 //right of the board
-                                    || block.x + i < 0; // left of the board
-                    std::pair<ley::BlockTexCode, bool>* boardAt = at(block.x + i, block.y + j);
-                    bool blockCollide = boardAt ? boardAt->second : false;
-                    if( (b.renderPart(i, j) != BlockTexCode::O)//we have a part to render.
-                        && (boardPart || blockCollide || boardBottomPart)//the space is already occupied
-                    ) {
-                            // TODO this double ternary is a little hard to read.
-                            return {false, boardBottomPart ? "board_bottom" : boardPart ? "board" : "block"}; /*** EARLY EXIT! ***/
-                    }
-               }
-           }
-        break;
-        default : break;
-    }
+    const SDL_Rect block = b.getRect();
 
-    return {true, "test"};
+    // Visit every filled cell of the block; return {false, reason} on the first
+    // collision detected by the direction-specific predicate, {true,""} if clear.
+    auto scan = [&](auto collide) -> std::pair<bool, std::string> {
+        for (int i = 0; i < block.w; ++i)
+            for (int j = 0; j < block.h; ++j)
+                if (b.renderPart(i, j) != BlockTexCode::O) {
+                    auto r = collide(i, j);
+                    if (!r.first) return r;
+                }
+        return {true, ""};
+    };
+
+    switch (d) {
+        case Command::down:
+            return scan([&](int i, int j) -> std::pair<bool, std::string> {
+                auto* cell = at(block.x + i, block.y + j + 1);
+                bool hit = (block.y + j + 1 >= mHeight) || (cell && cell->second);
+                return hit ? std::make_pair(false, std::string{"test"})
+                           : std::make_pair(true,  std::string{""});
+            });
+
+        case Command::right:
+            return scan([&](int i, int j) -> std::pair<bool, std::string> {
+                auto* cell = at(block.x + i + 1, block.y + j);
+                bool hit = (block.x + i + 1 > mWidth - 1) || (cell && cell->second);
+                return hit ? std::make_pair(false, std::string{"test"})
+                           : std::make_pair(true,  std::string{""});
+            });
+
+        case Command::left:
+            return scan([&](int i, int j) -> std::pair<bool, std::string> {
+                auto* cell = at(block.x + i - 1, block.y + j);
+                bool hit = (block.x + i - 1 < 0) || (cell && cell->second);
+                return hit ? std::make_pair(false, std::string{"test"})
+                           : std::make_pair(true,  std::string{""});
+            });
+
+        case Command::up: // rotation — three distinct collision reasons
+            return scan([&](int i, int j) -> std::pair<bool, std::string> {
+                bool boardBottom = block.y + j > mHeight - 1 || block.y + j > mHeight;
+                bool boardSide   = block.x + i > mWidth  - 1 || block.x + i < 0;
+                auto* cell       = at(block.x + i, block.y + j);
+                bool blockHit    = cell && cell->second;
+                if (boardBottom || boardSide || blockHit) {
+                    std::string reason = boardBottom ? "board_bottom"
+                                       : boardSide   ? "board"
+                                                     : "block";
+                    return {false, reason};
+                }
+                return {true, ""};
+            });
+
+        default: break;
+    }
+    return {true, ""};
 }
 void ley::Board::putBlock(Block& b) {
     SDL_Rect rect = b.getRect();

@@ -11,58 +11,49 @@ Date: Feb/15/2020
 #include <utility>
 #include <string>
 #include <array>
-#include <map>
+#include <unordered_map>
 #include <SDL2/SDL.h>
 
 #include "Rand_int.h"
 
-const auto BLOCK_START_X = 4;
-const auto BLOCK_START_Y = 0;
-const int BLOCK_SIZE = 5; //Maximum size of the block width and height.
-const Uint8 MAX_ORIENTATIONS = 4;
-const Uint8 NUM_DIFFERENT_BLOCKS = 7;
-
 namespace ley {
+
+// Block geometry constants — placed in namespace ley to avoid polluting global scope
+constexpr int   BLOCK_START_X        = 4;
+constexpr int   BLOCK_START_Y        = 0;
+constexpr int   BLOCK_SIZE           = 5; // Maximum block width and height
+constexpr Uint8 MAX_ORIENTATIONS     = 4;
+constexpr Uint8 NUM_DIFFERENT_BLOCKS = 7;
 
 enum class BlockNameType {cube,tee,rLee,zee,mzee,lLee,line,empty};
 // the letter 'O' means empty and is the default. Capital 'Z' means don't clear part if clear block.
 enum class BlockTexCode {a,b,c,d,e,f,g,h,i,j,k,l,O,Z};
 
-typedef std::map<std::string, std::string> BlockFileDataMapType;
+typedef std::unordered_map<std::string, std::string> BlockFileDataMapType;
 typedef std::array<std::array<BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> BlockDataType;
 typedef std::pair<ley::BlockTexCode, bool> BoardCellType;
 
-const std::map<BlockTexCode, std::string> TEXCODE_CHAR {
-    std::make_pair (BlockTexCode::a, "a"), // 12 texture possibilities
-    std::make_pair (BlockTexCode::b, "b"), //
-    std::make_pair (BlockTexCode::c, "c"), //
-    std::make_pair (BlockTexCode::d, "d"), //
-    std::make_pair (BlockTexCode::e, "e"), //
-    std::make_pair (BlockTexCode::f, "f"), //
-    std::make_pair (BlockTexCode::g, "g"), //
-    std::make_pair (BlockTexCode::h, "h"), //
-    std::make_pair (BlockTexCode::i, "i"), //
-    std::make_pair (BlockTexCode::j, "j"), //
-    std::make_pair (BlockTexCode::k, "k"), //
-    std::make_pair (BlockTexCode::l, "l"), //
-    std::make_pair (BlockTexCode::O, "O"), //This is the empty texture blockpart.
-  };
+// Defined once in Block.cpp; all TUs share the single construction.
+extern const std::unordered_map<BlockTexCode, std::string> TEXCODE_CHAR;
+extern const std::unordered_map<std::string, BlockTexCode> CHAR_TEXCODE;
 
-const std::map<std::string, BlockTexCode> CHAR_TEXCODE {
-    std::make_pair ("a", BlockTexCode::a), // 12 texture possibilities
-    std::make_pair ("b", BlockTexCode::b), //
-    std::make_pair ("c", BlockTexCode::c), //
-    std::make_pair ("d", BlockTexCode::d), //
-    std::make_pair ("e" ,BlockTexCode::e), //
-    std::make_pair ("f" ,BlockTexCode::f), //
-    std::make_pair ("g" ,BlockTexCode::g), //
-    std::make_pair ("h" ,BlockTexCode::h), //
-    std::make_pair ("i" ,BlockTexCode::i), //
-    std::make_pair ("j" ,BlockTexCode::j), //
-    std::make_pair ("k" ,BlockTexCode::k), //
-    std::make_pair ("l" ,BlockTexCode::l), //
-    std::make_pair ("O" ,BlockTexCode::O), //This is the empty texture blockpart.
-  };
+} // namespace ley
+
+// std::hash specializations so enum class values can be unordered_map keys
+namespace std {
+    template<> struct hash<ley::BlockTexCode> {
+        size_t operator()(ley::BlockTexCode v) const noexcept {
+            return std::hash<int>{}(static_cast<int>(v));
+        }
+    };
+    template<> struct hash<ley::BlockNameType> {
+        size_t operator()(ley::BlockNameType v) const noexcept {
+            return std::hash<int>{}(static_cast<int>(v));
+        }
+    };
+}
+
+namespace ley {
 
 class Block {
 
@@ -76,9 +67,11 @@ private:
     BlockDataType mBlockData;
     void setBlock(BlockNameType,int = 0);
 
-    // Gap cache — recalculated once whenever mBlockData changes
-    Uint8 mCachedLeftGap = 0;
-    Uint8 mCachedTopGap  = 0;
+    // Geometry cache — recalculated once whenever mBlockData changes
+    Uint8 mCachedLeftGap   = 0;
+    Uint8 mCachedTopGap    = 0;
+    int   mCachedHeight    = 0;
+    int   mCachedWidth     = 0;
     void recalcGaps();
 
 protected:
@@ -100,8 +93,8 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
-    int height(); // return the actual height of the block
-    int width(); // return the actual width of the block
+    int height() const; // return the actual height of the block (cached)
+    int width()  const; // return the actual width of the block (cached)
     int heightAtWidth(int width); //return the number of blocks high at a particular x location
     int widthAtHeight(int); //return the number of blocks wide at a particular y location
     void reset(); //return block to original position for restarting the game.
