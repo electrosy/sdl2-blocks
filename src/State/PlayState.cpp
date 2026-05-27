@@ -78,11 +78,11 @@ void PlayState::update(ley::Command command) {
         break;
         case ley::Command::debugcolide :
             //mGameModel->debugBoard(true);
-            mGameModel->getNewBoard()->debugOutput(true);
+            mGameModel->getBoard()->debugOutput(true);
         break;
         case ley::Command::debugtexture :
             //mGameModel->debugBoard(false);
-            mGameModel->getNewBoard()->debugOutput(false);
+            mGameModel->getBoard()->debugOutput(false);
         break;
         case ley::Command::quit :
             mGameModel->setGameRunning(false);
@@ -108,7 +108,7 @@ void PlayState::update(ley::Command command) {
             mFallTimer.reset();
         break;
         
-        defaut:
+        default:
         break;
     }
 

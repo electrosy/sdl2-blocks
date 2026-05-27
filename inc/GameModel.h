@@ -126,7 +126,7 @@ public:
     GameModel& operator=(const GameModel&) = delete;
     Board* getBoard();
     void debugResetActiveBlock();
-    bool moveBlock(Command);            //returns true for false if block actually moved
+    bool moveBlock(Command);            // returns true if block actually moved
     std::pair<bool, std::string> rotateBlock(bool);
     std::pair<bool, std::string> canRotate(bool); //false for counterclockwise and true for clockwise
     void overlayToggle();
@@ -159,7 +159,6 @@ public:
     bool newHighScore();
     void quickDrop();
     int comboCount() { return mComboCount;};
-    Board* getNewBoard() { return &mBoard;};
     void resizeBoard(int width, int height);
     KeyBindingsType* getKeyBindingsPtr(); //keyboard
     PadBindingsType* getButtonBindingsPtr(); //gamepad

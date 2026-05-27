@@ -33,8 +33,6 @@ public:
 
     void push_back(Renderable * r);
     void renderAll(SDL_Renderer * r, bool d);
-
-    unsigned int size();
 };
 
 }

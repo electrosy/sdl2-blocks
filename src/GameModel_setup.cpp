@@ -7,7 +7,9 @@ Purpose: GameModel setup, configuration, and binding methods.
          All functions here are called during initialisation, reset, or
          in response to config changes; none run on the per-frame hot path.
 */
+#ifdef DEBUG_LOGGING
 #include <iostream>
+#endif
 #include <set>
 
 #include <SDL2/SDL.h>
@@ -93,7 +95,9 @@ void ley::GameModel::readBlockData() {
     // Delegate file I/O to ConfigIO, then run in-memory processing steps.
     ConfigIO::readBlockData(&mBlockMapData);
     addCanRotateToBlockData();
+#ifdef DEBUG_LOGGING
     logBlockData();
+#endif
 }
 
 void ley::GameModel::addCanRotateToBlockData() {
@@ -121,11 +125,12 @@ void ley::GameModel::addCanRotateToBlockData() {
 }
 
 void ley::GameModel::logBlockData() {
-
+#ifdef DEBUG_LOGGING
     SDL_Log("Log Block Data:");
     for (const auto& pair : mBlockMapData) {
         std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
     }
+#endif
 }
 
 ley::BlockFileDataMapType* ley::GameModel::getFileDataPtr() {

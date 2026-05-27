@@ -49,7 +49,7 @@ void ley::GameController::runGameLoop() {
             mVideoSystem->render();
             mVideoSystem->renderNextBlock();
             //new board
-            mGm->getNewBoard()->render(mRen, false);
+            mGm->getBoard()->render(mRen, false);
         }
         mGameStateMachine.render();
         mVideoSystem->renderTopLayer();
@@ -156,13 +156,13 @@ void ley::GameController::processCommands(ley::Command command) {
 
         if(command == ley::Command::debugclear) {
             //new board
-            mGm->getNewBoard()->clear();
+            mGm->getBoard()->clear();
             mGm->debugResetActiveBlock();
         }
 
         if(command == ley::Command::debugfill) {
             //new board
-            mGm->getNewBoard()->debugFill();
+            mGm->getBoard()->debugFill();
         }
 
         if(command == ley::Command::debugnextlevel) {

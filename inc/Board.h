@@ -8,7 +8,6 @@ Date: Mar/30/2024
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <array>
 #include "Block.h"
 #include "./gfx/Renderable.h"
 #include "Textures.h"

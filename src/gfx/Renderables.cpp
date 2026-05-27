@@ -8,32 +8,18 @@ Date: Feb/17/2020
 #include "../../inc/gfx/Renderables.h"
 
 /* RAII */
-ley::RenderablesPtr::RenderablesPtr() {
-    
-}
- 
-ley::RenderablesPtr::~RenderablesPtr() {
-
-}
-/* Accessors */
-unsigned int ley::RenderablesPtr::size() {
-   
-   return renderables.size() > 0 ? renderables.size() : 0;
-}
+ley::RenderablesPtr::RenderablesPtr() {}
+ley::RenderablesPtr::~RenderablesPtr() {}
 
 /* Functions */
 void ley::RenderablesPtr::push_back(Renderable * r) {
-    
     renderables.push_back(r);
 }
 
-void ley::RenderablesPtr::renderAll(SDL_Renderer * r, bool d) {           
-    
-    if(renderables.size() > 0) {
-        for(const auto value : renderables) {
-            if(value->isVisible()) {
-                value->render(r, d);
-            }
+void ley::RenderablesPtr::renderAll(SDL_Renderer * r, bool d) {
+    for (const auto value : renderables) {
+        if (value->isVisible()) {
+            value->render(r, d);
         }
     }
 }
