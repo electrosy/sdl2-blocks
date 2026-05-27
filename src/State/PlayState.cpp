@@ -186,6 +186,7 @@ bool PlayState::resume() {
     }
     SDL_Log("ReEntering PlayState");
 
+    mFallProgressBar.setVisible(mGameModel->getShowProgressBar());
     mCurrentInputContext = "play";
 
     return true;

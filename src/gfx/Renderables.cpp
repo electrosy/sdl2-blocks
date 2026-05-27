@@ -31,7 +31,9 @@ void ley::RenderablesPtr::renderAll(SDL_Renderer * r, bool d) {
     
     if(renderables.size() > 0) {
         for(const auto value : renderables) {
-            value->render(r, d);
+            if(value->isVisible()) {
+                value->render(r, d);
+            }
         }
     }
 }
