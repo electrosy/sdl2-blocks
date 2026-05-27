@@ -271,13 +271,11 @@ void ley::GameController::processStates(ley::Command inCommand) {
         //Only allow pause if we are in the playstate.
         if(mGm->isPaused()) {
             SDL_Log("Game Paused!");
-            mGm->audio()->playSfx(ley::sfx::pause); //TODO sfx can probably go in the pause state
             mGameStateMachine.pushState(new ley::PauseState(mVideoSystem, mGm));
         }
 
         if(!mGm->isPaused()) {
             SDL_Log("Game Resumed");    
-            mGm->audio()->playSfx(ley::sfx::unpause); //TODO sfx can probably go in the pause state
             mGameStateMachine.popState();
         }
     }

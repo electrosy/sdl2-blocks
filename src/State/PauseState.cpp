@@ -43,7 +43,13 @@ bool PauseState::onEnter() {
     SDL_Log("Entering PauseState and loading renderables");
     loadRenderables();
     mCurrentInputContext = "play";
+    mGameModel->audio()->playSfx(ley::sfx::pause);
     return true;
+}
+
+bool PauseState::onExit() {
+    mGameModel->audio()->playSfx(ley::sfx::unpause);
+    return BaseState::onExit();
 }
 
 bool PauseState::resume() {
