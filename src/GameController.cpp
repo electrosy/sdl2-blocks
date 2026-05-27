@@ -9,6 +9,7 @@ Date: Feb/18/2020
 #include "../inc/GameController.h"
 #include "../inc/Textures.h"
 #include "../inc/Block.h"
+#include "../inc/State/StateIDs.h"
 #include <map>
 
 typedef ley::Textures TextureManager;
@@ -41,9 +42,9 @@ void ley::GameController::runGameLoop() {
 
         /**** RENDER ****/
         //Only render the game board if we are in PLAY, PAUSE or GAMEOVER.
-        if(mGameStateMachine.getStateId() == "PLAY" 
-            || mGameStateMachine.getStateId() == "PAUSE"
-            || mGameStateMachine.getStateId() == "GAMEOVER") {
+        if(mGameStateMachine.getStateId() == ley::StateID::Play
+            || mGameStateMachine.getStateId() == ley::StateID::Pause
+            || mGameStateMachine.getStateId() == ley::StateID::GameOver) {
             
             mVideoSystem->render();
             mVideoSystem->renderNextBlock();
@@ -180,16 +181,16 @@ void ley::GameController::processCommands(ley::Command command) {
 void ley::GameController::processStates(ley::Command inCommand) {
     //Quit the introstate and goto the menu state.
     if((inCommand == ley::Command::UI_enter || mGameStateMachine.isStateDone())
-        && mGameStateMachine.getStateId() == "INTRO") {
+        && mGameStateMachine.getStateId() == ley::StateID::Intro) {
         mGameStateMachine.changeState(new ley::MenuState(mVideoSystem, mGm));
     }
 
     //Don't quit the state for pause this way.
     if((inCommand == ley::Command::quit || mGm->currentStateChange() == ley::StateChange::quitstate)
-        && !(mGameStateMachine.getStateId() == "PAUSE")
-        && !(mGameStateMachine.getStateId() == "INTRO")) {
+        && !(mGameStateMachine.getStateId() == ley::StateID::Pause)
+        && !(mGameStateMachine.getStateId() == ley::StateID::Intro)) {
 
-        if(mGameStateMachine.getStateId() == "GAMEOVER" && !mGm->isGameRunning()) {
+        if(mGameStateMachine.getStateId() == ley::StateID::GameOver && !mGm->isGameRunning()) {
             mGameStateMachine.popState(); //Assume we have to exit two states if we are in game over. assume STACK=MENU|PLAY|GAMEOVER
         }
 
@@ -248,7 +249,7 @@ void ley::GameController::processStates(ley::Command inCommand) {
     }
 
     //If the game stops running and we are in the play state then go to the game over state.
-    if(!mGm->isGameRunning() && mGameStateMachine.getStateId() == "PLAY") {
+    if(!mGm->isGameRunning() && mGameStateMachine.getStateId() == ley::StateID::Play) {
       //  setHighScores(gm->highScores());
 
         // if new high score
@@ -266,7 +267,7 @@ void ley::GameController::processStates(ley::Command inCommand) {
     }
 
     //Only allow paused/unpause if we are in the play or pause states
-    if(inCommand == ley::Command::pause && (mGameStateMachine.getStateId() == "PLAY" || mGameStateMachine.getStateId() == "PAUSE")) {
+    if(inCommand == ley::Command::pause && (mGameStateMachine.getStateId() == ley::StateID::Play || mGameStateMachine.getStateId() == ley::StateID::Pause)) {
         //Only allow pause if we are in the playstate.
         if(mGm->isPaused()) {
             SDL_Log("Game Paused!");

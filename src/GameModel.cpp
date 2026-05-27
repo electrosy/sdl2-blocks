@@ -12,8 +12,7 @@ Date: Feb/15/2020
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
-#include "../inc/ConfigIO.h"
-#include "../inc/ConfigIO.h"  // BOARDHEIGHT_MIN, BOARDWIDTH_MIN etc.
+#include "../inc/ConfigIO.h"  // ConfigIO static methods + board-size constants
 #include "../inc/Rand_int.h"
 
 

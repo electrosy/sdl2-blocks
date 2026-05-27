@@ -6,7 +6,7 @@ UIWidget* GameState::mActiveUIElement = {};
 std::string GameState::mCurrentInputContext = "";
 
 bool GameState::onPause() {
-    std::string pause = "Pausing " + getStateID();
+    std::string pause = "Pausing " + stateIDName(getStateID());
     SDL_Log(pause.c_str());
 
     return true;

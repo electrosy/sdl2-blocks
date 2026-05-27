@@ -51,7 +51,6 @@ public:
 class Input {
 
 private:
-    // TODO lookupCommand should be replaced with lookupCommand2 and renamed to lookupCommand.
     ley::Command lookupPadCommand(const std::pair<SDL_GameControllerButton, std::string> scancodeContext, PadBindingsType* bindings);
     ley::Command lookupKeyCommand(const std::pair<SDL_Scancode, std::string> inputContext, Uint16 modifiers, KeyBindingsType* bindings);
     SDL_GameController *mControllerPtr = nullptr; //For the gamepad.

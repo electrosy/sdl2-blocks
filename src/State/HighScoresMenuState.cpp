@@ -13,7 +13,6 @@ const auto ROW_START_Y = 150;
 const auto ROW_START_X = 300;
 const auto ROW_SPACING = 30;
 
-const std::string HighScoresMenuState::sHighScoresMenuID = "HIGHSCORES";
 
 HighScoresMenuState::HighScoresMenuState(ley::Video * v, ley::GameModel * gm):
     BaseState(v, gm),

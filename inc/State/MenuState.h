@@ -18,11 +18,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sMenuID; }
+    virtual StateID getStateID() const { return StateID::Menu; }
 
 private:
 
-    static const std::string sMenuID;
 
     ley::Sprite mBackground;
 //    ley::Sprite m3dBlocksPicture;

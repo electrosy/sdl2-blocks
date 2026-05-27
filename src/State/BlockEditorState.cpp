@@ -6,7 +6,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string BlockEditorState::sBlockEditorID = "BLOCKEDITOR";
 
 BlockEditorState::BlockEditorState(ley::Video * v, ley::GameModel * gm):
     BaseState(v, gm),

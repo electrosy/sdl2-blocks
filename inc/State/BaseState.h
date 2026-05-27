@@ -43,7 +43,7 @@ public:
     virtual void loadRenderables()           override = 0;
     virtual bool onEnter()                   override = 0;
     virtual bool resume()                 override = 0;
-    virtual std::string getStateID() const   override = 0;
+    virtual StateID getStateID() const   override = 0;
 };
 
 } // namespace ley

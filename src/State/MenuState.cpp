@@ -4,7 +4,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string MenuState::sMenuID = "MENU";
 
 MenuState::MenuState(ley::Video * v, ley::GameModel * gm)
 : BaseState(v, gm) {

@@ -16,11 +16,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sIntroID; }
+    virtual StateID getStateID() const { return StateID::Intro; }
 
 private:
 
-    static const std::string sIntroID;
 
     ley::Sprite mLogo;
     bool lastLogo = false; //true when last logo has been displayed

@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "StateIDs.h"
 
 #include <vector>
 
@@ -16,7 +17,7 @@ public:
     void popState();
     void update(ley::Command command);
     void render();
-    std::string getStateId();
+    StateID getStateId();
     bool isStateDone();
     ley::UIWidget* activeUIElement();
     void commitUI();

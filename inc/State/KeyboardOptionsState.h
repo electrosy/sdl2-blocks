@@ -19,13 +19,12 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sKeyboardOptionsID; }
+    virtual StateID getStateID() const { return StateID::KeyboardOptions; }
 
 private:
 
     bool mCaptureNewInput = false;
     bool mAddMapping = false;
-    static const std::string sKeyboardOptionsID;
     ley::Font mDirectionsFont;
     ley::Font mTitleFont;
     ley::Font mButtonTitleFont;

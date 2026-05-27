@@ -1,6 +1,7 @@
 #include "../Input.h"
 #include "../../inc/UI/UIWidget.h"
 #include "../UI/TextEntry.h"
+#include "StateIDs.h"
 
 #include <string>
 #include <SDL2/SDL.h>
@@ -34,7 +35,7 @@ public:
     virtual void UI_ToggleFocus();
     virtual void commitUI();
     bool isDone(); // Returns true when everything in this state is finished.
-    virtual std::string getStateID() const = 0;
+    virtual StateID getStateID() const = 0;
     virtual ~GameState() {SDL_Log("Gamestate dtor()");};
     std::string currentInputContext();
 };

@@ -32,7 +32,6 @@ class OptionMenuState : public ley::BaseState {
 
 private:
 
-    static const std::string sOptionMenuID;
     
     //labels
     ley::Font mBoardSizeLabelFont;
@@ -76,7 +75,7 @@ public:
     virtual bool onExit()  override;
     virtual bool onEnter() override;
     virtual bool resume() override;
-    virtual std::string getStateID() const { return sOptionMenuID; }
+    virtual StateID getStateID() const { return StateID::OptionMenu; }
     
     void initTextEntryMessages();
     void commitBoardSize();

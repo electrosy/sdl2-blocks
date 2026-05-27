@@ -5,7 +5,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string LanguageOptionsState::sLanguageOptionsID = "LANGUAGEOPTIONS";
 
 LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
     BaseState(v, gm),

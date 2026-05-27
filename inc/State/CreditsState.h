@@ -18,11 +18,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sCreditsID; }
+    virtual StateID getStateID() const { return StateID::Credits; }
 
 private:
 
-    static const std::string sCreditsID;
 
     ley::Sprite mBackground;
 //    ley::Sprite mCreditsPanel;

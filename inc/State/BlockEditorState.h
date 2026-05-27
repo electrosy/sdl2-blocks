@@ -13,7 +13,6 @@ class BlockEditorState : public ley::BaseState {
 Uint8 EDITOR_FONT_SIZE = 16;
 
 private:
-    static const std::string sBlockEditorID;
     Font mTitleFont;
     Font mHelpTipFont;
     Font mCurrentTileFont;
@@ -44,7 +43,7 @@ private:
 
 public:
     BlockEditorState(ley::Video * v, ley::GameModel * gm);
-    virtual std::string getStateID() const { return sBlockEditorID; }
+    virtual StateID getStateID() const { return StateID::BlockEditor; }
 
     virtual void update(ley::Command command);
     virtual void render();

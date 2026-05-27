@@ -2,7 +2,6 @@
 
 namespace ley {
 
-const std::string PlayState::sPlayID = "PLAY";
 
 PlayState::PlayState(ley::Video * v, ley::GameModel * gm)
 :

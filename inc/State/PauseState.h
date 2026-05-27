@@ -17,12 +17,11 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sPauseID; }
+    virtual StateID getStateID() const { return StateID::Pause; }
 
 private:
 
 
-    static const std::string sPauseID;
 
     ley::Sprite controlsSprite;
 };

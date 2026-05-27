@@ -20,11 +20,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sHighScoresMenuID; }
+    virtual StateID getStateID() const { return StateID::HighScoresMenu; }
 
 private:
 
-    static const std::string sHighScoresMenuID;
     ley::TextEntry mLocalTextEntry;
     ley::Sprite mBackground;
     ley::Font mNameFont;

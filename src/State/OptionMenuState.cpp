@@ -8,7 +8,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string OptionMenuState::sOptionMenuID = "OPTIONMENU";
 
 OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 

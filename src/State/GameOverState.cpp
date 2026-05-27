@@ -2,7 +2,6 @@
 
 namespace ley {
 
-const std::string GameOverState::sGameOverStateID = "GAMEOVER";
 
 GameOverState::GameOverState(ley::Video * v, ley::GameModel * gm)
 : 

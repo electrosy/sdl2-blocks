@@ -4,7 +4,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string CreditsState::sCreditsID = "CREDITS";
 
 CreditsState::CreditsState(ley::Video * v, ley::GameModel * gm):
     BaseState(v, gm),

@@ -22,7 +22,7 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sPlayID; };
+    virtual StateID getStateID() const { return StateID::Play; };
 
 private:
     ley::Timer mLastHardDrop; //Time that has expired since last hard drop
@@ -37,7 +37,6 @@ private:
     //Progress bars driven by the timers above
     ley::ProgressBar mFallProgressBar;   // rendered in the game view
     ley::ProgressBar mStatusProgressBar; // rendered in debug overlay
-    static const std::string sPlayID;
 
     void resetGame();
 };

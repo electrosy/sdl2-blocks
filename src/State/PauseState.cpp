@@ -4,7 +4,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string PauseState::sPauseID = "PAUSE";
 
 PauseState::PauseState(ley::Video * v, ley::GameModel * gm)
 :

@@ -4,7 +4,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string IntroState::sIntroID = "INTRO";
 
 IntroState::IntroState(ley::Video * v, ley::GameModel * gm)
 : BaseState(v, gm) {

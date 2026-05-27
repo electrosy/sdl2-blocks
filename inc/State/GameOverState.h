@@ -18,11 +18,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sGameOverStateID; }
+    virtual StateID getStateID() const { return StateID::GameOver; }
 
 private:
 
-    static const std::string sGameOverStateID;
 
     ley::Font fontGameOver; //Game over font
 

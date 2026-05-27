@@ -56,12 +56,12 @@ void ley::GameStateMachine::render() {
     }
 }
 
-std::string ley::GameStateMachine::getStateId() {
+ley::StateID ley::GameStateMachine::getStateId() {
     if(!mGameStates.empty()) {
         return mGameStates.back()->getStateID();
     }
 
-    return "";
+    return StateID::None;
 }
 
 bool ley::GameStateMachine::isStateDone() {

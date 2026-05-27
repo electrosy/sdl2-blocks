@@ -4,7 +4,6 @@ typedef ley::Textures TextureManager;
 
 namespace ley {
 
-const std::string KeyboardOptionsState::sKeyboardOptionsID = "KEYBOARDOPTIONS";
 
 const std::string DIRECTIONS1 = "Press enter to replace command. Press keypad plus/rightshoulder to add.";
 const std::string DIRECTIONS2 = "Press the button for this command";

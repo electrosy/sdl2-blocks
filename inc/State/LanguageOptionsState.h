@@ -18,11 +18,10 @@ public:
     virtual bool onEnter();
     virtual bool resume();
 
-    virtual std::string getStateID() const { return sLanguageOptionsID; }
+    virtual StateID getStateID() const { return StateID::LanguageOptions; }
 
 private:
 
-    static const std::string sLanguageOptionsID;
 
     ley::Font mTitleFont;
     ley::Font mCurrentLanguageFont;
