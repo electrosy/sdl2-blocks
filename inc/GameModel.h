@@ -8,18 +8,11 @@ Date: Feb/15/2020
 #ifndef GAMEMODEL_H
 #define GAMEMODEL_H
 
-#include <array>
-#include <fstream>
-#include <functional>
-#include <set>
-#include <sstream>
 #include <string>
 #include <unordered_map>
 
 #include "Audio.h"
 #include "Block.h"
-#include "Clock.h"
-#include "Timer.h"
 #include "Input.h"
 #include "HighScores.h"
 #include "../inc/Board.h"

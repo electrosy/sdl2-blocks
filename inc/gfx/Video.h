@@ -10,6 +10,7 @@ Date: Feb/14/2020
 
 #include <SDL2/SDL.h>
 
+#include "../Clock.h"
 #include "../GameModel.h"
 #include "Renderables.h"
 #include "../Sprite.h"
