@@ -9,9 +9,8 @@ Date: Dec/2/2021
 #include "../inc/Audio.h"
 
 ley::Audio::Audio() :
-playlistNumber(0), playlistMax(9),
+playlistNumber(0), playlistMax(0),
 musIntro(nullptr), musMainMenu(nullptr),
-musMelJazz1(nullptr), musMelJazz2(nullptr), musMelJazz3(nullptr),
 sfxSwoosh(nullptr), sfxPause(nullptr), sfxUnPause(nullptr),
 sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(nullptr) {
 
@@ -45,23 +44,21 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
 
 
     #ifndef FULL_ASSETS
-        playlistMax = 3;
-        musMelJazz1 = Mix_LoadMUS("./assets/audio/wild_jazz.mp3"); // SOURCE https://opengameart.org/content/wild-jazz
-        if(!musMelJazz1) {                                         // AUTHOR Alex McCulloch
-            printf("Mix_LoadMUS(musMelJazz1): %s\n", Mix_GetError());
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/wild_jazz.mp3")); // SOURCE https://opengameart.org/content/wild-jazz
+        if(!mMusicList.back()) {                                           // AUTHOR Alex McCulloch
+            printf("Mix_LoadMUS(wild_jazz.mp3): %s\n", Mix_GetError());
         }
 
-        musMelJazz2 = Mix_LoadMUS("./assets/audio/jazz.ogg"); // SOURCE https://opengameart.org/content/jazz-1
-        if(!musMelJazz2) {                                    // AUTHOR Spring Spring
-            printf("Mix_LoadMUS(musMelJazz2): %s\n", Mix_GetError()); 
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/jazz.ogg")); // SOURCE https://opengameart.org/content/jazz-1
+        if(!mMusicList.back()) {                                      // AUTHOR Spring Spring
+            printf("Mix_LoadMUS(jazz.ogg): %s\n", Mix_GetError());
         }
 
-        musMelJazz3 = Mix_LoadMUS("./assets/audio/Shake and Bake.mp3"); // SOURCE https://opengameart.org/content/shake-and-bake 
-        if(!musMelJazz3) {                                              // AUTHOR Matthew Pablo
-            printf("Mix_LoadMUS(musMelJazz3): %s\n", Mix_GetError());
+        mMusicList.push_back(Mix_LoadMUS("./assets/audio/Shake and Bake.mp3")); // SOURCE https://opengameart.org/content/shake-and-bake
+        if(!mMusicList.back()) {                                                 // AUTHOR Matthew Pablo
+            printf("Mix_LoadMUS(Shake and Bake.mp3): %s\n", Mix_GetError());
         }
     #elif FULL_ASSETS
-        playlistMax = 9;
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/come-with-me-tonight-239958.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-come-with-me-tonight-239958/ 
         if(!mMusicList[0]) {                                                                       // AUTHOR Music by u_0tyyfec3hz from Pixabay
             printf("Mix_LoadMUS(./assets/audio/music/come-with-me-tonight-239958.mp3): %s\n", Mix_GetError());
@@ -108,6 +105,8 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
         }
     #endif
 
+    playlistMax = static_cast<int>(mMusicList.size());
+
     //Set Music Volume
     Mix_VolumeMusic(20);
 
@@ -129,9 +128,6 @@ ley::Audio::~Audio() {
     }
     if (musIntro)     Mix_FreeMusic(musIntro);
     if (musMainMenu)  Mix_FreeMusic(musMainMenu);
-    if (musMelJazz1)  Mix_FreeMusic(musMelJazz1);
-    if (musMelJazz2)  Mix_FreeMusic(musMelJazz2);
-    if (musMelJazz3)  Mix_FreeMusic(musMelJazz3);
 
     // Free all sound effects
     if (sfxSwoosh)        Mix_FreeChunk(sfxSwoosh);
@@ -176,140 +172,18 @@ void ley::Audio::playNext() {
 
 void ley::Audio::playPlaylist() {
 
-    // TODO can !Mix_PlayingMusic be refactored up here with !Mix_FadingMusic() it likely doesn't need to be repeated.
-    // we, can likely use a map here for this.
     if (Mix_FadingMusic() != MIX_FADING_OUT) {
-
-
-        #ifndef FULL_ASSETS
-        
-            if(playlistNumber == 0) {
-
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(musMelJazz1, 1) == -1) {
-                        printf("Mix_PlayMusic(musMelJazz1): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
+        if (!Mix_PlayingMusic() && playlistNumber < static_cast<int>(mMusicList.size())) {
+            if (Mix_PlayMusic(mMusicList[playlistNumber], 1) == -1) {
+                printf("Mix_PlayMusic(mMusicList[%d]): %s\n", playlistNumber, Mix_GetError());
+            } else {
+                playlistNumber++;
             }
-
-            if(playlistNumber == 1) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(musMelJazz2, 1) == -1) {
-                        printf("Mix_PlayMusic(musMelJazz2): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 2) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(musMelJazz3, 1) == -1) {
-                        printf("Mix_PlayMusic(musMelJazz3): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-        #elif FULL_ASSETS
-
-            if(playlistNumber == 0) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[0], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[0]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 1) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[1], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[1]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 2) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[2], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[2]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 3) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[3], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[3]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 4) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[4], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[4]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 5) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[5], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[5]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 6) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[6], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[6]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 7) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[7], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[7]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-
-            if(playlistNumber == 8) {
-                if(!Mix_PlayingMusic()) {
-                    if(Mix_PlayMusic(mMusicList[8], 1) == -1) {
-                        printf("Mix_PlayMusic(mMusicList[8]): %s\n", Mix_GetError());
-                    } else {
-                        playlistNumber++;
-                    }
-                }
-            }
-        #endif
+        }
     }
 
-    //restart from the top of the playlist
-    if(playlistNumber > (playlistMax-1)) {
+    // Restart from the top of the playlist.
+    if (playlistNumber > playlistMax - 1) {
         playlistNumber = 0;
     }
 }

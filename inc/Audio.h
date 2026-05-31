@@ -25,10 +25,6 @@ class Audio {
         Mix_Music *musIntro;
         Mix_Music *musMainMenu;
 
-        Mix_Music *musMelJazz1;
-        Mix_Music *musMelJazz2;
-        Mix_Music *musMelJazz3;
-
         std::vector<Mix_Music*> mMusicList;
 
         Mix_Chunk* sfxSwoosh;

@@ -329,7 +329,7 @@ bool OptionMenuState::onEnter() {
     mGuideGridOnTextEntry.setTextBoxValue(mGameModel->getGuideGridOnString());
     mWallKickOnTextEntry.setTextBoxValue(mGameModel->getWallKickOn() ? "on" : "off");
     mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
-    mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() == true ? "on" : "off" );
+    mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() ? "on" : "off" );
     mStartLevelTextEntry.setTextBoxValue( std::to_string(mGameModel->getStartLevel()) );
 
     initTextEntryMessages();

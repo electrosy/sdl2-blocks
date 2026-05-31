@@ -146,6 +146,7 @@ void KeyboardOptionsState::update(ley::Command command) {
             break;
             case ley::Command::UI_add :
                 mAddMapping = true;
+                [[fallthrough]];
             case ley::Command::UI_enter :
                 SDL_Log("UI_Enter!!");
                 mDirectionsFont.updateMessage(DIRECTIONS2);
@@ -194,14 +195,21 @@ void KeyboardOptionsState::reassignKeyButton(std::string keycode, bool addMappin
 
     SDL_Log("Prefix: %s, Suffix: %s", prefix.c_str(), suffix.c_str());
 
+    auto it = STRINGTOCOMMAND.find(suffix);
+    if (it == STRINGTOCOMMAND.end()) {
+        SDL_Log("reassignKeyButton: unrecognized command suffix '%s', ignoring", suffix.c_str());
+        return;
+    }
+    const ley::Command command = it->second;
+
     // Keyboard input
     if (prefix == "K") {
-        reassignKeyboard(STRINGTOCOMMAND.at(suffix), mGameModel->getLastScancode(), addMapping);
+        reassignKeyboard(command, mGameModel->getLastScancode(), addMapping);
         SDL_Log("Key reassign: %s", suffix.c_str());
     }
     // Button input
     else if (prefix == "B") {
-        reassignButton(STRINGTOCOMMAND.at(suffix), mGameModel->getLastButton(), addMapping);
+        reassignButton(command, mGameModel->getLastButton(), addMapping);
         SDL_Log("Button reassign: %s", suffix.c_str());
     }
 }
