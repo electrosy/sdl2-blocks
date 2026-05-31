@@ -10,7 +10,7 @@ Date: Feb/20/2020
 #ifndef TEXTURES_H
 #define TEXTURES_H
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <array>
 
@@ -23,7 +23,7 @@ namespace ley {
 class Textures {
 
 private:
-    std::map<std::string, SDL_Texture*> textures;
+    std::unordered_map<std::string, SDL_Texture*> textures;
     SDL_Renderer* renderer;
     unsigned int count; //number of textures we have loaded in the system.
     Textures();

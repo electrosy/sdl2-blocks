@@ -2,7 +2,7 @@
 #define LANGUAGEMODEL_H
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 namespace ley {
 
@@ -16,8 +16,8 @@ class LanguageModel {
 
 private:
     std::string mCurrentLanguage;
-    std::map<std::string, std::string>mLanguages;
-    std::map<std::string, std::string>mLanguageFields;
+    std::unordered_map<std::string, std::string>mLanguages;
+    std::unordered_map<std::string, std::string>mLanguageFields;
 
 public:
     LanguageModel();

@@ -2,6 +2,7 @@
 #include "../UI/UIMenu.h"
 #include "../UI/UI_Tile.h"
 #include "../../inc/Layout.h"
+#include <unordered_map>
 
 #ifndef BLOCKEDITORSTATE_H
 #define BLOCKEDITORSTATE_H
@@ -22,7 +23,7 @@ private:
     Layout mKeyLayout;
     std::vector<ley::Sprite> mBlockKeySprites;
     std::vector<ley::Font> mBlockKeyFonts;
-    std::map<std::string, std::pair<bool, SDL_Rect>> mBlocksKeyRects;
+    std::unordered_map<std::string, std::pair<bool, SDL_Rect>> mBlocksKeyRects;
     std::vector<std::shared_ptr<UI_Tile>> mTiles;
     std::string mPreviousOptionsValue;
     std::string mSelectedTextureChar;
