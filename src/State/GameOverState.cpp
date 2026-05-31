@@ -1,4 +1,5 @@
 #include "../../inc/State/GameOverState.h"
+#include "../../inc/LanguageModel.h"
 
 namespace ley {
 

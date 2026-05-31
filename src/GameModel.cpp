@@ -11,6 +11,10 @@ Date: Feb/15/2020
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
+#include "../inc/Audio.h"
+#include "../inc/Board.h"
+#include "../inc/HighScores.h"
+#include "../inc/LanguageModel.h"
 #include "../inc/ConfigIO.h"
 #include "../inc/Rand_int.h"
 
@@ -18,6 +22,10 @@ Date: Feb/15/2020
 /* RAII */
 ley::GameModel::GameModel()
 :
+mBoard(std::make_unique<Board>()),
+mAudioSystem(std::make_unique<ley::Audio>()),
+mHighScores(std::make_unique<ley::HighScores>()),
+mLanguageModel(std::make_unique<ley::LanguageModel>()),
 mNumLines(0),
 mStartLevel(1),
 mNumLevel(mStartLevel),
@@ -33,13 +41,13 @@ mDebugOnlyLine(false) {
     readBlockData();
     ley::Block::setBlockDataPtr(&mBlockMapData);
     initGame();
-    mHighScores.read();
+    mHighScores->read();
     loadKeyBindings();
     loadButtonBindings();
     ConfigIO::readMainConfig(this);
     readConfigOther();
     mActiveBlock.setBlockDataPtr(&mBlockMapData);
-    mLanguageModel.loadLanguage();
+    mLanguageModel->loadLanguage();
     mStartLevel = calcLevel();
 
     if(mStartLevel > mNumLevel) {
@@ -78,7 +86,7 @@ int ley::GameModel::getLines() {
 }
 
 ley::Board* ley::GameModel::getBoard() {
-    return &mBoard;
+    return mBoard.get();
 }
 
 /* Functions */
@@ -97,7 +105,7 @@ void ley::GameModel::debugResetActiveBlock() {
 
 void ley::GameModel::clearOldBlock() {
     //new board
-    mBoard.putBlock(mOldBlock);
+    mBoard->putBlock(mOldBlock);
 }
 ley::Block ley::GameModel::debugGetBlock() {
 
@@ -113,10 +121,10 @@ ley::Block ley::GameModel::getRandomBlock() {
     };
 
     if (mDebugOnlyLine)
-        return Block(mBoard.width(), 2, BlockNameType::line, false);
+        return Block(mBoard->width(), 2, BlockNameType::line, false);
 
     Rand_int rand0to6(0, 6);
-    Block a(mBoard.width(), 2, BLOCK_TYPES[rand0to6()], false);
+    Block a(mBoard->width(), 2, BLOCK_TYPES[rand0to6()], false);
 
     // Position so the bottom of the block appears at the top of the board
     a.getPosRectPtr()->y -= a.getPosRectPtr()->h;
@@ -133,11 +141,11 @@ bool ley::GameModel::newBlock() {
     mNextBlock = getRandomBlock();
 
     //check if we can put down the new active block.
-    if(!mBoard.canPut(mActiveBlock, ley::Command::up).first) {
+    if(!mBoard->canPut(mActiveBlock, ley::Command::up).first) {
         return false;
     }
     else {
-        mBoard.putBlock(mActiveBlock);
+        mBoard->putBlock(mActiveBlock);
         return true;
     }
    
@@ -149,7 +157,7 @@ bool ley::GameModel::rotateWithKick(bool r) {
     int kick = 0; //amount of wall kick to the right or left.
     // TODO think about the case where one kick doesn't work, but possibly two kicks or more would.
 
-    int boardWidth = mBoard.width();
+    int boardWidth = mBoard->width();
     const int MAX_KICK = boardWidth/2 > BLOCK_SIZE ? BLOCK_SIZE : boardWidth/2;
     std::pair<bool, std::string> result = {false, ""};
     result = rotateBlock(r);
@@ -210,7 +218,7 @@ std::pair<bool, std::string> ley::GameModel::rotateBlock(bool r) { // TODO, mayb
         clearOldBlock();
         mOldBlock.rotate(r);
         // new board
-        mBoard.putBlock(mActiveBlock);
+        mBoard->putBlock(mActiveBlock);
         result.first = true;
     }
 
@@ -222,7 +230,7 @@ std::pair<bool, std::string> ley::GameModel::canRotate(bool r) {
     
     std::pair<bool, std::string> result = {false, ""};
     if(!isPaused() && mActiveBlock.rotate(r)) {
-        result = mBoard.canPut(mActiveBlock, ley::Command::up);
+        result = mBoard->canPut(mActiveBlock, ley::Command::up);
         mActiveBlock.rotate(!r); //rotate it back, because this 
                                 //function is simply a test only
     }
@@ -234,7 +242,7 @@ void ley::GameModel::clearAndRecordLine(int lineNum) {
     ++mNumLines; //add to the score for each line
     //simply fill the rows where there are lines with the empty space.
     //new board
-    mBoard.fillLine(lineNum, std::make_pair(ley::BlockTexCode::O, false));
+    mBoard->fillLine(lineNum, std::make_pair(ley::BlockTexCode::O, false));
 
     SDL_Log("Your Score is:%s" , std::to_string(mNumLines).c_str());
 }
@@ -242,11 +250,11 @@ void ley::GameModel::shiftBoard(char start, char num) {
     //shift the board down start from the bottom right (backwards).
     char stopLine = start - num;
     for(char i = start; i >= 0; --i) {
-        for(char j = mBoard.width() - 1; j >= 0; --j) {
+        for(char j = mBoard->width() - 1; j >= 0; --j) {
             //new board
             if(i-num > -1) {
-                mBoard.at(j,i)->first = mBoard.at(j,i-num)->first;
-                mBoard.at(j,i)->second = mBoard.at(j,i-num)->second;
+                mBoard->at(j,i)->first = mBoard->at(j,i-num)->first;
+                mBoard->at(j,i)->second = mBoard->at(j,i-num)->second;
             }
         }
     }
@@ -254,7 +262,7 @@ void ley::GameModel::shiftBoard(char start, char num) {
 void ley::GameModel::fillTop(char num) {
     for(char i = 0; i < num; i++) {
         //new board
-        mBoard.fillLine(0, std::make_pair(ley::BlockTexCode::O, false));
+        mBoard->fillLine(0, std::make_pair(ley::BlockTexCode::O, false));
     }
 }
 bool ley::GameModel::newLevel() {
@@ -281,7 +289,7 @@ bool ley::GameModel::processLines(int &numLines) {
 
     std::vector<char> fullLines;
     //new board
-    fullLines = checkForLines(mBoard.height() - 1 /*board.size()-1*/);
+    fullLines = checkForLines(mBoard->height() - 1 /*board.size()-1*/);
     numLines = fullLines.size();
 
     //Cut out one line at a time incase there are gaps in between the completed lines
@@ -329,8 +337,8 @@ int ley::GameModel::firstLineAt(int start) {
     for(int i = start; i >= 0; --i) {
         fullline = false;
         //new board
-        for(int j = mBoard.width() - 1; j >= 0; --j) {
-            if(!mBoard.at(j,i)->second) {
+        for(int j = mBoard->width() - 1; j >= 0; --j) {
+            if(!mBoard->at(j,i)->second) {
                 fullline = false;
                 break;
             } 
@@ -400,7 +408,7 @@ bool ley::GameModel::moveBlock(Command d) {
     switch (d) {
         case Command::down :
             //new block
-            if (mBoard.canPut(mActiveBlock, Command::down).first) {
+            if (mBoard->canPut(mActiveBlock, Command::down).first) {
                 mActiveBlock.moveDown(); //move the active block down
                 clearOldBlock(); //Clear out the space where the active block was
                 mOldBlock.moveDown(); //Move the oldBlock(clearer) down as well so it will clear correctly next time.
@@ -408,9 +416,9 @@ bool ley::GameModel::moveBlock(Command d) {
             } 
             else { 
                 // new board
-                mBoard.setBlock(mActiveBlock);
+                mBoard->setBlock(mActiveBlock);
 
-                mAudioSystem.playSfx(ley::sfx::inplace);
+                mAudioSystem->playSfx(ley::sfx::inplace);
                 int currentLevel = mNumLevel; //Store the current level for points calculation which should happen for current level
                 int turnLines = 0; //lines cleared for this single turn.
                 if(processLines(turnLines)) {
@@ -427,7 +435,7 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::left :            
             //new board
-            if (mBoard.canPut(mActiveBlock, Command::left).first) {
+            if (mBoard->canPut(mActiveBlock, Command::left).first) {
                 mActiveBlock.moveLeft();
                 clearOldBlock();
                 mOldBlock.moveLeft();
@@ -437,7 +445,7 @@ bool ley::GameModel::moveBlock(Command d) {
 
         case Command::right :
             //new board
-            if (mBoard.canPut(mActiveBlock, Command::right).first) {
+            if (mBoard->canPut(mActiveBlock, Command::right).first) {
                 mActiveBlock.moveRight();
                 clearOldBlock();
                 mOldBlock.moveRight();
@@ -449,7 +457,7 @@ bool ley::GameModel::moveBlock(Command d) {
     }
 
     // new board
-    mBoard.putBlock(mActiveBlock);
+    mBoard->putBlock(mActiveBlock);
     
     updateSpeed();
 
@@ -461,7 +469,7 @@ void ley::GameModel::onDrop() {
 }
 /* Use the level that the player is on while the lines are made */
 void ley::GameModel::onLine(int lineCount, int level) {
-    mAudioSystem.playSfx(ley::sfx::piecesfalling);
+    mAudioSystem->playSfx(ley::sfx::piecesfalling);
 
     int linesSameTime = 1;
 
@@ -493,7 +501,7 @@ void ley::GameModel::setGameRunning(bool running) {
 
 void ley::GameModel::resetGame() {
     // new board
-    mBoard.clear();
+    mBoard->clear();
     setGameRunning(true);
     mNumLines = 0;
     mNumLevel = 1;

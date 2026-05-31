@@ -8,6 +8,8 @@ Date: Feb/14/2020
 #include <stdio.h>
 #include <unordered_map>
 #include "../../inc/gfx/Video.h"
+#include "../../inc/Board.h"
+#include "../../inc/LanguageModel.h"
 
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;

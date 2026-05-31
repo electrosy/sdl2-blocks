@@ -1,4 +1,5 @@
 #include "../../inc/State/CreditsState.h"
+#include "../../inc/LanguageModel.h"
 
 typedef ley::Textures TextureManager;
 

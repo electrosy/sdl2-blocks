@@ -14,6 +14,7 @@ Purpose: GameModel setup, configuration, and binding methods.
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
+#include "../inc/Board.h"
 #include "../inc/ConfigIO.h"
 
 void ley::GameModel::readConfigOther() {
@@ -25,9 +26,9 @@ void ley::GameModel::readConfigOther() {
 
 void ley::GameModel::resizeBoard(int width, int height) {
 
-    mBoard.setSize(width, height + BOARDSIZE_BUFFER);
-    mPts_Line = mBoard.width() * (PTS_DROP * 2);
-    mBoard.putBlock(mActiveBlock);
+    mBoard->setSize(width, height + BOARDSIZE_BUFFER);
+    mPts_Line = mBoard->width() * (PTS_DROP * 2);
+    mBoard->putBlock(mActiveBlock);
 }
 
 void ley::GameModel::loadKeyBindings() {

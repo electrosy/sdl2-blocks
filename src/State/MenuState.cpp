@@ -1,4 +1,6 @@
 #include "../../inc/State/MenuState.h"
+#include "../../inc/Audio.h"
+#include "../../inc/LanguageModel.h"
 
 typedef ley::Textures TextureManager;
 

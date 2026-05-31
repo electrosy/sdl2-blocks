@@ -1,4 +1,6 @@
 #include "../../inc/State/BlockEditorState.h"
+#include "../../inc/Audio.h"
+#include "../../inc/LanguageModel.h"
 #include "../../inc/ConfigIO.h"
  
 

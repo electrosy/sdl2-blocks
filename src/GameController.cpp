@@ -7,6 +7,8 @@ Date: Feb/18/2020
 */
 #include <SDL2/SDL.h>
 #include "../inc/GameController.h"
+#include "../inc/Audio.h"
+#include "../inc/Board.h"
 #include "../inc/Textures.h"
 #include "../inc/Block.h"
 #include "../inc/State/StateIDs.h"

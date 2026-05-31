@@ -1,4 +1,7 @@
 #include "../../inc/State/OptionMenuState.h"
+#include "../../inc/Audio.h"
+#include "../../inc/Board.h"
+#include "../../inc/LanguageModel.h"
 
 #include <fstream>
 #include <sstream> 

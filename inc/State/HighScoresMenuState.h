@@ -1,4 +1,5 @@
 #include "BaseState.h"
+#include "../HighScores.h"   // HIGHSCORES_NUM_DISPLAY, HighScores types (was transitive via GameModel.h)
 
 #include "../UI/UIMenu.h"
 #include "../UI/UIElement.h" // TODO this is also in TextEntry

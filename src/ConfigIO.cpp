@@ -13,6 +13,7 @@ Purpose: see header.
 #include <SDL2/SDL.h>
 
 #include "../inc/ConfigIO.h"
+#include "../inc/LanguageModel.h"
 #include "../inc/GameModel.h"
 // Board-size constants are now in ConfigIO.h
 

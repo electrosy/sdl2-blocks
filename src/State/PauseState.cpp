@@ -1,4 +1,6 @@
 #include "../../inc/State/PauseState.h"
+#include "../../inc/Audio.h"
+#include "../../inc/Board.h"
 
 typedef ley::Textures TextureManager;
 

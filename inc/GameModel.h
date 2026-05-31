@@ -10,15 +10,18 @@ Date: Feb/15/2020
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 
-#include "Audio.h"
 #include "Block.h"
 #include "Input.h"
-#include "HighScores.h"
-#include "../inc/Board.h"
-#include "../inc/LanguageModel.h"
 
 namespace ley {
+
+// Held by unique_ptr below; full definitions only needed in GameModel.cpp.
+class Audio;
+class Board;
+class HighScores;
+class LanguageModel;
 
 const Uint8 DROPCOOLDOWNMS_DEFAULT = 100;
 
@@ -65,7 +68,7 @@ class GameModel {
 private:
     bool mDebugOnlyLine = false;        //use only the line block for testing purposes
     bool mShowProgressBar = false;
-    Board mBoard;
+    std::unique_ptr<Board> mBoard;
     Block mActiveBlock;
     Block mOldBlock;
     Block mNextBlock;
@@ -84,14 +87,14 @@ private:
     int mKeyDelay = ley::KEY_DELAY_TIME_DEFAULT;
     int mKeyRepeat = ley::KEY_REPEAT_TIME_DEFAULT;
     GridGuide mGuideGrid = GridGuide::purple;
-    ley::Audio mAudioSystem;            //audio subsystem
+    std::unique_ptr<ley::Audio> mAudioSystem;   //audio subsystem
     ley::StateChange mStateChange = ley::StateChange::none;
     KeyBindingsType mKeyBindings;       // Keyboard bindings
     PadBindingsType mButtonBindings;    // Gamepad bindings
-    ley::HighScores mHighScores;
+    std::unique_ptr<ley::HighScores> mHighScores;
     bool mNewHighScore = false;
     int mPts_Line;
-    ley::LanguageModel mLanguageModel;
+    std::unique_ptr<ley::LanguageModel> mLanguageModel;
     bool mWallKickOn = true;
     BlockFileDataMapType mBlockMapData;
     Uint8 mDropCoolDownMs = DROPCOOLDOWNMS_DEFAULT;
@@ -145,10 +148,10 @@ public:
     bool programRunning();              //is the program running?
     void stopProgram(bool);             //sets the program to exit by setting running to false.
     bool newLevel();                    //retruns true if there is a new level to report.
-    ley::Audio* audio() { return &mAudioSystem; };
+    ley::Audio* audio() { return mAudioSystem.get(); };
     ley::StateChange currentStateChange() { return mStateChange; };
     void stateChange(ley::StateChange state) { mStateChange = state; };
-    ley::HighScores* highScores() { return &mHighScores; };
+    ley::HighScores* highScores() { return mHighScores.get(); };
     bool debugMode();                   //get current debugCommands flag
     void debugCommandsToggle();
     bool debugOnlyLine();
@@ -164,8 +167,8 @@ public:
     PadBindingsType* getButtonBindingsPtr(); //gamepad
     static std::string getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings);
     static std::string getPadInputString(std::string seperator, ley::Command command, PadBindingsType* bindings);
-    ley::LanguageModel* getLanguageModel() { return &mLanguageModel; };
-    const ley::LanguageModel* getLanguageModel() const { return &mLanguageModel; };
+    ley::LanguageModel* getLanguageModel() { return mLanguageModel.get(); };
+    const ley::LanguageModel* getLanguageModel() const { return mLanguageModel.get(); };
     int getKeyDelay() const {return mKeyDelay;};
     void setKeyDelay(int inKeyDelay) {mKeyDelay = inKeyDelay;};
     int getKeyRepeat() const {return mKeyRepeat;};
