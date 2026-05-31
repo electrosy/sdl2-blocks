@@ -104,7 +104,7 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
         return; //Assume we have one of the function pointer type elements.
     }
     
-    SDL_Texture* mainTexture = mElements.at(mCurrentIndex).getTexture();
+    SDL_Texture* mainTexture = mElements[mCurrentIndex].getTexture();
     if(!mainTexture) {
         //assume the font type element and pre render the font
         mElements[mCurrentIndex].getMainFontPtr()->preRender(v->getRenderer());
@@ -112,7 +112,7 @@ void ley::UIMenu::renderHotItem(ley::Video* v) {
 
     SDL_RenderCopy(v->getRenderer(), mainTexture, &src_rect, &dest_rect);
 
-    SDL_Texture* hotTexture = mElements.at(mCurrentIndex).getTextureHot();
+    SDL_Texture* hotTexture = mElements[mCurrentIndex].getTextureHot();
     if(!hotTexture) {
         //assume the font type element and pre render the font
         mElements[mCurrentIndex].getHotFontPtr()->preRender(v->getRenderer());
@@ -284,7 +284,8 @@ void ley::UIMenu::runCommand(ley::Command command) {
 }
 
 bool ley::UIMenu::isCurrentCellNull() {
-    return mElements.at(mCurrentIndex).getPlaceHolder();
+    if (mCurrentIndex >= static_cast<int>(mElements.size())) return false;
+    return mElements[mCurrentIndex].getPlaceHolder();
 }
 
 int ley::UIMenu::row() {
@@ -384,11 +385,11 @@ void ley::UIMenu::next(UIMenuItem item) {
 }
 
 SDL_Rect ley::UIMenu::currentDest() {
-    return mElements.at(mCurrentIndex).getDestination();
+    return mElements[mCurrentIndex].getDestination();
 }
 
 SDL_Rect ley::UIMenu::currentSrc() {
-    return mElements.at(mCurrentIndex).getSource();
+    return mElements[mCurrentIndex].getSource();
 }
 
 int ley::UIMenu::getIndex() {
@@ -402,6 +403,10 @@ void ley::UIMenu::clear() {
 }
 
 ley::UIElement* ley::UIMenu::getElementPtr(std::string label) {
-
-    return &mElements.at(getElementById(label));
+    int idx = getElementById(label);
+    if (idx < 0 || idx >= static_cast<int>(mElements.size())) {
+        SDL_Log("UIMenu::getElementPtr: label '%s' not found", label.c_str());
+        return nullptr;
+    }
+    return &mElements[idx];
 }

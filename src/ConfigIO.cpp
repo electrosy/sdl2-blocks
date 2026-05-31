@@ -79,8 +79,22 @@ void ley::ConfigIO::readKeyboardBindings(std::vector<ley::KeyBindingRow>* out) {
 
         SDL_Log((sScanCode + "," + sCommand + "," + sModifier).c_str());
         if (!sScanCode.empty() && !sCommand.empty()) {
-            out->push_back({ STRINGTOSCANCODE.at(sScanCode),
-                             { STRINGTOKMOD.at(sModifier), STRINGTOCOMMAND.at(sCommand) } });
+            auto itScan = STRINGTOSCANCODE.find(sScanCode);
+            auto itMod  = STRINGTOKMOD.find(sModifier);
+            auto itCmd  = STRINGTOCOMMAND.find(sCommand);
+            if (itScan == STRINGTOSCANCODE.end()) {
+                SDL_Log("readKeyboardBindings: unknown scancode '%s', skipping", sScanCode.c_str());
+                continue;
+            }
+            if (itMod == STRINGTOKMOD.end()) {
+                SDL_Log("readKeyboardBindings: unknown modifier '%s', skipping", sModifier.c_str());
+                continue;
+            }
+            if (itCmd == STRINGTOCOMMAND.end()) {
+                SDL_Log("readKeyboardBindings: unknown command '%s', skipping", sCommand.c_str());
+                continue;
+            }
+            out->push_back({ itScan->second, { itMod->second, itCmd->second } });
         }
     }
 }
@@ -112,7 +126,17 @@ void ley::ConfigIO::readGamepadBindings(std::vector<ley::ControllerButtonRow>* o
 
         SDL_Log((sButton + "," + sCommand).c_str());
         if (!sButton.empty() && !sCommand.empty()) {
-            out->push_back({ STRINGTOBUTTON.at(sButton), STRINGTOCOMMAND.at(sCommand) });
+            auto itBtn = STRINGTOBUTTON.find(sButton);
+            auto itCmd = STRINGTOCOMMAND.find(sCommand);
+            if (itBtn == STRINGTOBUTTON.end()) {
+                SDL_Log("readGamepadBindings: unknown button '%s', skipping", sButton.c_str());
+                continue;
+            }
+            if (itCmd == STRINGTOCOMMAND.end()) {
+                SDL_Log("readGamepadBindings: unknown command '%s', skipping", sCommand.c_str());
+                continue;
+            }
+            out->push_back({ itBtn->second, itCmd->second });
         }
     }
 }
