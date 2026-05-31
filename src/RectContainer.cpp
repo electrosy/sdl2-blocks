@@ -28,8 +28,9 @@ void ley::RectContainer::addRect(std::string id, SDL_Rect rect) {
 }
 
 SDL_Rect* ley::RectContainer::getRect(std::string id) {
-  
-  return &rects.find(id)->second;
+    auto it = rects.find(id);
+    if (it == rects.end()) { return nullptr; }
+    return &it->second;
 }
 
 void ley::RectContainer::increaseTransparency() {

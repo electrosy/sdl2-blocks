@@ -10,7 +10,7 @@ Purpose: GameModel setup, configuration, and binding methods.
 #ifdef DEBUG_LOGGING
 #include <iostream>
 #endif
-#include <set>
+#include <unordered_set>
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
@@ -103,7 +103,7 @@ void ley::GameModel::readBlockData() {
 void ley::GameModel::addCanRotateToBlockData() {
 
     // Extract single-letter block prefixes from keys like "a-0-3"
-    std::set<std::string> blockLetters;
+    std::unordered_set<std::string> blockLetters;
     for (const auto& [key, val] : mBlockMapData) {
         const auto dash = key.find('-');
         if (dash != std::string::npos && dash > 0)

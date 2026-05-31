@@ -103,7 +103,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
             return scan([&](int i, int j) -> std::pair<bool, std::string> {
                 auto* cell = at(block.x + i, block.y + j + 1);
                 bool hit = (block.y + j + 1 >= mHeight) || (cell && cell->second);
-                return hit ? std::make_pair(false, std::string{"test"})
+                return hit ? std::make_pair(false, std::string{""})
                            : std::make_pair(true,  std::string{""});
             });
 
@@ -111,7 +111,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
             return scan([&](int i, int j) -> std::pair<bool, std::string> {
                 auto* cell = at(block.x + i + 1, block.y + j);
                 bool hit = (block.x + i + 1 > mWidth - 1) || (cell && cell->second);
-                return hit ? std::make_pair(false, std::string{"test"})
+                return hit ? std::make_pair(false, std::string{""})
                            : std::make_pair(true,  std::string{""});
             });
 
@@ -119,7 +119,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
             return scan([&](int i, int j) -> std::pair<bool, std::string> {
                 auto* cell = at(block.x + i - 1, block.y + j);
                 bool hit = (block.x + i - 1 < 0) || (cell && cell->second);
-                return hit ? std::make_pair(false, std::string{"test"})
+                return hit ? std::make_pair(false, std::string{""})
                            : std::make_pair(true,  std::string{""});
             });
 

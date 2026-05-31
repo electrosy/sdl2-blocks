@@ -9,20 +9,20 @@ Date: Dec/2/2021
 #include "../inc/Audio.h"
 
 ley::Audio::Audio() :
-playlistNumber(0), playlistMax(9) {
+playlistNumber(0), playlistMax(9),
+musIntro(nullptr), musMainMenu(nullptr),
+musMelJazz1(nullptr), musMelJazz2(nullptr), musMelJazz3(nullptr),
+sfxSwoosh(nullptr), sfxPause(nullptr), sfxUnPause(nullptr),
+sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(nullptr) {
 
     SDL_InitSubSystem(SDL_INIT_AUDIO);
 
-    int flags=MIX_INIT_MP3 || MIX_INIT_OGG;
-    int initted=Mix_Init(flags);
-    
-    if(initted & (flags != flags)) {
-        printf("Mix_Init: Failed to init required mp3 support!\n");
-        printf("Mix_Init: %s\n", Mix_GetError());
-    }
+    int flags = MIX_INIT_MP3 | MIX_INIT_OGG;
+    int initted = Mix_Init(flags);
 
-    if (!(initted & MIX_INIT_MP3)) {
-        printf("SDL_mixer failed to initialize MP3 support: %s\n", Mix_GetError());
+    if ((initted & flags) != flags) {
+        printf("Mix_Init: Failed to init required MP3/OGG support!\n");
+        printf("Mix_Init: %s\n", Mix_GetError());
     }
 
     //Configure Audio system
@@ -122,27 +122,27 @@ playlistNumber(0), playlistMax(9) {
 }
 
 ley::Audio::~Audio() {
-    
+
     // Free all music tracks
     for (Mix_Music* m : mMusicList) {
-        Mix_FreeMusic(m);
+        if (m) Mix_FreeMusic(m);
     }
-    Mix_FreeMusic(musIntro);
-    Mix_FreeMusic(musMainMenu);
-    Mix_FreeMusic(musMelJazz1);
-    Mix_FreeMusic(musMelJazz2);
-    Mix_FreeMusic(musMelJazz3);
+    if (musIntro)     Mix_FreeMusic(musIntro);
+    if (musMainMenu)  Mix_FreeMusic(musMainMenu);
+    if (musMelJazz1)  Mix_FreeMusic(musMelJazz1);
+    if (musMelJazz2)  Mix_FreeMusic(musMelJazz2);
+    if (musMelJazz3)  Mix_FreeMusic(musMelJazz3);
 
     // Free all sound effects
-    Mix_FreeChunk(sfxSwoosh);
-    Mix_FreeChunk(sfxPause);
-    Mix_FreeChunk(sfxUnPause);
-    Mix_FreeChunk(sfxSqueek);
-    Mix_FreeChunk(sfxPiecesFalling);
-    Mix_FreeChunk(sfxInPlace);
-    Mix_FreeChunk(sfxFallDown);
+    if (sfxSwoosh)        Mix_FreeChunk(sfxSwoosh);
+    if (sfxPause)         Mix_FreeChunk(sfxPause);
+    if (sfxUnPause)       Mix_FreeChunk(sfxUnPause);
+    if (sfxSqueek)        Mix_FreeChunk(sfxSqueek);
+    if (sfxPiecesFalling) Mix_FreeChunk(sfxPiecesFalling);
+    if (sfxInPlace)       Mix_FreeChunk(sfxInPlace);
+    if (sfxFallDown)      Mix_FreeChunk(sfxFallDown);
 
-    while(Mix_Init(0)) {
+    while (Mix_Init(0)) {
         Mix_Quit();
     }
 
@@ -163,7 +163,7 @@ void ley::Audio::playMainMenu() {
     //always start the playlist at 0 when returning to the main menu
     playlistNumber = 0;
 
-    if(!Mix_PlayingMusic() && !Mix_FadingMusic() == MIX_FADING_OUT) {
+    if (!Mix_PlayingMusic() && Mix_FadingMusic() != MIX_FADING_OUT) {
             if(Mix_PlayMusic(musMainMenu, -1) == -1) {
                 printf("Mix_PlayMusic(musMainMenu): %s\n", Mix_GetError());
             }
@@ -178,7 +178,7 @@ void ley::Audio::playPlaylist() {
 
     // TODO can !Mix_PlayingMusic be refactored up here with !Mix_FadingMusic() it likely doesn't need to be repeated.
     // we, can likely use a map here for this.
-    if (!Mix_FadingMusic() == MIX_FADING_OUT) {
+    if (Mix_FadingMusic() != MIX_FADING_OUT) {
 
 
         #ifndef FULL_ASSETS
@@ -316,7 +316,7 @@ void ley::Audio::playPlaylist() {
 
 void ley::Audio::playSfx(ley::sfx sfx) {
     
-    Mix_Chunk* sfxToPlay;
+    Mix_Chunk* sfxToPlay = nullptr;
 
     switch (sfx) {
         case ley::sfx::swoosh :

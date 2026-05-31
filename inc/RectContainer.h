@@ -1,15 +1,14 @@
-#include "./gfx/Renderable.h"
-
-#include <map>
-
 #pragma once
+
+#include "./gfx/Renderable.h"
+#include <unordered_map>
 
 namespace ley {
 
 class RectContainer : public Renderable {
 
 private:
-    std::map<std::string,SDL_Rect> rects;
+    std::unordered_map<std::string, SDL_Rect> rects;
     unsigned char mFillBackgroundTransparency;
 
 public:
