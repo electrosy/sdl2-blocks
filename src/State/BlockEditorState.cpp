@@ -467,7 +467,12 @@ void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, s
     for(std::string stringRow : (*stringDataPtr)) {
         int col = 0;
         for(char chars : stringRow) {
-           (*blockDataPtr)[row][col] = CHAR_TEXCODE.at({chars});
+            auto it = CHAR_TEXCODE.find({chars});
+            if(it != CHAR_TEXCODE.end()) {
+                (*blockDataPtr)[row][col] = it->second;
+            } else {
+                SDL_Log("createBlockDataFromStrings: unknown char '%c' at [%d][%d], skipping", chars, row, col);
+            }
             ++col;
         }
         ++row;

@@ -49,7 +49,8 @@ void ley::Board::debugOutput(bool inLayer) {
             }
             else {
 
-                s += TEXCODE_CHAR.find(at(j,i)->first)->second + ".";
+                auto texIt = TEXCODE_CHAR.find(at(j,i)->first);
+                s += (texIt != TEXCODE_CHAR.end() ? texIt->second : "?") + ".";
             }            
         }
         SDL_Log(s.c_str());

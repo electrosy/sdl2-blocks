@@ -14,9 +14,6 @@ ley::Textures::Textures() {
 
 ley::Textures::~Textures() {
     unloadTextures();
-    
-    delete instance;
-    instance = nullptr;
 }
 
 void ley::Textures::unloadTextures() {
@@ -34,13 +31,12 @@ void ley::Textures::setRenderer(SDL_Renderer* r) {
 }
 
 SDL_Texture* ley::Textures::getTexture(std::string s) {
-    
-    if(textures.find(s) == textures.end()) {
+    auto it = textures.find(s);
+    if(it == textures.end()) {
         SDL_Log("Can not find texture! Aborting!");
         return nullptr;
     }
-
-    return textures.find(s)->second;
+    return it->second;
 }
 
 void ley::Textures::loadTexture(const char* p, std::string texturename) {

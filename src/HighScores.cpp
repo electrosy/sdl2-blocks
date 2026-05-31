@@ -88,7 +88,7 @@ void ley::HighScores::renderScoreFonts(ley::RenderablesPtr* re, std::vector<ley:
       }
     }
 
-    if(!placeholderadded && placeholderrow > 0) {
+    if(!placeholderadded && placeholderrow > 0 && counter < HIGHSCORES_NUM_DISPLAY) {
       score = std::to_string(placeholder.first);
       name = std::get<0>(placeholder.second);
       level = std::to_string(std::get<1>(placeholder.second));
