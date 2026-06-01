@@ -38,12 +38,12 @@ public:
 
     void write();
     int read();
-    void push(unsigned long, std::string, int, int);
+    void push(unsigned long, const std::string&, int, int);
     void renderScoreFonts(ley::RenderablesPtr*, std::vector<ley::Font*>, HighScoresRow placeholder, int placeholderrow);
     void setClean(bool c);
-    bool isClean();
-    int isNewHigh(int n);
-    void setHighScore(int score, std::string name, int lines, int level);
+    bool isClean() const;
+    int isNewHigh(int n) const;
+    void setHighScore(int score, const std::string& name, int lines, int level);
 };
 }
 #endif

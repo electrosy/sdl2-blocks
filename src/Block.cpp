@@ -126,7 +126,7 @@ void ley::Block::moveRight() {
     mRect.x = mRect.x + 1;
 }
 
-ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned int y /* height */) {
+ley::BlockTexCode ley::Block::renderPart(unsigned int x /* width */, unsigned int y /* height */) const {
     return mBlockData[y][x];
 }
 
@@ -179,7 +179,7 @@ void ley::Block::setBlockDataPtr(BlockFileDataMapType* blockDataPtr) {
     mBlockDataPtr = blockDataPtr;
 }
 
-void ley::Block::loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr) {
+void ley::Block::loadSingleOrientation(const std::string& orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr) {
 
     auto blockTexCodeFromString = [](char str_code) -> ley::BlockTexCode {
         static const std::unordered_map<char, ley::BlockTexCode> strTexCodeMap {
@@ -239,7 +239,7 @@ int ley::Block::rightEdgeOfOrientation(BlockDataType* blockData) {
 }
 
 
-bool ley::Block::hasMoreThanOneOrientation(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr) {
+bool ley::Block::hasMoreThanOneOrientation(const std::string& blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr) {
 
     return (*inBlockDataFileMapPtr)[blockCharName + "*"] == "yes" ? true : false;
 }

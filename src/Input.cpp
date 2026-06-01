@@ -77,7 +77,7 @@ void ley::Input::pollEvents(
     const std::function<void(ley::Command c)>& function,
     int inKeyDelay,
     int inKeyRepeat,
-    std::string context,
+    const std::string& context,
     SDL_Scancode* lastScancode,
     const std::function<void(bool inKeyDown)>& functionKeyDown,
     const std::function<void(bool inKeyDown)>& functionButtonPress,

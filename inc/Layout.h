@@ -29,8 +29,8 @@ public:
     void setLayout(SDL_Rect startPoint, Uint16 horizontalSpacing, Uint16 verticalSpacing, Uint16 rows, Uint16 columns);
     void setMajorGrid(Uint16 size, Uint16 majorHorizontalSpacing, Uint16 majorVerticalSpacing);
     void resetIndex();
-    SDL_Point getSize() { return {mColumns, mRows};};
-    Uint16 getMajorGridSize() { return mMajorGridSize;};
+    SDL_Point getSize() const { return {mColumns, mRows}; };
+    Uint16 getMajorGridSize() const { return mMajorGridSize; };
 };
 
 }

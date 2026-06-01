@@ -62,7 +62,7 @@ void ley::TextEntry::update() {
     }
 }
 
-void ley::TextEntry::processInput(std::string s) {
+void ley::TextEntry::processInput(const std::string& s) {
 
     if(s == "backspace") {
         value.updateMessage(value.getMessage().substr(0, value.getMessage().size()-1));
@@ -75,7 +75,7 @@ std::string ley::TextEntry::getTextBoxValue() {
     return value.getMessage();
 }
 
-void ley::TextEntry::setTextBoxValue(std::string s) {
+void ley::TextEntry::setTextBoxValue(const std::string& s) {
     value.updateMessage(s);
 }
 
@@ -194,14 +194,14 @@ std::string ley::TextEntry::getHelpMessage() {
     }
 }
 
-void ley::TextEntry::setHelpMessages(std::string focusHelp, std::string nonFocusHelp)  { 
+void ley::TextEntry::setHelpMessages(const std::string& focusHelp, const std::string& nonFocusHelp)  { 
     
     mFocusHelp = focusHelp;
     mNonFocusHelp = nonFocusHelp;
     mHelpFont.updateMessage(getHelpMessage());
 }
 
-void ley::TextEntry::setErrorMessage(std::string errorMessage) {
+void ley::TextEntry::setErrorMessage(const std::string& errorMessage) {
 
     mErrorFont.updateMessage(errorMessage);
 }
@@ -219,7 +219,7 @@ void ley::TextEntry::handleFocusChange(UIWidget** activeUIElement, std::string* 
     toggleFocus();
 }
 
-bool ley::TextEntry::commit(std::string previousValue) {
+bool ley::TextEntry::commit(const std::string& previousValue) {
 
     bool regexMatched;
     if (std::regex_match(getTextBoxValue().c_str(), std::regex(getRegEx()) )) {

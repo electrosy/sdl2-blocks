@@ -17,7 +17,7 @@ void ley::BaseState::render() {
 }
 
 bool ley::BaseState::onExit() {
-    SDL_Log(("Exiting " + stateIDName(getStateID())).c_str());
+    SDL_Log("%s", ("Exiting " + stateIDName(getStateID())).c_str());
     return true;
 }
 

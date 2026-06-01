@@ -43,7 +43,7 @@ void ley::UI_Tile::update() {
     
 }
 
-void ley::UI_Tile::processInput(std::string s) {
+void ley::UI_Tile::processInput(const std::string& s) {
 
     if(s == "backspace") {
         mCurrentTextureName = "O";
@@ -61,7 +61,7 @@ std::string ley::UI_Tile::getTextBoxValue() {
     return value.getMessage();
 }
 
-void ley::UI_Tile::setTextBoxValue(std::string s) {
+void ley::UI_Tile::setTextBoxValue(const std::string& s) {
     value.updateMessage(s);
 }
 
@@ -151,7 +151,7 @@ std::string ley::UI_Tile::getHelpMessage() {
 */
 
 /*
-void ley::UI_Tile::setHelpMessages(std::string focusHelp, std::string nonFocusHelp)  { 
+void ley::UI_Tile::setHelpMessages(const std::string& focusHelp, const std::string& nonFocusHelp)  { 
     
     mFocusHelp = focusHelp;
     mNonFocusHelp = nonFocusHelp;    
@@ -176,6 +176,6 @@ void ley::UI_Tile::commit() {
     }
 }
 
-void  ley::UI_Tile::setTextureName(std::string name) {
+void  ley::UI_Tile::setTextureName(const std::string& name) {
     mCurrentTextureName = name;
 }

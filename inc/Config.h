@@ -27,8 +27,8 @@ private:
 
 public:
     void read();
-    int height() { return mBoardHeight; };
-    int width() { return mBoardWidth; };
+    int height() const { return mBoardHeight; };
+    int width()  const { return mBoardWidth; };
 };
 
 }

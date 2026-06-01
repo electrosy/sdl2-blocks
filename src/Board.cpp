@@ -53,7 +53,7 @@ void ley::Board::debugOutput(bool inLayer) {
                 s += (texIt != TEXCODE_CHAR.end() ? texIt->second : "?") + ".";
             }            
         }
-        SDL_Log(s.c_str());
+        SDL_Log("%s", s.c_str());
     }
 }
 
@@ -83,7 +83,7 @@ void ley::Board::clear() {
     setSize(mWidth, mHeight);
 }
 
-std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
+std::pair<bool, std::string> ley::Board::canPut(const Block& b, Command d) {
 
     const SDL_Rect block = b.getRect();
 
@@ -126,7 +126,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
 
         case Command::up: // rotation — three distinct collision reasons
             return scan([&](int i, int j) -> std::pair<bool, std::string> {
-                bool boardBottom = block.y + j > mHeight - 1 || block.y + j > mHeight;
+                bool boardBottom = block.y + j > mHeight - 1;
                 bool boardSide   = block.x + i > mWidth  - 1 || block.x + i < 0;
                 auto* cell       = at(block.x + i, block.y + j);
                 bool blockHit    = cell && cell->second;
@@ -143,7 +143,7 @@ std::pair<bool, std::string> ley::Board::canPut(Block& b, Command d) {
     }
     return {true, ""};
 }
-void ley::Board::putBlock(Block& b) {
+void ley::Board::putBlock(const Block& b) {
     SDL_Rect rect = b.getRect();
     for(int i = 0; i < rect.w; ++i) {
         for(int j = 0; j < rect.h; ++j) {
@@ -155,7 +155,7 @@ void ley::Board::putBlock(Block& b) {
     }
 }
 
-void ley::Board::setBlock(Block& b) {
+void ley::Board::setBlock(const Block& b) {
     SDL_Rect blockRect = b.getRect();
     for(auto i=0; i<blockRect.w; ++i) {
         for(auto j=0; j<blockRect.h; ++j) {

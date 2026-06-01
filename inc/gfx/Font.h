@@ -38,7 +38,7 @@ public:
     void cleanUp();
     Font& operator=(const Font& other); //copy assignment
     void init(int size);
-    void updateMessage(std::string s);
+    void updateMessage(const std::string& s);
     std::string getMessage();
     std::string* getMessagePtr();
     SDL_Texture* getTexturePtr();
@@ -52,7 +52,7 @@ public:
     std::pair<int, int> size();
     void setColor(SDL_Color c);
     void setFontSize(int size);
-    int getFontSize() { return mPointSize; };
+    int getFontSize() const { return mPointSize; };
     // TODO these position methods should probably go into renderable.
     void center();
     void bottom(int screenHeight, int linesFromBottom); //move the font to the bottom of the screen

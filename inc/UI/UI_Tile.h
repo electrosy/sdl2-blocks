@@ -39,23 +39,23 @@ public:
     UI_Tile();
     void render(SDL_Renderer* r, bool d) override;
     void update() override; //handles update part of the lifecycle.
-    void processInput(std::string s) override;
+    void processInput(const std::string& s) override;
     void toggleFocus() override;
-    bool hasFocus() override {return mHasFocus;};
+    bool hasFocus() const override {return mHasFocus;};
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
-    std::string getRegEx() override { return mRegEx; };
+    std::string getRegEx() const override { return mRegEx; };
     void setPos(SDL_Point p) override;
     void setCharSound(const std::function<void()> &func) override;
     void setBackspaceSound(const std::function<void()> &func) override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
-    void setRegEx(std::string regEx) override { mRegEx = regEx; };
+    void setRegEx(const std::string& regEx) override { mRegEx = regEx; };
 
     void commit();
     std::string* getPreviousValuePtr() {return &mPreviousValue;};
-    std::string getCurrentTextureName()  { return mCurrentTextureName; };
-    void setTextureName(std::string name);
+    std::string getCurrentTextureName() const { return mCurrentTextureName; };
+    void setTextureName(const std::string& name);
 
 };
 

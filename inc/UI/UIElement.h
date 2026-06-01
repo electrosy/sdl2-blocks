@@ -41,7 +41,7 @@ protected:
    
 public:
     UIElement();
-    UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size);
+    UIElement(const std::string& l, SDL_Rect sr, SDL_Rect dr, const std::string& message, int size);
     UIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     ~UIElement();
 
@@ -54,7 +54,7 @@ public:
     ley::Font* getBaseFontPtr() { return &mBaseFont; };
     ley::Font* getMainFontPtr() { return &mMainFont; };
     ley::Font* getHotFontPtr() { return &mHotFont; };
-    void setMessage(std::string message);
+    void setMessage(const std::string& message);
     void setFontSize(int size);
     void preRender(SDL_Renderer* r);
     std::function<void()> getToggleFunction() {return mUIToggleFunc;};
@@ -62,7 +62,7 @@ public:
     std::function<void()> getEnterFunction() {return mCommitUI;};
     void setBaseColor(SDL_Color inColor);
     void setMainColor(SDL_Color inColor);
-    bool getPlaceHolder() { return mPlaceHolder; };
+    bool getPlaceHolder() const { return mPlaceHolder; };
     
 };
 

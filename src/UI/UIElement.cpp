@@ -18,7 +18,7 @@ ley::UIElement::UIElement(const std::function<void()> &toggle, const std::functi
     destination = {-1,-1,-1,-1};
 }
 
-ley::UIElement::UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message, int size)
+ley::UIElement::UIElement(const std::string& l, SDL_Rect sr, SDL_Rect dr, const std::string& message, int size)
 : 
 label(l), 
 mSource(sr), 
@@ -80,7 +80,7 @@ void ley::UIElement::preRender(SDL_Renderer* r) {
 
 }
 
-void ley::UIElement::setMessage(std::string message) {
+void ley::UIElement::setMessage(const std::string& message) {
     
     mMainFont.updateMessage(message);
     mBaseFont.updateMessage(message);

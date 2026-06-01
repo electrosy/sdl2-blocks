@@ -57,7 +57,7 @@ ley::PadBindingsType* ley::GameModel::getButtonBindingsPtr() {
     return &mButtonBindings;
 }
 
-std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings) {
+std::string ley::GameModel::getKeyInputString(const std::string& seperator, ley::Command command, KeyBindingsType* bindings) {
 
     std::string output = "";
     for(const auto& kv : *bindings) {
@@ -70,7 +70,7 @@ std::string ley::GameModel::getKeyInputString(std::string seperator, ley::Comman
     return output;
 }
 
-std::string ley::GameModel::getPadInputString(std::string seperator, ley::Command command, PadBindingsType* bindings) {
+std::string ley::GameModel::getPadInputString(const std::string& seperator, ley::Command command, PadBindingsType* bindings) {
 
     std::string output = "";
     for(const auto& kv : *bindings) {

@@ -7,7 +7,7 @@ std::string GameState::mCurrentInputContext = "";
 
 bool GameState::onPause() {
     std::string pause = "Pausing " + stateIDName(getStateID());
-    SDL_Log(pause.c_str());
+    SDL_Log("%s", pause.c_str());
 
     return true;
 }

@@ -23,11 +23,11 @@ void ley::RectContainer::render(SDL_Renderer* r, bool d) {
     }
 }
 
-void ley::RectContainer::addRect(std::string id, SDL_Rect rect) {
+void ley::RectContainer::addRect(const std::string& id, SDL_Rect rect) {
   rects.insert(std::make_pair(id,rect));
 }
 
-SDL_Rect* ley::RectContainer::getRect(std::string id) {
+SDL_Rect* ley::RectContainer::getRect(const std::string& id) {
     auto it = rects.find(id);
     if (it == rects.end()) { return nullptr; }
     return &it->second;

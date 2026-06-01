@@ -32,7 +32,7 @@ private:
     std::vector<ley::Font> mValueFonts;
     ley::UIMenu mMainUI;
     int fontWidth(ley::Font* inFont);
-    void reassignKeyButton(std::string keycode, bool addMapping);
+    void reassignKeyButton(const std::string& keycode, bool addMapping);
     void reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping);
     void reassignButton(ley::Command command, SDL_GameControllerButton button, bool addMapping);
     std::vector<std::pair<SDL_Scancode, std::string>> findKeysByValue(const KeyBindingsType* bindings, const std::pair<SDL_Keymod, ley::Command>& targetValue);

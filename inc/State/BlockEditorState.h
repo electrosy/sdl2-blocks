@@ -55,7 +55,7 @@ public:
 
     void loadFromBlockDataPtr(BlockFileDataMapType* blockDataMapPtr, BlockDataType* blockDataTypePtr);
     void WriteTileDataToFile();
-    void GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr);
+    void GetMajorTileRows(int inXMajor, int inYMajor, const std::string& prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr);
     
 };
 

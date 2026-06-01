@@ -148,8 +148,6 @@ bool ley::GameModel::newBlock() {
         mBoard->putBlock(mActiveBlock);
         return true;
     }
-   
-    return false;
 }
 
 bool ley::GameModel::rotateWithKick(bool r) {

@@ -142,16 +142,16 @@ public:
     void setGameRunning(bool running);
     ley::Block getNextBlock();
     void resetGame();
-    double speed() { return mCurrentSpeed; };
+    double speed() const { return mCurrentSpeed; };
     void pauseGame(bool);
     bool isPaused();
     bool programRunning();              //is the program running?
     void stopProgram(bool);             //sets the program to exit by setting running to false.
     bool newLevel();                    //retruns true if there is a new level to report.
-    ley::Audio* audio() { return mAudioSystem.get(); };
-    ley::StateChange currentStateChange() { return mStateChange; };
+    ley::Audio* audio() const { return mAudioSystem.get(); };
+    ley::StateChange currentStateChange() const { return mStateChange; };
     void stateChange(ley::StateChange state) { mStateChange = state; };
-    ley::HighScores* highScores() { return mHighScores.get(); };
+    ley::HighScores* highScores() const { return mHighScores.get(); };
     bool debugMode();                   //get current debugCommands flag
     void debugCommandsToggle();
     bool debugOnlyLine();
@@ -161,12 +161,12 @@ public:
     void newHighScore(bool flag);
     bool newHighScore();
     void quickDrop();
-    int comboCount() { return mComboCount;};
+    int comboCount() const { return mComboCount; };
     void resizeBoard(int width, int height);
     KeyBindingsType* getKeyBindingsPtr(); //keyboard
     PadBindingsType* getButtonBindingsPtr(); //gamepad
-    static std::string getKeyInputString(std::string seperator, ley::Command command, KeyBindingsType* bindings);
-    static std::string getPadInputString(std::string seperator, ley::Command command, PadBindingsType* bindings);
+    static std::string getKeyInputString(const std::string& seperator, ley::Command command, KeyBindingsType* bindings);
+    static std::string getPadInputString(const std::string& seperator, ley::Command command, PadBindingsType* bindings);
     ley::LanguageModel* getLanguageModel() { return mLanguageModel.get(); };
     const ley::LanguageModel* getLanguageModel() const { return mLanguageModel.get(); };
     int getKeyDelay() const {return mKeyDelay;};
@@ -179,14 +179,14 @@ public:
     std::string getGuideGridOnString() const { return gridGuideToString(mGuideGrid); };
     void setGuideGridOn(const std::string& inOn);
     bool rotateWithKick(bool r);
-    ley::Block getActiveBlock() { return mActiveBlock; };
+    ley::Block getActiveBlock() const { return mActiveBlock; };
     bool getWallKickOn() const { return mWallKickOn; };
     void setWallKickOn(bool on);
     BlockFileDataMapType* getFileDataPtr();
     Uint8 getDropCoolDown() const { return mDropCoolDownMs; };
     void setDropCoolDown(Uint8 dropCoolDown) { mDropCoolDownMs = dropCoolDown; };
-    SDL_Scancode getLastScancode() { return mLastScancode; };
-    SDL_GameControllerButton getLastButton() { return mLastButtoncode; };
+    SDL_Scancode getLastScancode() const { return mLastScancode; };
+    SDL_GameControllerButton getLastButton() const { return mLastButtoncode; };
     void setLastScancode(SDL_Scancode sdlScancode) { mLastScancode = sdlScancode; };
     void setLastButton(SDL_GameControllerButton sdlbuttoncode) { mLastButtoncode = sdlbuttoncode; };
     bool waitForKeyDown(); //returns true when a new keydown event has been made but the message hasen't been picked up yet.

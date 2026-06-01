@@ -36,7 +36,7 @@ public:
     int getElapsed();
     bool hasExpired();
     float getSpeed();
-    bool isPaused();
+    bool isPaused() const;
     void pause(bool);
     /* Functions */
     void runFrame(bool = true, double = 0);

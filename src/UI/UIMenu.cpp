@@ -32,13 +32,13 @@ void ley::UIMenu::pushPlaceHolder() {
     mElements.push_back({});
 }
 
-void ley::UIMenu::pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r) {
+void ley::UIMenu::pushFont(const std::string& elementid, ley::Font* inFont, SDL_Renderer* r) {
     
     SDL_Point pos = inFont->getPos();
     pushFont(elementid, pos, inFont->getMessage(), r, inFont->getFontSize());
 }
 
-void ley::UIMenu::pushFont(std::string label, SDL_Point pos, const std::string s, SDL_Renderer* r, int size) {
+void ley::UIMenu::pushFont(const std::string& label, SDL_Point pos, const std::string& s, SDL_Renderer* r, int size) {
 
     UIElement temp(label, {0,0,0,0}, {pos.x, pos.y, 0, 0}, s, size); // UIElement(std::string l, SDL_Rect sr, SDL_Rect dr, std::string message);
     temp.preRender(r); // preRender calls setDimensions() which fills in w/h from the texture
@@ -52,7 +52,7 @@ void ley::UIMenu::pushUIElement(const std::function<void()> &toggle, const std::
     mElements.push_back(temp);
 }
 
-int ley::UIMenu::count() {
+int ley::UIMenu::count() const {
     return mElements.size();
 }
 
@@ -60,7 +60,7 @@ ley::UIElement* ley::UIMenu::getCurrentElementPtr() {
     return &mElements[mCurrentIndex];
 }
 
-int ley::UIMenu::getElementById(std::string label) {
+int ley::UIMenu::getElementById(const std::string& label) {
     auto it = mLabelIndex.find(label);
     return (it != mLabelIndex.end()) ? it->second : -1;
 }
@@ -71,7 +71,7 @@ void ley::UIMenu::addRenderables(ley::RenderablesPtr r) {
 void ley::UIMenu::renderBaseMenuItems(ley::Video* v) {
     
     //Display all the base menu elements
-    for(int i = 0; i < mElements.size() && !mElements.empty(); ++i) {
+    for(int i = 0; i < static_cast<int>(mElements.size()); ++i) {
         SDL_Rect source = mElements[i].getSource();
         SDL_Rect destination = mElements[i].getDestination();
         SDL_Texture* baseTexture = mElements[i].getBase();
@@ -191,7 +191,7 @@ int ley::UIMenu::maxValidRow() {
         maxValidIndex = mCurrentIndex;
     }
 
-    for(int i = 0; i < mElements.size(); ++i) {
+    for(int i = 0; i < static_cast<int>(mElements.size()); ++i) {
         next(ley::UIMenuItem::row);
         if(!isCurrentCellNull()) {
             maxValidIndex = mCurrentIndex;
@@ -402,7 +402,7 @@ void ley::UIMenu::clear() {
     mCurrentIndex = 0;
 }
 
-ley::UIElement* ley::UIMenu::getElementPtr(std::string label) {
+ley::UIElement* ley::UIMenu::getElementPtr(const std::string& label) {
     int idx = getElementById(label);
     if (idx < 0 || idx >= static_cast<int>(mElements.size())) {
         SDL_Log("UIMenu::getElementPtr: label '%s' not found", label.c_str());

@@ -78,7 +78,7 @@ void ley::ConfigIO::readKeyboardBindings(std::vector<ley::KeyBindingRow>* out) {
         std::getline(ss, sModifier,  ',');
         std::getline(ss, sCommand);
 
-        SDL_Log((sScanCode + "," + sCommand + "," + sModifier).c_str());
+        SDL_Log("%s", (sScanCode + "," + sCommand + "," + sModifier).c_str());
         if (!sScanCode.empty() && !sCommand.empty()) {
             auto itScan = STRINGTOSCANCODE.find(sScanCode);
             auto itMod  = STRINGTOKMOD.find(sModifier);
@@ -105,9 +105,18 @@ void ley::ConfigIO::writeKeyboardBindings(const ley::KeyBindingsType& bindings) 
     std::ofstream f("keyboard-config.csv");
     for (const auto& binding : bindings) {
         if (binding.first.second != "play") continue;
-        f << SCANCODETOSTRING.at(binding.first.first)  << ','
-          << KMODTOSTRING.at(binding.second.first)      << ','
-          << COMMANDTOSTRING.at(binding.second.second)  << '\n';
+
+        auto itScan = SCANCODETOSTRING.find(binding.first.first);
+        auto itMod  = KMODTOSTRING.find(binding.second.first);
+        auto itCmd  = COMMANDTOSTRING.find(binding.second.second);
+        if (itScan == SCANCODETOSTRING.end() ||
+            itMod  == KMODTOSTRING.end()      ||
+            itCmd  == COMMANDTOSTRING.end()) {
+            SDL_Log("writeKeyboardBindings: unserializable binding (scancode %d), skipping",
+                    static_cast<int>(binding.first.first));
+            continue;
+        }
+        f << itScan->second << ',' << itMod->second << ',' << itCmd->second << '\n';
     }
 }
 
@@ -125,7 +134,7 @@ void ley::ConfigIO::readGamepadBindings(std::vector<ley::ControllerButtonRow>* o
         std::getline(ss, sButton,  ',');
         std::getline(ss, sCommand, ',');
 
-        SDL_Log((sButton + "," + sCommand).c_str());
+        SDL_Log("%s", (sButton + "," + sCommand).c_str());
         if (!sButton.empty() && !sCommand.empty()) {
             auto itBtn = STRINGTOBUTTON.find(sButton);
             auto itCmd = STRINGTOCOMMAND.find(sCommand);
@@ -147,8 +156,15 @@ void ley::ConfigIO::writeGamepadBindings(const ley::PadBindingsType& bindings) {
     std::ofstream f("gamepad-config.csv");
     for (const auto& binding : bindings) {
         if (binding.first.second != "play") continue;
-        f << BUTTONTOSTRING.at(binding.first.first)  << ','
-          << COMMANDTOSTRING.at(binding.second)       << '\n';
+
+        auto itBtn = BUTTONTOSTRING.find(binding.first.first);
+        auto itCmd = COMMANDTOSTRING.find(binding.second);
+        if (itBtn == BUTTONTOSTRING.end() || itCmd == COMMANDTOSTRING.end()) {
+            SDL_Log("writeGamepadBindings: unserializable binding (button %d), skipping",
+                    static_cast<int>(binding.first.first));
+            continue;
+        }
+        f << itBtn->second << ',' << itCmd->second << '\n';
     }
 }
 

@@ -15,7 +15,7 @@ ley::Timer::Timer()
   mSDLTimerReady(true) {
 
     if(SDL_Init(SDL_INIT_TIMER) < 0) {
-        printf("Can't Initialize SDL2 Timer");
+        SDL_Log("Can't Initialize SDL2 Timer");
         mSDLTimerReady = false;
     }
 }
@@ -27,7 +27,7 @@ ley::Timer::Timer(int ms)
   mSDLTimerReady(true) {
 
     if(SDL_Init(SDL_INIT_TIMER) < 0) {
-        printf("Can't Initialize SDL2 Timer");
+        SDL_Log("Can't Initialize SDL2 Timer");
         mSDLTimerReady = false;
     }
 }
@@ -121,7 +121,7 @@ float ley::Timer::getSpeed() {
     return mMili;
 }
 
-bool ley::Timer::isPaused() {
+bool ley::Timer::isPaused() const {
     return !mActive;
 }
 

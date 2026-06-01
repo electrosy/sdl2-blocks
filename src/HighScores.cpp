@@ -27,7 +27,7 @@ void ley::HighScores::setClean(bool c) {
   clean = c;
 }
 
-bool ley::HighScores::isClean() {
+bool ley::HighScores::isClean() const {
   return clean;
 }
 
@@ -98,7 +98,7 @@ void ley::HighScores::renderScoreFonts(ley::RenderablesPtr* re, std::vector<ley:
     }
 }
 
-void ley::HighScores::push(unsigned long score, std::string name, int level, int lines) {
+void ley::HighScores::push(unsigned long score, const std::string& name, int level, int lines) {
   highscoresdata.emplace(score, std::make_tuple(name,lines,level));
 }
 
@@ -151,7 +151,7 @@ int ley::HighScores::read() {
     return 0;
 }
 
-int ley::HighScores::isNewHigh(int n) {
+int ley::HighScores::isNewHigh(int n) const {
 
   auto it = highscoresdata.rbegin();
   auto i = 0;
@@ -171,7 +171,7 @@ int ley::HighScores::isNewHigh(int n) {
   return i <= HIGHSCORES_NUM_DISPLAY-1 ? i : 0;
 }
 
-void ley::HighScores::setHighScore(int score, std::string name, int level, int lines) {
+void ley::HighScores::setHighScore(int score, const std::string& name, int level, int lines) {
     //push on the new high score
     push(score, name, level, lines);
     write();

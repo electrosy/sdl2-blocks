@@ -5,7 +5,6 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/14/2020
 */
-#include <stdio.h>
 #include <unordered_map>
 #include "../../inc/gfx/Video.h"
 #include "../../inc/Board.h"
@@ -88,7 +87,7 @@ void ley::Video::createWindow() {
 
         SDL_StopTextInput();
     } else {
-        printf("Can't Initialize SDL2 Video");
+        SDL_Log("Can't Initialize SDL2 Video");
         video_ready = 0;
     }
 }
@@ -98,7 +97,7 @@ void ley::Video::createRenderer() {
     if(window != nullptr) { 
         renderer = SDL_CreateRenderer(window, -1, 0 /*SDL_RENDERER_PRESENTVSYNC*/);
     } else {
-        printf("Can't Initialize Renderer");
+        SDL_Log("Can't Initialize Renderer");
         video_ready = false;
     }
  

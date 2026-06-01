@@ -50,9 +50,9 @@ public:
     /* UIWidget overrides */
     void render(SDL_Renderer* r, bool d) override;
     void update() override; //handles update part of the lifecycle.
-    void processInput(std::string s) override;
+    void processInput(const std::string& s) override;
     void toggleFocus() override;
-    bool hasFocus() override {return mHasFocus;};
+    bool hasFocus() const override {return mHasFocus;};
     void setPos(SDL_Point p) override;
     void onKeyDown(ley::Character c) override;
     void onTextInput(const char* cstr) override;
@@ -61,21 +61,21 @@ public:
     void setBackspaceSound(const std::function<void()> &func) override;
     void setWidth(int width, int underlineWidth, int maxCharLength) override;
     ley::Font* getHelpFontPtr() { return &mHelpFont; };
-    std::string getRegEx() override { return mRegEx; };
-    void setRegEx(std::string regEx) override { mRegEx = regEx; };
+    std::string getRegEx() const override { return mRegEx; };
+    void setRegEx(const std::string& regEx) override { mRegEx = regEx; };
     void handleFocusChange(UIWidget** activeUIElement, std::string* previousValue) override;
     /* Functions */
-    bool commit(std::string previousValue); // enter this value into the system
+    bool commit(const std::string& previousValue); // enter this value into the system
     void setWidthByChar(int maxCharLength);
     /* Accessors */
     std::string getTextBoxValue();
-    void setTextBoxValue(std::string s);
+    void setTextBoxValue(const std::string& s);
     std::string* getTextBoxField();
     std::string getHelpMessage();
-    void setHelpMessages(std::string focusHelp, std::string nonFocusHelp);
+    void setHelpMessages(const std::string& focusHelp, const std::string& nonFocusHelp);
     ley::Timer* getErrorTimerPtr() { return &mErrorTimer; };
     ley::Font* getErrorFontPtr() { return &mErrorFont; };
-    void setErrorMessage(std::string errorMessage);
+    void setErrorMessage(const std::string& errorMessage);
 };
 
 }

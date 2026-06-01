@@ -20,25 +20,25 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
     int initted = Mix_Init(flags);
 
     if ((initted & flags) != flags) {
-        printf("Mix_Init: Failed to init required MP3/OGG support!\n");
-        printf("Mix_Init: %s\n", Mix_GetError());
+        SDL_Log("Mix_Init: Failed to init required MP3/OGG support!");
+        SDL_Log("Mix_Init: %s", Mix_GetError());
     }
 
     //Configure Audio system
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)==-1) {
-        printf("Mix_OpenAudio: %s\n", Mix_GetError());
+        SDL_Log("Mix_OpenAudio: %s", Mix_GetError());
         exit(2);
     }
     
     //Load music files
     musIntro = Mix_LoadMUS("./assets/audio/MovieTheaterIntro.mp3"); // SOURCE https://opengameart.org/content/movie-theater-intro
     if(!musIntro) {                                                 // AUTHOR Matthew Pablo
-        printf("Mix_LoadMUS(musIntro): %s\n", Mix_GetError());
+        SDL_Log("Mix_LoadMUS(musIntro): %s", Mix_GetError());
     }
 
     musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi__mixed.mp3"); // SOURCE https://opengameart.org/content/ooame
     if(!musMainMenu) {                                                       // AUTHOR TAD
-        printf("Mix_LoadMUS(musMainMenu): %s\n", Mix_GetError());
+        SDL_Log("Mix_LoadMUS(musMainMenu): %s", Mix_GetError());
     }
 
 
@@ -46,62 +46,62 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
     #ifndef FULL_ASSETS
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/wild_jazz.mp3")); // SOURCE https://opengameart.org/content/wild-jazz
         if(!mMusicList.back()) {                                           // AUTHOR Alex McCulloch
-            printf("Mix_LoadMUS(wild_jazz.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(wild_jazz.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/jazz.ogg")); // SOURCE https://opengameart.org/content/jazz-1
         if(!mMusicList.back()) {                                      // AUTHOR Spring Spring
-            printf("Mix_LoadMUS(jazz.ogg): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(jazz.ogg): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/Shake and Bake.mp3")); // SOURCE https://opengameart.org/content/shake-and-bake
         if(!mMusicList.back()) {                                                 // AUTHOR Matthew Pablo
-            printf("Mix_LoadMUS(Shake and Bake.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(Shake and Bake.mp3): %s", Mix_GetError());
         }
     #elif FULL_ASSETS
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/come-with-me-tonight-239958.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-come-with-me-tonight-239958/ 
         if(!mMusicList[0]) {                                                                       // AUTHOR Music by u_0tyyfec3hz from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/come-with-me-tonight-239958.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/come-with-me-tonight-239958.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/moonlit-groove-248491.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-moonlit-groove-248491/
         if(!mMusicList[1]) {                                                                       // AUTHOR Music by John Schofield from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/moonlit-groove-248491.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/moonlit-groove-248491.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-elevator-musik-278566.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-elevator-musik-278566/
         if(!mMusicList[2]) {                                                                       // AUTHOR Music by Tommsel from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/jazz-elevator-musik-278566.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/jazz-elevator-musik-278566.mp3): %s", Mix_GetError());
         }
         
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-only-good-vibes-275341.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-only-good-vibes-275341/
         if(!mMusicList[3]) {                                                                        // AUTHOR Music by NiKneT_Art from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/jazz-only-good-vibes-275341.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/jazz-only-good-vibes-275341.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/guitar-jazz-song-300816.mp3"));      // SOURCE https://pixabay.com/music/smooth-jazz-guitar-jazz-song-300816/
         if(!mMusicList[4]) {                                                                        // AUTHOR Music by Mircea Iancu from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/guitar-jazz-song-300816.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/guitar-jazz-song-300816.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/sebuah-kenangan-226035.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-sebuah-kenangan-226035/
         if(!mMusicList[5]) {                                                                        // AUTHOR Music by Wahyu Music from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/sebuah-kenangan-226035.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/sebuah-kenangan-226035.mp3): %s", Mix_GetError());
         }
         
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/good-morning-cafe-jazz-227888.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-good-morning-cafe-jazz-227888/
         if(!mMusicList[6]) {                                                                         // AUTHOR Music by Sleep Volume from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/good-morning-cafe-jazz-227888.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/good-morning-cafe-jazz-227888.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/rhythmic-jazz-289915.mp3"));          // SOURCE https://pixabay.com/music/funk-rhythmic-jazz-289915/
         if(!mMusicList[7]) {                                                                         // AUTHOR Music by Silviu on the street from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/rhythmic-jazz-289915.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/rhythmic-jazz-289915.mp3): %s", Mix_GetError());
         }
 
         mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/to-my-precious-person-291357.mp3"));  // SOURCE https://pixabay.com/music/beats-to-my-precious-person-291357/
         if(!mMusicList[8]) {                                                                         // AUTHOR Music by EDDIE LEE from Pixabay
-            printf("Mix_LoadMUS(./assets/audio/music/to-my-precious-person-291357.mp3): %s\n", Mix_GetError());
+            SDL_Log("Mix_LoadMUS(./assets/audio/music/to-my-precious-person-291357.mp3): %s", Mix_GetError());
         }
     #endif
 
@@ -150,7 +150,7 @@ ley::Audio::~Audio() {
 void ley::Audio::playIntro() {
 
     if(Mix_PlayMusic(musIntro, 1) == -1) {
-        printf("Mix_PlayMusic(musIntro): %s\n", Mix_GetError());
+        SDL_Log("Mix_PlayMusic(musIntro): %s", Mix_GetError());
     }
 }
 
@@ -161,7 +161,7 @@ void ley::Audio::playMainMenu() {
 
     if (!Mix_PlayingMusic() && Mix_FadingMusic() != MIX_FADING_OUT) {
             if(Mix_PlayMusic(musMainMenu, -1) == -1) {
-                printf("Mix_PlayMusic(musMainMenu): %s\n", Mix_GetError());
+                SDL_Log("Mix_PlayMusic(musMainMenu): %s", Mix_GetError());
             }
     }
     
@@ -175,7 +175,7 @@ void ley::Audio::playPlaylist() {
     if (Mix_FadingMusic() != MIX_FADING_OUT) {
         if (!Mix_PlayingMusic() && playlistNumber < static_cast<int>(mMusicList.size())) {
             if (Mix_PlayMusic(mMusicList[playlistNumber], 1) == -1) {
-                printf("Mix_PlayMusic(mMusicList[%d]): %s\n", playlistNumber, Mix_GetError());
+                SDL_Log("Mix_PlayMusic(mMusicList[%d]): %s", playlistNumber, Mix_GetError());
             } else {
                 playlistNumber++;
             }

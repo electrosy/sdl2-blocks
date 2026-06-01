@@ -17,7 +17,7 @@ void ley::LanguageModel::loadLanguage() {
     loadLanguageData(mCurrentLanguage);
 }
 
-void ley::LanguageModel::loadLanguageData(std::string language) {
+void ley::LanguageModel::loadLanguageData(const std::string& language) {
     //load config
     std::string fileName = "./assets/lang/" + language + ".csv";
     std::ifstream inFile(fileName);
@@ -39,29 +39,24 @@ void ley::LanguageModel::loadLanguageData(std::string language) {
         }
     }
 }
-std::string ley::LanguageModel::capitalizeFirstLetter(std::string input) const {
+std::string ley::LanguageModel::capitalizeFirstLetter(const std::string& input) const {
 
-    //capitalize the first letter
-    if(input.size() > 0) {
-        input[0] = toupper(input[0]);
+    std::string result = input;
+    if (!result.empty()) {
+        result[0] = toupper(static_cast<unsigned char>(result[0]));
     }
-    
-    return input;
+    return result;
 }
 
-std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(std::string input) const {
-    
-    input = capitalizeFirstLetter(input);
-    
-    //capitalize every letter after a space
-    for (int i = 0; i < input.size(); i++) {
-        if(input[i] == ' ' && i + 1 <= input.size()) {
-            
-            input[i + 1] = toupper(input[i + 1]);
+std::string ley::LanguageModel::capitalizeFirstLeterOfEveryWord(const std::string& input) const {
+
+    std::string result = capitalizeFirstLetter(input);
+    for (int i = 0; i < static_cast<int>(result.size()); i++) {
+        if (result[i] == ' ' && i + 1 < static_cast<int>(result.size())) {
+            result[i + 1] = toupper(static_cast<unsigned char>(result[i + 1]));
         }
     }
-
-    return input;
+    return result;
 }
 
 /*
@@ -88,7 +83,7 @@ std::string ley::LanguageModel::getWord(const std::string& field, int pad, bool 
     return padTo(string, ' ', pad, left);
 }
 
-std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned long size, bool left) const {
+std::string ley::LanguageModel::padTo(const std::string& input, char padChar, unsigned long size, bool left) const {
     
     //return early if the pad become a negative number.
 
@@ -99,19 +94,17 @@ std::string ley::LanguageModel::padTo(std::string input, char padChar, unsigned 
     // // // // // // // // // // // // // // // //
     int width = size - len;
 
-
-    if( width < 0) {
+    if (width < 0) {
         return input;
     }
 
-    if(left) {
-        input.append(size - input.length(), padChar);
+    std::string result = input;
+    if (left) {
+        result.append(static_cast<size_t>(width), padChar);
     } else {
-        
-        input.insert(input.begin(), width, padChar);
+        result.insert(result.begin(), width, padChar);
     }
-    
-    return  input;
+    return result;
 }
 
 std::string ley::LanguageModel::getLanguageString() const {   

@@ -50,16 +50,16 @@ public:
     void previous(UIMenuItem item);
     SDL_Rect currentSrc();
     SDL_Rect currentDest();
-    void pushFont(std::string elementid, ley::Font* inFont, SDL_Renderer* r);
-    void pushFont(std::string label, SDL_Point pos, const std::string s, SDL_Renderer* r, int size);
+    void pushFont(const std::string& elementid, ley::Font* inFont, SDL_Renderer* r);
+    void pushFont(const std::string& label, SDL_Point pos, const std::string& s, SDL_Renderer* r, int size);
     void pushUIElement(const std::function<void()> &toggle, const std::function<bool()> &focus, const std::function<void()> &enter);
     void pushPlaceHolder();
     int getIndex();
     void clear(); //clear out all the elements.
-    int count();
+    int count() const;
     void addRenderables(ley::RenderablesPtr);
-    int getElementById(std::string);
-    ley::UIElement* getElementPtr(std::string label); //Get elementPtr from label
+    int getElementById(const std::string&);
+    ley::UIElement* getElementPtr(const std::string& label); //Get elementPtr from label
     ley::UIElement* getCurrentElementPtr();
     void renderBaseMenuItems(ley::Video* v);
     void renderHotItem(ley::Video* v);

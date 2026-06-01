@@ -247,7 +247,7 @@ void BlockEditorState::loadBlocksKey() {
         mBlocksKeyRects.emplace( blockStr,  std::make_pair(false, (SDL_Rect){fontLayoutRect.x - 37, fontLayoutRect.y - 10, 90, 50})  );
     }
 
-    for(int i = 0; i < blocksToCheck.size(); ++i) {
+    for(int i = 0; i < static_cast<int>(blocksToCheck.size()); ++i) {
         //spriteBackground = ley::Sprite(TextureManager::Instance()->getTexture(background_level.c_str()), 0, {start_rect}, {500,{0,0,0,0}});
         mBlockKeySprites.push_back(ley::Sprite(TextureManager::Instance()->getTexture(blocksToCheck[i]), 0, {start_rect}, {10,{0,0,0,0}}));
         SDL_Rect blockKeyPosition = mKeyLayout.getRectForCell(i);
@@ -341,7 +341,7 @@ void BlockEditorState::WriteTileDataToFile() {
     ConfigIO::writeBlockData(rowDataVector);
 }
 
-void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, std::string prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr) {
+void BlockEditorState::GetMajorTileRows(int inXMajor, int inYMajor, const std::string& prefix, bool outputOrientation, std::vector<std::string>* rowDataVectorPtr) {
 
     SDL_Point layoutSize = mLayout.getSize();
     Uint16 layoutMajorSize = mLayout.getMajorGridSize();

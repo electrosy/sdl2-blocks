@@ -43,7 +43,7 @@ void ley::Font::init(int size) {
 //    SDL_Log("Open font");
     mTTFFont = TTF_OpenFont(FONTFILE, size);
     if(!mTTFFont) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        SDL_Log("TTF_OpenFont: %s", TTF_GetError());
     }
 
 }
@@ -87,7 +87,7 @@ void ley::Font::setColor(SDL_Color c) {
     mMessageTexture = {};
 }
 
-void ley::Font::updateMessage(std::string s) {
+void ley::Font::updateMessage(const std::string& s) {
     //Only update the texture if the message has changed.
     if(s != mMessageString) {
         mMessageString = s;

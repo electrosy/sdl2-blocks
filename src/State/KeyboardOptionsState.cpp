@@ -151,7 +151,7 @@ void KeyboardOptionsState::update(ley::Command command) {
             case ley::Command::UI_enter :
                 SDL_Log("UI_Enter!!");
                 mDirectionsFont.updateMessage(DIRECTIONS2);
-                SDL_Log(std::to_string(mGameModel->getLastScancode()).c_str());
+                SDL_Log("%s", std::to_string(mGameModel->getLastScancode()).c_str());
                 mCaptureNewInput = true;
                 SDL_Log("Menu element Id: %s", mMainUI.getCurrentElementPtr()->getLabel().c_str());
                 mGameModel->waitForKeyDown();
@@ -177,7 +177,7 @@ void KeyboardOptionsState::update(ley::Command command) {
     return;
 }
 
-void KeyboardOptionsState::reassignKeyButton(std::string keycode, bool addMapping) {
+void KeyboardOptionsState::reassignKeyButton(const std::string& keycode, bool addMapping) {
     std::string delimiter = "_";
     size_t delimiter_pos = keycode.find(delimiter);
 
@@ -261,6 +261,13 @@ std::vector<std::pair<SDL_Scancode, std::string>> KeyboardOptionsState::findKeys
 
 void KeyboardOptionsState::reassignButton(ley::Command command, SDL_GameControllerButton button, bool addMapping) {
 
+    // Reject buttons with no string form; same persistence-then-throw hazard as keys.
+    if (BUTTONTOSTRING.find(button) == BUTTONTOSTRING.end()) {
+        SDL_Log("reassignButton: button %d has no serializable name, ignoring rebind",
+                static_cast<int>(button));
+        return;
+    }
+
     // Capture context from existing binding before potentially erasing it.
     std::string context = "play";
     {
@@ -284,6 +291,14 @@ void KeyboardOptionsState::reassignButton(ley::Command command, SDL_GameControll
 }
 
 void KeyboardOptionsState::reassignKeyboard(ley::Command command, SDL_Scancode scancode, bool addMapping) {
+
+    // Reject keys with no string form on this SDL backend; storing one would let
+    // it persist in the bindings map and then throw when written to config.
+    if (SCANCODETOSTRING.find(scancode) == SCANCODETOSTRING.end()) {
+        SDL_Log("reassignKeyboard: scancode %d has no serializable name, ignoring rebind",
+                static_cast<int>(scancode));
+        return;
+    }
 
     // Capture context from existing binding before potentially erasing it.
     std::string context = "play";

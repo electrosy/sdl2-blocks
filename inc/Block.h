@@ -86,10 +86,10 @@ public:
     /* Operators */
     void operator= (const Block &b);
     /* Functions */
-    static void loadSingleOrientation(std::string orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr);
+    static void loadSingleOrientation(const std::string& orientation, BlockDataType* blockData, BlockFileDataMapType* inBlockDataFileMapPtr);
     static int bottomEdgeOfOrientation(BlockDataType* blockData);
     static int rightEdgeOfOrientation(BlockDataType* blockData);
-    BlockTexCode renderPart(unsigned int, unsigned int); // Return true or false depending on if the block would take up the x,y space
+    BlockTexCode renderPart(unsigned int, unsigned int) const; // returns the tex-code of the block cell at (x,y), or O if empty
     void moveDown();
     void moveLeft();
     void moveRight();
@@ -100,12 +100,12 @@ public:
     Uint8 getTopGap()  const;
     SDL_Rect* getPosRectPtr() { return &mRect;};
     static void setBlockDataPtr(BlockFileDataMapType* blockDataPtr);
-    bool getCanRotate(){ return mCanRotate;};
-    static bool hasMoreThanOneOrientation(std::string blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
+    bool getCanRotate() const { return mCanRotate; };
+    static bool hasMoreThanOneOrientation(const std::string& blockCharName, BlockFileDataMapType* inBlockDataFileMapPtr);
     /* Accessors */
     SDL_Rect getRect() const {return mRect;};
-    const BlockNameType getType() {return mType;};
-    const bool getClear() {return mClearFlag;};
+    BlockNameType getType() const {return mType;};
+    bool getClear() const {return mClearFlag;};
     void setClear(bool c);
     void setH(unsigned int h) {mRect.h = h;};
     void setW(unsigned int w) {mRect.w = w;};
@@ -114,7 +114,7 @@ public:
     std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
     static void setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr);
     BlockDataType* getBlockDataPtr() {return &mBlockData;};
-    unsigned int getBlockOrientation() {return mOrientation;};
+    unsigned int getBlockOrientation() const { return mOrientation; };
 };
 
 } 

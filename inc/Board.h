@@ -68,18 +68,18 @@ public:
     std::pair<ley::BlockTexCode, bool>* at(int inX, int inY); //The X and Y are 0 based.
     void render(SDL_Renderer * r, bool d);
     void clear();
-    std::pair<bool, std::string> canPut(Block& b, Command d);
-    void setBlock(Block& b);
-    void putBlock(Block& b);
+    std::pair<bool, std::string> canPut(const Block& b, Command d);
+    void setBlock(const Block& b);
+    void putBlock(const Block& b);
     void fillLine(int l, std::pair<ley::BlockTexCode, bool> p);
     
-    int width() { return mWidth; };
-    int height() { return mHeight; };
-    int widthpx() { return mWidthPx; };
-    int heightpx() { return mHeightPx; };
-    int boardPosXPx() { return mBoardPosXPx; };
-    int nextBoxPosXPx() { return mNextBoxPosXPx; };
-    int scorePosXPx() { return mScorePosXPx; };
+    int width()        const { return mWidth; };
+    int height()       const { return mHeight; };
+    int widthpx()      const { return mWidthPx; };
+    int heightpx()     const { return mHeightPx; };
+    int boardPosXPx()  const { return mBoardPosXPx; };
+    int nextBoxPosXPx()const { return mNextBoxPosXPx; };
+    int scorePosXPx()  const { return mScorePosXPx; };
 
 };
 }
