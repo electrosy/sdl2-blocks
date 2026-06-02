@@ -14,20 +14,19 @@ Date: Feb/14/2020
 #include <vector>
 #include <string>
 #include <queue>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
 #include <functional>
 #include "Timer.h"          // ley::Timer used by value (members + std::pair) — needs complete type
-#include "UI/TextEntry.h"
 #include "Command.h"
 
 
 namespace ley {
 
-// Forward declaration: Input only uses UIWidget through a pointer parameter.
-// Declaring it here keeps Input.h compilable independent of include order
-// (the Input.h <-> TextEntry.h include cycle can otherwise leave it undeclared).
+// Forward declaration: Input only uses UIWidget through a pointer parameter,
+// so the full definition isn't needed here (keeps Input.h lightweight).
 class UIWidget;
 
 

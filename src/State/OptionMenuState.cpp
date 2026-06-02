@@ -1,4 +1,5 @@
 #include "../../inc/State/OptionMenuState.h"
+#include "../../inc/UI/TextEntry.h"
 #include "../../inc/Audio.h"
 #include "../../inc/Board.h"
 #include "../../inc/LanguageModel.h"

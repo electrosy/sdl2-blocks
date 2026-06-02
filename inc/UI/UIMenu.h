@@ -8,9 +8,23 @@ Date: Jul/17/2021
 #ifndef UIMENU_H
 #define UIMENU_H
 
+#include <vector>
+#include <string>
 #include <unordered_map>
+#include <functional>
+
+#include <SDL2/SDL.h>
+
+#include "UIElement.h"          // ley::UIElement (stored by value) + ley::Font
+#include "../Fader.h"           // ley::Fader (member, by value)
+#include "../gfx/Renderables.h" // ley::RenderablesPtr (member, by value)
+#include "../Command.h"         // ley::Command (parameter, by value)
 
 namespace ley {
+
+// Video is only referenced through pointers here — a forward declaration is enough
+// and avoids pulling in the heavy gfx/Video.h (and its dependency cycle).
+class Video;
 
 enum class UIMenuItem {cell,row};
 
