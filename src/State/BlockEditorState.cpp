@@ -239,7 +239,7 @@ void BlockEditorState::loadBlocksKey() {
     start_rect.h = BLOCKSIZE_PX;
 
     mKeyLayout.resetIndex();
-    for(std::string blockStr : blocksToCheck) {
+    for(const std::string& blockStr : blocksToCheck) {
         mBlockKeyFonts.push_back(ley::Font());
         mBlockKeyFonts.back().updateMessage(blockStr);
         SDL_Rect fontLayoutRect = mKeyLayout.getNextRect();
@@ -290,7 +290,12 @@ void BlockEditorState::transferBlockToTiles(int xMajor, int yMajor, BlockDataTyp
         for(BlockTexCode code : blockRow) {
             int tileX = col + (xMajor * layoutMajorSize);
             int tileY = row + (yMajor * layoutMajorSize);
-            tileAt(tileX, tileY)->setTextureName(TEXCODE_CHAR.at(code));
+            auto codeIt = TEXCODE_CHAR.find(code);
+            if(codeIt != TEXCODE_CHAR.end()) {
+                tileAt(tileX, tileY)->setTextureName(codeIt->second);
+            } else {
+                SDL_Log("BlockEditorState: no texture-char mapping for BlockTexCode %d, skipping cell", static_cast<int>(code));
+            }
             ++col;
         }
         ++row;
@@ -464,7 +469,7 @@ void BlockEditorState::rowDataLeft(std::vector<std::string>* rowData) {
 void BlockEditorState::createBlockDataFromStrings(BlockDataType* blockDataPtr, std::vector<std::string>* stringDataPtr) {
 
     int row = 0;
-    for(std::string stringRow : (*stringDataPtr)) {
+    for(const std::string& stringRow : (*stringDataPtr)) {
         int col = 0;
         for(char chars : stringRow) {
             auto it = CHAR_TEXCODE.find({chars});

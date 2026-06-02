@@ -111,9 +111,8 @@ public:
     void setW(unsigned int w) {mRect.w = w;};
     void debugResetPos();
     bool rotate(bool); // input false for counterclockwise and true for clockwise. return true if there is more than one orientation
-    std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts();
+    std::array<std::array<ley::BlockTexCode, BLOCK_SIZE>,BLOCK_SIZE> getBlockParts() const;
     static void setBlockDataFromFile(BlockNameType t, int o, BlockDataType* inBlockPtr, bool inCf, SDL_Rect* inRectPtr, bool* inCanRotatePtr);
-    BlockDataType* getBlockDataPtr() {return &mBlockData;};
     unsigned int getBlockOrientation() const { return mOrientation; };
 };
 

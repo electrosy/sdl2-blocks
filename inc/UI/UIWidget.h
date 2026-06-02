@@ -1,11 +1,10 @@
-#include <regex>
+#ifndef UIWIDGET_H
+#define UIWIDGET_H
 
+#include <regex>
 #include "../gfx/Renderable.h"
 #include "UIElement.h"
 #include "../Timer.h"
-
-#ifndef UIWIDGET_H
-#define UIWIDGET_H
 
 namespace ley {
 

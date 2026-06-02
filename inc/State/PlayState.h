@@ -1,9 +1,8 @@
-#include "BaseState.h"
-#include "../../inc/ProgressBar.h"
-
-
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
+
+#include "BaseState.h"
+#include "../../inc/ProgressBar.h"
 
 auto constexpr STATUSMESSAGE_POS_X_PX = 150;
 auto constexpr STATUSMESSAGE_POS_Y_PX = 10;

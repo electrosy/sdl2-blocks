@@ -1,13 +1,12 @@
+#ifndef GAMESTATE_H
+#define GAMESTATE_H
+
 #include "../Input.h"
 #include "../../inc/UI/UIWidget.h"
 #include "../UI/TextEntry.h"
 #include "StateIDs.h"
-
 #include <string>
 #include <SDL2/SDL.h>
-
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
 
 namespace ley {
 
@@ -34,7 +33,7 @@ public:
     ley::UIWidget* activeUIelement();
     virtual void UI_ToggleFocus();
     virtual void commitUI();
-    bool isDone(); // Returns true when everything in this state is finished.
+    bool isDone() const; // Returns true when everything in this state is finished.
     virtual StateID getStateID() const = 0;
     virtual ~GameState() {SDL_Log("Gamestate dtor()");};
     std::string currentInputContext();

@@ -67,8 +67,13 @@ void ley::Board::render(SDL_Renderer * r, bool d) {
     for(int i = 0; i < mHeight; ++i) {
         for(int j = 0; j < mWidth; ++j) {
             if (at(j,i)->first != BlockTexCode::O) { 
-                blockBit = TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(at(j,i)->first));
-                SDL_RenderCopy(r, blockBit, &start_rect, &dest_rect);
+                auto codeIt = TEXCODE_CHAR.find(at(j,i)->first);
+                if(codeIt != TEXCODE_CHAR.end()) {
+                    blockBit = TextureManager::Instance()->getTexture(codeIt->second);
+                    SDL_RenderCopy(r, blockBit, &start_rect, &dest_rect);
+                } else {
+                    SDL_Log("Board::render: no texture-char mapping for BlockTexCode %d, skipping cell", static_cast<int>(at(j,i)->first));
+                }
             }
             dest_rect.x = dest_rect.x + w;
         }

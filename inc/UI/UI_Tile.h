@@ -1,15 +1,13 @@
+#ifndef UI_TILE_H
+#define UI_TILE_H
+
 #include <functional>
 #include <regex>
-
 #include <SDL2/SDL.h>
-
 #include "../Input.h"
 #include "../Fader.h"
 #include "../Textures.h"
 #include "../../inc/UI/UIWidget.h"
-
-#ifndef UI_TILE_H
-#define UI_TILE_H
 
 namespace ley {
 

@@ -108,7 +108,7 @@ void ley::Block::reset() {
     mOrientation = 0;
 }
 
-std::array<std::array<ley::BlockTexCode, 5>,5> ley::Block::getBlockParts() {
+std::array<std::array<ley::BlockTexCode, 5>,5> ley::Block::getBlockParts() const {
     return mBlockData;
 }
 

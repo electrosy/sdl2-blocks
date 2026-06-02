@@ -1,17 +1,14 @@
+#ifndef TEXTENTRY_H
+#define TEXTENTRY_H
+
 #include <functional>
 #include <regex>
-
 #include <SDL2/SDL.h>
-
 #include "../gfx/Font.h"
 #include "../Input.h" // TODO circurlar Input.h has TextEntry and TextEntry also has Input
 #include "../Fader.h"
 #include "UIElement.h" // TODO this is also in TextEntry.h
 #include "UIWidget.h"
-
-
-#ifndef TEXTENTRY_H
-#define TEXTENTRY_H
 
 namespace ley {
 

@@ -1,9 +1,8 @@
-#include "BaseState.h"
-
-#include "../UI/UIMenu.h"
-
 #ifndef OPTIONMENUSTATE_H
 #define OPTIONMENUSTATE_H
+
+#include "BaseState.h"
+#include "../UI/UIMenu.h"
 
 namespace ley {
 class OptionMenuState : public ley::BaseState {

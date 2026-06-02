@@ -1,9 +1,8 @@
-#include "BaseState.h"
-
-#include "../UI/UIMenu.h"
-
 #ifndef LANGUAGEOPTIONSSTATE_H
 #define LANGUAGEOPTIONSSTATE_H
+
+#include "BaseState.h"
+#include "../UI/UIMenu.h"
 
 namespace ley {
 

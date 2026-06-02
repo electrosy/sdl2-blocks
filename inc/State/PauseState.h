@@ -1,8 +1,7 @@
-#include "BaseState.h"
-
-
 #ifndef PAUSESTATE_H
 #define PAUSESTATE_H
+
+#include "BaseState.h"
 
 namespace ley {
 

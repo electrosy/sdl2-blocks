@@ -1,9 +1,7 @@
-#include "BaseState.h"
-
-
 #ifndef GAMEOVERSTATE_H
 #define GAMEOVERSTATE_H
 
+#include "BaseState.h"
 
 namespace ley {
 

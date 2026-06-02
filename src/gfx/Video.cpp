@@ -437,9 +437,14 @@ void ley::Video::renderNextBlock() {
     for (auto row : nextBlock.getBlockParts()) {
         for (auto column : row) {
             if (column != BlockTexCode::O) {
-                SDL_RenderCopy(renderer,
-                    TextureManager::Instance()->getTexture(TEXCODE_CHAR.at(column)),
-                    &start_rect, &dest_rect);
+                auto codeIt = TEXCODE_CHAR.find(column);
+                if(codeIt != TEXCODE_CHAR.end()) {
+                    SDL_RenderCopy(renderer,
+                        TextureManager::Instance()->getTexture(codeIt->second),
+                        &start_rect, &dest_rect);
+                } else {
+                    SDL_Log("Video: no texture-char mapping for BlockTexCode %d, skipping cell", static_cast<int>(column));
+                }
             }
             dest_rect.x += w;
         }

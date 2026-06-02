@@ -64,7 +64,7 @@ ley::StateID ley::GameStateMachine::getStateId() {
     return StateID::None;
 }
 
-bool ley::GameStateMachine::isStateDone() {
+bool ley::GameStateMachine::isStateDone() const {
     if(!mGameStates.empty()) {
         return mGameStates.back()->isDone();
     }

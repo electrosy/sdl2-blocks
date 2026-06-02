@@ -1,9 +1,8 @@
-#include "BaseState.h"
-
-#include "../UI/UIMenu.h"
-
 #ifndef MENUSTATE_H
 #define MENUSTATE_H
+
+#include "BaseState.h"
+#include "../UI/UIMenu.h"
 
 namespace ley {
 

@@ -1,9 +1,8 @@
-#include "BaseState.h"
-
-#include "../UI/UIMenu.h"
-
 #ifndef CREDITSSTATE_H
 #define CREDITSSTATE_H
+
+#include "BaseState.h"
+#include "../UI/UIMenu.h"
 
 namespace ley {
 

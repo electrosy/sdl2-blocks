@@ -18,11 +18,18 @@ Date: Feb/14/2020
 #include <SDL2/SDL.h>
 
 #include <functional>
+#include "Timer.h"          // ley::Timer used by value (members + std::pair) — needs complete type
 #include "UI/TextEntry.h"
 #include "Command.h"
 
 
 namespace ley {
+
+// Forward declaration: Input only uses UIWidget through a pointer parameter.
+// Declaring it here keeps Input.h compilable independent of include order
+// (the Input.h <-> TextEntry.h include cycle can otherwise leave it undeclared).
+class UIWidget;
+
 
 const auto KEY_DELAY_TIME_DEFAULT = 180;
 const auto KEY_REPEAT_TIME_DEFAULT = 45;

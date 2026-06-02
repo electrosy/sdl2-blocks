@@ -12,7 +12,7 @@ bool GameState::onPause() {
     return true;
 }
 
-bool GameState::isDone() {
+bool GameState::isDone() const {
     return done;
 }
 

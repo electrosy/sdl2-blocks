@@ -1,9 +1,8 @@
-#include "BaseState.h"
-
-#include "../../inc/UI/UIMenu.h"
-
 #ifndef KEYBOARDOPTIONSSTATE_H
 #define KEYBOARDOPTIONSSTATE_H
+
+#include "BaseState.h"
+#include "../../inc/UI/UIMenu.h"
 
 namespace ley {
 

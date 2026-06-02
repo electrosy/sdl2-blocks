@@ -5,10 +5,11 @@ Copyright (C) 2024 Steven Philley
 Purpose: Config loads and saves user selected options
 Date: Mar/27/2024
 */
-#include <SDL2/SDL.h>
 
 #ifndef CONFIG_H
 #define CONFIG_H
+
+#include <SDL2/SDL.h>
 
 namespace ley {
 

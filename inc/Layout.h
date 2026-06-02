@@ -1,8 +1,7 @@
-#include <SDL2/SDL.h>
-
 #ifndef LAYOUT_H
 #define LAYOUT_H
 
+#include <SDL2/SDL.h>
 
 namespace ley {
 

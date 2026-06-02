@@ -1,10 +1,9 @@
-#include "GameState.h"
-#include "StateIDs.h"
-
-#include <vector>
-
 #ifndef GAMESTATEMACHINE_H
 #define GAMESTATEMACHINE_H
+
+#include "GameState.h"
+#include "StateIDs.h"
+#include <vector>
 
 namespace ley {
 
@@ -18,7 +17,7 @@ public:
     void update(ley::Command command);
     void render();
     StateID getStateId();
-    bool isStateDone();
+    bool isStateDone() const;
     ley::UIWidget* activeUIElement();
     void commitUI();
     void UI_ToggleFocus();

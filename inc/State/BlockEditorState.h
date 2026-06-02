@@ -1,11 +1,11 @@
+#ifndef BLOCKEDITORSTATE_H
+#define BLOCKEDITORSTATE_H
+
 #include "BaseState.h"
 #include "../UI/UIMenu.h"
 #include "../UI/UI_Tile.h"
 #include "../../inc/Layout.h"
 #include <unordered_map>
-
-#ifndef BLOCKEDITORSTATE_H
-#define BLOCKEDITORSTATE_H
 
 namespace ley {
 

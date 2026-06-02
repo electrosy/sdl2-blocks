@@ -1,8 +1,7 @@
-#include "BaseState.h"
-
-
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
+
+#include "BaseState.h"
 
 namespace ley {
 
