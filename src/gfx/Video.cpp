@@ -196,7 +196,7 @@ void ley::Video::setBackgroundTexture() {
         if(gm->calcLevel() <= 9) {
             background_level = "BG_WEST_0" + std::to_string(gm->calcLevel()); //background based on current level.
         } else {
-            background_level = "BG_WEST_09";
+            background_level = "BG_WEST_10";
         }
         
         spriteBackgroundfadeout = spriteBackground; //first time spriteBackground is empty and spriteBackgroundfadeout gets set to empty and skips the rendering process
