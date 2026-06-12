@@ -30,9 +30,10 @@ mMessage(message) {
     mHotFont.updateMessage(mMessage);
     mMainFont.updateMessage(mMessage);
 
-    mBaseFont.setColor(CDARKTEAL);
-    mHotFont.setColor(CBRIGHTRED);
-    mMainFont.setColor(CWHITE);
+    mBaseFont.setColor(CORANGE);
+    mHotFont.setColor(CPURPLE);
+    mMainFont.setColor(CPINK);
+    
 
     mBaseFont.setFontSize(size);
     mHotFont.setFontSize(size);

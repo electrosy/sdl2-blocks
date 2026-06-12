@@ -69,7 +69,7 @@ void KeyboardOptionsState::initalizeMenu() {
             mValueFonts.back().updateMessage(mGameModel->getKeyInputString(",", inputObject.l_command, mGameModel->getKeyBindingsPtr()));
             mMainUI.pushFont(inputObject.l_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
             mMainUI.getElementPtr(inputObject.l_elementId)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.l_elementId)->setMainColor(CDARKTEAL);
+            mMainUI.getElementPtr(inputObject.l_elementId)->setMainColor(CORANGE);
         }
         else {
             mMainUI.pushPlaceHolder();
@@ -82,7 +82,7 @@ void KeyboardOptionsState::initalizeMenu() {
             mValueFonts.back().updateMessage(mGameModel->getKeyInputString(",", inputObject.r_command, mGameModel->getKeyBindingsPtr()));
             mMainUI.pushFont(inputObject.r_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
             mMainUI.getElementPtr(inputObject.r_elementId)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.r_elementId)->setMainColor(CDARKTEAL);
+            mMainUI.getElementPtr(inputObject.r_elementId)->setMainColor(CORANGE);
         }
         else {
             mMainUI.pushPlaceHolder();
@@ -107,7 +107,7 @@ void KeyboardOptionsState::initalizeMenu() {
             mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.l_command, mGameModel->getButtonBindingsPtr()));
             mMainUI.pushFont(inputObject.l_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
             mMainUI.getElementPtr(inputObject.l_elementId)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.l_elementId)->setMainColor(CDARKTEAL);
+            mMainUI.getElementPtr(inputObject.l_elementId)->setMainColor(CORANGE);
         }
         else {
             mMainUI.pushPlaceHolder();
@@ -121,7 +121,7 @@ void KeyboardOptionsState::initalizeMenu() {
             mValueFonts.back().updateMessage(mGameModel->getPadInputString(",", inputObject.r_command, mGameModel->getButtonBindingsPtr()));
             mMainUI.pushFont(inputObject.r_elementId, &mValueFonts.back(), mVideoSystem->getRenderer());
             mMainUI.getElementPtr(inputObject.r_elementId)->setBaseColor(CWHITE);
-            mMainUI.getElementPtr(inputObject.r_elementId)->setMainColor(CDARKTEAL);
+            mMainUI.getElementPtr(inputObject.r_elementId)->setMainColor(CORANGE);
         }
         else {
             mMainUI.pushPlaceHolder();

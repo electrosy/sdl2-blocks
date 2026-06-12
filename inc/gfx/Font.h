@@ -15,7 +15,6 @@ namespace ley {
 
 // TODO investigate where we are loading the font file multiple times.
 const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
-
 const auto DEFAULT_FONT_SIZE = 24;
 
 class Font : public Renderable {

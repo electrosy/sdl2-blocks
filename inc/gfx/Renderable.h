@@ -20,7 +20,10 @@ namespace ley {
 
 const SDL_Color CWHITE = {255, 255, 255, 255};
 const SDL_Color CBRIGHTRED = {238, 51, 84, 255};
-const SDL_Color CDARKTEAL = {32, 85, 83, 255};
+const SDL_Color CORANGE = {255, 140, 0, 255};
+const SDL_Color CPURPLE = {147, 51, 234, 255};
+const SDL_Color CPINK   = {236, 64, 122, 255};
+
 
 enum class Color {red,blue,green,orange,yellow,violet,indigo,white};
 
