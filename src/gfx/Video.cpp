@@ -327,18 +327,19 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
 
     //Backgrounds.
-    TextureManager::Instance()->loadTexture("assets/background/jazz/bridge-7504605_1280x720.jpg", "BG_WEST_01");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/sea-7707983_1280x720.jpg", "BG_WEST_02");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/heaven-5114501_1280x720.jpg", "BG_WEST_03");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/building-5002861_1280x720.jpg", "BG_WEST_04");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/alley-89197_1280x720.jpg", "BG_WEST_05");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/sunset-7898136_1280x720.jpg", "BG_WEST_06");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/night-7593233_1280x720.jpg", "BG_WEST_07");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/starry-sky-2051448_1280x720.jpg", "BG_WEST_08");
-    TextureManager::Instance()->loadTexture("assets/background/jazz/clouds-2517653_1280x720.jpg", "BG_WEST_09");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background1.jpg", "BG_WEST_01");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background2.jpg", "BG_WEST_02");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background3.jpg", "BG_WEST_03");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background4.jpg", "BG_WEST_04");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background5.jpg", "BG_WEST_05");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background6.jpg", "BG_WEST_06");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background7.jpg", "BG_WEST_07");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background8.jpg", "BG_WEST_08");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background9.jpg", "BG_WEST_09");
+    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background10.jpg", "BG_WEST_10");
 
     //3d blocks
-    TextureManager::Instance()->loadTexture("assets/blocks-background-517x558.png", "3dblocks");
+    TextureManager::Instance()->loadTexture("assets/blocks-background-517x558. png", "3dblocks");
 }
 
 void ley::Video::updateScores() {
