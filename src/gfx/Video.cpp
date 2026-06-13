@@ -290,8 +290,7 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/ablockalypse-logo-v2.png", "ablockalypse-logo-2026");
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
-    TextureManager::Instance()->loadTexture("assets/mainmenu-v2.png", "mainmenu");
-    TextureManager::Instance()->loadTexture("assets/background/background-1280x720-frame-v2.jpg", "mainmenuclouds");
+    TextureManager::Instance()->loadTexture("assets/graphic/main-menu.jpg", "mainmenuclouds");
     //High Scores
     TextureManager::Instance()->loadTexture("assets/btnHighScores.png", "btnHighScores");
     TextureManager::Instance()->loadTexture("assets/highscores-white.png", "highscores-white");

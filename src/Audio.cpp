@@ -43,67 +43,55 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
 
 
 
-    #ifndef FULL_ASSETS
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/wild_jazz.mp3")); // SOURCE https://opengameart.org/content/wild-jazz
-        if(!mMusicList.back()) {                                           // AUTHOR Alex McCulloch
-            SDL_Log("Mix_LoadMUS(wild_jazz.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/adream.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(adream.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/jazz.ogg")); // SOURCE https://opengameart.org/content/jazz-1
-        if(!mMusicList.back()) {                                      // AUTHOR Spring Spring
-            SDL_Log("Mix_LoadMUS(jazz.ogg): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/bbsintro.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(bbsintro.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/Shake and Bake.mp3")); // SOURCE https://opengameart.org/content/shake-and-bake
-        if(!mMusicList.back()) {                                                 // AUTHOR Matthew Pablo
-            SDL_Log("Mix_LoadMUS(Shake and Bake.mp3): %s", Mix_GetError());
-        }
-    #elif FULL_ASSETS
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/come-with-me-tonight-239958.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-come-with-me-tonight-239958/ 
-        if(!mMusicList[0]) {                                                                       // AUTHOR Music by u_0tyyfec3hz from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/come-with-me-tonight-239958.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/fm-scrap.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(fm-scrap.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/moonlit-groove-248491.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-moonlit-groove-248491/
-        if(!mMusicList[1]) {                                                                       // AUTHOR Music by John Schofield from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/moonlit-groove-248491.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/hardcore.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(hardcore.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-elevator-musik-278566.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-elevator-musik-278566/
-        if(!mMusicList[2]) {                                                                       // AUTHOR Music by Tommsel from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/jazz-elevator-musik-278566.mp3): %s", Mix_GetError());
-        }
-        
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/jazz-only-good-vibes-275341.mp3"));  // SOURCE https://pixabay.com/music/traditional-jazz-jazz-only-good-vibes-275341/
-        if(!mMusicList[3]) {                                                                        // AUTHOR Music by NiKneT_Art from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/jazz-only-good-vibes-275341.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/inc.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(inc.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/guitar-jazz-song-300816.mp3"));      // SOURCE https://pixabay.com/music/smooth-jazz-guitar-jazz-song-300816/
-        if(!mMusicList[4]) {                                                                        // AUTHOR Music by Mircea Iancu from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/guitar-jazz-song-300816.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/iz-mih.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(iz-mih.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/sebuah-kenangan-226035.mp3"));       // SOURCE https://pixabay.com/music/traditional-jazz-sebuah-kenangan-226035/
-        if(!mMusicList[5]) {                                                                        // AUTHOR Music by Wahyu Music from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/sebuah-kenangan-226035.mp3): %s", Mix_GetError());
-        }
-        
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/good-morning-cafe-jazz-227888.mp3")); // SOURCE https://pixabay.com/music/traditional-jazz-good-morning-cafe-jazz-227888/
-        if(!mMusicList[6]) {                                                                         // AUTHOR Music by Sleep Volume from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/good-morning-cafe-jazz-227888.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/oasis.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(oasis.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/rhythmic-jazz-289915.mp3"));          // SOURCE https://pixabay.com/music/funk-rhythmic-jazz-289915/
-        if(!mMusicList[7]) {                                                                         // AUTHOR Music by Silviu on the street from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/rhythmic-jazz-289915.mp3): %s", Mix_GetError());
-        }
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/stevee.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(stevee.s3m): %s", Mix_GetError());
+    }
 
-        mMusicList.push_back(Mix_LoadMUS("./assets/audio/music/to-my-precious-person-291357.mp3"));  // SOURCE https://pixabay.com/music/beats-to-my-precious-person-291357/
-        if(!mMusicList[8]) {                                                                         // AUTHOR Music by EDDIE LEE from Pixabay
-            SDL_Log("Mix_LoadMUS(./assets/audio/music/to-my-precious-person-291357.mp3): %s", Mix_GetError());
-        }
-    #endif
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/unitech.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(unitech.s3m): %s", Mix_GetError());
+    }
+
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/vouge-me.s3m"));
+    if(!mMusicList.back()) {
+        SDL_Log("Mix_LoadMUS(vouge-me.s3m): %s", Mix_GetError());
+    }
 
     playlistMax = static_cast<int>(mMusicList.size());
 

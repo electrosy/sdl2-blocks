@@ -37,11 +37,7 @@ BUILD_TYPE ?= minimal
 BUILD_CONFIG = $(OBJDIR)/build_config
 
 # Conditional flags based on BUILD_TYPE
-ifneq ($(BUILD_TYPE),minimal)
-    CXXFLAGS += -DFULL_ASSETS
-else
-    #CXXFLAGS += -DMINIMAL_ASSETS
-endif
+# (FULL_ASSETS removed: code now always loads the s3m tracker playlist)
 
 # Directories to create
 DIRS = $(OBJDIR) $(OBJDIR)/src $(OBJDIR)/src/State $(OBJDIR)/src/UI $(OBJDIR)/src/gfx
