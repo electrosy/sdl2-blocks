@@ -35,60 +35,53 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
     if(!musIntro) {                                                 // AUTHOR Matthew Pablo
         SDL_Log("Mix_LoadMUS(musIntro): %s", Mix_GetError());
     }
-
-    musMainMenu = Mix_LoadMUS("./assets/audio/8_bit_ooame_lofi__mixed.mp3"); // SOURCE https://opengameart.org/content/ooame
-    if(!musMainMenu) {                                                       // AUTHOR TAD
-        SDL_Log("Mix_LoadMUS(musMainMenu): %s", Mix_GetError());
-    }
-
-
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/adream.s3m"));
+    
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/ADREAM.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(adream.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/bbsintro.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/BBSINTRO.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(bbsintro.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/fm-scrap.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/FM-SCRAP.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(fm-scrap.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/hardcore.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/HARDCORE.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(hardcore.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/inc.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/INC.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(inc.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/iz-mih.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/IZ-MIH.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(iz-mih.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/oasis.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/OASIS.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(oasis.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/stevee.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/STEVEE.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(stevee.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/unitech.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/UNITECH.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(unitech.s3m): %s", Mix_GetError());
     }
 
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/vouge-me.s3m"));
+    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/VOUGE-ME.ogg"));
     if(!mMusicList.back()) {
         SDL_Log("Mix_LoadMUS(vouge-me.s3m): %s", Mix_GetError());
     }
