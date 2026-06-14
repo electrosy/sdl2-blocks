@@ -304,12 +304,12 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/exit-white.png", "exit-white");
     TextureManager::Instance()->loadTexture("assets/exit-hot-red.png", "exit-hot-red");
     //Options Background
-    TextureManager::Instance()->loadTexture("assets/optionsmenu.png", "optionsmenu");
+    TextureManager::Instance()->loadTexture("assets/graphic/options-menu.jpg", "optionsmenu");
     //Credits
-    TextureManager::Instance()->loadTexture("assets/graphic/credits.png", "credits");
+    TextureManager::Instance()->loadTexture("assets/graphic/credits-screen.jpg", "credits");
     TextureManager::Instance()->loadTexture("assets/graphic/credits-panel.png", "credits-panel");
     //Highscores Background
-    TextureManager::Instance()->loadTexture("assets/highscores.png", "highscores");
+    TextureManager::Instance()->loadTexture("assets/graphic/high-scores.jpg", "highscores");
     //Buttons for options menu.
     TextureManager::Instance()->loadTexture("assets/graphic/btn/back.png", "opt-back");
     TextureManager::Instance()->loadTexture("assets/graphic/btn/back-hot.png", "opt-hot");
