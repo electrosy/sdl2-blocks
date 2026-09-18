@@ -53,6 +53,7 @@ public:
     void bottomLeft(); //put sprite at bottom left
     void bottomRight(); //put sprite at bottom right
     void scale(double s); //set the scale of the sprite using a percent
+    void setTexture(SDL_Texture* t); //swap the texture in place (single-frame sprites); keeps position and fader
 };
 
 }

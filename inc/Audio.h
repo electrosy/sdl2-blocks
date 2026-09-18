@@ -15,6 +15,8 @@ Date: Dec/2/2021
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
+#include "Theme.h"
+
 namespace ley {
 
 enum class sfx {swoosh, pause, unpause, squeek, piecesfalling, inplace, falldown};
@@ -39,6 +41,10 @@ class Audio {
 
         int playlistNumber;
 
+        ley::Theme mPlaylistTheme = ley::THEME_DEFAULT;
+        bool mPlaylistLoaded = false;
+        void freePlaylist();
+
     public:
         Audio();
         ~Audio();
@@ -48,6 +54,9 @@ class Audio {
         void playNext();
         void playPlaylist();
         void playSfx(ley::sfx sfx);
+        // (Re)load the gameplay playlist for this theme. Returns false, leaving the
+        // current playlist untouched, if none of the theme's tracks could be loaded.
+        bool setTheme(ley::Theme theme);
 
         void fadeOutMusic();
         void increaseVolume();

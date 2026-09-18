@@ -13,9 +13,8 @@ MenuState::MenuState(ley::Video * v, ley::GameModel * gm)
  
     // TODO ablockalypse title pulses (gets brighter for a moment) every few moments to grab the players attention if they are just sitting in the main menu.
 
-    mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture("ablockalypse-logo-2026"), 0, {}, {1000,{0,0,0,0}});
-    mAblockalypseLogo.center();
-    mAblockalypseLogo.setPos(mAblockalypseLogo.getX(), +25);
+    mAblockalypseLogo = ley::Sprite(TextureManager::Instance()->getTexture(ley::activeThemeDef().logo.key.c_str()), 0, {}, {1000,{0,0,0,0}});
+    applyLogo(ley::activeThemeDef());
 
 
     int yStartPosition = 205;
@@ -86,6 +85,18 @@ bool MenuState::onEnter() {
     mCurrentInputContext = "ui";
 
     return true;
+}
+
+void MenuState::applyLogo(const ThemeDef& theme) {
+    mAblockalypseLogo.setTexture(TextureManager::Instance()->getTexture(theme.logo.key.c_str()));
+    mAblockalypseLogo.scale(theme.logoScale);
+    mAblockalypseLogo.center();
+    mAblockalypseLogo.setPos(mAblockalypseLogo.getX(), theme.logoY);
+}
+
+void MenuState::onThemeChanged(const ThemeDef& theme) {
+    applyLogo(theme);
+    mainUI.applyTheme(theme);
 }
 
 bool MenuState::resume() {

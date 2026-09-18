@@ -6,7 +6,11 @@ Purpose: see header.
 Date: Dec/2/2021
 */
 
+#include <string>
+#include <utility>
+
 #include "../inc/Audio.h"
+#include "../inc/Theme.h"
 
 ley::Audio::Audio() :
 playlistNumber(0), playlistMax(0),
@@ -36,57 +40,7 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
         SDL_Log("Mix_LoadMUS(musIntro): %s", Mix_GetError());
     }
     
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/ADREAM.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(adream.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/BBSINTRO.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(bbsintro.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/FM-SCRAP.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(fm-scrap.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/HARDCORE.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(hardcore.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/INC.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(inc.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/IZ-MIH.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(iz-mih.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/OASIS.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(oasis.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/STEVEE.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(stevee.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/UNITECH.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(unitech.s3m): %s", Mix_GetError());
-    }
-
-    mMusicList.push_back(Mix_LoadMUS("./assets/s3m/VOUGE-ME.ogg"));
-    if(!mMusicList.back()) {
-        SDL_Log("Mix_LoadMUS(vouge-me.s3m): %s", Mix_GetError());
-    }
-
-    playlistMax = static_cast<int>(mMusicList.size());
+    // Gameplay playlist is theme-dependent; GameModel calls setTheme() once config is read.
 
     //Set Music Volume
     Mix_VolumeMusic(20);
@@ -104,9 +58,7 @@ sfxSqueek(nullptr), sfxPiecesFalling(nullptr), sfxInPlace(nullptr), sfxFallDown(
 ley::Audio::~Audio() {
 
     // Free all music tracks
-    for (Mix_Music* m : mMusicList) {
-        if (m) Mix_FreeMusic(m);
-    }
+    freePlaylist();
     if (musIntro)     Mix_FreeMusic(musIntro);
     if (musMainMenu)  Mix_FreeMusic(musMainMenu);
 
@@ -126,6 +78,55 @@ ley::Audio::~Audio() {
     Mix_CloseAudio();
 
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
+}
+
+void ley::Audio::freePlaylist() {
+    for (Mix_Music* m : mMusicList) {
+        if (m) Mix_FreeMusic(m);
+    }
+    mMusicList.clear();
+    playlistMax = 0;
+    playlistNumber = 0;
+}
+
+bool ley::Audio::setTheme(ley::Theme theme) {
+
+    if (mPlaylistLoaded && theme == mPlaylistTheme) {
+        return true; // already loaded
+    }
+
+    // Load the new playlist BEFORE touching the current one, so a theme whose
+    // music is missing cannot leave us with an empty/half-swapped playlist.
+    std::vector<Mix_Music*> loaded;
+    for (const std::string& path : ley::themeDef(theme).musicPaths) {
+        Mix_Music* m = Mix_LoadMUS(path.c_str());
+        if (!m) {
+            SDL_Log("Mix_LoadMUS(%s): %s", path.c_str(), Mix_GetError());
+            continue; // skip missing tracks rather than keep a null in the playlist
+        }
+        loaded.push_back(m);
+    }
+
+    if (loaded.empty()) {
+        SDL_Log("Audio: no tracks loaded for theme '%s'; keeping current playlist", ley::themeToString(theme).c_str());
+        return false;
+    }
+
+    // Mix_FreeMusic on a track that is fading out blocks until the fade ends,
+    // so stop music outright before swapping. Theme changes only happen from the
+    // Options menu (or at startup), where no gameplay track should be audible.
+    if (Mix_PlayingMusic() || Mix_FadingMusic() != MIX_NO_FADING) {
+        Mix_HaltMusic();
+    }
+
+    freePlaylist();
+    mMusicList = std::move(loaded);
+    playlistMax = static_cast<int>(mMusicList.size());
+    playlistNumber = 0;
+    mPlaylistTheme = theme;
+    mPlaylistLoaded = true;
+    SDL_Log("Audio: loaded %d tracks for theme '%s'", playlistMax, ley::themeToString(theme).c_str());
+    return true;
 }
 
 void ley::Audio::playIntro() {

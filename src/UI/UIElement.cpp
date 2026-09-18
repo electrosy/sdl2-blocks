@@ -6,6 +6,7 @@ Purpose: see header.
 Date: Jul/17/2021
 */
 #include "../../inc/UI/UIElement.h"
+#include "../../inc/Theme.h"
 ley::UIElement::UIElement() {
     mPlaceHolder = true;
 }
@@ -30,10 +31,7 @@ mMessage(message) {
     mHotFont.updateMessage(mMessage);
     mMainFont.updateMessage(mMessage);
 
-    mBaseFont.setColor(CORANGE);
-    mHotFont.setColor(CPURPLE);
-    mMainFont.setColor(CPINK);
-    
+    applyThemeColors(ley::activeThemeDef());
 
     mBaseFont.setFontSize(size);
     mHotFont.setFontSize(size);
@@ -120,4 +118,10 @@ void ley::UIElement::setBaseColor(SDL_Color inColor) {
 
 void ley::UIElement::setMainColor(SDL_Color inColor) {
     mMainFont.setColor(inColor);
+}
+
+void ley::UIElement::applyThemeColors(const ley::ThemeDef& theme) {
+    mBaseFont.setColor(theme.fontBase);
+    mHotFont.setColor(theme.fontHot);
+    mMainFont.setColor(theme.fontMain);
 }

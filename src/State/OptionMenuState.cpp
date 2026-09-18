@@ -3,6 +3,7 @@
 #include "../../inc/Audio.h"
 #include "../../inc/Board.h"
 #include "../../inc/LanguageModel.h"
+#include "../../inc/ConfigIO.h"
 
 #include <fstream>
 #include <sstream> 
@@ -24,7 +25,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
     mWallKickOnLabelFont{31,300,10,20},
     mDropCoolDownLabelFont{31,350,10,20},
     mShowProgressBarLabelFont{31,400,10,20},
-    mStartLevelLabelFont{31,450,10,20}
+    mStartLevelLabelFont{31,450,10,20},
+    mThemeLabelFont{31,500,10,20}
 
     {
     // TODO streamline the text entry field an make the logic a little more generic so that its more straight forward to add new options.
@@ -39,7 +41,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         &mWallKickOnTextEntry,
         &mDropCoolDownTextEntry,
         &mShowProgressBarTextEntry,
-        &mStartLevelTextEntry
+        &mStartLevelTextEntry,
+        &mThemeTextEntry
     };
     initTextEntry(
         mBoardSizeTextEntry,
@@ -138,6 +141,18 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         mGameModel->getLanguageModel()->getWord("enter a number between 1 and 29", 0, false, capitalizationtype::capitalizeFirst)
     );
 
+    initTextEntry(
+        mThemeTextEntry,
+        false,
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::swoosh);},
+        [this]() {mGameModel->audio()->playSfx(ley::sfx::squeek);},
+        12,
+        {325,500},
+        "^(jazz|ablockalypse)$",
+        mGameModel->getLanguageModel()->getWord("must be one of: jazz, ablockalypse", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter one of: jazz, ablockalypse", 0, false, capitalizationtype::capitalizeFirst)
+    );
+
     mOptionUI.pushUIElement(
         [this](){mBoardSizeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousOptionsValue);},
         [this]()->bool{return mBoardSizeTextEntry.hasFocus();},
@@ -181,10 +196,15 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         [this]()->bool{return mStartLevelTextEntry.hasFocus();},
         [this](){ commitStartLevel(); });
 
-    mOptionUI.pushFont("languageOptions", {29,500}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mOptionUI.pushFont("keyboardOptions", {29,550}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushUIElement(
+        [this](){mThemeTextEntry.handleFocusChange(&mActiveUIElement, &mPreviousThemeValue);},
+        [this]()->bool{return mThemeTextEntry.hasFocus();},
+        [this](){ commitTheme(); });
+
+    mOptionUI.pushFont("languageOptions", {29,550}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("keyboardOptions", {29,600}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     // TODO localization
-    mOptionUI.pushFont("blockEditor", {29,600}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    mOptionUI.pushFont("blockEditor", {29,650}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 }
 
 void OptionMenuState::update(ley::Command command) {
@@ -196,15 +216,15 @@ void OptionMenuState::update(ley::Command command) {
     }
 
     //  TODO maybe you can provide the menuObject with a function pointer to the function that needs to be called so this isn't hard coded.
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 8) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 9) {
         mGameModel->stateChange(ley::StateChange::languageoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 9) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 10) {
         mGameModel->stateChange(ley::StateChange::keyboardoptions);
     }
 
-    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 10) {
+    if(command == ley::Command::UI_enter && mOptionUI.getIndex() == 11) {
         mGameModel->stateChange(ley::StateChange::blockeditor);
     }
 
@@ -291,6 +311,21 @@ void OptionMenuState::commitStartLevel() {
     }
 }
 
+void OptionMenuState::commitTheme() {
+
+    if(mThemeTextEntry.commit(mPreviousThemeValue)) {
+        mGameModel->setTheme(ley::stringToTheme(mThemeTextEntry.getTextBoxValue()));
+        // Show the theme that is actually active (setTheme refuses a theme whose music is missing).
+        mThemeTextEntry.setTextBoxValue(ley::themeToString(mGameModel->getTheme()));
+        refreshTheme(); // re-skin this menu right away as confirmation
+        ConfigIO::writeMainConfig(mGameModel); // persist now, not only at shutdown
+    }
+}
+
+void OptionMenuState::onThemeChanged(const ThemeDef& theme) {
+    mOptionUI.applyTheme(theme);
+}
+
 void OptionMenuState::render() {
     BaseState::render();
     mOptionUI.render(mVideoSystem);
@@ -310,6 +345,7 @@ void OptionMenuState::loadRenderables() {
     mRenderables.push_back(&mDropCoolDownLabelFont);
     mRenderables.push_back(&mShowProgressBarLabelFont);
     mRenderables.push_back(&mStartLevelLabelFont);
+    mRenderables.push_back(&mThemeLabelFont);
     
     //text entries
     for (auto* entry : mTextEntries) {
@@ -335,6 +371,7 @@ bool OptionMenuState::onEnter() {
     mDropCoolDownTextEntry.setTextBoxValue( std::to_string(mGameModel->getDropCoolDown()));
     mShowProgressBarTextEntry.setTextBoxValue( mGameModel->getShowProgressBar() ? "on" : "off" );
     mStartLevelTextEntry.setTextBoxValue( std::to_string(mGameModel->getStartLevel()) );
+    mThemeTextEntry.setTextBoxValue( ley::themeToString(mGameModel->getTheme()) );
 
     initTextEntryMessages();
     positionOptionsLabels();
@@ -365,6 +402,7 @@ bool OptionMenuState::onExit() {
     commitHardDropCoolDown();
     commitShowProgressBar();
     commitStartLevel();
+    commitTheme();
     
     mActiveUIElement = {};
 
@@ -419,6 +457,7 @@ void OptionMenuState::initTextEntryMessages() {
     mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
     mShowProgressBarLabelFont.updateMessage("Show progress bar");
     mStartLevelLabelFont.updateMessage("Start level");
+    mThemeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("theme", 0, false, capitalizationtype::capitalizeFirst));
 }
 
 void OptionMenuState::positionOptionsLabels() {
@@ -459,6 +498,10 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mShowProgressBarLabelFont.getTTFFont(), mShowProgressBarLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mShowProgressBarLabelFont.getPos();
     mShowProgressBarTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+
+    TTF_SizeUTF8( mThemeLabelFont.getTTFFont(), mThemeLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mThemeLabelFont.getPos();
+    mThemeTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 }
 
 }

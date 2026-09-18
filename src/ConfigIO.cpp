@@ -30,6 +30,7 @@ void ley::ConfigIO::readMainConfig(ley::GameModel* gm) {
         {"dropcooldown",    [gm](const std::string& v){ gm->setDropCoolDown(std::stoi(v)); }},
         {"showprogressbar", [gm](const std::string& v){ gm->setShowProgressBar(v == "on"); }},
         {"startlevel",      [gm](const std::string& v){ gm->setStartLevel(std::stoi(v)); }},
+        {"theme",           [gm](const std::string& v){ gm->setTheme(ley::stringToTheme(v)); }},
     };
 
     std::ifstream inFile("mainconfig.csv");
@@ -61,6 +62,7 @@ void ley::ConfigIO::writeMainConfig(const ley::GameModel* gm) {
     f << "dropcooldown"    << ',' << std::to_string(gm->getDropCoolDown())       << '\n';
     f << "showprogressbar" << ',' << (gm->getShowProgressBar() ? "on" : "off")   << '\n';
     f << "startlevel"      << ',' << gm->getStartLevel()                         << '\n';
+    f << "theme"           << ',' << ley::themeToString(gm->getTheme())          << '\n';
 }
 
 /* ── Keyboard bindings ──────────────────────────────────────────────────── */

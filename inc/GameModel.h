@@ -14,6 +14,7 @@ Date: Feb/15/2020
 
 #include "Block.h"
 #include "Input.h"
+#include "Theme.h"
 
 namespace ley {
 
@@ -197,6 +198,8 @@ public:
     bool getShowProgressBar() const { return mShowProgressBar; };
     int getStartLevel() const { return mStartLevel; }
     void setStartLevel(int startLevel) { mStartLevel = startLevel; }
+    Theme getTheme() const { return ley::activeTheme(); }
+    void setTheme(Theme theme);         // music + visuals, all-or-nothing; defined in GameModel_setup.cpp
     int calcLevel();                    //Calculate current level based on number of lines completed
 
 };

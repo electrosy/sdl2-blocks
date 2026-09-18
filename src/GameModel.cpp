@@ -45,6 +45,7 @@ mDebugOnlyLine(false) {
     loadKeyBindings();
     loadButtonBindings();
     ConfigIO::readMainConfig(this);
+    setTheme(getTheme()); // load the playlist even when mainconfig.csv has no theme key
     readConfigOther();
     mActiveBlock.setBlockDataPtr(&mBlockMapData);
     mLanguageModel->loadLanguage();

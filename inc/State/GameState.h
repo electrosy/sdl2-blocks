@@ -30,6 +30,7 @@ public:
     virtual bool onExit() = 0; //when the state is poped off
     virtual bool resume() = 0; // called when the state below this one becomes active again (the state on top was popped)
     virtual bool onPause() = 0; //When another state is pushed on after this one.
+    virtual void refreshTheme() {} // called by GameStateMachine before onEnter()/resume()
     ley::UIWidget* activeUIelement();
     virtual void UI_ToggleFocus();
     virtual void commitUI();

@@ -80,6 +80,7 @@ public:
     void render(ley::Video* v);
     void runCommand(ley::Command command);
     void setWidth(int width) { mWidth = width; };
+    void applyTheme(const ThemeDef& theme); // recolor every element (textures rebuild on next render)
 };
 
 }

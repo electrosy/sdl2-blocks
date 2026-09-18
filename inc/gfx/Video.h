@@ -38,6 +38,7 @@ private:
     bool video_ready; //video is woken up and initialized.
     ley::GameModel* gm;
     bool renderbg; //render background or not.
+    unsigned int mAppliedThemeRevision = 0; //theme revision the current background was chosen for
     double mili_adjust; //number of mili seconds to delay the frame
     Uint32 frame_start;
     ley::RenderablesPtr mRenderables;

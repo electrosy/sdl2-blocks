@@ -19,7 +19,11 @@ public:
 
     virtual StateID getStateID() const { return StateID::Menu; }
 
+protected:
+    virtual void onThemeChanged(const ThemeDef& theme) override;
+
 private:
+    void applyLogo(const ThemeDef& theme);
 
 
     ley::Sprite mBackground;

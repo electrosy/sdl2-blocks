@@ -7,7 +7,14 @@ Purpose: see header.
 #include "../../inc/State/BaseState.h"
 
 ley::BaseState::BaseState(ley::Video* v, ley::GameModel* gm)
-    : mVideoSystem(v), mGameModel(gm) {}
+    : mVideoSystem(v), mGameModel(gm), mAppliedThemeRevision(ley::themeRevision()) {}
+
+void ley::BaseState::refreshTheme() {
+    if (mAppliedThemeRevision == ley::themeRevision()) return;
+    mAppliedThemeRevision = ley::themeRevision();
+    SDL_Log("%s", ("Applying theme to " + stateIDName(getStateID())).c_str());
+    onThemeChanged(ley::activeThemeDef());
+}
 
 void ley::BaseState::render() {
     mRenderables.renderAll(mVideoSystem->getRenderer(), false);

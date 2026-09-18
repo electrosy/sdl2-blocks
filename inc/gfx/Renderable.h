@@ -19,6 +19,7 @@ Date: Feb/17/2020
 namespace ley {
 
 const SDL_Color CWHITE = {255, 255, 255, 255};
+const SDL_Color CDARKTEAL = {0, 128, 128, 255};   // jazz theme menu base (reconstructed value)
 const SDL_Color CBRIGHTRED = {238, 51, 84, 255};
 const SDL_Color CORANGE = {255, 140, 0, 255};
 const SDL_Color CPURPLE = {147, 51, 234, 255};

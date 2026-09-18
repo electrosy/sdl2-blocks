@@ -18,6 +18,7 @@ private:
     ley::Font mDropCoolDownLabelFont;
     ley::Font mShowProgressBarLabelFont;
     ley::Font mStartLevelLabelFont;
+    ley::Font mThemeLabelFont;
     //text entries
     ley::TextEntry mBoardSizeTextEntry;
     ley::TextEntry mKeyDelayTextEntry;
@@ -27,6 +28,7 @@ private:
     ley::TextEntry mDropCoolDownTextEntry;
     ley::TextEntry mShowProgressBarTextEntry;
     ley::TextEntry mStartLevelTextEntry;
+    ley::TextEntry mThemeTextEntry;
     std::vector<ley::TextEntry*> mTextEntries;
 
     ley::Sprite mBackground;
@@ -40,6 +42,7 @@ private:
     std::string mPreviousDropCoolDownValue;
     std::string mPreviousShowProgressBarValue;
     std::string mPreviousStartLevelValue;
+    std::string mPreviousThemeValue;
     void positionOptionsLabels();
     
 public:
@@ -52,6 +55,11 @@ public:
     virtual bool onEnter() override;
     virtual bool resume() override;
     virtual StateID getStateID() const { return StateID::OptionMenu; }
+
+protected:
+    virtual void onThemeChanged(const ThemeDef& theme) override;
+
+public:
     
     void initTextEntryMessages();
     void commitBoardSize();
@@ -62,6 +70,7 @@ public:
     void commitHardDropCoolDown();
     void commitShowProgressBar();
     void commitStartLevel();
+    void commitTheme();
     void initStartLevelTextEntry();
     void initTextEntry(
         ley::TextEntry& entry,

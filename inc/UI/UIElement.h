@@ -16,6 +16,8 @@ Date: Jul/17/2021
 
 namespace ley {
 
+struct ThemeDef;
+
 enum class Character {
     space,backspace,enter,none
 };
@@ -62,6 +64,7 @@ public:
     std::function<void()> getEnterFunction() {return mCommitUI;};
     void setBaseColor(SDL_Color inColor);
     void setMainColor(SDL_Color inColor);
+    void applyThemeColors(const ThemeDef& theme); // base/hot/main from the theme palette
     bool getPlaceHolder() const { return mPlaceHolder; };
     
 };

@@ -9,6 +9,7 @@ void ley::GameStateMachine::pushState(GameState *pState) {
     }
     //Then push the new state and call onEnter()
     mGameStates.push_back(pState);
+    mGameStates.back()->refreshTheme();
     mGameStates.back()->onEnter();
 }
 
@@ -24,6 +25,7 @@ void ley::GameStateMachine::popState() {
 
     //If there is another state remaining in the stack, call resume()
     if(!mGameStates.empty()) {
+        mGameStates.back()->refreshTheme();
         mGameStates.back()->resume();
     }
 }
@@ -41,6 +43,7 @@ void ley::GameStateMachine::changeState(GameState *pState) {
     }
 
     mGameStates.push_back(pState);
+    mGameStates.back()->refreshTheme();
     mGameStates.back()->onEnter();
 }
 

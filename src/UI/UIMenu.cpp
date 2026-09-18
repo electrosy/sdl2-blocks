@@ -52,6 +52,12 @@ void ley::UIMenu::pushUIElement(const std::function<void()> &toggle, const std::
     mElements.push_back(temp);
 }
 
+void ley::UIMenu::applyTheme(const ley::ThemeDef& theme) {
+    for (auto& element : mElements) {
+        element.applyThemeColors(theme);
+    }
+}
+
 int ley::UIMenu::count() const {
     return mElements.size();
 }

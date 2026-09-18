@@ -16,6 +16,7 @@ Purpose: BaseState is a concrete intermediate base that provides the members and
 #include "../gfx/Video.h"
 #include "../GameModel.h"
 #include "../gfx/Renderables.h"
+#include "../Theme.h"
 
 namespace ley {
 
@@ -29,7 +30,19 @@ protected:
 
     explicit BaseState(Video* v, GameModel* gm);
 
+    // Override to re-skin anything built from the theme (UIMenu colors, logos, ...).
+    // Only needed by states that can stay alive across a theme change — i.e. states
+    // that get resume()d, or the Options state that changes it. Newly constructed
+    // states already read the active theme.
+    virtual void onThemeChanged(const ThemeDef& /*theme*/) {}
+
+private:
+    unsigned int mAppliedThemeRevision; // theme revision this state was last built/refreshed for
+
 public:
+    // Calls onThemeChanged() if the active theme changed since this state last applied it.
+    virtual void refreshTheme() override;
+
     // Default render: mRenderables + debug overlay.
     // Override and optionally call BaseState::render() to extend.
     virtual void render() override;

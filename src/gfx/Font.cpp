@@ -84,7 +84,12 @@ ley::Font& ley::Font::operator=(const ley::Font& other) {
 
 void ley::Font::setColor(SDL_Color c) {
     mColor = c;
-    mMessageTexture = {};
+    // Invalidate so preRender rebuilds with the new color. Destroy rather than
+    // just null the pointer: theme switches recolor many fonts and would leak.
+    if(mMessageTexture) {
+        SDL_DestroyTexture(mMessageTexture);
+        mMessageTexture = nullptr;
+    }
 }
 
 void ley::Font::updateMessage(const std::string& s) {

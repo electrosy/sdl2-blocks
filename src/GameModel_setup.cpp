@@ -16,12 +16,26 @@ Purpose: GameModel setup, configuration, and binding methods.
 #include "../inc/GameModel.h"
 #include "../inc/Board.h"
 #include "../inc/ConfigIO.h"
+#include "../inc/Audio.h"
 
 void ley::GameModel::readConfigOther() {
     auto bs = ConfigIO::readBoardSize();
     if(bs.height >= BOARDHEIGHT_MIN && bs.width >= BOARDWIDTH_MIN) {
         resizeBoard(bs.width, bs.height);
     }
+}
+
+void ley::GameModel::setTheme(ley::Theme theme) {
+    // Music first: it is the only part that can fail (missing files). Visuals are
+    // switched only once the playlist is in place, so music and visuals never
+    // disagree. On failure the previous theme stays active in full, and that is
+    // what gets persisted by ConfigIO::writeMainConfig().
+    if (!mAudioSystem->setTheme(theme)) {
+        SDL_Log("GameModel::setTheme: '%s' rejected (no music loaded), keeping '%s'",
+                ley::themeToString(theme).c_str(), ley::themeToString(getTheme()).c_str());
+        return;
+    }
+    ley::setActiveTheme(theme); // visuals: UI palette, backgrounds, logo (revision-driven refresh)
 }
 
 void ley::GameModel::resizeBoard(int width, int height) {

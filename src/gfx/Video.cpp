@@ -5,10 +5,12 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Feb/14/2020
 */
+#include <algorithm>
 #include <unordered_map>
 #include "../../inc/gfx/Video.h"
 #include "../../inc/Board.h"
 #include "../../inc/LanguageModel.h"
+#include "../../inc/Theme.h"
 
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
@@ -191,13 +193,19 @@ void ley::Video::setBackgroundTexture() {
     start_rect.h = 720;
  
 
-    if(gm->newLevel()) {
-        std::string background_level;
-        if(gm->calcLevel() <= 9) {
-            background_level = "BG_WEST_0" + std::to_string(gm->calcLevel()); //background based on current level.
-        } else {
-            background_level = "BG_WEST_10";
-        }
+    // Consume the new-level flag every frame (it is fire-once), then also
+    // re-pick the background if the theme changed since we last chose one.
+    const bool levelChanged = gm->newLevel();
+    const bool themeChanged = mAppliedThemeRevision != ley::themeRevision();
+
+    if(levelChanged || themeChanged) {
+        mAppliedThemeRevision = ley::themeRevision();
+
+        //background based on current level; levels past the theme's last background reuse it.
+        const auto& backgrounds = ley::activeThemeDef().backgrounds;
+        const int level = gm->calcLevel();
+        const size_t index = level < 1 ? 0 : std::min(static_cast<size_t>(level), backgrounds.size()) - 1;
+        const std::string& background_level = backgrounds[index].key;
         
         spriteBackgroundfadeout = spriteBackground; //first time spriteBackground is empty and spriteBackgroundfadeout gets set to empty and skips the rendering process
         spriteBackgroundfadeout.reverseFader();
@@ -286,8 +294,16 @@ void ley::Video::loadTextures() {
     TextureManager::Instance()->loadTexture("assets/graphic/ph/yellow-glass2025-30x30.png", "i");
     TextureManager::Instance()->loadTexture("assets/graphic/ph/cyan-glass2025-30x30.png", "j");
     
-    //Logos    
-    TextureManager::Instance()->loadTexture("assets/ablockalypse-logo-v2.png", "ablockalypse-logo-2026");
+    //Themed textures (menu logo + level backgrounds) for every theme, so switching is a key lookup.
+    for (ley::Theme theme : ley::allThemes()) {
+        const ley::ThemeDef& def = ley::themeDef(theme);
+        TextureManager::Instance()->loadTexture(def.logo.path.c_str(), def.logo.key);
+        for (const ley::TextureAsset& bg : def.backgrounds) {
+            TextureManager::Instance()->loadTexture(bg.path.c_str(), bg.key);
+        }
+    }
+
+    //Logos
     TextureManager::Instance()->loadTexture("assets/sdllogo.png", "sdl");
     TextureManager::Instance()->loadTexture("assets/colorit2023.png", "itlogo");
     TextureManager::Instance()->loadTexture("assets/graphic/main-menu.jpg", "mainmenuclouds");
@@ -324,18 +340,6 @@ void ley::Video::loadTextures() {
 
     //Game controls
     TextureManager::Instance()->loadTexture("assets/graphic/game_controls.png", "game-controls");
-
-    //Backgrounds.
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background1.jpg", "BG_WEST_01");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background2.jpg", "BG_WEST_02");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background3.jpg", "BG_WEST_03");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background4.jpg", "BG_WEST_04");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background5.jpg", "BG_WEST_05");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background6.jpg", "BG_WEST_06");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background7.jpg", "BG_WEST_07");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background8.jpg", "BG_WEST_08");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background9.jpg", "BG_WEST_09");
-    TextureManager::Instance()->loadTexture("assets/background/Ablockalypse/background10.jpg", "BG_WEST_10");
 
     //3d blocks
     TextureManager::Instance()->loadTexture("assets/blocks-background-517x558. png", "3dblocks");

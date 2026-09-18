@@ -97,6 +97,18 @@ void ley::Sprite::bottomRight() {
     setPos(SCREEN_WIDTH - mWidth*mScale, SCREEN_HEIGHT - mHeight*mScale);
 }
 
+void ley::Sprite::setTexture(SDL_Texture* t) {
+    texture = t;
+    if (!texture) {
+        return;
+    }
+    SDL_QueryTexture(texture, nullptr, nullptr, &mWidth, &mHeight);
+    frames.clear();
+    dest_rect.w = mWidth;
+    dest_rect.h = mHeight;
+    mFaderBar({0, 0, mWidth, mHeight});
+}
+
 void ley::Sprite::scale(double s) {
     mScale = s;
 }
