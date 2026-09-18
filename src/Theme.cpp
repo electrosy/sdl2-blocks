@@ -16,9 +16,11 @@ namespace {
 const ley::ThemeDef JAZZ_THEME {
     "jazz",
     {
-        // Existing in-repo jazz playlist (original theme). Do not use missing Pixabay paths under assets/audio/music/.
-        "./assets/audio/jazz.ogg",
-        "./assets/audio/wild_jazz.mp3",
+        // In-repo jazz playlist (non-FULL_ASSETS path from historical Audio.cpp).
+        // The 9 Pixabay tracks under assets/audio/music/ were FULL_ASSETS-only and were never committed to this public repo.
+        "./assets/audio/wild_jazz.mp3",       // OpenGameArt — Alex McCulloch
+        "./assets/audio/jazz.ogg",            // OpenGameArt — Spring Spring
+        "./assets/audio/Shake and Bake.mp3",  // OpenGameArt — Matthew Pablo
     },
     {
         {"BG_JAZZ_01", "assets/background/jazz/bridge-7504605_1280x720.jpg"},
