@@ -16,15 +16,9 @@ namespace {
 const ley::ThemeDef JAZZ_THEME {
     "jazz",
     {
-        "./assets/audio/music/come-with-me-tonight-239958.mp3",   // SOURCE https://pixabay.com/music/traditional-jazz-come-with-me-tonight-239958/  AUTHOR u_0tyyfec3hz
-        "./assets/audio/music/moonlit-groove-248491.mp3",         // SOURCE https://pixabay.com/music/traditional-jazz-moonlit-groove-248491/  AUTHOR John Schofield
-        "./assets/audio/music/jazz-elevator-musik-278566.mp3",    // SOURCE https://pixabay.com/music/traditional-jazz-jazz-elevator-musik-278566/  AUTHOR Tommsel
-        "./assets/audio/music/jazz-only-good-vibes-275341.mp3",   // SOURCE https://pixabay.com/music/traditional-jazz-jazz-only-good-vibes-275341/  AUTHOR NiKneT_Art
-        "./assets/audio/music/guitar-jazz-song-300816.mp3",       // SOURCE https://pixabay.com/music/smooth-jazz-guitar-jazz-song-300816/  AUTHOR Mircea Iancu
-        "./assets/audio/music/sebuah-kenangan-226035.mp3",        // SOURCE https://pixabay.com/music/traditional-jazz-sebuah-kenangan-226035/  AUTHOR Wahyu Music
-        "./assets/audio/music/good-morning-cafe-jazz-227888.mp3", // SOURCE https://pixabay.com/music/traditional-jazz-good-morning-cafe-jazz-227888/  AUTHOR Sleep Volume
-        "./assets/audio/music/rhythmic-jazz-289915.mp3",          // SOURCE https://pixabay.com/music/funk-rhythmic-jazz-289915/  AUTHOR Silviu on the street
-        "./assets/audio/music/to-my-precious-person-291357.mp3",  // SOURCE https://pixabay.com/music/beats-to-my-precious-person-291357/  AUTHOR EDDIE LEE
+        // Existing in-repo jazz playlist (original theme). Do not use missing Pixabay paths under assets/audio/music/.
+        "./assets/audio/jazz.ogg",
+        "./assets/audio/wild_jazz.mp3",
     },
     {
         {"BG_JAZZ_01", "assets/background/jazz/bridge-7504605_1280x720.jpg"},
