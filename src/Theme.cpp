@@ -16,11 +16,17 @@ namespace {
 const ley::ThemeDef JAZZ_THEME {
     "jazz",
     {
-        // In-repo jazz playlist (non-FULL_ASSETS path from historical Audio.cpp).
-        // The 9 Pixabay tracks under assets/audio/music/ were FULL_ASSETS-only and were never committed to this public repo.
-        "./assets/audio/wild_jazz.mp3",       // OpenGameArt — Alex McCulloch
-        "./assets/audio/jazz.ogg",            // OpenGameArt — Spring Spring
-        "./assets/audio/Shake and Bake.mp3",  // OpenGameArt — Matthew Pablo
+        // Full jazz soundtrack (Steam FULL_ASSETS / assets/audio/music/) — 9 Pixabay tracks.
+        "./assets/audio/music/come-with-me-tonight-239958.mp3",
+        "./assets/audio/music/moonlit-groove-248491.mp3",
+        "./assets/audio/music/jazz-elevator-musik-278566.mp3",
+        "./assets/audio/music/jazz-only-good-vibes-275341.mp3",
+        "./assets/audio/music/guitar-jazz-song-300816.mp3",
+        "./assets/audio/music/sebuah-kenangan-226035.mp3",
+        "./assets/audio/music/good-morning-cafe-jazz-227888.mp3",
+        "./assets/audio/music/rhythmic-jazz-289915.mp3",
+        "./assets/audio/music/to-my-precious-person-291357.mp3",
+
     },
     {
         {"BG_JAZZ_01", "assets/background/jazz/bridge-7504605_1280x720.jpg"},
