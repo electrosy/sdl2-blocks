@@ -34,21 +34,27 @@ void unregisterLiveFont(ley::Font* font) {
 }
 
 std::string ley::fontFileForLanguage(const std::string& languageCode) {
-    std::string path = FONTFILE;
+    std::vector<std::string> candidates;
     if (languageCode == "ja") {
-        path = FONTFILE_JA;
+        candidates = { FONTFILE_JA, FONTFILE_JA_CJK };
     }
     else if (languageCode == "zh-CN") {
-        path = FONTFILE_ZH_CN;
+        candidates = { FONTFILE_ZH_CN, FONTFILE_ZH_CN_CJK };
     }
 
-    if (path != FONTFILE && !fontFileExists(path)) {
-        SDL_Log("ley::fontFileForLanguage: missing CJK font '%s' for locale '%s'; falling back to %s",
-                path.c_str(), languageCode.c_str(), FONTFILE);
+    if (candidates.empty()) {
         return FONTFILE;
     }
 
-    return path;
+    for (const auto& path : candidates) {
+        if (fontFileExists(path)) {
+            return path;
+        }
+    }
+
+    SDL_Log("ley::fontFileForLanguage: missing CJK fonts for locale '%s' (tried %s, %s); falling back to %s",
+            languageCode.c_str(), candidates[0].c_str(), candidates[1].c_str(), FONTFILE);
+    return FONTFILE;
 }
 
 void ley::setCurrentFontFile(const std::string& path) {

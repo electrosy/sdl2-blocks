@@ -16,9 +16,11 @@ namespace ley {
 
 // TODO investigate where we are loading the font file multiple times.
 const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
-// Drop these CJK fonts into assets/fonts/ for ja / zh-CN. Missing files fall back to FONTFILE.
-const auto FONTFILE_JA = "assets/fonts/NotoSansCJKjp-Regular.otf";
-const auto FONTFILE_ZH_CN = "assets/fonts/NotoSansCJKsc-Regular.otf";
+// Live-tree CJK drop-ins (preferred). NotoSansCJK* names are also accepted.
+const auto FONTFILE_JA = "assets/fonts/NotoSansJP-Regular.otf";
+const auto FONTFILE_JA_CJK = "assets/fonts/NotoSansCJKjp-Regular.otf";
+const auto FONTFILE_ZH_CN = "assets/fonts/NotoSansSC-Regular.otf";
+const auto FONTFILE_ZH_CN_CJK = "assets/fonts/NotoSansCJKsc-Regular.otf";
 const auto DEFAULT_FONT_SIZE = 24;
 
 std::string fontFileForLanguage(const std::string& languageCode);
