@@ -54,8 +54,8 @@ inline GridGuide stringToGridGuide(const std::string& s) {
     return it != table.end() ? it->second : GridGuide::off;
 }
 
-// Lightweight cues for the Video-owned ParticleSystem. Steven still needs to
-// lock which moments fire in a shippable build; the demo path is lineClear.
+// Cues for the Video-owned ParticleSystem. 0.7.6.0 ship set is lineClear +
+// hardDrop + pieceLock + combo (Tetris+ burst). No ambient dust bit.
 enum class ParticleMoment { lineClear, hardDrop, pieceLock, combo };
 
 struct ParticleCue {
@@ -70,9 +70,10 @@ constexpr unsigned PARTICLE_MOMENT_LINE_CLEAR = 1u << 0;
 constexpr unsigned PARTICLE_MOMENT_HARD_DROP  = 1u << 1;
 constexpr unsigned PARTICLE_MOMENT_PIECE_LOCK = 1u << 2;
 constexpr unsigned PARTICLE_MOMENT_COMBO      = 1u << 3;
-constexpr unsigned PARTICLE_MOMENT_ALL =
+constexpr unsigned PARTICLE_MOMENT_SHIP =
     PARTICLE_MOMENT_LINE_CLEAR | PARTICLE_MOMENT_HARD_DROP |
     PARTICLE_MOMENT_PIECE_LOCK | PARTICLE_MOMENT_COMBO;
+constexpr unsigned PARTICLE_MOMENT_ALL = PARTICLE_MOMENT_SHIP;
 
 inline std::string gridGuideToString(GridGuide g) {
     switch (g) {
@@ -143,8 +144,8 @@ private:
     bool mKeyDownEvent = false;
     bool mWaitForButtonPress = false;
     bool mButtonPressEvent = false;
-    bool mParticlesEnabled = false; // off until config/env/debug toggle
-    unsigned mParticleMoments = PARTICLE_MOMENT_LINE_CLEAR;
+    bool mParticlesEnabled = true; // ship default; F11 / env still toggle
+    unsigned mParticleMoments = PARTICLE_MOMENT_SHIP;
     bool mQuickDropping = false;
     std::vector<ParticleCue> mParticleCues;
     void queueParticleCue(const ParticleCue& cue);
@@ -233,7 +234,7 @@ public:
     void setParticleMoments(unsigned mask);
     unsigned getParticleMoments() const { return mParticleMoments; }
     std::vector<ParticleCue> takeParticleCues();
-    void applyParticleEnvOverride();    // ABLOCKALYPSE_PARTICLES=0|1|on|off|all
+    void applyParticleEnvOverride();    // ABLOCKALYPSE_PARTICLES=0|1|on|off|all (debug)
 
 };
 

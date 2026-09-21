@@ -15,7 +15,7 @@ Date: Feb/14/2020
 const auto TARGET_FPS = 144; //provide at least this many frames per second.
 const auto DELAY_TIME = 1000.0f / TARGET_FPS;
 const std::string APPLICATION_NAME = "Ablockalypse";
-const std::string APPLICATION_VER = "0.7.5.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
+const std::string APPLICATION_VER = "0.7.6.0"; //Major, Minor(Set of new features), Features, Bugfix or Refactor
 const std::string APPLICATION_PLATFORM = SDL_GetPlatform();
 const std::string APPLICATION_REL_TYPE = "Beta";
 const std::string APPLICATION_ENV = "Development";
@@ -126,7 +126,7 @@ void ley::Video::init() {
     mParticleLastTick = SDL_GetTicks();
 
     fontDebugMode = {10, 95, 240, 30};
-    fontDebugMode.updateMessage("Particles OFF");
+    fontDebugMode.updateMessage("Particles ON");
     mDebugRenderables.push_back(&fontDebugMode);
 
     //RectContainer
@@ -249,7 +249,7 @@ void ley::Video::pumpParticles() {
                 mParticles.emitPieceLock(boardCellsToPx(cue.pieceCells));
                 break;
             case ParticleMoment::combo:
-                mParticles.emitCombo({field.x - 120, COMBO_POS_Y_PX}, cue.comboCount);
+                mParticles.emitCombo({field.x - 120, COMBO_POS_Y_PX}, cue.comboCount, cue.lineCount, field);
                 break;
         }
     }

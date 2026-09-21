@@ -4,12 +4,13 @@ Copyright (C) 2026 Steven Philley
 
 Purpose: Lightweight CPU particle pool rendered through the existing
          Renderable path (same pattern as Font / ProgressBar / Board).
-         No GPU compute. Cap is small so a 144 FPS frame stays cheap.
+         No GPU compute. Cap 160 so a 144 FPS frame stays cheap.
 
-         Steven still needs to lock which gameplay moments fire (see
-         ParticleMoment in GameModel.h and docs/particles.md). The emit
-         methods below are the stable hooks; callers can stay behind the
-         particles / particlemoments flags until that call is made.
+         0.7.6.0 ship moments (Steven locked):
+           line clear (primary, full), hard drop / piece lock (medium),
+           combo / Tetris+ burst (stronger on 4+ lines).
+         Theme palette only (fontHot / fontBase / fontMain). No rainbow,
+         no ambient board dust.
 */
 #pragma once
 
@@ -51,17 +52,21 @@ public:
     bool isFrozen() const { return mFrozen; }
     std::size_t alive() const { return mParticles.size(); }
 
-    // Theme colors are sampled at emit time from Theme.h (activeThemeDef).
+    // Colors sampled at emit time from Theme.h (activeThemeDef palette only).
     void emitLineClear(int linePixelY, int lineCount, const SDL_Rect& playfield);
     void emitHardDrop(const SDL_Rect& piecePx);
     void emitPieceLock(const SDL_Rect& piecePx);
-    void emitCombo(SDL_Point origin, int comboCount);
+    void emitCombo(SDL_Point hudOrigin, int comboCount, int lineCount, const SDL_Rect& playfield);
 
 private:
     void spawn(const Particle& p);
-    SDL_Color themeColor(int which) const; // 0 base, 1 hot, 2 main
+    SDL_Color paletteColor(float towardBase) const; // 0 = fontHot, 1 = fontBase
     float nextF(float lo, float hi);
     int nextI(int lo, int hi);
+    void burst(int count, float x, float y, float xJitter, float yJitter,
+               float vxLo, float vxHi, float vyLo, float vyHi,
+               float lifeLo, float lifeHi, Uint8 alpha, Uint8 sizeLo, Uint8 sizeHi,
+               float towardBase);
 
     std::vector<Particle> mParticles;
     bool mFrozen = false;

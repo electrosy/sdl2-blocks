@@ -509,7 +509,7 @@ void ley::GameModel::onLine(int lineCount, int level) {
     addToScore(mPts_Line * level * linesSameTime * (mComboCount + 1));
     mComboCount++;
 
-    if (mComboCount > 1) {
+    if (mComboCount > 1 || lineCount >= 4) {
         ParticleCue cue;
         cue.moment = ParticleMoment::combo;
         cue.lineCount = lineCount;
@@ -601,7 +601,7 @@ void ley::GameModel::particlesToggle() {
 }
 
 void ley::GameModel::setParticleMoments(unsigned mask) {
-    mParticleMoments = mask ? mask : PARTICLE_MOMENT_LINE_CLEAR;
+    mParticleMoments = mask ? mask : PARTICLE_MOMENT_SHIP;
 }
 
 void ley::GameModel::queueParticleCue(const ParticleCue& cue) {
@@ -643,9 +643,9 @@ void ley::GameModel::applyParticleEnvOverride() {
     }
 
     setParticlesEnabled(true);
-    if (std::strcmp(env, "all") == 0) {
-        setParticleMoments(PARTICLE_MOMENT_ALL);
-        SDL_Log("ABLOCKALYPSE_PARTICLES=all: every emit stub is live");
+    if (std::strcmp(env, "all") == 0 || std::strcmp(env, "ship") == 0) {
+        setParticleMoments(PARTICLE_MOMENT_SHIP);
+        SDL_Log("ABLOCKALYPSE_PARTICLES=%s: ship moments on", env);
     }
 }
 
