@@ -121,6 +121,13 @@ void ley::Video::init() {
     mRenderables.push_back(&fontLvl);
     mRenderables.push_back(&fontScore);
     mRenderables.push_back(&mFontCombo);
+    mRenderablesTopLayer.push_back(&mParticles);
+    mParticles.setVisible(false);
+    mParticleLastTick = SDL_GetTicks();
+
+    fontDebugMode = {10, 95, 240, 30};
+    fontDebugMode.updateMessage("Particles OFF");
+    mDebugRenderables.push_back(&fontDebugMode);
 
     //RectContainer
     firstRectContainer(renderer);
@@ -184,6 +191,79 @@ void ley::Video::resetBackgroundFader() {
     spriteBackground = Sprite(); //clear this so that spriteBackgroundfadeout gets set to empty in setBackgroundTexture
 }
 
+void ley::Video::clearParticles() {
+    mParticles.clear();
+}
+
+SDL_Rect ley::Video::playfieldPx() const {
+    return {
+        gm->getBoard()->boardPosXPx(),
+        BOARD_POS_Y_PX,
+        gm->getBoard()->widthpx(),
+        BLOCKSIZE_PX * (gm->getBoard()->height() - BOARDSIZE_BUFFER)
+    };
+}
+
+SDL_Rect ley::Video::boardCellsToPx(const SDL_Rect& cells) const {
+    return {
+        gm->getBoard()->boardPosXPx() + cells.x * BLOCKSIZE_PX,
+        BLOCK_START_POS_Y_PX + cells.y * BLOCKSIZE_PX,
+        std::max(BLOCKSIZE_PX, cells.w * BLOCKSIZE_PX),
+        std::max(BLOCKSIZE_PX, cells.h * BLOCKSIZE_PX)
+    };
+}
+
+void ley::Video::pumpParticles() {
+    const Uint32 now = SDL_GetTicks();
+    float dt = 0.f;
+    if (mParticleLastTick != 0) {
+        dt = static_cast<float>(now - mParticleLastTick) / 1000.f;
+    }
+    mParticleLastTick = now;
+
+    if (!gm->getParticlesEnabled()) {
+        mParticles.setVisible(false);
+        mParticles.clear();
+        if (gm->isOverlayOn()) {
+            fontDebugMode.updateMessage("Particles OFF");
+        }
+        return;
+    }
+
+    mParticles.setVisible(true);
+    mParticles.setFrozen(gm->isPaused());
+
+    const SDL_Rect field = playfieldPx();
+    for (const ParticleCue& cue : gm->takeParticleCues()) {
+        switch (cue.moment) {
+            case ParticleMoment::lineClear:
+                mParticles.emitLineClear(
+                    BLOCK_START_POS_Y_PX + cue.boardLine * BLOCKSIZE_PX,
+                    cue.lineCount,
+                    field);
+                break;
+            case ParticleMoment::hardDrop:
+                mParticles.emitHardDrop(boardCellsToPx(cue.pieceCells));
+                break;
+            case ParticleMoment::pieceLock:
+                mParticles.emitPieceLock(boardCellsToPx(cue.pieceCells));
+                break;
+            case ParticleMoment::combo:
+                mParticles.emitCombo({field.x - 120, COMBO_POS_Y_PX}, cue.comboCount);
+                break;
+        }
+    }
+
+    mParticles.update(dt);
+
+    if (gm->isOverlayOn()) {
+        const std::string overlay = std::string("Particles ON ") +
+            std::to_string(mParticles.alive()) + "/" +
+            std::to_string(ParticleSystem::MAX_PARTICLES);
+        fontDebugMode.updateMessage(overlay);
+    }
+}
+
 /* functions */
 void ley::Video::setBackgroundTexture() {
     SDL_Rect start_rect;
@@ -233,6 +313,8 @@ void ley::Video::render() {
     if(gm->getGuideGridOn() != GridGuide::off) {
         renderGridLines();
     }
+
+    pumpParticles();
 
     //Then render sprites
     renderSprites();

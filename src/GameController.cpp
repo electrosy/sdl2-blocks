@@ -150,6 +150,10 @@ void ley::GameController::processCommands(ley::Command command) {
         mVideoSystem->increaseTransparency();
     }
 
+    if(command == ley::Command::debugparticles) {
+        mGm->particlesToggle();
+    }
+
     //allow debug commands to be used
     if(mGm->debugMode()) {
         if(command == ley::Command::console) {

@@ -8,6 +8,8 @@ Purpose: GameModel gameplay core — game loop, block movement, rotation,
 Date: Feb/15/2020
 */
 #include <array>
+#include <cstdlib>
+#include <cstring>
 
 #include <SDL2/SDL.h>
 #include "../inc/GameModel.h"
@@ -45,6 +47,7 @@ mDebugOnlyLine(false) {
     loadKeyBindings();
     loadButtonBindings();
     ConfigIO::readMainConfig(this);
+    applyParticleEnvOverride();
     setTheme(getTheme()); // load the playlist even when mainconfig.csv has no theme key
     readConfigOther();
     mActiveBlock.setBlockDataPtr(&mBlockMapData);
@@ -295,6 +298,14 @@ bool ley::GameModel::processLines(int &numLines) {
     if(fullLines.size()>0) {
         //add to the score based on number of lines completed in a single move
         linesRemoved = true;
+        for (char line : fullLines) {
+            ParticleCue cue;
+            cue.moment = ParticleMoment::lineClear;
+            cue.lineCount = numLines;
+            cue.comboCount = mComboCount + 1;
+            cue.boardLine = line;
+            queueParticleCue(cue);
+        }
     }
     while(fullLines.size()>0) {
         //TODO does order matter for fullLines, should we remove the highest number(bottom) line first?
@@ -417,6 +428,13 @@ bool ley::GameModel::moveBlock(Command d) {
                 // new board
                 mBoard->setBlock(mActiveBlock);
 
+                if (mQuickDropping) {
+                    ParticleCue dropCue;
+                    dropCue.moment = ParticleMoment::hardDrop;
+                    dropCue.pieceCells = mActiveBlock.getRect();
+                    queueParticleCue(dropCue);
+                }
+
                 mAudioSystem->playSfx(ley::sfx::inplace);
                 int currentLevel = mNumLevel; //Store the current level for points calculation which should happen for current level
                 int turnLines = 0; //lines cleared for this single turn.
@@ -465,6 +483,11 @@ bool ley::GameModel::moveBlock(Command d) {
 void ley::GameModel::onDrop() {
     addToScore(PTS_DROP * mNumLevel);
     mComboCount = 0;
+
+    ParticleCue cue;
+    cue.moment = ParticleMoment::pieceLock;
+    cue.pieceCells = mActiveBlock.getRect();
+    queueParticleCue(cue);
 }
 /* Use the level that the player is on while the lines are made */
 void ley::GameModel::onLine(int lineCount, int level) {
@@ -485,6 +508,15 @@ void ley::GameModel::onLine(int lineCount, int level) {
 
     addToScore(mPts_Line * level * linesSameTime * (mComboCount + 1));
     mComboCount++;
+
+    if (mComboCount > 1) {
+        ParticleCue cue;
+        cue.moment = ParticleMoment::combo;
+        cue.lineCount = lineCount;
+        cue.comboCount = mComboCount;
+        cue.pieceCells = mActiveBlock.getRect();
+        queueParticleCue(cue);
+    }
 }
 void ley::GameModel::overlayToggle() {
     mOverLayOn = !mOverLayOn;
@@ -506,6 +538,7 @@ void ley::GameModel::resetGame() {
     mNumLevel = 1;
     mScore = 0;
     mComboCount = 0;
+    mParticleCues.clear();
     initGame();
     mNewLevelToReport = true; //we always want to reset the game background when we restart the game.
     mNewHighScore = false;
@@ -548,8 +581,71 @@ bool ley::GameModel::newHighScore() {
 void ley::GameModel::quickDrop() {
 
     SDL_Log("Quick drop");
+    mQuickDropping = true;
     while(ley::GameModel::moveBlock(ley::Command::down)) {
 
+    }
+    mQuickDropping = false;
+}
+
+void ley::GameModel::setParticlesEnabled(bool on) {
+    mParticlesEnabled = on;
+    if (!on) {
+        mParticleCues.clear();
+    }
+    SDL_Log("Particles %s (moments mask %u)", on ? "on" : "off", mParticleMoments);
+}
+
+void ley::GameModel::particlesToggle() {
+    setParticlesEnabled(!mParticlesEnabled);
+}
+
+void ley::GameModel::setParticleMoments(unsigned mask) {
+    mParticleMoments = mask ? mask : PARTICLE_MOMENT_LINE_CLEAR;
+}
+
+void ley::GameModel::queueParticleCue(const ParticleCue& cue) {
+    if (!mParticlesEnabled) {
+        return;
+    }
+
+    unsigned bit = 0;
+    switch (cue.moment) {
+        case ParticleMoment::lineClear: bit = PARTICLE_MOMENT_LINE_CLEAR; break;
+        case ParticleMoment::hardDrop:  bit = PARTICLE_MOMENT_HARD_DROP;  break;
+        case ParticleMoment::pieceLock: bit = PARTICLE_MOMENT_PIECE_LOCK; break;
+        case ParticleMoment::combo:     bit = PARTICLE_MOMENT_COMBO;      break;
+    }
+    if ((mParticleMoments & bit) == 0) {
+        return;
+    }
+    if (mParticleCues.size() >= 16) {
+        return;
+    }
+    mParticleCues.push_back(cue);
+}
+
+std::vector<ley::ParticleCue> ley::GameModel::takeParticleCues() {
+    std::vector<ParticleCue> out;
+    out.swap(mParticleCues);
+    return out;
+}
+
+void ley::GameModel::applyParticleEnvOverride() {
+    const char* env = std::getenv("ABLOCKALYPSE_PARTICLES");
+    if (!env || !env[0]) {
+        return;
+    }
+
+    if (std::strcmp(env, "0") == 0 || std::strcmp(env, "off") == 0) {
+        setParticlesEnabled(false);
+        return;
+    }
+
+    setParticlesEnabled(true);
+    if (std::strcmp(env, "all") == 0) {
+        setParticleMoments(PARTICLE_MOMENT_ALL);
+        SDL_Log("ABLOCKALYPSE_PARTICLES=all: every emit stub is live");
     }
 }
 

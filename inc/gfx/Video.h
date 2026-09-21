@@ -16,6 +16,7 @@ Date: Feb/14/2020
 #include "../Sprite.h"
 #include "../Textures.h"
 #include "Font.h"
+#include "Particle.h"
 #include "../RectContainer.h"
 #include "../UI/TextEntry.h"
 
@@ -77,8 +78,13 @@ private:
     ley::Font SDLCompiled;
     ley::Font SDLLinked;
     ley::Font mFontCombo;
+    ley::ParticleSystem mParticles;
+    Uint32 mParticleLastTick = 0;
 
     void renderGridLines();
+    void pumpParticles();
+    SDL_Rect playfieldPx() const;
+    SDL_Rect boardCellsToPx(const SDL_Rect& cells) const;
 
 public:
     Video(ley::GameModel*);
@@ -94,6 +100,7 @@ public:
     void setFullScreen(bool);
     void setRenderBackground(bool inRenderBackGround);
     void resetBackgroundFader();
+    void clearParticles();
 
 /* Functions */
     void renderTopLayer();

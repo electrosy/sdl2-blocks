@@ -11,6 +11,7 @@ Date: Feb/15/2020
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 
 #include "Block.h"
 #include "Input.h"
@@ -52,6 +53,26 @@ inline GridGuide stringToGridGuide(const std::string& s) {
     auto it = table.find(s);
     return it != table.end() ? it->second : GridGuide::off;
 }
+
+// Lightweight cues for the Video-owned ParticleSystem. Steven still needs to
+// lock which moments fire in a shippable build; the demo path is lineClear.
+enum class ParticleMoment { lineClear, hardDrop, pieceLock, combo };
+
+struct ParticleCue {
+    ParticleMoment moment = ParticleMoment::lineClear;
+    int lineCount = 0;
+    int comboCount = 0;
+    int boardLine = -1;          // board row (0-based) for lineClear
+    SDL_Rect pieceCells{0,0,0,0}; // locked-piece cells for drop/lock
+};
+
+constexpr unsigned PARTICLE_MOMENT_LINE_CLEAR = 1u << 0;
+constexpr unsigned PARTICLE_MOMENT_HARD_DROP  = 1u << 1;
+constexpr unsigned PARTICLE_MOMENT_PIECE_LOCK = 1u << 2;
+constexpr unsigned PARTICLE_MOMENT_COMBO      = 1u << 3;
+constexpr unsigned PARTICLE_MOMENT_ALL =
+    PARTICLE_MOMENT_LINE_CLEAR | PARTICLE_MOMENT_HARD_DROP |
+    PARTICLE_MOMENT_PIECE_LOCK | PARTICLE_MOMENT_COMBO;
 
 inline std::string gridGuideToString(GridGuide g) {
     switch (g) {
@@ -122,6 +143,11 @@ private:
     bool mKeyDownEvent = false;
     bool mWaitForButtonPress = false;
     bool mButtonPressEvent = false;
+    bool mParticlesEnabled = false; // off until config/env/debug toggle
+    unsigned mParticleMoments = PARTICLE_MOMENT_LINE_CLEAR;
+    bool mQuickDropping = false;
+    std::vector<ParticleCue> mParticleCues;
+    void queueParticleCue(const ParticleCue& cue);
 
 public:
     GameModel();
@@ -201,6 +227,13 @@ public:
     Theme getTheme() const { return ley::activeTheme(); }
     void setTheme(Theme theme);         // music + visuals, all-or-nothing; defined in GameModel_setup.cpp
     int calcLevel();                    //Calculate current level based on number of lines completed
+    void setParticlesEnabled(bool on);
+    bool getParticlesEnabled() const { return mParticlesEnabled; }
+    void particlesToggle();
+    void setParticleMoments(unsigned mask);
+    unsigned getParticleMoments() const { return mParticleMoments; }
+    std::vector<ParticleCue> takeParticleCues();
+    void applyParticleEnvOverride();    // ABLOCKALYPSE_PARTICLES=0|1|on|off|all
 
 };
 
