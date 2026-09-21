@@ -72,9 +72,35 @@ std::string ley::LanguageModel::getLanguageNativeName(const std::string& code) c
 std::string ley::LanguageModel::capitalizeFirstLetter(const std::string& input) const {
 
     std::string result = input;
-    if (!result.empty()) {
-        result[0] = toupper(static_cast<unsigned char>(result[0]));
+    if (result.empty()) {
+        return result;
     }
+
+    const unsigned char first = static_cast<unsigned char>(result[0]);
+    if (first < 0x80) {
+        result[0] = toupper(first);
+        return result;
+    }
+
+    // UTF-8 Cyrillic (а-я, ё). Existing ASCII toupper cannot title-case these.
+    if (result.size() >= 2 && first == 0xD0) {
+        const unsigned char second = static_cast<unsigned char>(result[1]);
+        if (second >= 0xB0 && second <= 0xBF) {
+            result[1] = static_cast<char>(second - 0x20);
+        }
+    }
+    else if (result.size() >= 2 && first == 0xD1) {
+        const unsigned char second = static_cast<unsigned char>(result[1]);
+        if (second >= 0x80 && second <= 0x8F) {
+            result[0] = static_cast<char>(0xD0);
+            result[1] = static_cast<char>(second + 0x20);
+        }
+        else if (second == 0x91) {
+            result[0] = static_cast<char>(0xD0);
+            result[1] = static_cast<char>(0x81);
+        }
+    }
+
     return result;
 }
 
