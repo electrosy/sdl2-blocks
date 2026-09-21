@@ -50,6 +50,28 @@ make; ./sdl2-blocks;
 Install MingW
 Install SDL Libraries, SDLttf, SDLimage
 
+## Localization
+
+UI strings live in `assets/lang/<code>.csv` for:
+
+* `en` — English
+* `es` — Español
+* `fr` — Français
+* `de` — Deutsch
+* `pt-BR` — Português (Brasil)
+* `ru` — Русский
+* `ja` — 日本語
+* `zh-CN` — 简体中文
+
+Latin and Cyrillic locales use `assets/fonts/MartianMono-Regular.ttf`.
+
+Japanese and Simplified Chinese switch to CJK fonts. Drop these exact files into `assets/fonts/` (not shipped in this repo):
+
+* `NotoSansCJKjp-Regular.otf` — Japanese (`ja`)
+* `NotoSansCJKsc-Regular.otf` — Simplified Chinese (`zh-CN`)
+
+If a CJK font file is missing, the game logs a warning and falls back to MartianMono.
+
 ## About
 
 A 'Block Falling & Locking Game'.

@@ -1,20 +1,34 @@
 #include "../inc/LanguageModel.h"
+#include "../inc/gfx/Font.h"
 #include "SDL2/SDL.h"
 #include <fstream>
 #include <sstream>
+
+void ley::LanguageModel::registerLanguage(const std::string& code, const std::string& nativeName, const std::string& labelKey) {
+    mLanguageCodes.push_back(code);
+    mLanguages.emplace(code, nativeName);
+    mLanguageLabelKeys.emplace(code, labelKey);
+}
 
 ley::LanguageModel::LanguageModel()
 :
 mCurrentLanguage{"en"} {
 
-    //ISO 639 language code
-    mLanguages.emplace("en", "English");
-    mLanguages.emplace("es", "Spanish");
+    // ISO 639 / BCP-47 language codes with native display names
+    registerLanguage("en", "English", "english");
+    registerLanguage("es", "Español", "spanish");
+    registerLanguage("fr", "Français", "french");
+    registerLanguage("de", "Deutsch", "german");
+    registerLanguage("pt-BR", "Português (Brasil)", "portuguese");
+    registerLanguage("ru", "Русский", "russian");
+    registerLanguage("ja", "日本語", "japanese");
+    registerLanguage("zh-CN", "简体中文", "chinese");
     
 }
 
 void ley::LanguageModel::loadLanguage() {
     loadLanguageData(mCurrentLanguage);
+    setCurrentFontFile(fontFileForLanguage(mCurrentLanguage));
 }
 
 void ley::LanguageModel::loadLanguageData(const std::string& language) {
@@ -38,6 +52,22 @@ void ley::LanguageModel::loadLanguageData(const std::string& language) {
             mLanguageFields.emplace(field, word);
         }
     }
+}
+
+std::string ley::LanguageModel::getLanguageLabelKey(const std::string& code) const {
+    auto it = mLanguageLabelKeys.find(code);
+    if (it != mLanguageLabelKeys.end()) {
+        return it->second;
+    }
+    return {};
+}
+
+std::string ley::LanguageModel::getLanguageNativeName(const std::string& code) const {
+    auto it = mLanguages.find(code);
+    if (it != mLanguages.end()) {
+        return it->second;
+    }
+    return {};
 }
 std::string ley::LanguageModel::capitalizeFirstLetter(const std::string& input) const {
 
@@ -107,19 +137,16 @@ std::string ley::LanguageModel::padTo(const std::string& input, char padChar, un
     return result;
 }
 
-std::string ley::LanguageModel::getLanguageString() const {   
-    std::string language;
+std::string ley::LanguageModel::getLanguageString() const {
+    const std::string labelKey = getLanguageLabelKey(mCurrentLanguage);
+    if (!labelKey.empty()) {
+        return getWord(labelKey, 0, true, capitalizationtype::capitalizeFirst);
+    }
 
-    if(mCurrentLanguage == "es") {
-        language = getWord("spanish", 0, true, capitalizationtype::capitalizeFirst);
+    const std::string nativeName = getLanguageNativeName(mCurrentLanguage);
+    if (!nativeName.empty()) {
+        return nativeName;
     }
-    else if (mCurrentLanguage == "en") {
-        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
-    }
-    else {
-        //default to english
-        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
-    }
-    
-    return language;
+
+    return getWord("english", 0, true, capitalizationtype::capitalizeFirst);
 }

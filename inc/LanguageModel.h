@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace ley {
 
@@ -16,13 +17,20 @@ class LanguageModel {
 
 private:
     std::string mCurrentLanguage;
-    std::unordered_map<std::string, std::string>mLanguages;
-    std::unordered_map<std::string, std::string>mLanguageFields;
+    std::vector<std::string> mLanguageCodes;
+    std::unordered_map<std::string, std::string> mLanguages;
+    std::unordered_map<std::string, std::string> mLanguageLabelKeys;
+    std::unordered_map<std::string, std::string> mLanguageFields;
+
+    void registerLanguage(const std::string& code, const std::string& nativeName, const std::string& labelKey);
 
 public:
     LanguageModel();
     std::string getLanguage() const { return mCurrentLanguage; };
     std::string getLanguageString() const;
+    const std::vector<std::string>& getLanguageCodes() const { return mLanguageCodes; };
+    std::string getLanguageLabelKey(const std::string& code) const;
+    std::string getLanguageNativeName(const std::string& code) const;
     void setLanguage(const std::string& language) { mCurrentLanguage = language; };
     void loadLanguageData(const std::string& language);
     void loadLanguage();

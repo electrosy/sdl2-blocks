@@ -1,0 +1,62 @@
+name,名前
+score,スコア
+lines,ライン
+level,レベル
+combo,コンボ
+english,英語
+spanish,スペイン語
+french,フランス語
+german,ドイツ語
+portuguese,ポルトガル語
+russian,ロシア語
+japanese,日本語
+chinese,中国語
+language options,言語オプション
+current language,現在の言語
+start game,ゲーム開始
+press '?' for help,'?' でヘルプ
+start,スタート
+high scores,ハイスコア
+options,オプション
+exit,終了
+credits,クレジット
+language options,言語オプション
+input options,入力オプション
+keyboard inputs,キーボード入力
+gamepad inputs,ゲームパッド入力
+enter a number between 8x8 and 25x22,8x8から25x22の数値を入力
+e.g. 10x20,例: 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,8x8から25x22の間で 'x' 区切りの2つの数値
+scroll here to modify field,ここでスクロールして変更
+volume up,音量アップ
+volume down,音量ダウン
+left,左
+right,右
+down,下
+counter clockwise,反時計回り
+clockwise,時計回り
+quick drop,クイックドロップ
+quit,やめる
+next song,次の曲
+pause game,一時停止
+decrease volume,音量を下げる
+increase volume,音量を上げる
+enter,決定
+programming,プログラム
+photography,写真
+3d modeling,3Dモデリング
+artwork,アートワーク
+sound engineering,サウンドエンジニアリング
+featuring music by,音楽
+special thanks,スペシャルサンクス
+sound effects,効果音
+uses,使用
+game over,ゲームオーバー
+must be a number between 15 and 80,15から80の数値である必要があります
+enter a number between 15 and 80,15から80の数値を入力
+input repeat rate,入力リピート速度
+must be a number between 50 and 300,50から300の数値である必要があります
+enter a number between 50 and 300,50から300の数値を入力
+input delay,入力遅延
+board size,ボードサイズ
+guide grid on,ガイドグリッドオン

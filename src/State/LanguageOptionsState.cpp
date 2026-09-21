@@ -4,6 +4,17 @@
 
 typedef ley::Textures TextureManager;
 
+namespace {
+
+constexpr int LANGUAGE_LIST_START_Y = 140;
+constexpr int LANGUAGE_LIST_SPACING = 52;
+
+std::string languageElementId(const std::string& code) {
+    return code + "Language";
+}
+
+}
+
 namespace ley {
 
 
@@ -14,9 +25,15 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 
-    // TODO the x,y isn't used for the SDL_rect
-    mLanguageUI.pushFont("englishLanguage", {29,200}, mGameModel->getLanguageModel()->getWord("english", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mLanguageUI.pushFont("spanishLanguage", {29,250}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+    int y = LANGUAGE_LIST_START_Y;
+    for (const auto& code : codes) {
+        const std::string labelKey = mGameModel->getLanguageModel()->getLanguageLabelKey(code);
+        mLanguageUI.pushFont(languageElementId(code), {29, y},
+            mGameModel->getLanguageModel()->getWord(labelKey, 0, false, capitalizationtype::capitalizeFirst),
+            v->getRenderer(), 24);
+        y += LANGUAGE_LIST_SPACING;
+    }
 
     updateLanguageFont();
 
@@ -30,16 +47,14 @@ void LanguageOptionsState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 0) {
-        mGameModel->getLanguageModel()->setLanguage("en");
-        mGameModel->getLanguageModel()->loadLanguage();
-        updateLanguageFont();
-    }
-
-    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 1) {
-        mGameModel->getLanguageModel()->setLanguage("es");
-        mGameModel->getLanguageModel()->loadLanguage();
-        updateLanguageFont();
+    if (command == ley::Command::UI_enter) {
+        const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+        const int index = mLanguageUI.getIndex();
+        if (index >= 0 && index < static_cast<int>(codes.size())) {
+            mGameModel->getLanguageModel()->setLanguage(codes[index]);
+            mGameModel->getLanguageModel()->loadLanguage();
+            updateLanguageFont();
+        }
     }
 
     mLanguageUI.runCommand(command);
@@ -76,8 +91,14 @@ void LanguageOptionsState::updateLanguageFont() {
     
     mCurrentLanguageFont.updateMessage(mGameModel->getLanguageModel()->getWord("current language",0,false, capitalizationtype::capitalizeWords) + ": " + mGameModel->getLanguageModel()->getLanguageString());
     
-    mLanguageUI.getElementPtr("englishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("english",0,false, capitalizationtype::capitalizeFirst));
-    mLanguageUI.getElementPtr("spanishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("spanish",0,false, capitalizationtype::capitalizeFirst));
+    const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+    for (const auto& code : codes) {
+        const std::string labelKey = mGameModel->getLanguageModel()->getLanguageLabelKey(code);
+        ley::UIElement* element = mLanguageUI.getElementPtr(languageElementId(code));
+        if (element) {
+            element->setMessage(mGameModel->getLanguageModel()->getWord(labelKey, 0, false, capitalizationtype::capitalizeFirst));
+        }
+    }
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 }

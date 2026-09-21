@@ -1,0 +1,62 @@
+name,姓名
+score,分数
+lines,行数
+level,等级
+combo,连击
+english,英语
+spanish,西班牙语
+french,法语
+german,德语
+portuguese,葡萄牙语
+russian,俄语
+japanese,日语
+chinese,中文
+language options,语言选项
+current language,当前语言
+start game,开始游戏
+press '?' for help,按 '?' 获取帮助
+start,开始
+high scores,高分榜
+options,选项
+exit,退出
+credits,制作人员
+language options,语言选项
+input options,输入选项
+keyboard inputs,键盘输入
+gamepad inputs,手柄输入
+enter a number between 8x8 and 25x22,请输入 8x8 到 25x22 之间的数字
+e.g. 10x20,例如 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,必须是用 'x' 分隔的两个数字且介于 8x8 和 25x22
+scroll here to modify field,在此滚动以修改字段
+volume up,提高音量
+volume down,降低音量
+left,左
+right,右
+down,下
+counter clockwise,逆时针
+clockwise,顺时针
+quick drop,快速下落
+quit,退出
+next song,下一首
+pause game,暂停游戏
+decrease volume,减小音量
+increase volume,增大音量
+enter,确定
+programming,程序
+photography,摄影
+3d modeling,3D 建模
+artwork,美术
+sound engineering,音效工程
+featuring music by,音乐
+special thanks,特别感谢
+sound effects,音效
+uses,使用
+game over,游戏结束
+must be a number between 15 and 80,必须是 15 到 80 之间的数字
+enter a number between 15 and 80,请输入 15 到 80 之间的数字
+input repeat rate,按键重复速率
+must be a number between 50 and 300,必须是 50 到 300 之间的数字
+enter a number between 50 and 300,请输入 50 到 300 之间的数字
+input delay,输入延迟
+board size,棋盘大小
+guide grid on,辅助网格开

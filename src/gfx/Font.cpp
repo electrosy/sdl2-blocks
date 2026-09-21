@@ -5,12 +5,74 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Jul/14/2020
 */
-#include "../../inc/gfx/Font.h" 
+#include "../../inc/gfx/Font.h"
+
+#include <algorithm>
+#include <fstream>
+#include <vector>
+
+namespace {
+
+std::string gCurrentFontFile = ley::FONTFILE;
+std::vector<ley::Font*> gLiveFonts;
+
+bool fontFileExists(const std::string& path) {
+    std::ifstream in(path);
+    return in.good();
+}
+
+void registerLiveFont(ley::Font* font) {
+    if (font) {
+        gLiveFonts.push_back(font);
+    }
+}
+
+void unregisterLiveFont(ley::Font* font) {
+    gLiveFonts.erase(std::remove(gLiveFonts.begin(), gLiveFonts.end(), font), gLiveFonts.end());
+}
+
+}
+
+std::string ley::fontFileForLanguage(const std::string& languageCode) {
+    std::string path = FONTFILE;
+    if (languageCode == "ja") {
+        path = FONTFILE_JA;
+    }
+    else if (languageCode == "zh-CN") {
+        path = FONTFILE_ZH_CN;
+    }
+
+    if (path != FONTFILE && !fontFileExists(path)) {
+        SDL_Log("ley::fontFileForLanguage: missing CJK font '%s' for locale '%s'; falling back to %s",
+                path.c_str(), languageCode.c_str(), FONTFILE);
+        return FONTFILE;
+    }
+
+    return path;
+}
+
+void ley::setCurrentFontFile(const std::string& path) {
+    if (gCurrentFontFile == path) {
+        return;
+    }
+
+    gCurrentFontFile = path;
+    for (Font* font : gLiveFonts) {
+        if (font) {
+            font->reloadFont();
+        }
+    }
+}
+
+const std::string& ley::currentFontFile() {
+    return gCurrentFontFile;
+}
 
 ley::Font::Font():
 mPointSize(DEFAULT_FONT_SIZE) {
     mMessageRect = {0, 0, 0, 0};
     init(mPointSize);
+    registerLiveFont(this);
 }
 
 ley::Font::Font(int x, int y, int w, int h)
@@ -19,6 +81,7 @@ mPointSize(DEFAULT_FONT_SIZE) {
 
     mMessageRect = {x, y, w, h};
     init(mPointSize);
+    registerLiveFont(this);
 }
 
 ley::Font::Font(const Font& other) {
@@ -28,6 +91,7 @@ ley::Font::Font(const Font& other) {
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
     mColor = other.mColor;
+    registerLiveFont(this);
 }
 
 void ley::Font::init(int size) {
@@ -41,15 +105,33 @@ void ley::Font::init(int size) {
     }
 
 //    SDL_Log("Open font");
-    mTTFFont = TTF_OpenFont(FONTFILE, size);
+    mTTFFont = TTF_OpenFont(gCurrentFontFile.c_str(), size);
     if(!mTTFFont) {
         SDL_Log("TTF_OpenFont: %s", TTF_GetError());
     }
 
 }
 
+void ley::Font::reloadFont() {
+    if (mMessageTexture) {
+        SDL_DestroyTexture(mMessageTexture);
+        mMessageTexture = nullptr;
+    }
+
+    if (mTTFFont) {
+        TTF_CloseFont(mTTFFont);
+        mTTFFont = nullptr;
+    }
+
+    mTTFFont = TTF_OpenFont(gCurrentFontFile.c_str(), mPointSize);
+    if (!mTTFFont) {
+        SDL_Log("TTF_OpenFont: %s", TTF_GetError());
+    }
+}
+
 ley::Font::~Font() {
 
+    unregisterLiveFont(this);
     cleanUp();
 }
 

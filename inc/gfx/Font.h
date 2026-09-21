@@ -7,6 +7,7 @@ Date: Jul/14/2020
 */
 #ifndef FONT_H
 #define FONT_H
+#include <string>
 #include <SDL2/SDL_ttf.h>
 
 #include "Renderable.h"
@@ -15,7 +16,14 @@ namespace ley {
 
 // TODO investigate where we are loading the font file multiple times.
 const auto FONTFILE = "assets/fonts/MartianMono-Regular.ttf";
+// Drop these CJK fonts into assets/fonts/ for ja / zh-CN. Missing files fall back to FONTFILE.
+const auto FONTFILE_JA = "assets/fonts/NotoSansCJKjp-Regular.otf";
+const auto FONTFILE_ZH_CN = "assets/fonts/NotoSansCJKsc-Regular.otf";
 const auto DEFAULT_FONT_SIZE = 24;
+
+std::string fontFileForLanguage(const std::string& languageCode);
+void setCurrentFontFile(const std::string& path);
+const std::string& currentFontFile();
 
 class Font : public Renderable {
 
@@ -37,6 +45,7 @@ public:
     void cleanUp();
     Font& operator=(const Font& other); //copy assignment
     void init(int size);
+    void reloadFont();
     void updateMessage(const std::string& s);
     std::string getMessage();
     std::string* getMessagePtr();
