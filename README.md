@@ -65,10 +65,10 @@ UI strings live in `assets/lang/<code>.csv` for:
 
 Latin and Cyrillic locales use `assets/fonts/MartianMono-Regular.ttf`.
 
-Japanese and Simplified Chinese switch to CJK fonts. Drop one of these exact files into `assets/fonts/` (not shipped in this repo):
+Japanese and Simplified Chinese switch to CJK fonts. Drop one of these exact files into `assets/fonts/` (OTF binaries are not committed):
 
-* Japanese (`ja`): `NotoSansJP-Regular.otf` (preferred) or `NotoSansCJKjp-Regular.otf`
-* Simplified Chinese (`zh-CN`): `NotoSansSC-Regular.otf` (preferred) or `NotoSansCJKsc-Regular.otf`
+* Japanese (`ja`): `NotoSansCJKjp-Regular.otf` (preferred) or `NotoSansJP-Regular.otf`
+* Simplified Chinese (`zh-CN`): `NotoSansCJKsc-Regular.otf` (preferred) or `NotoSansSC-Regular.otf`
 
 If a CJK font file is missing, the game logs a warning and falls back to MartianMono.
 
