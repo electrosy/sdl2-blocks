@@ -36,10 +36,10 @@ void unregisterLiveFont(ley::Font* font) {
 std::string ley::fontFileForLanguage(const std::string& languageCode) {
     std::vector<std::string> candidates;
     if (languageCode == "ja") {
-        candidates = { FONTFILE_JA, FONTFILE_JA_ALT };
+        candidates = { FONTFILE_JA, FONTFILE_JA_CJK };
     }
     else if (languageCode == "zh-CN") {
-        candidates = { FONTFILE_ZH_CN, FONTFILE_ZH_CN_ALT };
+        candidates = { FONTFILE_ZH_CN, FONTFILE_ZH_CN_CJK };
     }
 
     if (candidates.empty()) {

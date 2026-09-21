@@ -3,7 +3,7 @@
 Add French, German, Brazilian Portuguese, Russian, Japanese, and Simplified Chinese.
 Language Options lists all eight locales from LanguageModel (no hardcoded en/es).
 Japanese and Simplified Chinese switch to Noto CJK fonts when those files are present
-(NotoSansCJKjp-Regular.otf / NotoSansCJKsc-Regular.otf, or NotoSansJP/SC mirrors).
+(NotoSansJP-Regular.otf / NotoSansSC-Regular.otf, or NotoSansCJK* fallback names).
 
 0.7.4.0
 
