@@ -31,6 +31,14 @@ void ley::ConfigIO::readMainConfig(ley::GameModel* gm) {
         {"showprogressbar", [gm](const std::string& v){ gm->setShowProgressBar(v == "on"); }},
         {"startlevel",      [gm](const std::string& v){ gm->setStartLevel(std::stoi(v)); }},
         {"theme",           [gm](const std::string& v){ gm->setTheme(ley::stringToTheme(v)); }},
+        {"particles",       [gm](const std::string& v){ gm->setParticlesEnabled(v == "on"); }},
+        {"particlemoments", [gm](const std::string& v){
+            if (v == "lineclear") {
+                gm->setParticleMoments(PARTICLE_MOMENT_LINE_CLEAR);
+            } else {
+                gm->setParticleMoments(PARTICLE_MOMENT_SHIP);
+            }
+        }},
     };
 
     std::ifstream inFile("mainconfig.csv");
@@ -63,6 +71,8 @@ void ley::ConfigIO::writeMainConfig(const ley::GameModel* gm) {
     f << "showprogressbar" << ',' << (gm->getShowProgressBar() ? "on" : "off")   << '\n';
     f << "startlevel"      << ',' << gm->getStartLevel()                         << '\n';
     f << "theme"           << ',' << ley::themeToString(gm->getTheme())          << '\n';
+    f << "particles"       << ',' << (gm->getParticlesEnabled() ? "on" : "off")  << '\n';
+    f << "particlemoments" << ',' << (gm->getParticleMoments() == PARTICLE_MOMENT_LINE_CLEAR ? "lineclear" : "ship") << '\n';
 }
 
 /* ── Keyboard bindings ──────────────────────────────────────────────────── */

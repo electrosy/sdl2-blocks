@@ -40,6 +40,7 @@ enum class Command {
     debugclear,
     debugfill,
     debugonlyline,
+    debugparticles,
     enter,
     quit,
     increaseVolume,

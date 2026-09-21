@@ -153,6 +153,7 @@ bool PlayState::onEnter() {
     resetGame();
     SDL_Log("Entering PlayState and loading renderables");
     mVideoSystem->resetBackgroundFader();
+    mVideoSystem->clearParticles();
 
     SDL_Log("Loading PlayState renderables");
     loadRenderables();

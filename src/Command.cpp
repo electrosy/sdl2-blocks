@@ -41,7 +41,8 @@ const std::unordered_map<ley::Command, std::string> COMMANDTOSTRING = {
     {ley::Command::debugnextlevel, "debugnextlevel"},
     {ley::Command::debugonlyline, "debugonlyline"},
     {ley::Command::debugcolide, "debugcolide"},
-    {ley::Command::debugprevlevel, "debugprevlevel"}
+    {ley::Command::debugprevlevel, "debugprevlevel"},
+    {ley::Command::debugparticles, "debugparticles"}
 };
 
 const std::unordered_map<std::string, ley::Command> STRINGTOCOMMAND = {
@@ -73,7 +74,8 @@ const std::unordered_map<std::string, ley::Command> STRINGTOCOMMAND = {
     {"debugnextlevel", ley::Command::debugnextlevel},
     {"debugonlyline", ley::Command::debugonlyline},
     {"debugcolide", ley::Command::debugcolide},
-    {"debugprevlevel", ley::Command::debugprevlevel}
+    {"debugprevlevel", ley::Command::debugprevlevel},
+    {"debugparticles", ley::Command::debugparticles}
 };
 
 const std::unordered_map<SDL_GameControllerButton, std::string> BUTTONTOSTRING = {

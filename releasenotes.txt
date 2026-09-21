@@ -1,3 +1,9 @@
+0.7.6.0
+
+Theme-colored particle bursts on line clear (primary), hard drop / piece lock (medium), and combo / Tetris+ (stronger on 4+ lines).
+Cap 160, pause freezes the pool, jazz and ablockalypse palettes. F11 and ABLOCKALYPSE_PARTICLES remain as debug toggles.
+No ambient board dust.
+
 0.7.5.0
 
 Add six languages: French, German, Portuguese (Brazil), Russian, Japanese, and Simplified Chinese.
