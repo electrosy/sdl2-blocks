@@ -1,4 +1,5 @@
 #include "../inc/LanguageModel.h"
+#include "../inc/gfx/Font.h"
 #include "SDL2/SDL.h"
 #include <fstream>
 #include <sstream>
@@ -7,10 +8,32 @@ ley::LanguageModel::LanguageModel()
 :
 mCurrentLanguage{"en"} {
 
-    //ISO 639 language code
-    mLanguages.emplace("en", "English");
-    mLanguages.emplace("es", "Spanish");
-    
+    // ISO / BCP-47 style codes with native display names (stable order)
+    const struct {
+        const char* code;
+        const char* nativeName;
+        const char* nameKey;
+    } langs[] = {
+        {"en",    "English",            "english"},
+        {"es",    "Español",            "spanish"},
+        {"fr",    "Français",           "french"},
+        {"de",    "Deutsch",            "german"},
+        {"pt-BR", "Português (Brasil)", "portuguese"},
+        {"ru",    "Русский",            "russian"},
+        {"ja",    "日本語",               "japanese"},
+        {"zh-CN", "简体中文",             "chinese"},
+    };
+
+    for (const auto& lang : langs) {
+        mLanguageOrder.emplace_back(lang.code);
+        mLanguages.emplace(lang.code, lang.nativeName);
+        mLanguageNameKeys.emplace(lang.code, lang.nameKey);
+    }
+}
+
+void ley::LanguageModel::setLanguage(const std::string& language) {
+    mCurrentLanguage = language;
+    ley::Font::setActiveFontLanguage(language);
 }
 
 void ley::LanguageModel::loadLanguage() {
@@ -18,10 +41,12 @@ void ley::LanguageModel::loadLanguage() {
 }
 
 void ley::LanguageModel::loadLanguageData(const std::string& language) {
-    //load config
+    // Keep font path in sync with the language being loaded (startup + switches).
+    ley::Font::setActiveFontLanguage(language);
+
     std::string fileName = "./assets/lang/" + language + ".csv";
     std::ifstream inFile(fileName);
-    
+
     mLanguageFields.clear();
 
     if (inFile.is_open())
@@ -38,7 +63,25 @@ void ley::LanguageModel::loadLanguageData(const std::string& language) {
             mLanguageFields.emplace(field, word);
         }
     }
+    else {
+        SDL_Log("ley::LanguageModel::loadLanguageData could not open: %s", fileName.c_str());
+    }
 }
+
+std::string ley::LanguageModel::getNativeLanguageName(const std::string& code) const {
+    auto it = mLanguages.find(code);
+    return (it != mLanguages.end()) ? it->second : code;
+}
+
+std::string ley::LanguageModel::getLanguageNameKey(const std::string& code) const {
+    auto it = mLanguageNameKeys.find(code);
+    return (it != mLanguageNameKeys.end()) ? it->second : "";
+}
+
+bool ley::LanguageModel::hasLanguage(const std::string& code) const {
+    return mLanguages.find(code) != mLanguages.end();
+}
+
 std::string ley::LanguageModel::capitalizeFirstLetter(const std::string& input) const {
 
     std::string result = input;
@@ -84,7 +127,7 @@ std::string ley::LanguageModel::getWord(const std::string& field, int pad, bool 
 }
 
 std::string ley::LanguageModel::padTo(const std::string& input, char padChar, unsigned long size, bool left) const {
-    
+
     //return early if the pad become a negative number.
 
     // from https://stackoverflow.com/a/4063229 / //
@@ -107,19 +150,11 @@ std::string ley::LanguageModel::padTo(const std::string& input, char padChar, un
     return result;
 }
 
-std::string ley::LanguageModel::getLanguageString() const {   
-    std::string language;
-
-    if(mCurrentLanguage == "es") {
-        language = getWord("spanish", 0, true, capitalizationtype::capitalizeFirst);
+std::string ley::LanguageModel::getLanguageString() const {
+    std::string nameKey = getLanguageNameKey(mCurrentLanguage);
+    if (nameKey.empty()) {
+        // Unknown code — fall back to english label
+        nameKey = "english";
     }
-    else if (mCurrentLanguage == "en") {
-        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
-    }
-    else {
-        //default to english
-        language = getWord("english", 0, true, capitalizationtype::capitalizeFirst);
-    }
-    
-    return language;
+    return getWord(nameKey, 0, true, capitalizationtype::capitalizeFirst);
 }

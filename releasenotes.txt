@@ -1,3 +1,9 @@
+0.7.5.0
+
+Add six languages: French, German, Portuguese (Brazil), Russian, Japanese, and Simplified Chinese.
+Language options menu is data-driven for all eight languages.
+Japanese and Simplified Chinese use Noto Sans CJK fonts when available (MartianMono fallback).
+
 0.7.4.0
 
 Options Theme switcher: jazz (original) vs ablockalypse (new), music + visuals.

@@ -1,0 +1,62 @@
+name,nom
+score,score
+lines,lignes
+level,niveau
+combo,combo
+english,anglais
+spanish,espagnol
+language options,options de langue
+current language,langue actuelle
+start game,commencer le jeu
+press '?' for help,appuyez sur '?' pour obtenir de l'aide
+start,démarrer
+high scores,meilleurs scores
+options,options
+exit,quitter
+credits,crédits
+language options,options de langue
+input options,options de saisie
+keyboard inputs,entrées clavier
+gamepad inputs,entrées de manette
+enter a number between 8x8 and 25x22,entrez un nombre entre 8x8 et 25x22
+e.g. 10x20,par ex. 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,doit contenir deux nombres séparés par un 'x' entre 8x8 et 25x22
+scroll here to modify field,faites défiler ici pour modifier le champ
+volume up,augmenter le volume
+volume down,diminuer le volume
+left,gauche
+right,droite
+down,bas
+counter clockwise,sens antihoraire
+clockwise,sens horaire
+quick drop,chute rapide
+quit,quitter
+next song,chanson suivante
+pause game,mettre le jeu en pause
+decrease volume,diminuer le volume
+increase volume,augmenter le volume
+enter,entrée
+programming,programmation
+photography,photographie
+3d modeling,modélisation 3d
+artwork,illustrations
+sound engineering,ingénierie sonore
+featuring music by,musique de
+special thanks,remerciements particuliers
+sound effects,effets sonores
+uses,utilise
+game over,fin de partie
+must be a number between 15 and 80,doit être un nombre entre 15 et 80
+enter a number between 15 and 80,entrez un nombre entre 15 et 80
+input repeat rate,fréquence de répétition des entrées
+must be a number between 50 and 300,doit être un nombre entre 50 et 300
+enter a number between 50 and 300,entrez un nombre entre 50 et 300
+input delay,délai d'entrée
+board size,taille du plateau
+guide grid on,grille guide activée
+french,français
+german,allemand
+portuguese,portugais
+russian,russe
+japanese,japonais
+chinese,chinois

@@ -1,0 +1,62 @@
+name,nome
+score,pontuação
+lines,linhas
+level,nível
+combo,combo
+english,inglês
+spanish,espanhol
+language options,opções de idioma
+current language,idioma atual
+start game,iniciar jogo
+press '?' for help,pressione '?' para obter ajuda
+start,iniciar
+high scores,recordes
+options,opções
+exit,sair
+credits,créditos
+language options,opções de idioma
+input options,opções de entrada
+keyboard inputs,entradas do teclado
+gamepad inputs,entradas do gamepad
+enter a number between 8x8 and 25x22,digite um número entre 8x8 e 25x22
+e.g. 10x20,ex. 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,devem ser dois números separados por um 'x' entre 8x8 e 25x22
+scroll here to modify field,role aqui para modificar o campo
+volume up,aumentar volume
+volume down,diminuir volume
+left,esquerda
+right,direita
+down,baixo
+counter clockwise,sentido anti-horário
+clockwise,sentido horário
+quick drop,queda rápida
+quit,sair
+next song,próxima música
+pause game,pausar jogo
+decrease volume,diminuir volume
+increase volume,aumentar volume
+enter,enter
+programming,programação
+photography,fotografia
+3d modeling,modelagem 3D
+artwork,arte
+sound engineering,engenharia de som
+featuring music by,música de
+special thanks,agradecimentos especiais
+sound effects,efeitos sonoros
+uses,usa
+game over,fim de jogo
+must be a number between 15 and 80,deve ser um número entre 15 e 80
+enter a number between 15 and 80,digite um número entre 15 e 80
+input repeat rate,taxa de repetição da entrada
+must be a number between 50 and 300,deve ser um número entre 50 e 300
+enter a number between 50 and 300,digite um número entre 50 e 300
+input delay,atraso de entrada
+board size,tamanho do tabuleiro
+guide grid on,grade guia ativada
+french,francês
+german,alemão
+portuguese,português
+russian,russo
+japanese,japonês
+chinese,chinês

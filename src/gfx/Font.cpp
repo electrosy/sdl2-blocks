@@ -5,7 +5,100 @@ Copyright (C) 2020 Steven Philley
 Purpose: see header.
 Date: Jul/14/2020
 */
-#include "../../inc/gfx/Font.h" 
+#include "../../inc/gfx/Font.h"
+#include <SDL2/SDL.h>
+#include <sys/stat.h>
+
+namespace {
+
+bool fileExists(const char* path) {
+    struct stat st;
+    return path && stat(path, &st) == 0 && S_ISREG(st.st_mode);
+}
+
+} // namespace
+
+std::string ley::Font::sActiveFontPath = FONTFILE;
+
+std::string ley::fontPathForLanguage(const std::string& languageCode) {
+    // Prefer NotoSansJP / NotoSansSC (live tree); also accept NotoSansCJK* alternates.
+    if (languageCode == "ja") {
+        const char* candidates[] = {
+            "assets/fonts/NotoSansJP-Regular.otf",
+            "assets/fonts/NotoSansCJKjp-Regular.otf",
+        };
+        for (const char* path : candidates) {
+            if (fileExists(path)) {
+                return path;
+            }
+        }
+        SDL_Log("CJK font missing for ja (tried NotoSansJP / NotoSansCJKjp); falling back to MartianMono");
+        return FONTFILE;
+    }
+
+    if (languageCode == "zh-CN") {
+        const char* candidates[] = {
+            "assets/fonts/NotoSansSC-Regular.otf",
+            "assets/fonts/NotoSansCJKsc-Regular.otf",
+        };
+        for (const char* path : candidates) {
+            if (fileExists(path)) {
+                return path;
+            }
+        }
+        SDL_Log("CJK font missing for zh-CN (tried NotoSansSC / NotoSansCJKsc); falling back to MartianMono");
+        return FONTFILE;
+    }
+
+    // en / es / fr / de / pt-BR / ru (Cyrillic covered by MartianMono)
+    return FONTFILE;
+}
+
+void ley::Font::setActiveFontLanguage(const std::string& languageCode) {
+    sActiveFontPath = fontPathForLanguage(languageCode);
+}
+
+const std::string& ley::Font::getActiveFontPath() {
+    return sActiveFontPath;
+}
+
+void ley::Font::openFontFile(int size) {
+    const std::string& path = sActiveFontPath.empty() ? std::string(FONTFILE) : sActiveFontPath;
+
+    mTTFFont = TTF_OpenFont(path.c_str(), size);
+    if (!mTTFFont) {
+        SDL_Log("TTF_OpenFont failed for %s: %s", path.c_str(), TTF_GetError());
+        if (path != FONTFILE) {
+            mTTFFont = TTF_OpenFont(FONTFILE, size);
+            if (!mTTFFont) {
+                SDL_Log("TTF_OpenFont fallback MartianMono failed: %s", TTF_GetError());
+                mLoadedFontPath.clear();
+                return;
+            }
+            mLoadedFontPath = FONTFILE;
+            return;
+        }
+        mLoadedFontPath.clear();
+        return;
+    }
+    mLoadedFontPath = path;
+}
+
+void ley::Font::reloadForActiveLanguage() {
+    if (mLoadedFontPath == sActiveFontPath && mTTFFont) {
+        return;
+    }
+
+    if (mMessageTexture) {
+        SDL_DestroyTexture(mMessageTexture);
+        mMessageTexture = nullptr;
+    }
+    if (mTTFFont) {
+        TTF_CloseFont(mTTFFont);
+        mTTFFont = nullptr;
+    }
+    openFontFile(mPointSize);
+}
 
 ley::Font::Font():
 mPointSize(DEFAULT_FONT_SIZE) {
@@ -34,18 +127,14 @@ void ley::Font::init(int size) {
 
     mMessageTexture = nullptr;
     mTTFFont = nullptr;
+    mLoadedFontPath.clear();
     mColor = {255, 255, 255, 255};
 
     if (TTF_Init() < 0) {
         SDL_Log("TTF_Init failed");
     }
 
-//    SDL_Log("Open font");
-    mTTFFont = TTF_OpenFont(FONTFILE, size);
-    if(!mTTFFont) {
-        SDL_Log("TTF_OpenFont: %s", TTF_GetError());
-    }
-
+    openFontFile(size);
 }
 
 ley::Font::~Font() {
@@ -67,6 +156,7 @@ void ley::Font::cleanUp() {
         TTF_CloseFont(mTTFFont);
         mTTFFont = nullptr;
     }
+    mLoadedFontPath.clear();
 
     TTF_Quit();
 }
@@ -119,6 +209,9 @@ SDL_Texture* ley::Font::getTexturePtr() {
 
 void ley::Font::preRender(SDL_Renderer* r)
 {
+    // Pick up language font switches (ja/zh-CN) without requiring a full UI rebuild.
+    reloadForActiveLanguage();
+
     if(!mMessageTexture) {
         SDL_Surface* surfaceMessage;
         surfaceMessage = TTF_RenderUTF8_Blended_Wrapped(mTTFFont, mMessageString.c_str(), mColor, 0);
@@ -188,7 +281,9 @@ std::pair<int, int> ley::Font::size() {
 void ley::Font::setFontSize(int size) {
 
     mPointSize = size;
-    TTF_SetFontSize(mTTFFont, mPointSize);
+    if (mTTFFont) {
+        TTF_SetFontSize(mTTFFont, mPointSize);
+    }
 }
 
 void ley::Font::center() {

@@ -1,0 +1,62 @@
+name,имя
+score,счёт
+lines,линии
+level,уровень
+combo,комбо
+english,английский
+spanish,испанский
+language options,настройки языка
+current language,текущий язык
+start game,начать игру
+press '?' for help,нажмите '?' для справки
+start,начать
+high scores,рекорды
+options,настройки
+exit,выход
+credits,авторы
+language options,настройки языка
+input options,настройки ввода
+keyboard inputs,клавиши управления
+gamepad inputs,управление геймпадом
+enter a number between 8x8 and 25x22,введите число от 8x8 до 25x22
+e.g. 10x20,например 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,нужны два числа разделённые символом 'x' от 8x8 до 25x22
+scroll here to modify field,прокрутите здесь чтобы изменить поле
+volume up,громче
+volume down,тише
+left,влево
+right,вправо
+down,вниз
+counter clockwise,против часовой стрелки
+clockwise,по часовой стрелке
+quick drop,быстрое падение
+quit,выйти
+next song,следующая песня
+pause game,пауза игры
+decrease volume,уменьшить громкость
+increase volume,увеличить громкость
+enter,ввод
+programming,программирование
+photography,фотография
+3d modeling,3D-моделирование
+artwork,графика
+sound engineering,звукорежиссура
+featuring music by,музыка
+special thanks,особая благодарность
+sound effects,звуковые эффекты
+uses,использует
+game over,игра окончена
+must be a number between 15 and 80,число должно быть от 15 до 80
+enter a number between 15 and 80,введите число от 15 до 80
+input repeat rate,частота повтора ввода
+must be a number between 50 and 300,число должно быть от 50 до 300
+enter a number between 50 and 300,введите число от 50 до 300
+input delay,задержка ввода
+board size,размер поля
+guide grid on,направляющая сетка включена
+french,французский
+german,немецкий
+portuguese,португальский
+russian,русский
+japanese,японский
+chinese,китайский

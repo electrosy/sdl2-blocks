@@ -10,7 +10,7 @@ current language,current language
 start game,start game
 press '?' for help,press '?' for help
 start,start
-high scores,high scores  
+high scores,high scores
 options,options
 exit,exit
 credits,credits
@@ -54,3 +54,9 @@ enter a number between 50 and 300,enter a number between 50 and 300
 input delay,input delay
 board size,board size
 guide grid on,guide grid on
+french,French
+german,German
+portuguese,Portuguese
+russian,Russian
+japanese,Japanese
+chinese,Chinese

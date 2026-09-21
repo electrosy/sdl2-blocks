@@ -1,5 +1,7 @@
 #include "../../inc/State/LanguageOptionsState.h"
 #include "../../inc/LanguageModel.h"
+#include "../../inc/ConfigIO.h"
+#include "../../inc/gfx/Font.h"
 
 
 typedef ley::Textures TextureManager;
@@ -14,9 +16,17 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 
-    // TODO the x,y isn't used for the SDL_rect
-    mLanguageUI.pushFont("englishLanguage", {29,200}, mGameModel->getLanguageModel()->getWord("english", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    mLanguageUI.pushFont("spanishLanguage", {29,250}, mGameModel->getLanguageModel()->getWord("spanish", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
+    // Data-driven list from LanguageModel ordered codes (not hardcoded en/es indices).
+    const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+    const int startY = 140;
+    const int rowSpacing = 36; // readable spacing; 8 rows fit without scroll
+    for (size_t i = 0; i < codes.size(); ++i) {
+        const std::string& code = codes[i];
+        // Native names on the picker (Français, 日本語, …) — not translated labels.
+        const std::string label = mGameModel->getLanguageModel()->getNativeLanguageName(code);
+        const int y = startY + static_cast<int>(i) * rowSpacing;
+        mLanguageUI.pushFont("lang_" + code, {29, y}, label, v->getRenderer(), 24);
+    }
 
     updateLanguageFont();
 
@@ -30,16 +40,19 @@ void LanguageOptionsState::update(ley::Command command) {
         break;
     }
 
-    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 0) {
-        mGameModel->getLanguageModel()->setLanguage("en");
-        mGameModel->getLanguageModel()->loadLanguage();
-        updateLanguageFont();
-    }
-
-    if(command == ley::Command::UI_enter && mLanguageUI.getIndex() == 1) {
-        mGameModel->getLanguageModel()->setLanguage("es");
-        mGameModel->getLanguageModel()->loadLanguage();
-        updateLanguageFont();
+    if (command == ley::Command::UI_enter) {
+        const int idx = mLanguageUI.getIndex();
+        const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+        if (idx >= 0 && idx < static_cast<int>(codes.size())) {
+            const std::string& code = codes[static_cast<size_t>(idx)];
+            mGameModel->getLanguageModel()->setLanguage(code);
+            mGameModel->getLanguageModel()->loadLanguage();
+            // Reload title/list fonts for CJK switch and persist selection.
+            mTitleFont.reloadForActiveLanguage();
+            mCurrentLanguageFont.reloadForActiveLanguage();
+            updateLanguageFont();
+            ConfigIO::writeMainConfig(mGameModel);
+        }
     }
 
     mLanguageUI.runCommand(command);
@@ -74,10 +87,29 @@ bool LanguageOptionsState::resume() {
 
 void LanguageOptionsState::updateLanguageFont() {
     
-    mCurrentLanguageFont.updateMessage(mGameModel->getLanguageModel()->getWord("current language",0,false, capitalizationtype::capitalizeWords) + ": " + mGameModel->getLanguageModel()->getLanguageString());
-    
-    mLanguageUI.getElementPtr("englishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("english",0,false, capitalizationtype::capitalizeFirst));
-    mLanguageUI.getElementPtr("spanishLanguage")->setMessage(mGameModel->getLanguageModel()->getWord("spanish",0,false, capitalizationtype::capitalizeFirst));
+    mCurrentLanguageFont.updateMessage(
+        mGameModel->getLanguageModel()->getWord("current language", 0, false, capitalizationtype::capitalizeWords)
+        + ": " + mGameModel->getLanguageModel()->getLanguageString());
+
+    const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
+    for (const auto& code : codes) {
+        const std::string elementId = "lang_" + code;
+        ley::UIElement* el = mLanguageUI.getElementPtr(elementId);
+        if (!el) {
+            continue;
+        }
+        el->setMessage(mGameModel->getLanguageModel()->getNativeLanguageName(code));
+        // Ensure CJK / Latin font file matches active language after a switch.
+        if (el->getMainFontPtr()) {
+            el->getMainFontPtr()->reloadForActiveLanguage();
+        }
+        if (el->getHotFontPtr()) {
+            el->getHotFontPtr()->reloadForActiveLanguage();
+        }
+        if (el->getBaseFontPtr()) {
+            el->getBaseFontPtr()->reloadForActiveLanguage();
+        }
+    }
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));
 }
