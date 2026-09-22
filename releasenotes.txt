@@ -1,3 +1,8 @@
+0.7.7.1
+
+Steam beta ship: six new languages (it/ko/pl/nl/tr/uk) with build digit rolled for this upload.
+APPLICATION_VER is Major.Minor.Feature.Build — roll the 4th digit on every ship/upload.
+
 0.7.7.0
 
 Add six languages: Italian, Korean, Polish, Dutch, Turkish, and Ukrainian.
