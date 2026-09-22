@@ -1,0 +1,68 @@
+name,nome
+score,punteggio
+lines,linee
+level,livello
+combo,combo
+english,inglese
+spanish,spagnolo
+language options,opzioni lingua
+current language,lingua attuale
+start game,inizia partita
+press '?' for help,premi '?' per aiuto
+start,inizia
+high scores,punteggi alti
+options,opzioni
+exit,esci
+credits,crediti
+language options,opzioni lingua
+input options,opzioni di input
+keyboard inputs,comandi tastiera
+gamepad inputs,comandi gamepad
+enter a number between 8x8 and 25x22,inserisci un numero tra 8x8 e 25x22
+e.g. 10x20,es. 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,devono essere due numeri separati da una 'x' tra 8x8 e 25x22
+scroll here to modify field,scorri qui per modificare il campo
+volume up,alza volume
+volume down,abbassa volume
+left,sinistra
+right,destra
+down,giù
+counter clockwise,antiorario
+clockwise,orario
+quick drop,caduta rapida
+quit,esci
+next song,brano successivo
+pause game,pausa
+decrease volume,diminuisci volume
+increase volume,aumenta volume
+enter,invio
+programming,programmazione
+photography,fotografia
+3d modeling,modellazione 3d
+artwork,grafica
+sound engineering,ingegneria del suono
+featuring music by,musica di
+special thanks,ringraziamenti speciali
+sound effects,effetti sonori
+uses,usa
+game over,fine partita
+must be a number between 15 and 80,deve essere un numero tra 15 e 80
+enter a number between 15 and 80,inserisci un numero tra 15 e 80
+input repeat rate,velocità ripetizione input
+must be a number between 50 and 300,deve essere un numero tra 50 e 300
+enter a number between 50 and 300,inserisci un numero tra 50 e 300
+input delay,ritardo input
+board size,dimensione campo
+guide grid on,griglia guida attiva
+french,francese
+german,tedesco
+portuguese,portoghese
+russian,russo
+japanese,giapponese
+chinese,cinese
+italian,italiano
+korean,coreano
+polish,polacco
+dutch,olandese
+turkish,turco
+ukrainian,ucraino

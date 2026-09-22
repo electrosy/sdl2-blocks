@@ -22,6 +22,12 @@ mCurrentLanguage{"en"} {
         {"ru",    "Русский",            "russian"},
         {"ja",    "日本語",               "japanese"},
         {"zh-CN", "简体中文",             "chinese"},
+        {"it",    "Italiano",           "italian"},
+        {"ko",    "한국어",               "korean"},
+        {"pl",    "Polski",             "polish"},
+        {"nl",    "Nederlands",         "dutch"},
+        {"tr",    "Türkçe",             "turkish"},
+        {"uk",    "Українська",         "ukrainian"},
     };
 
     for (const auto& lang : langs) {

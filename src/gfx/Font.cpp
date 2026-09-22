@@ -50,7 +50,23 @@ std::string ley::fontPathForLanguage(const std::string& languageCode) {
         return FONTFILE;
     }
 
-    // en / es / fr / de / pt-BR / ru (Cyrillic covered by MartianMono)
+    if (languageCode == "ko") {
+        const char* candidates[] = {
+            "assets/fonts/NotoSansKR-Regular.otf",
+            "assets/fonts/NotoSansKR-Regular.ttf",
+            "assets/fonts/NotoSansCJKkr-Regular.otf",
+        };
+        for (const char* path : candidates) {
+            if (fileExists(path)) {
+                return path;
+            }
+        }
+        SDL_Log("Hangul font missing for ko (tried NotoSansKR / NotoSansCJKkr); falling back to MartianMono");
+        return FONTFILE;
+    }
+
+    // en / es / fr / de / pt-BR / it / pl / nl / tr (Latin) and
+    // ru / uk (Cyrillic including Ukrainian ї є ґ) — MartianMono covers these.
     return FONTFILE;
 }
 

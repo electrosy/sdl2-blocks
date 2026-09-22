@@ -1,0 +1,68 @@
+name,nazwa
+score,wynik
+lines,linie
+level,poziom
+combo,kombo
+english,angielski
+spanish,hiszpański
+language options,opcje języka
+current language,aktualny język
+start game,rozpocznij grę
+press '?' for help,naciśnij '?' aby uzyskać pomoc
+start,start
+high scores,najlepsze wyniki
+options,opcje
+exit,wyjście
+credits,twórcy
+language options,opcje języka
+input options,opcje sterowania
+keyboard inputs,sterowanie klawiaturą
+gamepad inputs,sterowanie pada
+enter a number between 8x8 and 25x22,wprowadź liczbę między 8x8 a 25x22
+e.g. 10x20,np. 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,muszą to być dwie liczby oddzielone 'x' między 8x8 a 25x22
+scroll here to modify field,przewiń tutaj aby zmienić pole
+volume up,głośniej
+volume down,ciszej
+left,lewo
+right,prawo
+down,dół
+counter clockwise,przeciwnie do ruchu wskazówek
+clockwise,zgodnie z ruchem wskazówek
+quick drop,szybki upadek
+quit,wyjdź
+next song,następna piosenka
+pause game,pauza
+decrease volume,zmniejsz głośność
+increase volume,zwiększ głośność
+enter,enter
+programming,programowanie
+photography,fotografia
+3d modeling,modelowanie 3D
+artwork,grafika
+sound engineering,inżynieria dźwięku
+featuring music by,muzyka
+special thanks,specjalne podziękowania
+sound effects,efekty dźwiękowe
+uses,używa
+game over,koniec gry
+must be a number between 15 and 80,musi być liczbą między 15 a 80
+enter a number between 15 and 80,wprowadź liczbę między 15 a 80
+input repeat rate,częstotliwość powtarzania wejścia
+must be a number between 50 and 300,musi być liczbą między 50 a 300
+enter a number between 50 and 300,wprowadź liczbę między 50 a 300
+input delay,opóźnienie wejścia
+board size,rozmiar planszy
+guide grid on,siatka pomocnicza włączona
+french,francuski
+german,niemiecki
+portuguese,portugalski
+russian,rosyjski
+japanese,japoński
+chinese,chiński
+italian,włoski
+korean,koreański
+polish,polski
+dutch,niderlandzki
+turkish,turecki
+ukrainian,ukraiński

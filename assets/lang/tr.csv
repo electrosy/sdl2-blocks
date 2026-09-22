@@ -1,0 +1,68 @@
+name,ad
+score,skor
+lines,satırlar
+level,seviye
+combo,kombo
+english,İngilizce
+spanish,İspanyolca
+language options,dil seçenekleri
+current language,geçerli dil
+start game,oyunu başlat
+press '?' for help,yardım için '?' tuşuna basın
+start,başlat
+high scores,yüksek skorlar
+options,seçenekler
+exit,çıkış
+credits,künye
+language options,dil seçenekleri
+input options,giriş seçenekleri
+keyboard inputs,klavye girişleri
+gamepad inputs,oyun kolu girişleri
+enter a number between 8x8 and 25x22,8x8 ile 25x22 arasında bir sayı girin
+e.g. 10x20,örn. 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,8x8 ile 25x22 arasında 'x' ile ayrılmış iki sayı olmalıdır
+scroll here to modify field,alanı değiştirmek için burada kaydırın
+volume up,sesi artır
+volume down,sesi azalt
+left,sol
+right,sağ
+down,aşağı
+counter clockwise,saat yönünün tersi
+clockwise,saat yönü
+quick drop,hızlı düşüş
+quit,çık
+next song,sonraki şarkı
+pause game,oyunu duraklat
+decrease volume,sesi düşür
+increase volume,sesi yükselt
+enter,enter
+programming,programlama
+photography,fotoğrafçılık
+3d modeling,3D modelleme
+artwork,sanat
+sound engineering,ses mühendisliği
+featuring music by,müzik
+special thanks,özel teşekkürler
+sound effects,ses efektleri
+uses,kullanır
+game over,oyun bitti
+must be a number between 15 and 80,15 ile 80 arasında bir sayı olmalıdır
+enter a number between 15 and 80,15 ile 80 arasında bir sayı girin
+input repeat rate,giriş tekrar hızı
+must be a number between 50 and 300,50 ile 300 arasında bir sayı olmalıdır
+enter a number between 50 and 300,50 ile 300 arasında bir sayı girin
+input delay,giriş gecikmesi
+board size,tahta boyutu
+guide grid on,kılavuz ızgara açık
+french,Fransızca
+german,Almanca
+portuguese,Portekizce
+russian,Rusça
+japanese,Japonca
+chinese,Çince
+italian,İtalyanca
+korean,Korece
+polish,Lehçe
+dutch,Felemenkçe
+turkish,Türkçe
+ukrainian,Ukraynaca

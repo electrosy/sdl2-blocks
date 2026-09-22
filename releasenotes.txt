@@ -1,3 +1,9 @@
+0.7.7.0
+
+Add six languages: Italian, Korean, Polish, Dutch, Turkish, and Ukrainian.
+Language options menu lists all fourteen languages with tighter row spacing.
+Korean uses Noto Sans KR when available (MartianMono fallback). Ukrainian stays on MartianMono (covers ї є ґ).
+
 0.7.6.1
 
 Steam beta ship: languages (0.7.5) + theme-colored particles (0.7.6) with build digit rolled for this upload.

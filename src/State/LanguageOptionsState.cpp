@@ -18,14 +18,16 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
 
     // Data-driven list from LanguageModel ordered codes (not hardcoded en/es indices).
     const auto& codes = mGameModel->getLanguageModel()->getLanguageCodes();
-    const int startY = 140;
-    const int rowSpacing = 36; // readable spacing; 8 rows fit without scroll
+    // 14 languages on 720p: tighter row spacing + slightly smaller font so all fit.
+    const int startY = 130;
+    const int rowSpacing = 28;
+    const int rowFontSize = 20;
     for (size_t i = 0; i < codes.size(); ++i) {
         const std::string& code = codes[i];
         // Native names on the picker (Français, 日本語, …) — not translated labels.
         const std::string label = mGameModel->getLanguageModel()->getNativeLanguageName(code);
         const int y = startY + static_cast<int>(i) * rowSpacing;
-        mLanguageUI.pushFont("lang_" + code, {29, y}, label, v->getRenderer(), 24);
+        mLanguageUI.pushFont("lang_" + code, {29, y}, label, v->getRenderer(), rowFontSize);
     }
 
     updateLanguageFont();

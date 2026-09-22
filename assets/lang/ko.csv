@@ -1,0 +1,68 @@
+name,이름
+score,점수
+lines,줄
+level,레벨
+combo,콤보
+english,영어
+spanish,스페인어
+language options,언어 옵션
+current language,현재 언어
+start game,게임 시작
+press '?' for help,'?'를 눌러 도움말
+start,시작
+high scores,최고 점수
+options,옵션
+exit,종료
+credits,제작진
+language options,언어 옵션
+input options,입력 옵션
+keyboard inputs,키보드 입력
+gamepad inputs,게임패드 입력
+enter a number between 8x8 and 25x22,8x8과 25x22 사이의 숫자를 입력
+e.g. 10x20,예: 10x20
+must be two numbers seperated by an 'x' between 8x8 and 25x22,8x8과 25x22 사이에서 'x'로 구분된 두 숫자여야 합니다
+scroll here to modify field,여기를 스크롤하여 항목 수정
+volume up,볼륨 올리기
+volume down,볼륨 내리기
+left,왼쪽
+right,오른쪽
+down,아래
+counter clockwise,반시계 방향
+clockwise,시계 방향
+quick drop,빠른 낙하
+quit,종료
+next song,다음 곡
+pause game,게임 일시정지
+decrease volume,볼륨 줄이기
+increase volume,볼륨 높이기
+enter,확인
+programming,프로그래밍
+photography,사진
+3d modeling,3D 모델링
+artwork,아트워크
+sound engineering,사운드 엔지니어링
+featuring music by,음악
+special thanks,특별 감사
+sound effects,효과음
+uses,사용
+game over,게임 오버
+must be a number between 15 and 80,15에서 80 사이의 숫자여야 합니다
+enter a number between 15 and 80,15에서 80 사이의 숫자를 입력
+input repeat rate,입력 반복 속도
+must be a number between 50 and 300,50에서 300 사이의 숫자여야 합니다
+enter a number between 50 and 300,50에서 300 사이의 숫자를 입력
+input delay,입력 지연
+board size,보드 크기
+guide grid on,가이드 그리드 켜짐
+french,프랑스어
+german,독일어
+portuguese,포르투갈어
+russian,러시아어
+japanese,일본어
+chinese,중국어
+italian,이탈리아어
+korean,한국어
+polish,폴란드어
+dutch,네덜란드어
+turkish,터키어
+ukrainian,우크라이나어
