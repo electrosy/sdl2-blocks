@@ -1,3 +1,8 @@
+0.7.6.1
+
+Steam beta ship: languages (0.7.5) + theme-colored particles (0.7.6) with build digit rolled for this upload.
+APPLICATION_VER is Major.Minor.Feature.Build — roll the 4th digit on every ship/upload.
+
 0.7.6.0
 
 Theme-colored particle bursts on line clear (primary), hard drop / piece lock (medium), and combo / Tetris+ (stronger on 4+ lines).
