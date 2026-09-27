@@ -78,8 +78,15 @@ const std::string& ley::Font::getActiveFontPath() {
     return sActiveFontPath;
 }
 
+std::string ley::Font::desiredFontPath() const {
+    if (mFontPinned) {
+        return mPinnedFontPath.empty() ? std::string(FONTFILE) : mPinnedFontPath;
+    }
+    return sActiveFontPath.empty() ? std::string(FONTFILE) : sActiveFontPath;
+}
+
 void ley::Font::openFontFile(int size) {
-    const std::string& path = sActiveFontPath.empty() ? std::string(FONTFILE) : sActiveFontPath;
+    const std::string path = desiredFontPath();
 
     mTTFFont = TTF_OpenFont(path.c_str(), size);
     if (!mTTFFont) {
@@ -100,8 +107,15 @@ void ley::Font::openFontFile(int size) {
     mLoadedFontPath = path;
 }
 
+void ley::Font::pinToLanguage(const std::string& languageCode) {
+    mFontPinned = true;
+    mPinnedFontPath = fontPathForLanguage(languageCode);
+    reloadForActiveLanguage();
+}
+
 void ley::Font::reloadForActiveLanguage() {
-    if (mLoadedFontPath == sActiveFontPath && mTTFFont) {
+    const std::string desired = desiredFontPath();
+    if (mLoadedFontPath == desired && mTTFFont) {
         return;
     }
 
@@ -133,6 +147,9 @@ mPointSize(DEFAULT_FONT_SIZE) {
 ley::Font::Font(const Font& other) {
     
     mPointSize = other.mPointSize;
+    // Copy the pin before init so openFontFile loads this entry's script, not the UI language.
+    mFontPinned = other.mFontPinned;
+    mPinnedFontPath = other.mPinnedFontPath;
     init(mPointSize);
     mMessageString = other.mMessageString;
     mMessageRect = other.mMessageRect;
@@ -180,6 +197,8 @@ void ley::Font::cleanUp() {
 //copy assignment operator
 ley::Font& ley::Font::operator=(const ley::Font& other) {
     
+    mFontPinned = other.mFontPinned;
+    mPinnedFontPath = other.mPinnedFontPath;
     cleanUp();
     init(24);
     mMessageRect = other.mMessageRect;

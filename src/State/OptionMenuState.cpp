@@ -89,8 +89,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         6,
         {325,250},
         "^(off|red|green|yellow|cyan|purple)$",
-        mGameModel->getLanguageModel()->getWord("must be one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst),
-        mGameModel->getLanguageModel()->getWord("enter one of: off, red, green, yellow, cyan, purple", 0, false, capitalizationtype::capitalizeFirst)
+        mGameModel->getLanguageModel()->getWord("must be off red green yellow cyan or purple", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter off red green yellow cyan or purple", 0, false, capitalizationtype::capitalizeFirst)
     );
 
     initTextEntry(
@@ -101,8 +101,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         3,
         {325,300},
         "^(off|on)$",
-        mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst),
-        mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst)
+        mGameModel->getLanguageModel()->getWord("must be off or on", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter off or on", 0, false, capitalizationtype::capitalizeFirst)
     );
 
     initTextEntry(
@@ -125,8 +125,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         3,
         {325,400},
         "^(off|on)$",
-        mGameModel->getLanguageModel()->getWord("must be one of: off, on", 0, false, capitalizationtype::capitalizeFirst),
-        mGameModel->getLanguageModel()->getWord("enter one of: off, on", 0, false, capitalizationtype::capitalizeFirst)
+        mGameModel->getLanguageModel()->getWord("must be off or on", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter off or on", 0, false, capitalizationtype::capitalizeFirst)
     );
 
     initTextEntry(
@@ -149,8 +149,8 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
         12,
         {325,500},
         "^(jazz|ablockalypse)$",
-        mGameModel->getLanguageModel()->getWord("must be one of: jazz, ablockalypse", 0, false, capitalizationtype::capitalizeFirst),
-        mGameModel->getLanguageModel()->getWord("enter one of: jazz, ablockalypse", 0, false, capitalizationtype::capitalizeFirst)
+        mGameModel->getLanguageModel()->getWord("must be jazz or ablockalypse", 0, false, capitalizationtype::capitalizeFirst),
+        mGameModel->getLanguageModel()->getWord("enter jazz or ablockalypse", 0, false, capitalizationtype::capitalizeFirst)
     );
 
     mOptionUI.pushUIElement(
@@ -203,7 +203,6 @@ OptionMenuState::OptionMenuState(ley::Video * v, ley::GameModel * gm):
 
     mOptionUI.pushFont("languageOptions", {29,550}, mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
     mOptionUI.pushFont("keyboardOptions", {29,600}, mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
-    // TODO localization
     mOptionUI.pushFont("blockEditor", {29,650}, mGameModel->getLanguageModel()->getWord("block editor", 0, false, capitalizationtype::capitalizeFirst), v->getRenderer(), 24);
 }
 
@@ -433,31 +432,54 @@ void OptionMenuState::initTextEntry(
 
 void OptionMenuState::initTextEntryMessages() {
 
-    mOptionUI.getElementPtr("languageOptions")->setMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeFirst));
-    mOptionUI.getElementPtr("keyboardOptions")->setMessage(mGameModel->getLanguageModel()->getWord("input options", 0, false, capitalizationtype::capitalizeFirst));
+    auto word = [this](const std::string& key, capitalizationtype cap) {
+        return mGameModel->getLanguageModel()->getWord(key, 0, false, cap);
+    };
+    const auto first = capitalizationtype::capitalizeFirst;
+    const auto words = capitalizationtype::capitalizeWords;
 
-    mBoardSizeTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst) + "," 
-        + mGameModel->getLanguageModel()->getWord("e.g. 10x20", 0, false, capitalizationtype::capitalizeNone)
+    mOptionUI.getElementPtr("languageOptions")->setMessage(word("language options", first));
+    mOptionUI.getElementPtr("keyboardOptions")->setMessage(word("input options", first));
+    mOptionUI.getElementPtr("blockEditor")->setMessage(word("block editor", first));
+
+    mBoardSizeTextEntry.setHelpMessages(word("enter a number between 8x8 and 25x22", first) + ","
+        + word("e.g. 10x20", capitalizationtype::capitalizeNone)
         , "");
+    mBoardSizeTextEntry.setErrorMessage(word("must be two numbers seperated by an 'x' between 8x8 and 25x22", first));
 
-    mBoardSizeTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be two numbers seperated by an 'x' between 8x8 and 25x22", 0, false, capitalizationtype::capitalizeFirst));
+    mKeyDelayTextEntry.setErrorMessage(word("must be a number between 50 and 300", first));
+    mKeyDelayTextEntry.setHelpMessages(word("enter a number between 50 and 300", first), "");
 
-    mKeyRepeatTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst));
-    mKeyRepeatTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 15 and 80", 0, false, capitalizationtype::capitalizeFirst), "");
-    
-    mRepeatLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input repeat rate", 0, false, capitalizationtype::capitalizeWords));
+    mKeyRepeatTextEntry.setErrorMessage(word("must be a number between 15 and 80", first));
+    mKeyRepeatTextEntry.setHelpMessages(word("enter a number between 15 and 80", first), "");
 
-    mKeyDelayTextEntry.setErrorMessage(mGameModel->getLanguageModel()->getWord("must be a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst));
-    mKeyDelayTextEntry.setHelpMessages(mGameModel->getLanguageModel()->getWord("enter a number between 50 and 300", 0, false, capitalizationtype::capitalizeFirst), "");
+    mGuideGridOnTextEntry.setErrorMessage(word("must be off red green yellow cyan or purple", first));
+    mGuideGridOnTextEntry.setHelpMessages(word("enter off red green yellow cyan or purple", first), "");
 
-    mDelayLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("input delay", 0, false, capitalizationtype::capitalizeWords));
-    mBoardSizeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("board size", 0, false, capitalizationtype::capitalizeWords));
-    mGuideGridOnLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("guide grid on", 0, false, capitalizationtype::capitalizeWords));
-    mWallKickOnLabelFont.updateMessage("Wall Kick");
-    mDropCoolDownLabelFont.updateMessage("Quick Drop Cool down");
-    mShowProgressBarLabelFont.updateMessage("Show progress bar");
-    mStartLevelLabelFont.updateMessage("Start level");
-    mThemeLabelFont.updateMessage(mGameModel->getLanguageModel()->getWord("theme", 0, false, capitalizationtype::capitalizeFirst));
+    mWallKickOnTextEntry.setErrorMessage(word("must be off or on", first));
+    mWallKickOnTextEntry.setHelpMessages(word("enter off or on", first), "");
+
+    mDropCoolDownTextEntry.setErrorMessage(word("must be a number between 0 and 250", first));
+    mDropCoolDownTextEntry.setHelpMessages(word("enter a number between 0 and 250", first), "");
+
+    mShowProgressBarTextEntry.setErrorMessage(word("must be off or on", first));
+    mShowProgressBarTextEntry.setHelpMessages(word("enter off or on", first), "");
+
+    mStartLevelTextEntry.setErrorMessage(word("must be a number between 1 and 29", first));
+    mStartLevelTextEntry.setHelpMessages(word("enter a number between 1 and 29", first), "");
+
+    mThemeTextEntry.setErrorMessage(word("must be jazz or ablockalypse", first));
+    mThemeTextEntry.setHelpMessages(word("enter jazz or ablockalypse", first), "");
+
+    mBoardSizeLabelFont.updateMessage(word("board size", words));
+    mDelayLabelFont.updateMessage(word("input delay", words));
+    mRepeatLabelFont.updateMessage(word("input repeat rate", words));
+    mGuideGridOnLabelFont.updateMessage(word("guide grid on", words));
+    mWallKickOnLabelFont.updateMessage(word("wall kick", words));
+    mDropCoolDownLabelFont.updateMessage(word("quick drop cooldown", words));
+    mShowProgressBarLabelFont.updateMessage(word("show progress bar", words));
+    mStartLevelLabelFont.updateMessage(word("start level", words));
+    mThemeLabelFont.updateMessage(word("theme", first));
 }
 
 void OptionMenuState::positionOptionsLabels() {
@@ -465,6 +487,24 @@ void OptionMenuState::positionOptionsLabels() {
     int w = 0; 
     int h = 0;
     SDL_Point labelPos{0,0};
+
+    // Measure after the face matches the UI language. Otherwise a switch to
+    // ja/zh-CN/ko sizes CJK labels with MartianMono (missing glyphs, width ~0)
+    // and the value field is drawn on top of the label.
+    ley::Font* labelFonts[] = {
+        &mBoardSizeLabelFont,
+        &mDelayLabelFont,
+        &mRepeatLabelFont,
+        &mGuideGridOnLabelFont,
+        &mWallKickOnLabelFont,
+        &mDropCoolDownLabelFont,
+        &mShowProgressBarLabelFont,
+        &mStartLevelLabelFont,
+        &mThemeLabelFont
+    };
+    for (ley::Font* labelFont : labelFonts) {
+        labelFont->reloadForActiveLanguage();
+    }
     
     // get the spacing of a " " character space.
     TTF_SizeUTF8(mBoardSizeLabelFont.getTTFFont(), " ", &w, &h );
@@ -498,6 +538,10 @@ void OptionMenuState::positionOptionsLabels() {
     TTF_SizeUTF8( mShowProgressBarLabelFont.getTTFFont(), mShowProgressBarLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mShowProgressBarLabelFont.getPos();
     mShowProgressBarTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
+
+    TTF_SizeUTF8( mStartLevelLabelFont.getTTFFont(), mStartLevelLabelFont.getMessage().c_str(), &w, &h );
+    labelPos = mStartLevelLabelFont.getPos();
+    mStartLevelTextEntry.setPos({labelPos.x + w + labelDataSpacing, labelPos.y});
 
     TTF_SizeUTF8( mThemeLabelFont.getTTFFont(), mThemeLabelFont.getMessage().c_str(), &w, &h );
     labelPos = mThemeLabelFont.getPos();

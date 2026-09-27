@@ -32,8 +32,14 @@ private:
     SDL_Color mColor;
     int mPointSize;
     std::string mLoadedFontPath; // path currently opened in mTTFFont
+    // When set, this Font keeps its own file and ignores the active UI language.
+    // Language-list rows need this: 日本語 / 简体中文 / 한국어 are not in MartianMono,
+    // and the three Noto faces do not cover each other's scripts (or Ukrainian ї).
+    bool mFontPinned = false;
+    std::string mPinnedFontPath;
 
     static std::string sActiveFontPath;
+    std::string desiredFontPath() const;
     void openFontFile(int size);
 
 protected:
@@ -70,8 +76,11 @@ public:
     // Per-language font path (updates process-wide active path used by new/reloaded Fonts).
     static void setActiveFontLanguage(const std::string& languageCode);
     static const std::string& getActiveFontPath();
-    // Re-open TTF if the active path changed (e.g. after switching to ja/zh-CN).
+    // Re-open TTF if the active path changed (e.g. after switching to ja/zh-CN/ko).
+    // Pinned fonts reload their own file instead of the active UI language.
     void reloadForActiveLanguage();
+    // Keep this Font on the face that covers languageCode, regardless of the UI language.
+    void pinToLanguage(const std::string& languageCode);
 };
 
 }

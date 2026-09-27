@@ -66,3 +66,19 @@ polish,польский
 dutch,нидерландский
 turkish,турецкий
 ukrainian,украинский
+wall kick,отскок от стены
+quick drop cooldown,пауза быстрого падения
+show progress bar,шкала прогресса
+start level,начальный уровень
+theme,тема
+block editor,редактор блоков
+must be a number between 0 and 250,число должно быть от 0 до 250
+enter a number between 0 and 250,введите число от 0 до 250
+must be a number between 1 and 29,число должно быть от 1 до 29
+enter a number between 1 and 29,введите число от 1 до 29
+must be off or on,должно быть off или on
+enter off or on,введите off или on
+must be off red green yellow cyan or purple,должно быть off/red/green/yellow/cyan/purple
+enter off red green yellow cyan or purple,введите off/red/green/yellow/cyan/purple
+must be jazz or ablockalypse,должно быть jazz или ablockalypse
+enter jazz or ablockalypse,введите jazz или ablockalypse

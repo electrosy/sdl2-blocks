@@ -1,3 +1,8 @@
+0.7.7.2
+
+Language list renders each native name with a font for that name's script, so 日本語, 简体中文 and 한국어 are not empty boxes in other UI languages. Cyrillic stays on MartianMono.
+Options labels for wall kick, quick drop cooldown, progress bar, start level, theme and block editor, plus the related help text, come from the language CSVs.
+
 0.7.7.1
 
 Steam beta ship: six new languages (it/ko/pl/nl/tr/uk) with build digit rolled for this upload.
