@@ -28,6 +28,13 @@ LanguageOptionsState::LanguageOptionsState(ley::Video * v, ley::GameModel * gm):
         const std::string label = mGameModel->getLanguageModel()->getNativeLanguageName(code);
         const int y = startY + static_cast<int>(i) * rowSpacing;
         mLanguageUI.pushFont("lang_" + code, {29, y}, label, v->getRenderer(), rowFontSize);
+        // Native names are not in the active UI font. MartianMono has no CJK, and
+        // Noto JP/SC/KR do not cover each other (KR-only Hangul, SC-only 简).
+        // Pin each row to its own script so all 14 names render in every UI language.
+        // ru/uk stay on MartianMono; Noto CJK is missing Ukrainian ї.
+        if (ley::UIElement* el = mLanguageUI.getElementPtr("lang_" + code)) {
+            el->pinFontsToLanguage(code);
+        }
     }
 
     updateLanguageFont();
@@ -101,16 +108,9 @@ void LanguageOptionsState::updateLanguageFont() {
             continue;
         }
         el->setMessage(mGameModel->getLanguageModel()->getNativeLanguageName(code));
-        // Ensure CJK / Latin font file matches active language after a switch.
-        if (el->getMainFontPtr()) {
-            el->getMainFontPtr()->reloadForActiveLanguage();
-        }
-        if (el->getHotFontPtr()) {
-            el->getHotFontPtr()->reloadForActiveLanguage();
-        }
-        if (el->getBaseFontPtr()) {
-            el->getBaseFontPtr()->reloadForActiveLanguage();
-        }
+        // Re-pin after a language switch. reloadForActiveLanguage() would put every
+        // row on the UI font and turn the other scripts back into tofu.
+        el->pinFontsToLanguage(code);
     }
 
     mTitleFont.updateMessage(mGameModel->getLanguageModel()->getWord("language options", 0, false, capitalizationtype::capitalizeWords));

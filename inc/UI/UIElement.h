@@ -58,6 +58,8 @@ public:
     ley::Font* getHotFontPtr() { return &mHotFont; };
     void setMessage(const std::string& message);
     void setFontSize(int size);
+    // Draw this row with the face for languageCode (not the active UI language).
+    void pinFontsToLanguage(const std::string& languageCode);
     void preRender(SDL_Renderer* r);
     std::function<void()> getToggleFunction() {return mUIToggleFunc;};
     bool getInFocus() {return mUIInFocus();};

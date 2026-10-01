@@ -112,6 +112,13 @@ void ley::UIElement::setFontSize(int size) {
     mMainFont.setFontSize(size);
 }
 
+void ley::UIElement::pinFontsToLanguage(const std::string& languageCode) {
+    // Base, hot, and main all draw the same label. Each must cover that label's script.
+    mBaseFont.pinToLanguage(languageCode);
+    mHotFont.pinToLanguage(languageCode);
+    mMainFont.pinToLanguage(languageCode);
+}
+
 void ley::UIElement::setBaseColor(SDL_Color inColor) {
     mBaseFont.setColor(inColor);
 }
